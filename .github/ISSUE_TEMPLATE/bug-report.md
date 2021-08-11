@@ -7,17 +7,17 @@ Hello,
 
 I encountered an issue with the following code:
 ```go
-carbon.Parse("2020-08-05 13:14:15").AddDays(3).ToDateTimeString()
+dongle.Encrypt.FromString("hello world").ByMd5().ToString()
 ```
 
 golang version: **such as 1.16**
 
-openssl version: **such as 1.0.0**
+dongle version: **such as 1.0.0**
 
 I expected to get:
 
 ```
-2020-08-08 13:14:15
+5eb63bbbe01eeed093cb22bb8f5acdc3
 ```
 <!--
     Always give your expectations. Each use has their owns.
@@ -29,7 +29,7 @@ I expected to get:
 But I actually get:
 
 ```
-2020-08-07 13:14:15
+014f03f9025ea81a8a0e9734be540c53
 ```
 
 Thanks!
