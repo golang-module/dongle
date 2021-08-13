@@ -364,3 +364,7 @@ invalid file "./demo.txt", please make sure the file exists
  - [ ] RC4 加密解密
  - [ ] RC5 加密解密
  - [ ] RC6 加密解密
+ - [ ] SM1 加密解密
+ - [ ] SM2 加密解密
+ - [ ] SM3 加密解密
+ - [ ] SM4 加密解密
