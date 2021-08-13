@@ -13,7 +13,7 @@ import (
 	"unsafe"
 )
 
-// dongle define dongle struct.
+// dongle defines a dongle struct.
 type dongle struct {
 	input  []byte
 	output []byte
@@ -29,7 +29,7 @@ var (
 	Encrypt = newEncrypt()
 )
 
-// string2bytes converts string into byte slice without a memory allocation.
+// string2bytes converts string to byte slice without a memory allocation.
 func string2bytes(s string) []byte {
 	return *(*[]byte)(unsafe.Pointer(
 		&struct {
@@ -39,7 +39,7 @@ func string2bytes(s string) []byte {
 	))
 }
 
-// bytes2string converts byte slice into string without a memory allocation.
+// bytes2string converts byte slice to string without a memory allocation.
 func bytes2string(b []byte) string {
 	return *(*string)(unsafe.Pointer(&b))
 }

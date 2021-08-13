@@ -9,7 +9,7 @@ const (
 	HEX = "hex"
 )
 
-// encode defines encode struct.
+// encode defines a encode struct.
 type encode struct {
 	dongle
 }

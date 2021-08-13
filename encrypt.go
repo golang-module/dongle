@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 )
 
-// encrypt defines encrypt struct.
+// encrypt defines a encrypt struct.
 type encrypt struct {
 	dongle
 }

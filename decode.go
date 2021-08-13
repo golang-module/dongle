@@ -1,6 +1,6 @@
 package dongle
 
-// decode defines decode struct.
+// decode defines a decode struct.
 type decode struct {
 	dongle
 }
