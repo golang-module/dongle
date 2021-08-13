@@ -365,7 +365,6 @@ invalid file "./demo.txt", please make sure the file exists
  - [ ] Encryption and decryption by rc4
  - [ ] Encryption and decryption by rc5
  - [ ] Encryption and decryption by rc6
- - [ ] Encryption and decryption by sm1
  - [ ] Encryption and decryption by sm2
  - [ ] Encryption and decryption by sm3
  - [ ] Encryption and decryption by sm4
