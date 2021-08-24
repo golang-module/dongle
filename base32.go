@@ -13,7 +13,7 @@ func (e encode) ByBase32() encode {
 	if output != nil {
 		input = output
 	}
-	e.output = []byte(base32.StdEncoding.EncodeToString(input))
+	e.output = string2bytes(base32.StdEncoding.EncodeToString(input))
 	return e
 }
 
@@ -26,6 +26,6 @@ func (d decode) ByBase32() decode {
 	if output != nil {
 		input = output
 	}
-	d.output, d.Error = base32.StdEncoding.DecodeString(string(input))
+	d.output, d.Error = base32.StdEncoding.DecodeString(bytes2string(input))
 	return d
 }

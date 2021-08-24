@@ -13,7 +13,7 @@ func (e encode) ByBase64() encode {
 	if output != nil {
 		input = output
 	}
-	e.output = []byte(base64.StdEncoding.EncodeToString(input))
+	e.output = string2bytes(base64.StdEncoding.EncodeToString(input))
 	return e
 }
 
@@ -26,6 +26,6 @@ func (d decode) ByBase64() decode {
 	if output != nil {
 		input = output
 	}
-	d.output, d.Error = base64.StdEncoding.DecodeString(string(input))
+	d.output, d.Error = base64.StdEncoding.DecodeString(bytes2string(input))
 	return d
 }
