@@ -55,7 +55,7 @@ func (c *Cipher) SetPadding(padding string) {
 	c.padding = padding
 }
 
-// SetSecretKey sets secret key.
+// SetKey sets key.
 func (c *Cipher) SetKey(key interface{}) {
 	switch v := key.(type) {
 	case string:
