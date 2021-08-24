@@ -3,6 +3,8 @@ package dongle
 const (
 	// BASE32 base32 encoding mode
 	BASE32 = "base32"
+	// BASE58 base58 encoding mode
+	BASE58 = "base58"
 	// BASE64 base64 encoding mode
 	BASE64 = "base64"
 	// HEX hex encoding mode
@@ -20,9 +22,8 @@ func newEncode() encode {
 }
 
 // FromString encrypts from string.
-// 对字符串进行加密
 func (e encode) FromString(s string) encode {
-	if s == "" {
+	if s == emptyString {
 		return e
 	}
 	e.input = string2bytes(s)
@@ -50,7 +51,7 @@ func (e encode) ToString() string {
 func (e encode) ToBytes() []byte {
 	input, output := e.input, e.output
 	if len(input) == 0 {
-		return []byte("")
+		return emptyBytes
 	}
 	return output
 }

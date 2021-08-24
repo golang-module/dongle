@@ -1,9 +1,7 @@
 package dongle
 
 import (
-	"encoding/base32"
-	"encoding/base64"
-	"encoding/hex"
+	"crypto/cipher"
 	"io/ioutil"
 )
 
@@ -49,31 +47,55 @@ func (e encrypt) FromBytes(b []byte) encrypt {
 }
 
 // ToString outputs as string with given encoding mode.
-func (e encrypt) ToString(encodeMode ...string) string {
+func (e encrypt) ToString(encodingMode ...string) string {
 	if len(e.output) == 0 {
-		return ""
+		return emptyString
 	}
 	mode := HEX
-	if len(encodeMode) > 0 {
-		mode = encodeMode[len(encodeMode)-1]
+	if len(encodingMode) > 0 {
+		mode = encodingMode[len(encodingMode)-1]
 	}
-	if mode == HEX {
-		return hex.EncodeToString(e.output)
-	}
-	if mode == BASE32 {
-		return base32.StdEncoding.EncodeToString(e.output)
-	}
-	if mode == BASE64 {
-		return base64.StdEncoding.EncodeToString(e.output)
-	}
-	return ""
+	return e.encode(mode)
 }
 
 // ToBytes outputs as byte slice with given encoding mode.
-func (e encrypt) ToBytes(encodeMode ...string) []byte {
-	bytes := string2bytes(e.ToString(encodeMode...))
+func (e encrypt) ToBytes(encodingMode ...string) []byte {
+	bytes := string2bytes(e.ToString(encodingMode...))
 	if len(bytes) == 0 {
-		return []byte("")
+		return emptyBytes
 	}
 	return bytes
+}
+
+func (e encrypt) encode(encodingMode string) string {
+	switch encodingMode {
+	case HEX:
+		return Encode.FromBytes(e.output).ByHex().ToString()
+	case BASE32:
+		return Encode.FromBytes(e.output).ByBase32().ToString()
+	case BASE58:
+		return Encode.FromBytes(e.output).ByBase58().ToString()
+	case BASE64:
+		return Encode.FromBytes(e.output).ByBase64().ToString()
+	}
+	return emptyString
+}
+
+func (e encrypt) encrypt(cipher *Cipher, block cipher.Block) ([]byte, error) {
+	src := emptyBytes
+	switch cipher.padding {
+	case ZeroPadding:
+		src = cipher.ZeroPadding(e.input, block.BlockSize())
+	case PKCS5Padding:
+		src = cipher.PKCS5Padding(e.input)
+	case PKCS7Padding:
+		src = cipher.PKCS7Padding(e.input, block.BlockSize())
+	default:
+		return src, invalidPaddingModeError(cipher.padding)
+	}
+	switch cipher.mode {
+	case CBC:
+		return cipher.CBCEncrypt(block, src), nil
+	}
+	return src, invalidGroupModeError(cipher.mode)
 }

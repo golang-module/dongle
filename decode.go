@@ -40,7 +40,7 @@ func (d decode) ToString() string {
 func (d decode) ToBytes() []byte {
 	input, output := d.input, d.output
 	if len(input) == 0 {
-		return []byte{}
+		return emptyBytes
 	}
 	return output
 }
