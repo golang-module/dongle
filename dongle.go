@@ -1,7 +1,7 @@
 // @Package dongle
 // @Description a simple, semantic and developer-friendly golang package for encoding&decoding and encryption&decryption
 // @Page github.com/golang-module/dongle
-// @Version v0.0.1
+// @Version v0.0.2
 // @Author gouguoyin
 // @Blog www.gouguoyin.cn
 // @Email contact@gouguoyin.cn
@@ -21,12 +21,19 @@ type dongle struct {
 }
 
 var (
+	// emptyString defines a empty string
+	emptyString = ""
+	// emptyBytes defines a empty byte slice
+	emptyBytes = []byte{}
+
 	// Encode returns a new encode instance
 	Encode = newEncode()
 	// Decode returns a new decode instance
 	Decode = newDecode()
 	// Encrypt returns a new encrypt instance
 	Encrypt = newEncrypt()
+	// Decrypt returns a new decrypt instance
+	Decrypt = newDecrypt()
 )
 
 // string2bytes converts string to byte slice without a memory allocation.
