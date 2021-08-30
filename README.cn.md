@@ -16,6 +16,8 @@ Dongle 已被 [awesome-go](https://github.com/avelino/awesome-go#security "aweso
 
 [gitee.com/go-package/dongle](https://gitee.com/go-package/dongle "gitee.com/go-package/dongle")
 
+[robeeask community](http://dongle.robeeask.com/ "dongle.robeeask.com")
+
 #### 安装使用
 ```go
 // 使用 github 库
@@ -33,7 +35,7 @@ import (
 )
 ```
 
-#### 编码&加密
+#### 编码
 
 ##### Base32 编码
 ```go
@@ -88,6 +90,60 @@ dongle.Encode.FromBytes([]byte("hello world")).ByHex().ToString() // 68656c6c6f2
 dongle.Encode.FromBytes([]byte("hello world")).ByHex().ToBytes() // []byte("68656c6c6f20776f726c64")
 ```
 
+#### 解码
+##### Base32 解码
+```go
+// 对字符串进行 base64 解码，输出字符串
+dongle.Decode.FromString("NBSWY3DPEB3W64TMMQ======").ByBase32().ToString() // hello world
+// 对字符串进行 base64 解码，输出字节切片
+dongle.Decode.FromString("NBSWY3DPEB3W64TMMQ======").ByBase32().ToBytes() // []byte("hello world")
+
+// 对字节切片进行 base64 解码，输出字符串
+dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToString() // hello world
+// 对字节切片进行 base64 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToBytes() // []byte("hello world")
+```
+
+##### Base58 解码
+```go
+// 对字符串进行 base58 解码，输出字符串
+dongle.Decode.FromString("StV1DL6CwTryKyV").ByBase58().ToString() // hello world
+// 对字符串进行 base58 解码，输出字节切片
+dongle.Decode.FromString("StV1DL6CwTryKyV").ByBase58().ToBytes() // []byte("hello world")
+
+// 对字节切片进行 base58 解码，输出字符串
+dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToString() // hello world
+// 对字节切片进行 base58 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToBytes() // []byte("hello world")
+```
+
+##### Base64 解码
+```go
+// 对字符串进行 base64 解码，输出字符串
+dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64().ToString() // hello world
+// 对字符串进行 base64 解码，输出字节切片
+dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64().ToBytes() // []byte("hello world")
+
+// 对字节切片进行 base64 解码，输出字符串
+dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToString() // hello world
+// 对字节切片进行 base64 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToBytes() // []byte("hello world")
+```
+
+##### Hex 解码
+```go
+// 对字符串进行 hex 解码，输出字符串
+dongle.Decode.FromString("68656c6c6f20776f726c64").ByHex().ToString() // hello world
+// 对字符串进行 hex 解码，输出字节切片
+dongle.Decode.FromString("68656c6c6f20776f726c64").ByHex().ToBytes() // []byte("hello world")
+
+// 对字节切片进行 hex 解码，输出字符串
+dongle.Decode.FromBytes([]byte("68656c6c6f20776f726c64")).ByHex().ToString() // hello world
+// 对字节切片进行 hex 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("68656c6c6f20776f726c64")).ByHex().ToBytes() // []byte("hello world")
+```
+
+#### 加密
 ##### Md5 加密
 ```go
 // 对字符串进行 md5 加密，输出 hex 编码字符串
@@ -315,6 +371,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha512().ToBytes("base64") // 
 ```
 
 ##### AES 加密
+
 ```go
 cipher := NewCipher()
 
@@ -327,58 +384,7 @@ dongle.Encrypt.FromString("hello world").ByAes(cipher).ToString() // c1e9b4529aa
 dongle.Encrypt.FromString("hello world").ByAes(cipher).ToString("hex") // c1e9b4529aac9793010f4677f6358efe
 ```
 
-#### 解码&解密
-##### Base32 解码
-```go
-// 对字符串进行 base64 解码，输出字符串
-dongle.Decode.FromString("NBSWY3DPEB3W64TMMQ======").ByBase32().ToString() // hello world
-// 对字符串进行 base64 解码，输出字节切片
-dongle.Decode.FromString("NBSWY3DPEB3W64TMMQ======").ByBase32().ToBytes() // []byte("hello world")
-
-// 对字节切片进行 base64 解码，输出字符串
-dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToString() // hello world
-// 对字节切片进行 base64 解码，输出字节切片
-dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToBytes() // []byte("hello world")
-```
-
-##### Base58 解码
-```go
-// 对字符串进行 base58 解码，输出字符串
-dongle.Decode.FromString("StV1DL6CwTryKyV").ByBase58().ToString() // hello world
-// 对字符串进行 base58 解码，输出字节切片
-dongle.Decode.FromString("StV1DL6CwTryKyV").ByBase58().ToBytes() // []byte("hello world")
-
-// 对字节切片进行 base58 解码，输出字符串
-dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToString() // hello world
-// 对字节切片进行 base58 解码，输出字节切片
-dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToBytes() // []byte("hello world")
-```
-
-##### Base64 解码
-```go
-// 对字符串进行 base64 解码，输出字符串
-dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64().ToString() // hello world
-// 对字符串进行 base64 解码，输出字节切片
-dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64().ToBytes() // []byte("hello world")
-
-// 对字节切片进行 base64 解码，输出字符串
-dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToString() // hello world
-// 对字节切片进行 base64 解码，输出字节切片
-dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToBytes() // []byte("hello world")
-```
-
-##### Hex 解码
-```go
-// 对字符串进行 hex 解码，输出字符串
-dongle.Decode.FromString("68656c6c6f20776f726c64").ByHex().ToString() // hello world
-// 对字符串进行 hex 解码，输出字节切片
-dongle.Decode.FromString("68656c6c6f20776f726c64").ByHex().ToBytes() // []byte("hello world")
-
-// 对字节切片进行 hex 解码，输出字符串
-dongle.Decode.FromBytes([]byte("68656c6c6f20776f726c64")).ByHex().ToString() // hello world
-// 对字节切片进行 hex 解码，输出字节切片
-dongle.Decode.FromBytes([]byte("68656c6c6f20776f726c64")).ByHex().ToBytes() // []byte("hello world")
-```
+#### 解密
 
 ##### AES 解密
 ```go
