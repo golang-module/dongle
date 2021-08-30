@@ -17,7 +17,7 @@ Dongle has been included by [awesome-go](https://github.com/avelino/awesome-go#s
 
 [gitee.com/go-package/dongle](https://gitee.com/go-package/dongle "gitee.com/go-package/dongle")
 
-[robeeask community](http://dongle.robeeask.com/ "dongle.robeeask.com")
+[robeeask community](https://ajaxupload.robeeask.com/ "ajaxupload.robeeask.com")
 
 #### Installation
 ```go
