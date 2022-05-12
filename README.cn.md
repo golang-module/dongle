@@ -28,10 +28,10 @@ import (
 )
 
 // 使用 gitee 库
-go get -u gitee.com/go-package/dongle
+go get -u gitee.com/golang-module/dongle
 
 import (
-    "gitee.com/go-package/dongle"
+    "gitee.com/golang-module/dongle"
 )
 ```
 
