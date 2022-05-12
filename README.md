@@ -15,7 +15,7 @@ Dongle has been included by [awesome-go](https://github.com/avelino/awesome-go#s
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
 
-[gitee.com/go-package/dongle](https://gitee.com/go-package/dongle "gitee.com/go-package/dongle")
+[gitee.com/go-package/dongle](https://gitee.com/golang-module/dongle "gitee.com/golang-module/dongle")
 
 
 #### Installation
