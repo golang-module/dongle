@@ -17,7 +17,6 @@ Dongle has been included by [awesome-go](https://github.com/avelino/awesome-go#s
 
 [gitee.com/go-package/dongle](https://gitee.com/go-package/dongle "gitee.com/go-package/dongle")
 
-[robeeask community](https://dongle.robeeask.com/ "dongle.robeeask.com")
 
 #### Installation
 ```go
@@ -29,10 +28,10 @@ import (
 )
 
 // By gitee
-go get -u gitee.com/go-package/dongle
+go get -u gitee.com/golang-module/dongle
 
 import (
-    "gitee.com/go-package/dongle"
+    "gitee.com/golang-module/dongle"
 )
 ```
 
