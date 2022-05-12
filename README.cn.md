@@ -14,9 +14,7 @@ Dongle 已被 [awesome-go](https://github.com/avelino/awesome-go#security "aweso
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
 
-[gitee.com/go-package/dongle](https://gitee.com/go-package/dongle "gitee.com/go-package/dongle")
-
-[robeeask community](http://dongle.robeeask.com/ "dongle.robeeask.com")
+[gitee.com/golang-module/dongle](https://gitee.com/golang-module/dongle "gitee.com/golang-module/dongle")
 
 #### 安装使用
 ```go
