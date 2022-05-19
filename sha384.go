@@ -5,15 +5,12 @@ import (
 )
 
 // BySha384 encrypts by sha384.
+// 通过 sha384 加密
 func (e encrypt) BySha384() encrypt {
-	if e.Error != nil {
+	if len(e.src) == 0 {
 		return e
 	}
-	if len(e.input) == 0 {
-		return e
-	}
-
-	bytes := sha512.Sum384(e.input)
-	e.output = bytes[:]
+	bytes := sha512.Sum384(e.src)
+	e.dst = bytes[:]
 	return e
 }
