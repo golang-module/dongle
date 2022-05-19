@@ -5,27 +5,25 @@ import (
 )
 
 // ByBase64 encodes by base64.
+// 通过 base64 编码
 func (e encode) ByBase64() encode {
-	input, output := e.input, e.output
-	if input == nil {
+	if len(e.src) == 0 {
 		return e
 	}
-	if output != nil {
-		input = output
-	}
-	e.output = string2bytes(base64.StdEncoding.EncodeToString(input))
+	buf := make([]byte, base64.StdEncoding.EncodedLen(len(e.src)))
+	base64.StdEncoding.Encode(buf, e.src)
+	e.dst = buf
 	return e
 }
 
 // ByBase64 encodes by base64.
+// 通过 base64 解码
 func (d decode) ByBase64() decode {
-	input, output := d.input, d.output
-	if input == nil {
+	if len(d.src) == 0 {
 		return d
 	}
-	if output != nil {
-		input = output
-	}
-	d.output, d.Error = base64.StdEncoding.DecodeString(bytes2string(input))
+	buf := make([]byte, base64.StdEncoding.DecodedLen(len(d.src)))
+	n, err := base64.StdEncoding.Decode(buf, d.src)
+	d.dst, d.Error = buf[:n], err
 	return d
 }
