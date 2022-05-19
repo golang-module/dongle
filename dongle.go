@@ -1,8 +1,7 @@
 // @Package dongle
 // @Description a simple, semantic and developer-friendly golang package for encoding&decoding and encryption&decryption
 // @Page github.com/golang-module/dongle
-// @Version v0.0.2
-// @Author gouguoyin
+// @Developer gouguoyin
 // @Blog www.gouguoyin.cn
 // @Email contact@gouguoyin.cn
 
@@ -13,19 +12,19 @@ import (
 	"unsafe"
 )
 
+// Version current version
+// 当前版本号
+const Version = "0.1.0"
+
 // dongle defines a dongle struct.
+// 定义 dongle 结构体
 type dongle struct {
-	input  []byte
-	output []byte
-	Error  error
+	src   []byte
+	dst   []byte
+	Error error
 }
 
 var (
-	// emptyString defines a empty string
-	emptyString = ""
-	// emptyBytes defines a empty byte slice
-	emptyBytes = []byte{}
-
 	// Encode returns a new encode instance
 	Encode = newEncode()
 	// Decode returns a new decode instance
@@ -36,8 +35,12 @@ var (
 	Decrypt = newDecrypt()
 )
 
-// string2bytes converts string to byte slice without a memory allocation.
+// converts string to byte slice without a memory allocation.
+// 将字符串转换为字节切片
 func string2bytes(s string) []byte {
+	if s == "" {
+		return nil
+	}
 	return *(*[]byte)(unsafe.Pointer(
 		&struct {
 			string
@@ -46,7 +49,11 @@ func string2bytes(s string) []byte {
 	))
 }
 
-// bytes2string converts byte slice to string without a memory allocation.
+// converts byte slice to string without a memory allocation.
+// 将字节切片转换为字符串
 func bytes2string(b []byte) string {
+	if len(b) == 0 {
+		return ""
+	}
 	return *(*string)(unsafe.Pointer(&b))
 }
