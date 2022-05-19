@@ -7,94 +7,102 @@ import (
 // decrypt defines decrypt struct
 type decrypt struct {
 	dongle
-	Cipher *Cipher
 }
 
 // newDecrypt returns a new decrypt instance.
 func newDecrypt() decrypt {
-	return decrypt{Cipher: NewCipher()}
+	return decrypt{}
 }
 
 // FromString encrypts from string.
-func (d decrypt) FromString(s string, decodingMode ...string) decrypt {
-	if s == emptyString {
-		return d
-	}
-	mode := HEX
-	if len(decodingMode) > 0 {
-		mode = decodingMode[len(decodingMode)-1]
-	}
-	d.input = string2bytes(s)
-	d.input, d.Error = d.decode(mode)
+func (d decrypt) FromString(s string) decrypt {
+	d.src = string2bytes(s)
+	return d
+}
+
+func (d decrypt) FromHexString(s string) decrypt {
+	d.src = Decode.FromString(s).ByHex().ToBytes()
+	return d
+}
+
+func (d decrypt) FromBase32String(s string) decrypt {
+	d.src = Decode.FromString(s).ByBase32().ToBytes()
+	return d
+}
+
+func (d decrypt) FromBase64String(s string) decrypt {
+	d.src = Decode.FromString(s).ByBase64().ToBytes()
 	return d
 }
 
 // FromBytes encrypts from byte slice.
-func (d decrypt) FromBytes(b []byte, decodingMode ...string) decrypt {
-	if len(b) == 0 {
-		return d
-	}
-	mode := HEX
-	if len(decodingMode) > 0 {
-		mode = decodingMode[len(decodingMode)-1]
-	}
-	d.input = b
-	d.input, d.Error = d.decode(mode)
+func (d decrypt) FromBytes(b []byte) decrypt {
+	d.src = b
 	return d
+}
+
+func (d decrypt) FromHexBytes(b []byte) decrypt {
+	d.src = Decode.FromBytes(b).ByHex().ToBytes()
+	return d
+}
+
+func (d decrypt) FromBase32Bytes(b []byte) decrypt {
+	d.src = Decode.FromBytes(b).ByBase32().ToBytes()
+	return d
+}
+
+func (d decrypt) FromBase64Bytes(b []byte) decrypt {
+	d.src = Decode.FromBytes(b).ByBase64().ToBytes()
+	return d
+}
+
+// String implements the interface Stringer for decrypt struct.
+// 实现 Stringer 接口
+func (d decrypt) String() string {
+	return d.ToString()
 }
 
 // ToString outputs as string.
 func (d decrypt) ToString() string {
-	input, output := d.input, d.output
-	if len(input) == 0 {
-		return emptyString
-	}
-	return bytes2string(output)
+	return bytes2string(d.dst)
 }
 
 // ToBytes outputs as byte slice.
 func (d decrypt) ToBytes() []byte {
-	input, output := d.input, d.output
-	if len(input) == 0 {
-		return emptyBytes
+	if len(d.dst) == 0 {
+		return []byte("")
 	}
-	return output
+	return d.dst
 }
 
-func (d decrypt) decode(decodingMode string) ([]byte, error) {
-	switch decodingMode {
-	case HEX:
-		hex := Decode.FromBytes(d.input).ByHex()
-		return hex.ToBytes(), hex.Error
-	case BASE32:
-		base32 := Decode.FromBytes(d.input).ByBase32()
-		return base32.ToBytes(), base32.Error
-	case BASE58:
-		base58 := Decode.FromBytes(d.input).ByBase58()
-		return base58.ToBytes(), base58.Error
-	case BASE64:
-		base64 := Decode.FromBytes(d.input).ByBase64()
-		return base64.ToBytes(), base64.Error
+func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
+	if len(d.src) == 0 {
+		return nil, d.Error
+	}
+	if len(c.iv) != b.BlockSize() {
+		return nil, invalidIVError(len(c.iv), b.BlockSize())
+	}
+	switch {
+	case c.mode == CBC && c.padding == ZERO:
+		dst = c.CBCDecrypt(d.src, b)
+		dst = c.ZeroUnPadding(dst)
+	case c.mode == CBC && c.padding == PKCS5:
+		dst = c.CBCDecrypt(d.src, b)
+		dst = c.PKCS5UnPadding(dst)
+	case c.mode == CBC && c.padding == PKCS7:
+		dst = c.CBCDecrypt(d.src, b)
+		dst = c.PKCS7UnPadding(dst)
+	case c.mode == CFB && c.padding == ZERO:
+		dst = c.CFBDecrypt(d.src, b)
+		dst = c.ZeroUnPadding(dst)
+	case c.mode == CFB && c.padding == PKCS5:
+		dst = c.CFBDecrypt(d.src, b)
+		dst = c.PKCS5UnPadding(dst)
+	case c.mode == CFB && c.padding == PKCS7:
+		dst = c.CFBDecrypt(d.src, b)
+		dst = c.PKCS7UnPadding(dst)
 	default:
-		return emptyBytes, invalidDecodingModeError(decodingMode)
+		return nil, invalidModeOrPaddingError(c.mode, c.padding)
 	}
-}
-
-func (d decrypt) decrypt(cipher *Cipher, block cipher.Block) ([]byte, error) {
-	dst := emptyBytes
-	switch cipher.mode {
-	case CBC:
-		dst = cipher.CBCDecrypt(block, d.input)
-	default:
-		return dst, invalidGroupModeError(cipher.mode)
-	}
-	switch cipher.padding {
-	case ZeroPadding:
-		return cipher.ZeroUnPadding(dst), nil
-	case PKCS5Padding:
-		return cipher.PKCS5UnPadding(dst), nil
-	case PKCS7Padding:
-		return cipher.PKCS7UnPadding(dst), nil
-	}
-	return dst, invalidPaddingModeError(cipher.padding)
+	return dst, nil
 }

@@ -1,57 +1,81 @@
 package dongle
 
-const (
-	// BASE32 base32 encoding mode
-	BASE32 = "base32"
-	// BASE58 base58 encoding mode
-	BASE58 = "base58"
-	// BASE64 base64 encoding mode
-	BASE64 = "base64"
-	// HEX hex encoding mode
-	HEX = "hex"
+import (
+	"bufio"
+	"io"
+	"os"
 )
 
 // encode defines a encode struct.
+// 定义 encode 结构体
 type encode struct {
 	dongle
 }
 
-// newEncode returns a new encode instance.
+// returns a new encode instance.
+// 初始化 encode 结构体
 func newEncode() encode {
 	return encode{}
 }
 
-// FromString encrypts from string.
+// FromString encodes from string.
+// 对字符串编码
 func (e encode) FromString(s string) encode {
-	if s == emptyString {
-		return e
-	}
-	e.input = string2bytes(s)
+	e.src = string2bytes(s)
 	return e
 }
 
-// FromBytes encrypts from byte slice.
+// FromBytes encodes from byte slice.
+// 对字节切片编码
 func (e encode) FromBytes(b []byte) encode {
-	if len(b) > 0 {
-		e.input = b
+	e.src = b
+	return e
+}
+
+// FromFile encrypts from file.
+// 对文件编码
+func (e encode) FromFile(s string) encode {
+	if len(s) == 0 {
+		return e
+	}
+	file, err := os.Open(s)
+	if err != nil {
+		e.Error = invalidFileError(s)
+		return e
+	}
+	defer file.Close()
+
+	for buf, reader := make([]byte, 1024), bufio.NewReader(file); ; {
+		n, err := reader.Read(buf)
+		if err != nil && err != io.EOF {
+			e.Error = err
+			return e
+		}
+		if n == 0 {
+			break
+		}
+		e.src = append(e.src, buf[:n]...)
 	}
 	return e
+}
+
+// String implements the interface Stringer for encode struct.
+// 实现 Stringer 接口
+func (e encode) String() string {
+	return e.ToString()
 }
 
 // ToString outputs as string.
+// 输出字符串
 func (e encode) ToString() string {
-	output := e.output
-	if output == nil {
-		output = e.input
-	}
-	return bytes2string(output)
+	return bytes2string(e.dst)
 }
 
 // ToBytes outputs as byte slice.
+// 输出字节切片
 func (e encode) ToBytes() []byte {
-	input, output := e.input, e.output
-	if len(input) == 0 {
-		return emptyBytes
+	if len(e.dst) == 0 {
+		return []byte("")
 	}
-	return output
+	return e.dst
 }
