@@ -11,7 +11,7 @@ English | [简体中文](README.cn.md)
 ### Introduction
 A simple, semantic and developer-friendly golang package for encoding&decoding and encryption&decryption
 
-Dongle has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go"), if you think
+`Dongle` has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go"), if you think
 it is helpful, please give me a star
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")

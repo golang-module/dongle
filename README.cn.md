@@ -10,7 +10,7 @@
 
 一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密库
 
-Dongle 已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录, 如果您觉得不错，请给个 star 吧
+`Dongle` 已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录, 如果您觉得不错，请给个 star 吧
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
 
