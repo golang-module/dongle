@@ -7,104 +7,101 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEncrypt_BySha512_FromString_ToString(t *testing.T) {
+var (
+	sha512Input          = "hello world"
+	sha512HexExpected    = "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f"
+	sha512Base32Expected = "GCPMYSE4CLLOWTGEB5IMSAXSWTIO257OKENHY6U3ZU6KQ3KM3BXZRHOTLPC76SMWODNDIJK3IWYM7WBQ5APWAXOPPXCVILUTV2ONO3Y="
+	sha512Base64Expected = "MJ7MSJwS1utMxA9QyQLytNDtd+5RGnx6m808qG1M2G+YndNbxf9JlnDaNCVbRbDP2DDoH2Bdz33FVC6TrpzXbw=="
+)
+
+func TestEncrypt_BySha512_FromStringToString(t *testing.T) {
 	assert := assert.New(t)
 
-	tests := []struct {
-		input      string // 输入值
-		encodeMode string // 编码模式
-		expected   string // 期望值
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
 	}{
-		{"", "hex", ""},
-		{"", "base32", ""},
-		{"", "base64", ""},
-		{"hello world", "xxx", ""},
-		{"hello world", "hex", "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f"},
-		{"hello world", "base32", "GCPMYSE4CLLOWTGEB5IMSAXSWTIO257OKENHY6U3ZU6KQ3KM3BXZRHOTLPC76SMWODNDIJK3IWYM7WBQ5APWAXOPPXCVILUTV2ONO3Y="},
-		{"hello world", "base64", "MJ7MSJwS1utMxA9QyQLytNDtd+5RGnx6m808qG1M2G+YndNbxf9JlnDaNCVbRbDP2DDoH2Bdz33FVC6TrpzXbw=="},
+		{"", ""},
+		{sha512Input, sha512HexExpected},
 	}
 
-	for index, test := range tests {
+	for index, test := range hexTests {
 		e := Encrypt.FromString(test.input).BySha512()
 		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(test.encodeMode), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
 	}
-}
 
-func TestEncrypt_BySha512_FromString_ToBytes(t *testing.T) {
-	assert := assert.New(t)
-
-	tests := []struct {
-		input      string // 输入值
-		encodeMode string // 编码模式
-		expected   []byte // 期望值
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
 	}{
-		{"", "hex", []byte{}},
-		{"", "base32", []byte{}},
-		{"", "base64", []byte{}},
-		{"hello world", "xxx", []byte("")},
-		{"hello world", "hex", []byte("309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f")},
-		{"hello world", "base32", []byte("GCPMYSE4CLLOWTGEB5IMSAXSWTIO257OKENHY6U3ZU6KQ3KM3BXZRHOTLPC76SMWODNDIJK3IWYM7WBQ5APWAXOPPXCVILUTV2ONO3Y=")},
-		{"hello world", "base64", []byte("MJ7MSJwS1utMxA9QyQLytNDtd+5RGnx6m808qG1M2G+YndNbxf9JlnDaNCVbRbDP2DDoH2Bdz33FVC6TrpzXbw==")},
+		{"", ""},
+		{sha512Input, sha512Base32Expected},
 	}
 
-	for index, test := range tests {
+	for index, test := range base32Tests {
 		e := Encrypt.FromString(test.input).BySha512()
 		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBytes(test.encodeMode), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{sha512Input, sha512Base64Expected},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromString(test.input).BySha512()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestEncrypt_BySha512_FromBytes_ToString(t *testing.T) {
+func TestEncrypt_BySha512_FromBytesToString(t *testing.T) {
 	assert := assert.New(t)
 
-	tests := []struct {
-		input      []byte // 输入值
-		encodeMode string // 编码模式
-		expected   string // 期望值
+	hexTests := []struct {
+		input    []byte // 输入值
+		expected string // 期望值
 	}{
-		{[]byte(""), "hex", ""},
-		{[]byte(""), "base32", ""},
-		{[]byte(""), "base64", ""},
-		{[]byte("hello world"), "xxx", ""},
-		{[]byte("hello world"), "hex", "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f"},
-		{[]byte("hello world"), "base32", "GCPMYSE4CLLOWTGEB5IMSAXSWTIO257OKENHY6U3ZU6KQ3KM3BXZRHOTLPC76SMWODNDIJK3IWYM7WBQ5APWAXOPPXCVILUTV2ONO3Y="},
-		{[]byte("hello world"), "base64", "MJ7MSJwS1utMxA9QyQLytNDtd+5RGnx6m808qG1M2G+YndNbxf9JlnDaNCVbRbDP2DDoH2Bdz33FVC6TrpzXbw=="},
+		{[]byte(""), ""},
+		{[]byte(sha512Input), sha512HexExpected},
 	}
 
-	for index, test := range tests {
+	for index, test := range hexTests {
 		e := Encrypt.FromBytes(test.input).BySha512()
 		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(test.encodeMode), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
 	}
-}
 
-func TestEncrypt_BySha512_FromBytes_ToBytes(t *testing.T) {
-	assert := assert.New(t)
-
-	tests := []struct {
-		input      []byte // 输入值
-		encodeMode string // 编码模式
-		expected   []byte // 期望值
+	base32Tests := []struct {
+		input    []byte // 输入值
+		expected string // 期望值
 	}{
-		{[]byte(""), "hex", []byte{}},
-		{[]byte(""), "base32", []byte{}},
-		{[]byte(""), "base64", []byte{}},
-		{[]byte("hello world"), "xxx", []byte("")},
-		{[]byte("hello world"), "hex", []byte("309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f")},
-		{[]byte("hello world"), "base32", []byte("GCPMYSE4CLLOWTGEB5IMSAXSWTIO257OKENHY6U3ZU6KQ3KM3BXZRHOTLPC76SMWODNDIJK3IWYM7WBQ5APWAXOPPXCVILUTV2ONO3Y=")},
-		{[]byte("hello world"), "base64", []byte("MJ7MSJwS1utMxA9QyQLytNDtd+5RGnx6m808qG1M2G+YndNbxf9JlnDaNCVbRbDP2DDoH2Bdz33FVC6TrpzXbw==")},
+		{[]byte(""), ""},
+		{[]byte(sha512Input), sha512Base32Expected},
 	}
 
-	for index, test := range tests {
+	for index, test := range base32Tests {
 		e := Encrypt.FromBytes(test.input).BySha512()
 		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBytes(test.encodeMode), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
 	}
-}
 
-func TestError_BySha512_FromFile(t *testing.T) {
-	file := "./demo.txt"
-	e := Encrypt.FromFile(file).BySha512()
-	assert.Equal(t, invalidFileError(file), e.Error, "Should catch an exception")
+	base64Tests := []struct {
+		input    []byte // 输入值
+		expected string // 期望值
+	}{
+		{[]byte(""), ""},
+		{[]byte(sha512Input), sha512Base64Expected},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromBytes(test.input).BySha512()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+	}
 }

@@ -5,14 +5,12 @@ import (
 )
 
 // BySha512 encrypts by sha512.
+// 通过 sha512 加密
 func (e encrypt) BySha512() encrypt {
-	if e.Error != nil {
+	if len(e.src) == 0 {
 		return e
 	}
-	if len(e.input) == 0 {
-		return e
-	}
-	bytes := sha512.Sum512(e.input)
-	e.output = bytes[:]
+	bytes := sha512.Sum512(e.src)
+	e.dst = bytes[:]
 	return e
 }
