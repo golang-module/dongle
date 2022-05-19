@@ -1,219 +1,636 @@
 package dongle
 
 import (
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
-func TestEncrypt_ByAesWithCBC_FromString(t *testing.T) {
-	assert := assert.New(t)
-	input, key, iv := "hello world", "0123456789abcdef", "0123456789abcdef"
+var (
+	aesInput = "hello world"
+	aesKey   = "1234567887654321"
+	aesIV    = "1234567887654321"
+)
 
-	tests := []struct {
-		paddingMode  string // 填充模式
-		encodingMode string // 编码模式
-		expected     string // 期望值
-	}{
-		{ZeroPadding, HEX, "889935b7a0c64b0333d713cafaee08fe"},
-		{PKCS5Padding, HEX, "c1e9b4529aac9793010f4677f6358efe"},
-		{PKCS7Padding, HEX, "c1e9b4529aac9793010f4677f6358efe"},
-
-		{ZeroPadding, BASE32, "RCMTLN5AYZFQGM6XCPFPV3QI7Y======"},
-		{PKCS5Padding, BASE32, "YHU3IUU2VSLZGAIPIZ37MNMO7Y======"},
-		{PKCS7Padding, BASE32, "YHU3IUU2VSLZGAIPIZ37MNMO7Y======"},
-
-		{ZeroPadding, BASE58, "HsL9oy8dws8BDiaCnhxcW9"},
-		{PKCS5Padding, BASE58, "QwpdQepaZ8PxuVpFdiVSER"},
-		{PKCS7Padding, BASE58, "QwpdQepaZ8PxuVpFdiVSER"},
-
-		{ZeroPadding, BASE64, "iJk1t6DGSwMz1xPK+u4I/g=="},
-		{PKCS5Padding, BASE64, "wem0Upqsl5MBD0Z39jWO/g=="},
-		{PKCS7Padding, BASE64, "wem0Upqsl5MBD0Z39jWO/g=="},
-	}
-
-	cipher := NewCipher()
-	for index, test := range tests {
+var (
+	// AES-CBC-ZEROPadding
+	aesCbcZeroHexExpected    = "5eb15d89da69f77372ee8d9bd02b0252"
+	aesCbcZeroBase32Expected = "L2YV3CO2NH3XG4XORWN5AKYCKI======"
+	aesCbcZeroBase64Expected = "XrFdidpp93Ny7o2b0CsCUg=="
+	aesCbcZeroCipher         = func() *Cipher {
+		cipher := NewCipher()
 		cipher.SetMode(CBC)
-		cipher.SetPadding(test.paddingMode)
-		cipher.SetKey(key)
-		cipher.SetIV(iv)
-		e := Encrypt.FromString(input).ByAes(cipher)
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(test.encodingMode), "Current test id is "+strconv.Itoa(index))
-	}
-}
-
-func TestEncrypt_ByAesWithCBC_FromBytes(t *testing.T) {
-	assert := assert.New(t)
-	input, key, iv := "hello world", "0123456789abcdef", "0123456789abcdef"
-
-	tests := []struct {
-		paddingMode  string // 填充模式
-		encodingMode string // 编码模式
-		expected     string // 期望值
-	}{
-		{ZeroPadding, HEX, "889935b7a0c64b0333d713cafaee08fe"},
-		{PKCS5Padding, HEX, "c1e9b4529aac9793010f4677f6358efe"},
-		{PKCS7Padding, HEX, "c1e9b4529aac9793010f4677f6358efe"},
-
-		{ZeroPadding, BASE32, "RCMTLN5AYZFQGM6XCPFPV3QI7Y======"},
-		{PKCS5Padding, BASE32, "YHU3IUU2VSLZGAIPIZ37MNMO7Y======"},
-		{PKCS7Padding, BASE32, "YHU3IUU2VSLZGAIPIZ37MNMO7Y======"},
-
-		{ZeroPadding, BASE58, "HsL9oy8dws8BDiaCnhxcW9"},
-		{PKCS5Padding, BASE58, "QwpdQepaZ8PxuVpFdiVSER"},
-		{PKCS7Padding, BASE58, "QwpdQepaZ8PxuVpFdiVSER"},
-
-		{ZeroPadding, BASE64, "iJk1t6DGSwMz1xPK+u4I/g=="},
-		{PKCS5Padding, BASE64, "wem0Upqsl5MBD0Z39jWO/g=="},
-		{PKCS7Padding, BASE64, "wem0Upqsl5MBD0Z39jWO/g=="},
+		cipher.SetPadding(ZERO)
+		cipher.SetKey(aesKey)
+		cipher.SetIV(aesIV)
+		return cipher
 	}
 
-	cipher := NewCipher()
-	for index, test := range tests {
+	// AES-CBC-PKCS5Padding
+	aesCbcPkcs5HexExpected    = "65d823bdf1c581a1ded1cba42e03ca52"
+	aesCbcPkcs5Base32Expected = "MXMCHPPRYWA2DXWRZOSC4A6KKI======"
+	aesCbcPkcs5Base64Expected = "ZdgjvfHFgaHe0cukLgPKUg=="
+	aesCbcPkcs5Cipher         = func() *Cipher {
+		cipher := NewCipher()
 		cipher.SetMode(CBC)
-		cipher.SetPadding(test.paddingMode)
-		cipher.SetKey(key)
-		cipher.SetIV(iv)
-		e := Encrypt.FromBytes([]byte(input)).ByAes(cipher)
-		assert.Nil(e.Error)
-		assert.Equal([]byte(test.expected), e.ToBytes(test.encodingMode), "Current test id is "+strconv.Itoa(index))
-	}
-}
-
-func TestDecrypt_ByAesWithCBC_FromString(t *testing.T) {
-	assert := assert.New(t)
-	expected, key, iv := "hello world", "0123456789abcdef", "0123456789abcdef"
-
-	tests := []struct {
-		input        string // 期望值
-		decodingMode string // 解码模式
-		paddingMode  string // 填充模式
-	}{
-		{"889935b7a0c64b0333d713cafaee08fe", HEX, ZeroPadding},
-		{"c1e9b4529aac9793010f4677f6358efe", HEX, PKCS5Padding},
-		{"c1e9b4529aac9793010f4677f6358efe", HEX, PKCS7Padding},
-
-		{"RCMTLN5AYZFQGM6XCPFPV3QI7Y======", BASE32, ZeroPadding},
-		{"YHU3IUU2VSLZGAIPIZ37MNMO7Y======", BASE32, PKCS5Padding},
-		{"YHU3IUU2VSLZGAIPIZ37MNMO7Y======", BASE32, PKCS7Padding},
-
-		{"HsL9oy8dws8BDiaCnhxcW9", BASE58, ZeroPadding},
-		{"QwpdQepaZ8PxuVpFdiVSER", BASE58, PKCS5Padding},
-		{"QwpdQepaZ8PxuVpFdiVSER", BASE58, PKCS7Padding},
-
-		{"iJk1t6DGSwMz1xPK+u4I/g==", BASE64, ZeroPadding},
-		{"wem0Upqsl5MBD0Z39jWO/g==", BASE64, PKCS5Padding},
-		{"wem0Upqsl5MBD0Z39jWO/g==", BASE64, PKCS7Padding},
+		cipher.SetPadding(PKCS5)
+		cipher.SetKey(aesKey)
+		cipher.SetIV(aesIV)
+		return cipher
 	}
 
-	cipher := NewCipher()
-	for index, test := range tests {
+	// AES-CBC-PKCS7Padding
+	aesCbcPkcs7HexExpected    = "65d823bdf1c581a1ded1cba42e03ca52"
+	aesCbcPkcs7Base32Expected = "MXMCHPPRYWA2DXWRZOSC4A6KKI======"
+	aesCbcPkcs7Base64Expected = "ZdgjvfHFgaHe0cukLgPKUg=="
+	aesCbcPkcs7Cipher         = func() *Cipher {
+		cipher := NewCipher()
 		cipher.SetMode(CBC)
-		cipher.SetPadding(test.paddingMode)
-		cipher.SetKey(key)
-		cipher.SetIV(iv)
-		e := Decrypt.FromString(test.input, test.decodingMode).ByAes(cipher)
-		assert.Nil(e.Error)
-		assert.Equal(expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
+		cipher.SetPadding(PKCS7)
+		cipher.SetKey([]byte(aesKey))
+		cipher.SetIV([]byte(aesIV))
+		return cipher
 	}
-}
 
-func TestDecrypt_ByAesWithCBC_FromBytes(t *testing.T) {
+	// AES-CFB-PKCS5Padding
+	aesCfbPkcs5HexExpected    = "3fbb763723e1b2a11242f0aa880d7100"
+	aesCfbPkcs5Base32Expected = "H65XMNZD4GZKCESC6CVIQDLRAA======"
+	aesCfbPkcs5Base64Expected = "P7t2NyPhsqESQvCqiA1xAA=="
+	aesCfbPkcs5Cipher         = func() *Cipher {
+		cipher := NewCipher()
+		cipher.SetMode(CFB)
+		cipher.SetPadding(PKCS5)
+		cipher.SetKey(aesKey)
+		cipher.SetIV(aesIV)
+		return cipher
+	}
+
+	// AES-CFB-PKCS7Padding
+	aesCfbPkcs7HexExpected    = "3fbb763723e1b2a11242f0aa880d7100"
+	aesCfbPkcs7Base32Expected = "H65XMNZD4GZKCESC6CVIQDLRAA======"
+	aesCfbPkcs7Base64Expected = "P7t2NyPhsqESQvCqiA1xAA=="
+	aesCfbPkcs7Cipher         = func() *Cipher {
+		cipher := NewCipher()
+		cipher.SetMode(CFB)
+		cipher.SetPadding(PKCS7)
+		cipher.SetKey(aesKey)
+		cipher.SetIV(aesIV)
+		return cipher
+	}
+)
+
+func TestEncrypt_ByAes_CBC_ZERO(t *testing.T) {
 	assert := assert.New(t)
-	expected, key, iv := "hello world", "0123456789abcdef", "0123456789abcdef"
 
-	tests := []struct {
-		input        string // 期望值
-		decodingMode string // 解码模式
-		paddingMode  string // 填充模式
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
 	}{
-		{"889935b7a0c64b0333d713cafaee08fe", HEX, ZeroPadding},
-		{"c1e9b4529aac9793010f4677f6358efe", HEX, PKCS5Padding},
-		{"c1e9b4529aac9793010f4677f6358efe", HEX, PKCS7Padding},
-
-		{"RCMTLN5AYZFQGM6XCPFPV3QI7Y======", BASE32, ZeroPadding},
-		{"YHU3IUU2VSLZGAIPIZ37MNMO7Y======", BASE32, PKCS5Padding},
-		{"YHU3IUU2VSLZGAIPIZ37MNMO7Y======", BASE32, PKCS7Padding},
-
-		{"HsL9oy8dws8BDiaCnhxcW9", BASE58, ZeroPadding},
-		{"QwpdQepaZ8PxuVpFdiVSER", BASE58, PKCS5Padding},
-		{"QwpdQepaZ8PxuVpFdiVSER", BASE58, PKCS7Padding},
-
-		{"iJk1t6DGSwMz1xPK+u4I/g==", BASE64, ZeroPadding},
-		{"wem0Upqsl5MBD0Z39jWO/g==", BASE64, PKCS5Padding},
-		{"wem0Upqsl5MBD0Z39jWO/g==", BASE64, PKCS7Padding},
+		{"", ""},
+		{aesInput, aesCbcZeroHexExpected},
 	}
 
-	cipher := NewCipher()
-	for index, test := range tests {
-		cipher.SetMode(CBC)
-		cipher.SetPadding(test.paddingMode)
-		cipher.SetKey(key)
-		cipher.SetIV(iv)
-		e := Decrypt.FromBytes([]byte(test.input), test.decodingMode).ByAes(cipher)
+	for index, test := range hexTests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcZeroCipher())
 		assert.Nil(e.Error)
-		assert.Equal([]byte(expected), e.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcZeroBase32Expected},
+	}
+
+	for index, test := range base32Tests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcZeroCipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcZeroBase64Expected},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcZeroCipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestError_Encrypt_Padding(t *testing.T) {
-	encrypt, key, iv := "hello world", "0123456789abcdef", "0123456789abcdef"
+func TestDecrypt_ByAes_CBC_ZERO(t *testing.T) {
+	assert := assert.New(t)
 
-	cipher := NewCipher()
-	cipher.SetPadding("xxx")
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcZeroHexExpected, aesInput},
+	}
 
-	e := Encrypt.FromString(encrypt).ByAes(cipher)
-	assert.NotNil(t, e.Error, "It should catch a padding mode exception in ByAes()")
+	for index, test := range hexTests {
+		e := Decrypt.FromHexString(test.input).ByAes(aesCbcZeroCipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcZeroBase32Expected, aesInput},
+	}
+
+	for index, test := range base32Tests {
+		e := Decrypt.FromBase32String(test.input).ByAes(aesCbcZeroCipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcZeroBase64Expected, aesInput},
+	}
+
+	for index, test := range base64Tests {
+		e := Decrypt.FromBase64String(test.input).ByAes(aesCbcZeroCipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
 }
 
-func TestError_Encrypt_Mode(t *testing.T) {
-	encrypt, key, iv := "hello world", "0123456789abcdef", "0123456789abcdef"
+func TestEncrypt_ByAes_CBC_PKCS5(t *testing.T) {
+	assert := assert.New(t)
 
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcPkcs5HexExpected},
+	}
+
+	for index, test := range hexTests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcPkcs5Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcPkcs5Base32Expected},
+	}
+
+	for index, test := range base32Tests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcPkcs5Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcPkcs5Base64Expected},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcPkcs5Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
+func TestDecrypt_ByAes_CBC_PKCS5(t *testing.T) {
+	assert := assert.New(t)
+
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcPkcs5HexExpected, aesInput},
+	}
+
+	for index, test := range hexTests {
+		e := Decrypt.FromHexString(test.input).ByAes(aesCbcPkcs5Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcPkcs5Base32Expected, aesInput},
+	}
+
+	for index, test := range base32Tests {
+		e := Decrypt.FromBase32String(test.input).ByAes(aesCbcPkcs5Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcPkcs5Base64Expected, aesInput},
+	}
+
+	for index, test := range base64Tests {
+		e := Decrypt.FromBase64String(test.input).ByAes(aesCbcPkcs5Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
+func TestEncrypt_ByAes_CBC_PKCS7(t *testing.T) {
+	assert := assert.New(t)
+
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcPkcs7HexExpected},
+	}
+
+	for index, test := range hexTests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcPkcs7Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcPkcs7Base32Expected},
+	}
+
+	for index, test := range base32Tests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcPkcs7Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesInput, aesCbcPkcs7Base64Expected},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromString(test.input).ByAes(aesCbcPkcs7Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
+func TestDecrypt_ByAes_CBC_PKCS7(t *testing.T) {
+	assert := assert.New(t)
+
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcPkcs7HexExpected, aesInput},
+	}
+
+	for index, test := range hexTests {
+		e := Decrypt.FromHexString(test.input).ByAes(aesCbcPkcs7Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcPkcs7Base32Expected, aesInput},
+	}
+
+	for index, test := range base32Tests {
+		e := Decrypt.FromBase32String(test.input).ByAes(aesCbcPkcs7Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{aesCbcPkcs7Base64Expected, aesInput},
+	}
+
+	for index, test := range base64Tests {
+		e := Decrypt.FromBase64String(test.input).ByAes(aesCbcPkcs7Cipher())
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
+// func TestEncrypt_ByAes_CFB_PKCS7(t *testing.T) {
+// 	assert := assert.New(t)
+//
+// 	hexTests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, aesCfbPkcs7HexExpected},
+// 	}
+//
+// 	for index, test := range hexTests {
+// 		e := Encrypt.FromString(test.input).ByAes(aesCfbPkcs7Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base32Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, aesCfbPkcs7Base32Expected},
+// 	}
+//
+// 	for index, test := range base32Tests {
+// 		e := Encrypt.FromString(test.input).ByAes(aesCfbPkcs7Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base64Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, aesCfbPkcs7Base64Expected},
+// 	}
+//
+// 	for index, test := range base64Tests {
+// 		e := Encrypt.FromString(test.input).ByAes(aesCfbPkcs7Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+// 	}
+// }
+//
+// func TestDecrypt_ByAes_CFB_PKCS5(t *testing.T) {
+// 	assert := assert.New(t)
+//
+// 	hexTests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, ""},
+// 	}
+//
+// 	for index, test := range hexTests {
+// 		e := Decrypt.FromHexString(test.input).ByAes(aesCfbPkcs5Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base32Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesCbcPkcs5Base32Expected, aesInput},
+// 	}
+//
+// 	for index, test := range base32Tests {
+// 		e := Decrypt.FromBase32String(test.input).ByAes(aesCfbPkcs5Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base64Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesCbcPkcs5Base64Expected, aesInput},
+// 	}
+//
+// 	for index, test := range base64Tests {
+// 		e := Decrypt.FromBase64String(test.input).ByAes(aesCfbPkcs5Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+// }
+//
+// func TestEncrypt_ByAes_CFB_PKCS5(t *testing.T) {
+// 	assert := assert.New(t)
+//
+// 	hexTests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, aesCfbPkcs5HexExpected},
+// 	}
+//
+// 	for index, test := range hexTests {
+// 		e := Encrypt.FromString(test.input).ByAes(aesCfbPkcs5Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base32Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, aesCfbPkcs5Base32Expected},
+// 	}
+//
+// 	for index, test := range base32Tests {
+// 		e := Encrypt.FromString(test.input).ByAes(aesCfbPkcs5Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base64Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, aesCfbPkcs5Base64Expected},
+// 	}
+//
+// 	for index, test := range base64Tests {
+// 		e := Encrypt.FromString(test.input).ByAes(aesCfbPkcs5Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+// 	}
+// }
+//
+// func TestDecrypt_ByAes_CFB_PKCS7(t *testing.T) {
+// 	assert := assert.New(t)
+//
+// 	hexTests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesInput, ""},
+// 	}
+//
+// 	for index, test := range hexTests {
+// 		e := Decrypt.FromHexString(test.input).ByAes(aesCfbPkcs7Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base32Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesCbcPkcs7Base32Expected, aesInput},
+// 	}
+//
+// 	for index, test := range base32Tests {
+// 		e := Decrypt.FromBase32String(test.input).ByAes(aesCfbPkcs7Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+//
+// 	base64Tests := []struct {
+// 		input    string // 输入值
+// 		expected string // 期望值
+// 	}{
+// 		{"", ""},
+// 		{aesCbcPkcs7Base64Expected, aesInput},
+// 	}
+//
+// 	for index, test := range base64Tests {
+// 		e := Decrypt.FromBase64String(test.input).ByAes(aesCfbPkcs7Cipher())
+// 		assert.Nil(e.Error)
+// 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+// 	}
+// }
+
+func TestEncryptModeError_ByAes(t *testing.T) {
 	cipher := NewCipher()
 	cipher.SetMode("xxx")
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
+	cipher.SetPadding(PKCS7)
+	cipher.SetKey(aesKey)
+	cipher.SetIV(aesIV)
 
-	e := Encrypt.FromString(encrypt).ByAes(cipher)
-	assert.NotNil(t, e.Error, "It should catch a group mode exception in ByAes()")
+	expected := invalidModeOrPaddingError("xxx", PKCS7)
+
+	e1 := Encrypt.FromString(aesInput).ByAes(cipher)
+	assert.Equal(t, expected, e1.Error, "Should catch an exception")
+
+	e2 := Encrypt.FromBytes([]byte(aesInput)).ByAes(cipher)
+	assert.Equal(t, expected, e2.Error, "Should catch an exception")
 }
 
-func TestError_Decrypt_Mode(t *testing.T) {
-	decrypt, key, iv := "889935b7a0c64b0333d713cafaee08fe", "0123456789abcdef", "0123456789abcdef"
-
+func TestDecryptModeError_ByAes(t *testing.T) {
 	cipher := NewCipher()
 	cipher.SetMode("xxx")
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
+	cipher.SetPadding(PKCS7)
+	cipher.SetKey(aesKey)
+	cipher.SetIV(aesIV)
 
-	e := Decrypt.FromString(decrypt).ByAes(cipher)
-	assert.NotNil(t, e.Error, "It should catch a group mode exception in ByAes()")
+	expected := invalidModeOrPaddingError("xxx", PKCS7)
+
+	d1 := Decrypt.FromHexString(aesCbcPkcs7HexExpected).ByAes(cipher)
+	assert.Equal(t, expected, d1.Error, "Should catch an exception")
+
+	d2 := Decrypt.FromHexBytes([]byte(aesCbcPkcs7HexExpected)).ByAes(cipher)
+	assert.Equal(t, expected, d2.Error, "Should catch an exception")
 }
 
-func TestError_Decrypt_Padding(t *testing.T) {
-	decrypt, key, iv := "889935b7a0c64b0333d713cafaee08fe", "0123456789abcdef", "0123456789abcdef"
-
+func TestEncryptKeySizeError_ByAes(t *testing.T) {
 	cipher := NewCipher()
-	cipher.SetPadding("xxx")
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
+	cipher.SetMode(CBC)
+	cipher.SetPadding(PKCS7)
+	cipher.SetKey("xxx")
+	cipher.SetIV(aesIV)
 
-	e := Decrypt.FromString(decrypt).ByAes(cipher)
-	assert.NotNil(t, e.Error, "It should catch a padding mode exception in ByAes()")
+	expected := invalidKeyError(3)
+
+	e1 := Encrypt.FromString(aesInput).ByAes(cipher)
+	assert.Equal(t, expected, e1.Error, "Should catch an exception")
+
+	e2 := Encrypt.FromBytes([]byte(aesInput)).ByAes(cipher)
+	assert.Equal(t, expected, e2.Error, "Should catch an exception")
 }
 
-func TestError_Decrypt_Decoding(t *testing.T) {
-	decrypt, key, iv := "889935b7a0c64b0333d713cafaee08fe", "0123456789abcdef", "0123456789abcdef"
-
+func TestDecryptKeySizeError_ByAes(t *testing.T) {
 	cipher := NewCipher()
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
+	cipher.SetMode(CBC)
+	cipher.SetPadding(PKCS7)
+	cipher.SetKey("xxx")
+	cipher.SetIV(aesIV)
 
-	e := Decrypt.FromString(decrypt, "xxx").ByAes(cipher)
-	assert.NotNil(t, e.Error, "It should catch a decoding mode exception in ByAes()")
+	expected := invalidKeyError(3)
+
+	d1 := Decrypt.FromBase32String(aesCbcPkcs7HexExpected).ByAes(cipher)
+	assert.Equal(t, expected, d1.Error, "Should catch an exception")
+
+	d2 := Decrypt.FromBase32Bytes([]byte(aesCbcPkcs7HexExpected)).ByAes(cipher)
+	assert.Equal(t, expected, d2.Error, "Should catch an exception")
+}
+
+func TestEncryptIVSizeError_ByAes(t *testing.T) {
+	cipher := NewCipher()
+	cipher.SetMode(CBC)
+	cipher.SetPadding(PKCS7)
+	cipher.SetKey(aesKey)
+	cipher.SetIV("xxx")
+
+	expected := invalidIVError(3, 16)
+
+	e1 := Encrypt.FromString(aesInput).ByAes(cipher)
+	assert.Equal(t, expected, e1.Error, "Should catch an exception")
+
+	e2 := Encrypt.FromBytes([]byte(aesInput)).ByAes(cipher)
+	assert.Equal(t, expected, e2.Error, "Should catch an exception")
+}
+
+func TestDecryptIVSizeError_ByAes(t *testing.T) {
+	cipher := NewCipher()
+	cipher.SetMode(CBC)
+	cipher.SetPadding(PKCS7)
+	cipher.SetKey(aesKey)
+	cipher.SetIV("xxx")
+
+	expected := invalidIVError(3, 16)
+
+	d1 := Decrypt.FromBase64String(aesCbcPkcs7HexExpected).ByAes(cipher)
+	assert.Equal(t, expected, d1.Error, "Should catch an exception")
+
+	d2 := Decrypt.FromBase64Bytes([]byte(aesCbcPkcs7HexExpected)).ByAes(cipher)
+	assert.Equal(t, expected, d2.Error, "Should catch an exception")
 }
