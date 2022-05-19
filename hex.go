@@ -5,27 +5,22 @@ import (
 )
 
 // ByHex encodes by hex.
+// 通过 hex 编码
 func (e encode) ByHex() encode {
-	input, output := e.input, e.output
-	if input == nil {
-		return e
-	}
-	if output != nil {
-		input = output
-	}
-	e.output = string2bytes(hex.EncodeToString(input))
+	buf := make([]byte, hex.EncodedLen(len(e.src)))
+	hex.Encode(buf, e.src)
+	e.dst = buf
 	return e
 }
 
-// ByHex decodes by base64.
+// ByHex decodes by hex.
+// 通过 hex 解码
 func (d decode) ByHex() decode {
-	input, output := d.input, d.output
-	if input == nil {
-		return d
+	buf := make([]byte, hex.DecodedLen(len(d.src)))
+	n, err := hex.Decode(buf, d.src)
+	if n > 0 {
+		d.dst = buf
 	}
-	if output != nil {
-		input = output
-	}
-	d.output, d.Error = hex.DecodeString(bytes2string(input))
+	d.Error = err
 	return d
 }
