@@ -7,7 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEncode_ByBase32_FromString(t *testing.T) {
+var (
+	base32Input    = "hello world"
+	base32Expected = "NBSWY3DPEB3W64TMMQ======"
+)
+
+func TestEncode_ByBase32_FromStringToString(t *testing.T) {
 	assert := assert.New(t)
 
 	tests := []struct {
@@ -15,7 +20,7 @@ func TestEncode_ByBase32_FromString(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{"hello world", "NBSWY3DPEB3W64TMMQ======"},
+		{base32Input, base32Expected},
 	}
 
 	for index, test := range tests {
@@ -25,7 +30,25 @@ func TestEncode_ByBase32_FromString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase32_FromBytes(t *testing.T) {
+func TestDecode_ByBase32_FromStringToString(t *testing.T) {
+	assert := assert.New(t)
+
+	tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{base32Expected, base32Input},
+	}
+
+	for index, test := range tests {
+		d := Decode.FromString(test.input).ByBase32()
+		assert.Nil(d.Error)
+		assert.Equal(test.expected, d.ToString(), "Current test id is "+strconv.Itoa(index))
+	}
+}
+
+func TestEncode_ByBase32_FromBytesToBytes(t *testing.T) {
 	assert := assert.New(t)
 
 	tests := []struct {
@@ -33,7 +56,7 @@ func TestEncode_ByBase32_FromBytes(t *testing.T) {
 		expected []byte // 期望值
 	}{
 		{[]byte(""), []byte("")},
-		{[]byte("hello world"), []byte("NBSWY3DPEB3W64TMMQ======")},
+		{[]byte(base32Input), []byte(base32Expected)},
 	}
 
 	for index, test := range tests {
@@ -43,43 +66,7 @@ func TestEncode_ByBase32_FromBytes(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase32_Multiple(t *testing.T) {
-	assert := assert.New(t)
-
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{"hello world", "JZBFGV2ZGNCFARKCGNLTMNCUJVGVCPJ5HU6T2PI="},
-	}
-
-	for index, test := range tests {
-		e := Encode.FromString(test.input).ByBase32().ByBase32()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
-	}
-}
-
-func TestDecode_ByBase32_FromString(t *testing.T) {
-	assert := assert.New(t)
-
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{"NBSWY3DPEB3W64TMMQ======", "hello world"},
-	}
-
-	for index, test := range tests {
-		e := Decode.FromString(test.input).ByBase32()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
-	}
-}
-
-func TestDecode_ByBase32_FromBytes(t *testing.T) {
+func TestDecode_ByBase32_FromBytesToBytes(t *testing.T) {
 	assert := assert.New(t)
 
 	tests := []struct {
@@ -87,30 +74,12 @@ func TestDecode_ByBase32_FromBytes(t *testing.T) {
 		expected []byte // 期望值
 	}{
 		{[]byte(""), []byte("")},
-		{[]byte("NBSWY3DPEB3W64TMMQ======"), []byte("hello world")},
+		{[]byte(base32Expected), []byte(base32Input)},
 	}
 
 	for index, test := range tests {
-		e := Decode.FromBytes(test.input).ByBase32()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBytes(), "Current test id is "+strconv.Itoa(index))
-	}
-}
-
-func TestDecode_ByBase32_Multiple(t *testing.T) {
-	assert := assert.New(t)
-
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{"JZBFGV2ZGNCFARKCGNLTMNCUJVGVCPJ5HU6T2PI=", "hello world"},
-	}
-
-	for index, test := range tests {
-		e := Decode.FromString(test.input).ByBase32().ByBase32()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
+		d := Decode.FromBytes(test.input).ByBase32()
+		assert.Nil(d.Error)
+		assert.Equal(test.expected, d.ToBytes(), "Current test id is "+strconv.Itoa(index))
 	}
 }
