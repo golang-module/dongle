@@ -13,7 +13,7 @@ var (
 )
 
 var (
-	// AES-CBC-ZEROPadding
+	// AES-CBC-ZeroPadding
 	aesCbcZeroHexExpected    = "5eb15d89da69f77372ee8d9bd02b0252"
 	aesCbcZeroBase32Expected = "L2YV3CO2NH3XG4XORWN5AKYCKI======"
 	aesCbcZeroBase64Expected = "XrFdidpp93Ny7o2b0CsCUg=="

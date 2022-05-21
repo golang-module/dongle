@@ -488,28 +488,28 @@ invalid file "./demo.txt", please make sure the file exists
 - [ ] SM2 加密
 - [ ] SM3 加密
 - [ ] SM4 加密
-- [x] AES-CBC-ZEROPadding 加密、解密
+- [x] AES-CBC-ZeroPadding 加密、解密
 - [x] AES-CBC-PKCS5Padding 加密、解密
 - [x] AES-CBC-PKCS7Padding 加密、解密
-- [x] AES-CFB-ZEROPadding 加密、解密
+- [x] AES-CFB-ZeroPadding 加密、解密
 - [x] AES-CFB-PKCS5Padding 加密、解密
 - [x] AES-CFB-PKCS7Padding 加密、解密
-- [ ] AES-CTR-ZEROPadding 加密、解密
+- [ ] AES-CTR-ZeroPadding 加密、解密
 - [ ] AES-CTR-PKCS5Padding 加密、解密
 - [ ] AES-CTR-PKCS7Padding 加密、解密
 - [ ] AES-ECB-ZEROPadding 加密、解密
 - [ ] AES-ECB-PKCS5Padding 加密、解密
 - [ ] AES-ECB-PKCS7Padding 加密、解密
-- [ ] 3AES-CBC-ZEROPadding 加密、解密
+- [ ] 3AES-CBC-ZeroPadding 加密、解密
 - [ ] 3AES-CBC-PKCS5Padding 加密、解密
 - [ ] 3AES-CBC-PKCS7Padding 加密、解密
-- [ ] 3AES-CFB-ZEROPadding 加密、解密
+- [ ] 3AES-CFB-ZeroPadding 加密、解密
 - [ ] 3AES-CFB-PKCS5Padding 加密、解密
 - [ ] 3AES-CFB-PKCS7Padding 加密、解密
-- [ ] 3AES-CTR-ZEROPadding 加密、解密
+- [ ] 3AES-CTR-ZeroPadding 加密、解密
 - [ ] 3AES-CTR-PKCS5Padding 加密、解密
 - [ ] 3AES-CTR-PKCS7Padding 加密、解密
-- [ ] 3AES-CBC-ZEROPadding 加密、解密
+- [ ] 3AES-CBC-ZeroPadding 加密、解密
 - [ ] 3AES-CBC-PKCS5Padding 加密、解密
 - [ ] 3AES-CBC-PKCS7Padding 加密、解密
 - [ ] DES 加密、解密

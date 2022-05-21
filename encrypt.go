@@ -1,10 +1,8 @@
 package dongle
 
 import (
-	"bufio"
 	"crypto/cipher"
-	"io"
-	"os"
+	"io/ioutil"
 )
 
 // encrypt defines a encrypt struct.
@@ -39,24 +37,12 @@ func (e encrypt) FromFile(s string) encrypt {
 	if len(s) == 0 {
 		return e
 	}
-	file, err := os.Open(s)
+	bytes, err := ioutil.ReadFile(s)
 	if err != nil {
 		e.Error = invalidFileError(s)
 		return e
 	}
-	defer file.Close()
-
-	for buf, reader := make([]byte, 1024), bufio.NewReader(file); ; {
-		n, err := reader.Read(buf)
-		if err != nil && err != io.EOF {
-			e.Error = err
-			return e
-		}
-		if n == 0 {
-			break
-		}
-		e.src = append(e.src, buf[:n]...)
-	}
+	e.src = bytes
 	return e
 }
 

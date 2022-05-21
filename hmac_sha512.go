@@ -6,7 +6,7 @@ import (
 	"hash"
 )
 
-// ByHmacSha512 encrypts by hmac use sha512.
+// ByHmacSha512 encrypts by hmac with sha512.
 // 通过 hmac-sha512 加密
 func (e encrypt) ByHmacSha512(key interface{}) encrypt {
 	if len(e.src) == 0 {

@@ -7,7 +7,7 @@ import (
 	"golang.org/x/crypto/md4"
 )
 
-// ByHmacMd4 encrypts by md4.
+// ByHmacMd4 encrypts by hmac with md4.
 // 通过 hmac-md4 加密
 func (e encrypt) ByHmacMd4(key interface{}) encrypt {
 	if len(e.src) == 0 {

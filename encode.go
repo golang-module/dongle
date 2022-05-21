@@ -1,9 +1,7 @@
 package dongle
 
 import (
-	"bufio"
-	"io"
-	"os"
+	"io/ioutil"
 )
 
 // encode defines a encode struct.
@@ -32,30 +30,18 @@ func (e encode) FromBytes(b []byte) encode {
 	return e
 }
 
-// FromFile encrypts from file.
+// FromFile encodes from file.
 // 对文件编码
 func (e encode) FromFile(s string) encode {
 	if len(s) == 0 {
 		return e
 	}
-	file, err := os.Open(s)
+	bytes, err := ioutil.ReadFile(s)
 	if err != nil {
 		e.Error = invalidFileError(s)
 		return e
 	}
-	defer file.Close()
-
-	for buf, reader := make([]byte, 1024), bufio.NewReader(file); ; {
-		n, err := reader.Read(buf)
-		if err != nil && err != io.EOF {
-			e.Error = err
-			return e
-		}
-		if n == 0 {
-			break
-		}
-		e.src = append(e.src, buf[:n]...)
-	}
+	e.src = bytes
 	return e
 }
 

@@ -6,7 +6,7 @@ import (
 	"hash"
 )
 
-// ByHmacMd5 encrypts by md5.
+// ByHmacMd5 encrypts by hmac with md5.
 // 通过 hmac-md5 加密
 func (e encrypt) ByHmacMd5(key interface{}) encrypt {
 	if len(e.src) == 0 {

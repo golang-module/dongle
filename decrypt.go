@@ -75,6 +75,8 @@ func (d decrypt) ToBytes() []byte {
 	return d.dst
 }
 
+// decrypts with given encryption mode and padding
+// 根据指定的加密模式和填充模式进行解密
 func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	if len(d.src) == 0 {
 		return nil, d.Error
@@ -84,25 +86,19 @@ func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	}
 	switch {
 	case c.mode == CBC && c.padding == ZERO:
-		dst = c.CBCDecrypt(d.src, b)
-		dst = c.ZeroUnPadding(dst)
+		dst = c.ZeroUnPadding(c.CBCDecrypt(d.src, b))
 	case c.mode == CBC && c.padding == PKCS5:
-		dst = c.CBCDecrypt(d.src, b)
-		dst = c.PKCS5UnPadding(dst)
+		dst = c.PKCS5UnPadding(c.CBCDecrypt(d.src, b))
 	case c.mode == CBC && c.padding == PKCS7:
-		dst = c.CBCDecrypt(d.src, b)
-		dst = c.PKCS7UnPadding(dst)
+		dst = c.PKCS7UnPadding(c.CBCDecrypt(d.src, b))
 	case c.mode == CFB && c.padding == ZERO:
-		dst = c.CFBDecrypt(d.src, b)
-		dst = c.ZeroUnPadding(dst)
+		dst = c.ZeroUnPadding(c.CFBDecrypt(d.src, b))
 	case c.mode == CFB && c.padding == PKCS5:
-		dst = c.CFBDecrypt(d.src, b)
-		dst = c.PKCS5UnPadding(dst)
+		dst = c.PKCS5UnPadding(c.CFBDecrypt(d.src, b))
 	case c.mode == CFB && c.padding == PKCS7:
-		dst = c.CFBDecrypt(d.src, b)
-		dst = c.PKCS7UnPadding(dst)
+		dst = c.PKCS7UnPadding(c.CFBDecrypt(d.src, b))
 	default:
 		return nil, invalidModeOrPaddingError(c.mode, c.padding)
 	}
-	return dst, nil
+	return
 }

@@ -6,7 +6,7 @@ import (
 	"hash"
 )
 
-// ByHmacSha384 encrypts by hmac use sha384.
+// ByHmacSha384 encrypts by hmac with sha384.
 // 通过 hmac-sha384 加密
 func (e encrypt) ByHmacSha384(key interface{}) encrypt {
 	if len(e.src) == 0 {

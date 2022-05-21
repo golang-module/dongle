@@ -5,7 +5,7 @@ import (
 	"crypto/cipher"
 )
 
-// mode constant
+// mode constants
 // 模式常量
 const (
 	CBC = "cbc"
@@ -16,7 +16,7 @@ const (
 	GCM = "gcm"
 )
 
-// padding constant
+// padding constants
 // 填充常量
 const (
 	NO    = "no"
@@ -46,16 +46,19 @@ func NewCipher() *Cipher {
 }
 
 // SetMode sets mode.
+// 设置分组模式
 func (c *Cipher) SetMode(mode string) {
 	c.mode = mode
 }
 
 // SetPadding sets padding.
+// 设置填充模式
 func (c *Cipher) SetPadding(padding string) {
 	c.padding = padding
 }
 
 // SetKey sets key, key size must be 16, 24 or 32 bytes.
+// 设置密钥
 func (c *Cipher) SetKey(key interface{}) {
 	switch v := key.(type) {
 	case string:
@@ -65,7 +68,8 @@ func (c *Cipher) SetKey(key interface{}) {
 	}
 }
 
-// SetIV sets iv.
+// SetIV sets iv, iv size must be 16, 24 or 32 bytes.
+// 设置偏移向量
 func (c *Cipher) SetIV(iv interface{}) {
 	switch v := iv.(type) {
 	case string:
@@ -76,6 +80,7 @@ func (c *Cipher) SetIV(iv interface{}) {
 }
 
 // ZeroPadding padding with ZERO mode.
+// 零填充
 func (c *Cipher) ZeroPadding(src []byte, size int) []byte {
 	paddingCount := size - len(src)%size
 	if paddingCount == 0 {
@@ -86,6 +91,7 @@ func (c *Cipher) ZeroPadding(src []byte, size int) []byte {
 }
 
 // ZeroUnPadding removes padding with ZERO mode.
+// 移除零填充
 func (c *Cipher) ZeroUnPadding(src []byte) []byte {
 	for i := len(src) - 1; ; i-- {
 		if src[i] != 0 {
@@ -95,16 +101,19 @@ func (c *Cipher) ZeroUnPadding(src []byte) []byte {
 }
 
 // PKCS5Padding padding with PKCS5 mode.
+// PKCS5 填充
 func (c *Cipher) PKCS5Padding(src []byte) []byte {
 	return c.PKCS7Padding(src, 8)
 }
 
 // PKCS5UnPadding removes padding with PKCS5 mode.
+// 移除 PKCS5 填充
 func (c *Cipher) PKCS5UnPadding(src []byte) []byte {
 	return c.PKCS7UnPadding(src)
 }
 
 // PKCS7Padding padding with PKCS7 mode.
+// PKCS7 填充
 func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
 	paddingCount := size - len(src)%size
 	paddingText := bytes.Repeat([]byte{byte(paddingCount)}, paddingCount)
@@ -112,6 +121,7 @@ func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
 }
 
 // PKCS7UnPadding removes padding with PKCS7 mode.
+// 移除 PKCS7 填充
 func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
 	length := len(src)
 	trim := length - int(src[length-1])
@@ -122,6 +132,7 @@ func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
 }
 
 // CBCEncrypt encrypts with CBC mode.
+// CBC 加密
 func (c *Cipher) CBCEncrypt(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCBCEncrypter(block, c.iv).CryptBlocks(dst, src)
@@ -129,6 +140,7 @@ func (c *Cipher) CBCEncrypt(src []byte, block cipher.Block) (dst []byte) {
 }
 
 // CBCDecrypt decrypts with CBC mode.
+// CBC 解密
 func (c *Cipher) CBCDecrypt(dst []byte, block cipher.Block) (src []byte) {
 	src = make([]byte, len(dst))
 	cipher.NewCBCDecrypter(block, c.iv).CryptBlocks(src, dst)
@@ -136,13 +148,15 @@ func (c *Cipher) CBCDecrypt(dst []byte, block cipher.Block) (src []byte) {
 }
 
 // CFBEncrypt encrypts with CFB mode.
+// CFB 加密
 func (c *Cipher) CFBEncrypt(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCFBEncrypter(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
-// CFBDecrypt encrypts with CFB mode.
+// CFBDecrypt decrypts with CFB mode.
+// CFB 解密
 func (c *Cipher) CFBDecrypt(dst []byte, block cipher.Block) (src []byte) {
 	src = make([]byte, len(dst))
 	cipher.NewCFBDecrypter(block, c.iv[:block.BlockSize()]).XORKeyStream(src, dst)
@@ -150,13 +164,15 @@ func (c *Cipher) CFBDecrypt(dst []byte, block cipher.Block) (src []byte) {
 }
 
 // CTREncrypt encrypts with CTR mode.
+// CTR 加密
 func (c *Cipher) CTREncrypt(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCTR(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
-// CTRDecrypt encrypts with CTR mode.
+// CTRDecrypt decrypts with CTR mode.
+// CTR 解密
 func (c *Cipher) CTRDecrypt(dst []byte, block cipher.Block) (src []byte) {
 	src = make([]byte, len(dst))
 	cipher.NewCTR(block, c.iv[:block.BlockSize()]).XORKeyStream(src, dst)

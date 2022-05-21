@@ -6,7 +6,7 @@ import (
 	"hash"
 )
 
-// ByHmacSha1 encrypts by hmac use sha1.
+// ByHmacSha1 encrypts by hmac with sha1.
 // 通过 hmac-sha1 加密
 func (e encrypt) ByHmacSha1(key interface{}) encrypt {
 	if len(e.src) == 0 {

@@ -489,28 +489,28 @@ invalid file "./demo.txt", please make sure the file exists
  - [ ] Encryption by SM2
  - [ ] Encryption by SM3
  - [ ] Encryption by SM4
- - [x] Encryption and decryption by AES-CBC-ZEROPadding
+ - [x] Encryption and decryption by AES-CBC-ZeroPadding
  - [x] Encryption and decryption by AES-CBC-PKCS5Padding
  - [x] Encryption and decryption by AES-CBC-PKCS7Padding
- - [x] Encryption and decryption by AES-CFB-ZEROPadding
+ - [x] Encryption and decryption by AES-CFB-ZeroPadding
  - [x] Encryption and decryption by AES-CFB-PKCS5Padding
  - [x] Encryption and decryption by AES-CFB-PKCS7Padding
- - [ ] Encryption and decryption by AES-CTR-ZEROPadding
+ - [ ] Encryption and decryption by AES-CTR-ZeroPadding
  - [ ] Encryption and decryption by AES-CTR-PKCS5Padding
  - [ ] Encryption and decryption by AES-CTR-PKCS7Padding
- - [ ] Encryption and decryption by AES-ECB-ZEROPadding
+ - [ ] Encryption and decryption by AES-ECB-ZeroPadding
  - [ ] Encryption and decryption by AES-ECB-PKCS5Padding
  - [ ] Encryption and decryption by AES-ECB-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-CBC-ZEROPadding
+ - [ ] Encryption and decryption by 3AES-CBC-ZeroPadding
  - [ ] Encryption and decryption by 3AES-CBC-PKCS5Padding
  - [ ] Encryption and decryption by 3AES-CBC-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-CFB-ZEROPadding
+ - [ ] Encryption and decryption by 3AES-CFB-ZeroPadding
  - [ ] Encryption and decryption by 3AES-CFB-PKCS5Padding
  - [ ] Encryption and decryption by 3AES-CFB-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-CTR-ZEROPadding
+ - [ ] Encryption and decryption by 3AES-CTR-ZeroPadding
  - [ ] Encryption and decryption by 3AES-CTR-PKCS5Padding
  - [ ] Encryption and decryption by 3AES-CTR-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-ECB-ZEROPadding
+ - [ ] Encryption and decryption by 3AES-ECB-ZeroPadding
  - [ ] Encryption and decryption by 3AES-ECB-PKCS5Padding
  - [ ] Encryption and decryption by 3AES-ECB-PKCS7Padding
  - [ ] Encryption and decryption by DES
