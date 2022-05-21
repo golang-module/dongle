@@ -113,6 +113,8 @@ func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return nil, invalidIVError(len(c.iv), b.BlockSize())
 	}
 	switch {
+	case c.mode == CBC && c.padding == NO:
+		return c.CBCEncrypt(e.src, b), nil
 	case c.mode == CBC && c.padding == ZERO:
 		dst = c.ZeroPadding(e.src, b.BlockSize())
 		return c.CBCEncrypt(dst, b), nil
@@ -122,6 +124,11 @@ func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	case c.mode == CBC && c.padding == PKCS7:
 		dst = c.PKCS7Padding(e.src, b.BlockSize())
 		return c.CBCEncrypt(dst, b), nil
+	case c.mode == CFB && c.padding == NO:
+		return c.CFBEncrypt(e.src, b), nil
+	case c.mode == CFB && c.padding == ZERO:
+		dst = c.ZeroPadding(e.src, b.BlockSize())
+		return c.CFBEncrypt(dst, b), nil
 	case c.mode == CFB && c.padding == PKCS5:
 		dst = c.PKCS5Padding(e.src)
 		return c.CFBEncrypt(dst, b), nil
