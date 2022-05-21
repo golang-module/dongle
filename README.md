@@ -463,7 +463,7 @@ fmt.Println(e.ToHexString())
 invalid file "./demo.txt", please make sure the file exists
 ```
 
-### Todo List
+### Feature list
  - [x] Encoding and decoding by HEX
  - [x] Encoding and decoding by BASE32
  - [x] Encoding and decoding by BASE64

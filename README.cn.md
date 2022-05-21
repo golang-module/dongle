@@ -462,7 +462,7 @@ fmt.Println(e.ToString())
 invalid file "./demo.txt", please make sure the file exists
 ```
 
-### 待做清单
+### 功能清单
 - [x] HEX 编码、解码
 - [x] BASE32 编码、解码
 - [x] BASE64 编码、解码
