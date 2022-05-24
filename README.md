@@ -412,10 +412,10 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() 
 #### Encrypt and decrypt by aes
 ```go
 cipher := NewCipher()
-cipher.SetMode(dongle.CBC) // options:CBC、ECB、CFB、OFB、CTR、GCM
-cipher.SetPadding(dongle.PKCS7) // options:NO、ZERO、PKCS1、PKCS5、PKCS7
+cipher.SetMode(dongle.CBC) // CBC, ECB, CFB, OFB, CTR, GCM
+cipher.SetPadding(dongle.PKCS7) // None, Zero, PKCS5, PKCS7
 cipher.SetKey("1234567887654321") // key must be 16, 24 or 32 bytes
-cipher.SetIV("1234567887654321") // IV must be 16, 24 or 32 bytes
+cipher.SetIV("1234567887654321") // iv must be 16, 24 or 32 bytes
 
 // Encrypt by aes from string and output string with hex encoding
 dongle.Encrypt.FromString("hello world").ByAes(cipher).ToHexString() // 65d823bdf1c581a1ded1cba42e03ca52
@@ -466,6 +466,7 @@ invalid file "./demo.txt", please make sure the file exists
 ### Feature list
  - [x] Encoding and decoding by HEX
  - [x] Encoding and decoding by BASE32
+ - [ ] Encoding and decoding by BASE58
  - [x] Encoding and decoding by BASE64
  - [x] Encoding and decoding by BASE64Url
  - [x] Encryption by MD4
@@ -489,31 +490,28 @@ invalid file "./demo.txt", please make sure the file exists
  - [ ] Encryption by SM2
  - [ ] Encryption by SM3
  - [ ] Encryption by SM4
+ - [x] Encryption and decryption by AES-CBC-NonePadding
  - [x] Encryption and decryption by AES-CBC-ZeroPadding
  - [x] Encryption and decryption by AES-CBC-PKCS5Padding
  - [x] Encryption and decryption by AES-CBC-PKCS7Padding
+ - [x] Encryption and decryption by AES-CTR-NonePadding
+ - [x] Encryption and decryption by AES-CTR-ZeroPadding
+ - [x] Encryption and decryption by AES-CTR-PKCS5Padding
+ - [x] Encryption and decryption by AES-CTR-PKCS7Padding
+ - [x] Encryption and decryption by AES-CFB-NonePadding
  - [x] Encryption and decryption by AES-CFB-ZeroPadding
  - [x] Encryption and decryption by AES-CFB-PKCS5Padding
  - [x] Encryption and decryption by AES-CFB-PKCS7Padding
- - [ ] Encryption and decryption by AES-CTR-ZeroPadding
- - [ ] Encryption and decryption by AES-CTR-PKCS5Padding
- - [ ] Encryption and decryption by AES-CTR-PKCS7Padding
- - [ ] Encryption and decryption by AES-ECB-ZeroPadding
- - [ ] Encryption and decryption by AES-ECB-PKCS5Padding
- - [ ] Encryption and decryption by AES-ECB-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-CBC-ZeroPadding
- - [ ] Encryption and decryption by 3AES-CBC-PKCS5Padding
- - [ ] Encryption and decryption by 3AES-CBC-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-CFB-ZeroPadding
- - [ ] Encryption and decryption by 3AES-CFB-PKCS5Padding
- - [ ] Encryption and decryption by 3AES-CFB-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-CTR-ZeroPadding
- - [ ] Encryption and decryption by 3AES-CTR-PKCS5Padding
- - [ ] Encryption and decryption by 3AES-CTR-PKCS7Padding
- - [ ] Encryption and decryption by 3AES-ECB-ZeroPadding
- - [ ] Encryption and decryption by 3AES-ECB-PKCS5Padding
- - [ ] Encryption and decryption by 3AES-ECB-PKCS7Padding
+ - [x] Encryption and decryption by AES-OFB-NonePadding
+ - [x] Encryption and decryption by AES-OFB-ZeroPadding
+ - [x] Encryption and decryption by AES-OFB-PKCS5Padding
+ - [x] Encryption and decryption by AES-OFB-PKCS7Padding
+ - [ ] Encryption and decryption by AES-GCM-NonePadding
+ - [ ] Encryption and decryption by AES-GCM-ZeroPadding
+ - [ ] Encryption and decryption by AES-GCM-PKCS5Padding
+ - [ ] Encryption and decryption by AES-GCM-PKCS7Padding
  - [ ] Encryption and decryption by DES
+ - [ ] Encryption and decryption by 3DES
  - [ ] Encryption and decryption by RSA
 
 ### References

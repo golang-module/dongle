@@ -1,7 +1,6 @@
 package dongle
 
 import (
-	"fmt"
 	"strconv"
 	"testing"
 
@@ -121,6 +120,6 @@ func TestEncrypt_ByRC4_FromBytesToBytes(t *testing.T) {
 
 func TestError_ByRc4_FromString(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByRc4("")
-	expected := fmt.Errorf("invalid key size %d, key at least 1 byte and at most 256 bytes", 0)
+	expected := overflowKeyError(0)
 	assert.Equal(t, expected, e.Error, "Should catch an exception")
 }

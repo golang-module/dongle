@@ -65,10 +65,8 @@ dongle.Encode.FromString("hello world").ByBase32().ToString() // NBSWY3DPEB3W64T
 dongle.Decode.FromString("NBSWY3DPEB3W64TMMQ======").ByBase32().ToString() // hello world
 
 // 对字节切片进行 base32 编码，输出字符串
-fmt.Println(dongle.Encode.FromBytes([]byte("hello world")).ByBase32()) // NBSWY3DPEB3W64TMMQ======
 dongle.Encode.FromBytes([]byte("hello world")).ByBase32().ToString() // NBSWY3DPEB3W64TMMQ======
 // 对字节切片进行 base32 解码，输出字符串
-fmt.Println(dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32()) // hello world
 dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToString() // hello world
 
 // 对字符串进行 base32 编码，输出字节切片
@@ -412,10 +410,10 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() 
 #### Aes 加密、解密
 ```go
 cipher := NewCipher()
-cipher.SetMode(dongle.CBC) // 可选选项：CBC、ECB、CFB、OFB、CTR、GCM
-cipher.SetPadding(dongle.PKCS7) // 可选选项：NO、ZERO、PKCS1、PKCS5、PKCS7
-cipher.SetKey("1234567887654321") // key 长度必须是 16, 24 或 32
-cipher.SetIV("1234567887654321") // IV 长度必须是 16, 24 或 32
+cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR、GCM
+cipher.SetPadding(dongle.PKCS7) // None、Zero、PKCS5、PKCS7
+cipher.SetKey("1234567887654321") // key 长度必须是 16、24 或 32
+cipher.SetIV("1234567887654321") // iv 长度必须是 16、24 或 32
 
 // 对字符串进行 aes 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").ByAes(cipher).ToHexString() // 65d823bdf1c581a1ded1cba42e03ca52
@@ -465,6 +463,7 @@ invalid file "./demo.txt", please make sure the file exists
 ### 功能清单
 - [x] HEX 编码、解码
 - [x] BASE32 编码、解码
+- [ ] BASE58 编码、解码
 - [x] BASE64 编码、解码
 - [x] BASE64Url 编码、解码
 - [x] MD4 加密
@@ -488,31 +487,28 @@ invalid file "./demo.txt", please make sure the file exists
 - [ ] SM2 加密
 - [ ] SM3 加密
 - [ ] SM4 加密
+- [x] AES-CBC-NonePadding 加密、解密
 - [x] AES-CBC-ZeroPadding 加密、解密
 - [x] AES-CBC-PKCS5Padding 加密、解密
 - [x] AES-CBC-PKCS7Padding 加密、解密
+- [x] AES-CTR-NonePadding 加密、解密
+- [x] AES-CTR-ZeroPadding 加密、解密
+- [x] AES-CTR-PKCS5Padding 加密、解密
+- [x] AES-CTR-PKCS7Padding 加密、解密
+- [x] AES-CFB-NonePadding 加密、解密
 - [x] AES-CFB-ZeroPadding 加密、解密
 - [x] AES-CFB-PKCS5Padding 加密、解密
 - [x] AES-CFB-PKCS7Padding 加密、解密
-- [ ] AES-CTR-ZeroPadding 加密、解密
-- [ ] AES-CTR-PKCS5Padding 加密、解密
-- [ ] AES-CTR-PKCS7Padding 加密、解密
-- [ ] AES-ECB-ZEROPadding 加密、解密
-- [ ] AES-ECB-PKCS5Padding 加密、解密
-- [ ] AES-ECB-PKCS7Padding 加密、解密
-- [ ] 3AES-CBC-ZeroPadding 加密、解密
-- [ ] 3AES-CBC-PKCS5Padding 加密、解密
-- [ ] 3AES-CBC-PKCS7Padding 加密、解密
-- [ ] 3AES-CFB-ZeroPadding 加密、解密
-- [ ] 3AES-CFB-PKCS5Padding 加密、解密
-- [ ] 3AES-CFB-PKCS7Padding 加密、解密
-- [ ] 3AES-CTR-ZeroPadding 加密、解密
-- [ ] 3AES-CTR-PKCS5Padding 加密、解密
-- [ ] 3AES-CTR-PKCS7Padding 加密、解密
-- [ ] 3AES-CBC-ZeroPadding 加密、解密
-- [ ] 3AES-CBC-PKCS5Padding 加密、解密
-- [ ] 3AES-CBC-PKCS7Padding 加密、解密
+- [x] AES-OFB-NonePadding 加密、解密
+- [x] AES-OFB-ZeroPadding 加密、解密
+- [x] AES-OFB-PKCS5Padding 加密、解密
+- [x] AES-OFB-PKCS7Padding 加密、解密
+- [ ] AES-GCM-NonePadding 加密、解密
+- [ ] AES-GCM-ZeroPadding 加密、解密
+- [ ] AES-GCM-PKCS5Padding 加密、解密
+- [ ] AES-GCM-PKCS7Padding 加密、解密
 - [ ] DES 加密、解密
+- [ ] 3DES 加密、解密
 - [ ] RSA 加密、解密
 
 ### 参考项目

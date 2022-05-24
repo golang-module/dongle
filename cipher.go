@@ -19,8 +19,8 @@ const (
 // padding constants
 // 填充常量
 const (
-	NO    = "no"
-	ZERO  = "zero"
+	None  = "none"
+	Zero  = "zero"
 	PKCS5 = "pkcs5"
 	PKCS7 = "pkcs7"
 )
@@ -79,20 +79,22 @@ func (c *Cipher) SetIV(iv interface{}) {
 	}
 }
 
-// ZeroPadding padding with ZERO mode.
-// 零填充
+// ZeroPadding padding with Zero mode.
+// 进行零填充
 func (c *Cipher) ZeroPadding(src []byte, size int) []byte {
-	paddingCount := size - len(src)%size
-	if paddingCount == 0 {
-		return src
+	if len(src) == 0 {
+		return nil
 	}
-	paddingText := bytes.Repeat([]byte{byte(0)}, paddingCount)
-	return append(src, paddingText...)
+	padding := bytes.Repeat([]byte{byte(0)}, size-len(src)%size)
+	return append(src, padding...)
 }
 
-// ZeroUnPadding removes padding with ZERO mode.
+// ZeroUnPadding removes padding with Zero mode.
 // 移除零填充
 func (c *Cipher) ZeroUnPadding(src []byte) []byte {
+	if len(src) == 0 {
+		return nil
+	}
 	for i := len(src) - 1; ; i-- {
 		if src[i] != 0 {
 			return src[:i+1]
@@ -101,20 +103,29 @@ func (c *Cipher) ZeroUnPadding(src []byte) []byte {
 }
 
 // PKCS5Padding padding with PKCS5 mode.
-// PKCS5 填充
+// 进行 PKCS5 填充
 func (c *Cipher) PKCS5Padding(src []byte) []byte {
+	if len(src) == 0 {
+		return nil
+	}
 	return c.PKCS7Padding(src, 8)
 }
 
 // PKCS5UnPadding removes padding with PKCS5 mode.
 // 移除 PKCS5 填充
 func (c *Cipher) PKCS5UnPadding(src []byte) []byte {
+	if len(src) == 0 {
+		return nil
+	}
 	return c.PKCS7UnPadding(src)
 }
 
 // PKCS7Padding padding with PKCS7 mode.
-// PKCS7 填充
+// 进行 PKCS7 填充
 func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
+	if len(src) == 0 {
+		return nil
+	}
 	paddingCount := size - len(src)%size
 	paddingText := bytes.Repeat([]byte{byte(paddingCount)}, paddingCount)
 	return append(src, paddingText...)
@@ -123,11 +134,10 @@ func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
 // PKCS7UnPadding removes padding with PKCS7 mode.
 // 移除 PKCS7 填充
 func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
-	length := len(src)
-	trim := length - int(src[length-1])
-	if trim < 0 {
+	if len(src) == 0 {
 		return nil
 	}
+	trim := len(src) - int(src[len(src)-1])
 	return src[:trim]
 }
 
@@ -176,5 +186,21 @@ func (c *Cipher) CTREncrypt(src []byte, block cipher.Block) (dst []byte) {
 func (c *Cipher) CTRDecrypt(dst []byte, block cipher.Block) (src []byte) {
 	src = make([]byte, len(dst))
 	cipher.NewCTR(block, c.iv[:block.BlockSize()]).XORKeyStream(src, dst)
+	return
+}
+
+// OFBEncrypt encrypts with OFB mode.
+// OFB 加密
+func (c *Cipher) OFBEncrypt(src []byte, block cipher.Block) (dst []byte) {
+	dst = make([]byte, len(src))
+	cipher.NewOFB(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
+	return
+}
+
+// OFBDecrypt decrypts with OFB mode.
+// OFB 解密
+func (c *Cipher) OFBDecrypt(dst []byte, block cipher.Block) (src []byte) {
+	src = make([]byte, len(dst))
+	cipher.NewOFB(block, c.iv[:block.BlockSize()]).XORKeyStream(src, dst)
 	return
 }

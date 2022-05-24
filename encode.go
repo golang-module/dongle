@@ -17,21 +17,21 @@ func newEncode() encode {
 }
 
 // FromString encodes from string.
-// 对字符串编码
+// 对字符串进行编码
 func (e encode) FromString(s string) encode {
 	e.src = string2bytes(s)
 	return e
 }
 
 // FromBytes encodes from byte slice.
-// 对字节切片编码
+// 对字节切片进行编码
 func (e encode) FromBytes(b []byte) encode {
 	e.src = b
 	return e
 }
 
 // FromFile encodes from file.
-// 对文件编码
+// 对文件进行编码
 func (e encode) FromFile(s string) encode {
 	if len(s) == 0 {
 		return e

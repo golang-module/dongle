@@ -9,22 +9,29 @@ var invalidFileError = func(file string) error {
 	return fmt.Errorf("invalid file %q, please make sure the file exists", file)
 }
 
+// returns a decode src error
+var decodeSrcError = func(decoding string) error {
+	return fmt.Errorf("invalid src, the src can't be decoded by %s", decoding)
+}
+
+// returns an invalid src error
+var invalidSrcError = func(size int) error {
+	return fmt.Errorf("invalid src size %d, the src must be multiple of 16", size)
+}
+
 // returns an invalid key error
-var invalidKeyError = func(length int, size ...int) error {
-	if len(size) == 0 {
-		return fmt.Errorf("invalid key size %d, key must be 16, 24 or 32 bytes", length)
-	}
-	return fmt.Errorf("invalid key size %d, key must be %d bytes", length, size[0])
+var invalidKeyError = func(size int) error {
+	return fmt.Errorf("invalid key size %d, the key must be 16, 24 or 32 bytes", size)
 }
 
 // returns a overflow key error
-var overflowKeyError = func(length int) error {
-	return fmt.Errorf("invalid key size %d, key at least 1 byte and at most 256 bytes", length)
+var overflowKeyError = func(size int) error {
+	return fmt.Errorf("invalid key size %d, the key at least 1 byte and at most 256 bytes", size)
 }
 
 // returns an invalid IV error
 var invalidIVError = func(length int, size int) error {
-	return fmt.Errorf("invalid IV size %d, IV size must be %d", length, size)
+	return fmt.Errorf("invalid iv size %d, the iv size must be %d", length, size)
 }
 
 // returns an invalid encryption mode or padding error

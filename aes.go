@@ -19,6 +19,9 @@ func (e encrypt) ByAes(c *Cipher) encrypt {
 // ByAes encrypts by aes algorithm.
 // 通过 aes 解密
 func (d decrypt) ByAes(c *Cipher) decrypt {
+	if d.Error != nil {
+		return d
+	}
 	block, err := aes.NewCipher(c.key)
 	if err != nil {
 		d.Error = invalidKeyError(len(c.key))
