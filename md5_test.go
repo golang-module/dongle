@@ -153,6 +153,52 @@ func TestEncrypt_ByMd5_FromFileToString(t *testing.T) {
 	}
 }
 
+func TestEncrypt_ByMd5_FromFileToBytes(t *testing.T) {
+	assert := assert.New(t)
+
+	hexTests := []struct {
+		input    []byte // 输入值
+		expected []byte // 期望值
+	}{
+		{[]byte(""), []byte("")},
+		{[]byte("./LICENSE"), []byte("c7549a87626c65bd0970e32e02f130d7")},
+	}
+
+	for index, test := range hexTests {
+		e := Encrypt.FromFile(test.input).ByMd5()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToHexBytes(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    []byte // 输入值
+		expected []byte // 期望值
+	}{
+		{[]byte(""), []byte("")},
+		{[]byte("./LICENSE"), []byte("Y5KJVB3CNRS32CLQ4MXAF4JQ24======")},
+	}
+
+	for index, test := range base32Tests {
+		e := Encrypt.FromFile(test.input).ByMd5()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase32Bytes(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    []byte // 输入值
+		expected []byte // 期望值
+	}{
+		{[]byte(""), []byte("")},
+		{[]byte("./LICENSE"), []byte("x1Sah2JsZb0JcOMuAvEw1w==")},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromFile(test.input).ByMd5()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64Bytes(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
 func TestError_ByMd5(t *testing.T) {
 	file := "./demo.txt"
 	e := Encrypt.FromFile(file).ByMd5()

@@ -33,13 +33,20 @@ func (e encrypt) FromBytes(b []byte) encrypt {
 
 // FromFile encrypts from file.
 // 对文件加密
-func (e encrypt) FromFile(s string) encrypt {
-	if len(s) == 0 {
+func (e encrypt) FromFile(f interface{}) encrypt {
+	filename := ""
+	switch v := f.(type) {
+	case string:
+		filename = v
+	case []byte:
+		filename = bytes2string(v)
+	}
+	if len(filename) == 0 {
 		return e
 	}
-	bytes, err := ioutil.ReadFile(s)
+	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
-		e.Error = invalidFileError(s)
+		e.Error = invalidFileError(filename)
 		return e
 	}
 	e.src = bytes

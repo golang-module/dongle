@@ -104,5 +104,102 @@ func TestEncrypt_ByMd4_FromBytesToBytes(t *testing.T) {
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToBase64Bytes(), "Current test index is "+strconv.Itoa(index))
 	}
+}
 
+func TestEncrypt_ByMd4_FromFileToString(t *testing.T) {
+	assert := assert.New(t)
+
+	hexTests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{"./LICENSE", "1240c5c0fb26b585999357915c56b511"},
+	}
+
+	for index, test := range hexTests {
+		e := Encrypt.FromFile(test.input).ByMd4()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{"./LICENSE", "CJAMLQH3E22YLGMTK6IVYVVVCE======"},
+	}
+
+	for index, test := range base32Tests {
+		e := Encrypt.FromFile(test.input).ByMd4()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    string // 输入值
+		expected string // 期望值
+	}{
+		{"", ""},
+		{"./LICENSE", "EkDFwPsmtYWZk1eRXFa1EQ=="},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromFile(test.input).ByMd4()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
+func TestEncrypt_ByMd4_FromFileToBytes(t *testing.T) {
+	assert := assert.New(t)
+
+	hexTests := []struct {
+		input    []byte // 输入值
+		expected []byte // 期望值
+	}{
+		{[]byte(""), []byte("")},
+		{[]byte("./LICENSE"), []byte("1240c5c0fb26b585999357915c56b511")},
+	}
+
+	for index, test := range hexTests {
+		e := Encrypt.FromFile(test.input).ByMd4()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToHexBytes(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base32Tests := []struct {
+		input    []byte // 输入值
+		expected []byte // 期望值
+	}{
+		{[]byte(""), []byte("")},
+		{[]byte("./LICENSE"), []byte("CJAMLQH3E22YLGMTK6IVYVVVCE======")},
+	}
+
+	for index, test := range base32Tests {
+		e := Encrypt.FromFile(test.input).ByMd4()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase32Bytes(), "Current test index is "+strconv.Itoa(index))
+	}
+
+	base64Tests := []struct {
+		input    []byte // 输入值
+		expected []byte // 期望值
+	}{
+		{[]byte(""), []byte("")},
+		{[]byte("./LICENSE"), []byte("EkDFwPsmtYWZk1eRXFa1EQ==")},
+	}
+
+	for index, test := range base64Tests {
+		e := Encrypt.FromFile(test.input).ByMd4()
+		assert.Nil(e.Error)
+		assert.Equal(test.expected, e.ToBase64Bytes(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
+func TestError_ByMd4(t *testing.T) {
+	file := "./demo.txt"
+	e := Encrypt.FromFile(file).ByMd4()
+	assert.Equal(t, invalidFileError(file), e.Error, "Should catch an exception")
 }

@@ -32,13 +32,20 @@ func (e encode) FromBytes(b []byte) encode {
 
 // FromFile encodes from file.
 // 对文件进行编码
-func (e encode) FromFile(s string) encode {
-	if len(s) == 0 {
+func (e encode) FromFile(f interface{}) encode {
+	filename := ""
+	switch v := f.(type) {
+	case string:
+		filename = v
+	case []byte:
+		filename = bytes2string(v)
+	}
+	if len(filename) == 0 {
 		return e
 	}
-	bytes, err := ioutil.ReadFile(s)
+	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
-		e.Error = invalidFileError(s)
+		e.Error = invalidFileError(filename)
 		return e
 	}
 	e.src = bytes
