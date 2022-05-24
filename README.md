@@ -491,55 +491,57 @@ invalid file "./demo.txt", please make sure the file exists
 ```
 
 ### Feature list
- - [x] Encoding and decoding by HEX
- - [x] Encoding and decoding by BASE32
- - [ ] Encoding and decoding by BASE58
- - [x] Encoding and decoding by BASE64
- - [x] Encoding and decoding by BASE64Url
- - [x] Encryption by MD4
- - [x] Encryption by HMAC-MD4
- - [x] Encryption by MD5
- - [x] Encryption by HMAC-MD5
- - [x] Encryption by SHA1
- - [x] Encryption by HMAC-SHA1
- - [x] Encryption by SHA224
- - [x] Encryption by HMAC-SHA224
- - [x] Encryption by SHA256
- - [x] Encryption by HMAC-SHA256
- - [x] Encryption by SHA384
- - [x] Encryption by HMAC-SHA384
- - [x] Encryption by SHA512
- - [x] Encryption by HMAC-SHA512
- - [ ] Encryption by RC2
- - [x] Encryption by RC4
- - [ ] Encryption by RC5
- - [ ] Encryption by RC6
- - [ ] Encryption by SM2
- - [ ] Encryption by SM3
- - [ ] Encryption by SM4
- - [x] Encryption and decryption by AES-CBC-NoPadding
- - [x] Encryption and decryption by AES-CBC-ZeroPadding
- - [x] Encryption and decryption by AES-CBC-PKCS5Padding
- - [x] Encryption and decryption by AES-CBC-PKCS7Padding
- - [x] Encryption and decryption by AES-CTR-NoPadding
- - [x] Encryption and decryption by AES-CTR-ZeroPadding
- - [x] Encryption and decryption by AES-CTR-PKCS5Padding
- - [x] Encryption and decryption by AES-CTR-PKCS7Padding
- - [x] Encryption and decryption by AES-CFB-NoPadding
- - [x] Encryption and decryption by AES-CFB-ZeroPadding
- - [x] Encryption and decryption by AES-CFB-PKCS5Padding
- - [x] Encryption and decryption by AES-CFB-PKCS7Padding
- - [x] Encryption and decryption by AES-OFB-NoPadding
- - [x] Encryption and decryption by AES-OFB-ZeroPadding
- - [x] Encryption and decryption by AES-OFB-PKCS5Padding
- - [x] Encryption and decryption by AES-OFB-PKCS7Padding
- - [ ] Encryption and decryption by AES-GCM-NoPadding
- - [ ] Encryption and decryption by AES-GCM-ZeroPadding
- - [ ] Encryption and decryption by AES-GCM-PKCS5Padding
- - [ ] Encryption and decryption by AES-GCM-PKCS7Padding
- - [ ] Encryption and decryption by DES
- - [ ] Encryption and decryption by 3DES
- - [ ] Encryption and decryption by RSA
+- [x] Encoding and decoding by Hex
+- [x] Encoding and decoding by Base32
+- [ ] Encoding and decoding by Base58
+- [x] Encoding and decoding by Base64
+- [x] Encoding and decoding by Base64URL
+- [x] Encoding and decoding by SafeURL
+- [x] Encryption by Md4
+- [x] Encryption by HmaC-md4
+- [x] Encryption by Md5
+- [x] Encryption by Hmac-md5
+- [x] Encryption by Sha1
+- [x] Encryption by Hmac-sha1
+- [x] Encryption by Sha224
+- [x] Encryption by Hmac-sha224
+- [x] Encryption by Sha256
+- [x] Encryption by Hmac-sha256
+- [x] Encryption by Sha384
+- [x] Encryption by Hmac-sha384
+- [x] Encryption by Sha512
+- [x] Encryption by Hmac-sha512
+- [ ] Encryption by Rc2
+- [x] Encryption by Rc4
+- [ ] Encryption by Rc5
+- [ ] Encryption by Rc6
+- [ ] Encryption by Sm2
+- [ ] Encryption by Sm3
+- [ ] Encryption by Sm4
+- [x] Encryption and decryption by AES-CBC-NoPadding
+- [x] Encryption and decryption by AES-CBC-ZeroPadding
+- [x] Encryption and decryption by AES-CBC-PKCS5Padding
+- [x] Encryption and decryption by AES-CBC-PKCS7Padding
+- [x] Encryption and decryption by AES-CTR-NoPadding
+- [x] Encryption and decryption by AES-CTR-ZeroPadding
+- [x] Encryption and decryption by AES-CTR-PKCS5Padding
+- [x] Encryption and decryption by AES-CTR-PKCS7Padding
+- [x] Encryption and decryption by AES-CFB-NoPadding
+- [x] Encryption and decryption by AES-CFB-ZeroPadding
+- [x] Encryption and decryption by AES-CFB-PKCS5Padding
+- [x] Encryption and decryption by AES-CFB-PKCS7Padding
+- [x] Encryption and decryption by AES-OFB-NoPadding
+- [x] Encryption and decryption by AES-OFB-ZeroPadding
+- [x] Encryption and decryption by AES-OFB-PKCS5Padding
+- [x] Encryption and decryption by AES-OFB-PKCS7Padding
+- [ ] Encryption and decryption by AES-GCM-NoPadding
+- [ ] Encryption and decryption by AES-GCM-ZeroPadding
+- [ ] Encryption and decryption by AES-GCM-PKCS5Padding
+- [ ] Encryption and decryption by AES-GCM-PKCS7Padding
+- [ ] Encryption and decryption by DES
+- [ ] Encryption and decryption by 3DES
+- [ ] Encryption and decryption by RSA
+- [ ] Encryption and decryption by DSA
 
 ### References
 * [brix/crypto-js](https://github.com/brix/crypto-js)

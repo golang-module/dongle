@@ -487,32 +487,33 @@ invalid file "./demo.txt", please make sure the file exists
 ```
 
 ### 功能清单
-- [x] HEX 编码、解码
-- [x] BASE32 编码、解码
-- [ ] BASE58 编码、解码
-- [x] BASE64 编码、解码
-- [x] BASE64Url 编码、解码
-- [x] MD4 加密
-- [x] HMAC-MD4 加密
-- [x] MD5 加密
-- [x] HMAC-MD5 加密
-- [x] SHA1 加密
-- [x] HMAC-SHA1 加密
-- [x] SHA224 加密
-- [x] HMAC-SHA224 加密
-- [x] SHA256 加密
-- [x] HMAC-SHA256 加密
-- [x] SHA384 加密
-- [x] HMAC-SHA384 加密
-- [x] SHA512 加密
-- [x] HMAC-SHA512 加密
-- [ ] RC2 加密
-- [x] RC4 加密
-- [ ] RC5 加密
-- [ ] RC6 加密
-- [ ] SM2 加密
-- [ ] SM3 加密
-- [ ] SM4 加密
+- [x] Hex 编码、解码
+- [x] Base32 编码、解码
+- [ ] Base58 编码、解码
+- [x] Base64 编码、解码
+- [x] Base64URL 编码、解码
+- [x] SafeURL 编码、解码
+- [x] Md4 加密
+- [x] HmaC-md4 加密
+- [x] Md5 加密
+- [x] Hmac-md5 加密
+- [x] Sha1 加密
+- [x] Hmac-sha1 加密
+- [x] Sha224 加密
+- [x] Hmac-sha224 加密
+- [x] Sha256 加密
+- [x] Hmac-sha256 加密
+- [x] Sha384 加密
+- [x] Hmac-sha384 加密
+- [x] Sha512 加密
+- [x] Hmac-sha512 加密
+- [ ] Rc2 加密
+- [x] Rc4 加密
+- [ ] Rc5 加密
+- [ ] Rc6 加密
+- [ ] Sm2 加密
+- [ ] Sm3 加密
+- [ ] Sm4 加密
 - [x] AES-CBC-NoPadding 加密、解密
 - [x] AES-CBC-ZeroPadding 加密、解密
 - [x] AES-CBC-PKCS5Padding 加密、解密
@@ -536,6 +537,7 @@ invalid file "./demo.txt", please make sure the file exists
 - [ ] DES 加密、解密
 - [ ] 3DES 加密、解密
 - [ ] RSA 加密、解密
+- [ ] DSA 加密、解密
 
 ### 参考项目
 * [brix/crypto-js](https://github.com/brix/crypto-js)
