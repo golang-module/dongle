@@ -11,10 +11,10 @@ var (
 	aesOfbKey   = "1234567887654321"
 	aesOfbIV    = "1234567887654321"
 
-	// AES-OFB-NonePadding
-	aesOfbNoneHexExpected    = "66ec296f79f7f2f6015df0c9ea601e6e"
-	aesOfbNoneBase32Expected = "M3WCS33Z67ZPMAK56DE6UYA6NY======"
-	aesOfbNoneBase64Expected = "Zuwpb3n38vYBXfDJ6mAebg=="
+	// AES-OFB-NoPadding
+	aesOfbNoHexExpected    = "66ec296f79f7f2f6015df0c9ea601e6e"
+	aesOfbNoBase32Expected = "M3WCS33Z67ZPMAK56DE6UYA6NY======"
+	aesOfbNoBase64Expected = "Zuwpb3n38vYBXfDJ6mAebg=="
 
 	// AES-OFB-ZeroPadding
 	aesOfbZeroHexExpected    = "3fbb763723e1b2a11242f0af8d087405"
@@ -41,7 +41,7 @@ func aesOfbCipher(padding string) *Cipher {
 	return cipher
 }
 
-func TestEncrypt_ByAes_OFB_None(t *testing.T) {
+func TestEncrypt_ByAes_OFB_NoPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	input := "12345678asdfghjk"
@@ -51,11 +51,11 @@ func TestEncrypt_ByAes_OFB_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{input, aesOfbNoneHexExpected},
+		{input, aesOfbNoHexExpected},
 	}
 
 	for index, test := range hexTests {
-		e := Encrypt.FromString(test.input).ByAes(aesOfbCipher(None))
+		e := Encrypt.FromString(test.input).ByAes(aesOfbCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -65,11 +65,11 @@ func TestEncrypt_ByAes_OFB_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{input, aesOfbNoneBase32Expected},
+		{input, aesOfbNoBase32Expected},
 	}
 
 	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input).ByAes(aesOfbCipher(None))
+		e := Encrypt.FromString(test.input).ByAes(aesOfbCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -79,17 +79,17 @@ func TestEncrypt_ByAes_OFB_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{input, aesOfbNoneBase64Expected},
+		{input, aesOfbNoBase64Expected},
 	}
 
 	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input).ByAes(aesOfbCipher(None))
+		e := Encrypt.FromString(test.input).ByAes(aesOfbCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestDecrypt_ByAes_OFB_None(t *testing.T) {
+func TestDecrypt_ByAes_OFB_NoPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	input := "12345678asdfghjk"
@@ -99,11 +99,11 @@ func TestDecrypt_ByAes_OFB_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{aesOfbNoneHexExpected, input},
+		{aesOfbNoHexExpected, input},
 	}
 
 	for index, test := range hexTests {
-		e := Decrypt.FromHexString(test.input).ByAes(aesOfbCipher(None))
+		e := Decrypt.FromHexString(test.input).ByAes(aesOfbCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -113,11 +113,11 @@ func TestDecrypt_ByAes_OFB_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{aesOfbNoneBase32Expected, input},
+		{aesOfbNoBase32Expected, input},
 	}
 
 	for index, test := range base32Tests {
-		e := Decrypt.FromBase32String(test.input).ByAes(aesOfbCipher(None))
+		e := Decrypt.FromBase32String(test.input).ByAes(aesOfbCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -127,17 +127,17 @@ func TestDecrypt_ByAes_OFB_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{aesOfbNoneBase64Expected, input},
+		{aesOfbNoBase64Expected, input},
 	}
 
 	for index, test := range base64Tests {
-		e := Decrypt.FromBase64String(test.input).ByAes(aesOfbCipher(None))
+		e := Decrypt.FromBase64String(test.input).ByAes(aesOfbCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestEncrypt_ByAes_OFB_Zero(t *testing.T) {
+func TestEncrypt_ByAes_OFB_ZeroPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -183,7 +183,7 @@ func TestEncrypt_ByAes_OFB_Zero(t *testing.T) {
 	}
 }
 
-func TestDecrypt_ByAes_OFB_Zero(t *testing.T) {
+func TestDecrypt_ByAes_OFB_ZeroPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -229,7 +229,7 @@ func TestDecrypt_ByAes_OFB_Zero(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByAes_OFB_PKCS5(t *testing.T) {
+func TestEncrypt_ByAes_OFB_PKCS5Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -275,7 +275,7 @@ func TestEncrypt_ByAes_OFB_PKCS5(t *testing.T) {
 	}
 }
 
-func TestDecrypt_ByAes_OFB_PKCS5(t *testing.T) {
+func TestDecrypt_ByAes_OFB_PKCS5Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -321,7 +321,7 @@ func TestDecrypt_ByAes_OFB_PKCS5(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByAes_OFB_PKCS7(t *testing.T) {
+func TestEncrypt_ByAes_OFB_PKCS7Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -367,7 +367,7 @@ func TestEncrypt_ByAes_OFB_PKCS7(t *testing.T) {
 	}
 }
 
-func TestDecrypt_ByAes_OFB_PKCS7(t *testing.T) {
+func TestDecrypt_ByAes_OFB_PKCS7Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {

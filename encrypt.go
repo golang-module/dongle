@@ -106,14 +106,14 @@ func (e encrypt) ToBase64Bytes() []byte {
 // encrypts with given mode and padding
 // 根据指定的分组模式和填充模式进行加密
 func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
-	if c.padding == None && len(e.src)%b.BlockSize() != 0 {
+	if c.padding == No && len(e.src)%b.BlockSize() != 0 {
 		return nil, invalidSrcError(len(e.src))
 	}
 	if len(c.iv) != b.BlockSize() {
 		return nil, invalidIVError(len(c.iv), b.BlockSize())
 	}
 	switch {
-	case c.mode == CBC && c.padding == None:
+	case c.mode == CBC && c.padding == No:
 		return c.CBCEncrypt(e.src, b), nil
 	case c.mode == CBC && c.padding == Zero:
 		return c.CBCEncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil
@@ -121,7 +121,7 @@ func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return c.CBCEncrypt(c.PKCS5Padding(e.src), b), nil
 	case c.mode == CBC && c.padding == PKCS7:
 		return c.CBCEncrypt(c.PKCS7Padding(e.src, b.BlockSize()), b), nil
-	case c.mode == CTR && c.padding == None:
+	case c.mode == CTR && c.padding == No:
 		return c.CTREncrypt(e.src, b), nil
 	case c.mode == CTR && c.padding == Zero:
 		return c.CTREncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil
@@ -129,7 +129,7 @@ func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return c.CTREncrypt(c.PKCS5Padding(e.src), b), nil
 	case c.mode == CTR && c.padding == PKCS7:
 		return c.CTREncrypt(c.PKCS7Padding(e.src, b.BlockSize()), b), nil
-	case c.mode == CFB && c.padding == None:
+	case c.mode == CFB && c.padding == No:
 		return c.CFBEncrypt(e.src, b), nil
 	case c.mode == CFB && c.padding == Zero:
 		return c.CFBEncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil
@@ -137,7 +137,7 @@ func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return c.CFBEncrypt(c.PKCS5Padding(e.src), b), nil
 	case c.mode == CFB && c.padding == PKCS7:
 		return c.CFBEncrypt(c.PKCS7Padding(e.src, b.BlockSize()), b), nil
-	case c.mode == OFB && c.padding == None:
+	case c.mode == OFB && c.padding == No:
 		return c.OFBEncrypt(e.src, b), nil
 	case c.mode == OFB && c.padding == Zero:
 		return c.OFBEncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil

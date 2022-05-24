@@ -150,7 +150,7 @@ func TestDecryptIVError_ByAes(t *testing.T) {
 func TestEncryptSrcError_ByAes(t *testing.T) {
 	cipher := NewCipher()
 	cipher.SetMode(CBC)
-	cipher.SetPadding(None)
+	cipher.SetPadding(No)
 	cipher.SetKey(aesRightKey)
 	cipher.SetIV(aesRightIV)
 
@@ -166,7 +166,7 @@ func TestEncryptSrcError_ByAes(t *testing.T) {
 func TestDecryptSrcError_ByAes(t *testing.T) {
 	cipher := NewCipher()
 	cipher.SetMode(CBC)
-	cipher.SetPadding(None)
+	cipher.SetPadding(No)
 	cipher.SetKey([]byte(aesRightKey))
 	cipher.SetIV([]byte(aesRightIV))
 

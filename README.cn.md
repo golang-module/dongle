@@ -437,7 +437,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() 
 ```go
 cipher := NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR、GCM
-cipher.SetPadding(dongle.PKCS7) // None、Zero、PKCS5、PKCS7
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
 cipher.SetKey("1234567887654321") // key 长度必须是 16、24 或 32
 cipher.SetIV("1234567887654321") // iv 长度必须是 16、24 或 32
 
@@ -513,23 +513,23 @@ invalid file "./demo.txt", please make sure the file exists
 - [ ] SM2 加密
 - [ ] SM3 加密
 - [ ] SM4 加密
-- [x] AES-CBC-NonePadding 加密、解密
+- [x] AES-CBC-NoPadding 加密、解密
 - [x] AES-CBC-ZeroPadding 加密、解密
 - [x] AES-CBC-PKCS5Padding 加密、解密
 - [x] AES-CBC-PKCS7Padding 加密、解密
-- [x] AES-CTR-NonePadding 加密、解密
+- [x] AES-CTR-NoPadding 加密、解密
 - [x] AES-CTR-ZeroPadding 加密、解密
 - [x] AES-CTR-PKCS5Padding 加密、解密
 - [x] AES-CTR-PKCS7Padding 加密、解密
-- [x] AES-CFB-NonePadding 加密、解密
+- [x] AES-CFB-NoPadding 加密、解密
 - [x] AES-CFB-ZeroPadding 加密、解密
 - [x] AES-CFB-PKCS5Padding 加密、解密
 - [x] AES-CFB-PKCS7Padding 加密、解密
-- [x] AES-OFB-NonePadding 加密、解密
+- [x] AES-OFB-NoPadding 加密、解密
 - [x] AES-OFB-ZeroPadding 加密、解密
 - [x] AES-OFB-PKCS5Padding 加密、解密
 - [x] AES-OFB-PKCS7Padding 加密、解密
-- [ ] AES-GCM-NonePadding 加密、解密
+- [ ] AES-GCM-NoPadding 加密、解密
 - [ ] AES-GCM-ZeroPadding 加密、解密
 - [ ] AES-GCM-PKCS5Padding 加密、解密
 - [ ] AES-GCM-PKCS7Padding 加密、解密

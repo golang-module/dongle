@@ -11,10 +11,10 @@ var (
 	aesCtrKey   = "1234567887654321"
 	aesCtrIV    = "1234567887654321"
 
-	// AES-CTR-NonePadding
-	aesCtrNoneHexExpected    = "66ec296f79f7f2f6015df0c9ea601e6e"
-	aesCtrNoneBase32Expected = "M3WCS33Z67ZPMAK56DE6UYA6NY======"
-	aesCtrNoneBase64Expected = "Zuwpb3n38vYBXfDJ6mAebg=="
+	// AES-CTR-NoPadding
+	aesCtrNoHexExpected    = "66ec296f79f7f2f6015df0c9ea601e6e"
+	aesCtrNoBase32Expected = "M3WCS33Z67ZPMAK56DE6UYA6NY======"
+	aesCtrNoBase64Expected = "Zuwpb3n38vYBXfDJ6mAebg=="
 
 	// AES-CTR-ZeroPadding
 	aesCtrZeroHexExpected    = "3fbb763723e1b2a11242f0af8d087405"
@@ -41,7 +41,7 @@ func aesCtrCipher(padding string) *Cipher {
 	return cipher
 }
 
-func TestEncrypt_ByAes_CTR_None(t *testing.T) {
+func TestEncrypt_ByAes_CTR_NoPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	input := "12345678asdfghjk"
@@ -51,11 +51,11 @@ func TestEncrypt_ByAes_CTR_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{input, aesCtrNoneHexExpected},
+		{input, aesCtrNoHexExpected},
 	}
 
 	for index, test := range hexTests {
-		e := Encrypt.FromString(test.input).ByAes(aesCtrCipher(None))
+		e := Encrypt.FromString(test.input).ByAes(aesCtrCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -65,11 +65,11 @@ func TestEncrypt_ByAes_CTR_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{input, aesCtrNoneBase32Expected},
+		{input, aesCtrNoBase32Expected},
 	}
 
 	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input).ByAes(aesCtrCipher(None))
+		e := Encrypt.FromString(test.input).ByAes(aesCtrCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -79,17 +79,17 @@ func TestEncrypt_ByAes_CTR_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{input, aesCtrNoneBase64Expected},
+		{input, aesCtrNoBase64Expected},
 	}
 
 	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input).ByAes(aesCtrCipher(None))
+		e := Encrypt.FromString(test.input).ByAes(aesCtrCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestDecrypt_ByAes_CTR_None(t *testing.T) {
+func TestDecrypt_ByAes_CTR_NoPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	input := "12345678asdfghjk"
@@ -99,11 +99,11 @@ func TestDecrypt_ByAes_CTR_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{aesCtrNoneHexExpected, input},
+		{aesCtrNoHexExpected, input},
 	}
 
 	for index, test := range hexTests {
-		e := Decrypt.FromHexString(test.input).ByAes(aesCtrCipher(None))
+		e := Decrypt.FromHexString(test.input).ByAes(aesCtrCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -113,11 +113,11 @@ func TestDecrypt_ByAes_CTR_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{aesCtrNoneBase32Expected, input},
+		{aesCtrNoBase32Expected, input},
 	}
 
 	for index, test := range base32Tests {
-		e := Decrypt.FromBase32String(test.input).ByAes(aesCtrCipher(None))
+		e := Decrypt.FromBase32String(test.input).ByAes(aesCtrCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
@@ -127,17 +127,17 @@ func TestDecrypt_ByAes_CTR_None(t *testing.T) {
 		expected string // 期望值
 	}{
 		{"", ""},
-		{aesCtrNoneBase64Expected, input},
+		{aesCtrNoBase64Expected, input},
 	}
 
 	for index, test := range base64Tests {
-		e := Decrypt.FromBase64String(test.input).ByAes(aesCtrCipher(None))
+		e := Decrypt.FromBase64String(test.input).ByAes(aesCtrCipher(No))
 		assert.Nil(e.Error)
 		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestEncrypt_ByAes_CTR_Zero(t *testing.T) {
+func TestEncrypt_ByAes_CTR_ZeroPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -183,7 +183,7 @@ func TestEncrypt_ByAes_CTR_Zero(t *testing.T) {
 	}
 }
 
-func TestDecrypt_ByAes_CTR_Zero(t *testing.T) {
+func TestDecrypt_ByAes_CTR_ZeroPadding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -229,7 +229,7 @@ func TestDecrypt_ByAes_CTR_Zero(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByAes_CTR_PKCS5(t *testing.T) {
+func TestEncrypt_ByAes_CTR_PKCS5Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -275,7 +275,7 @@ func TestEncrypt_ByAes_CTR_PKCS5(t *testing.T) {
 	}
 }
 
-func TestDecrypt_ByAes_CTR_PKCS5(t *testing.T) {
+func TestDecrypt_ByAes_CTR_PKCS5Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -321,7 +321,7 @@ func TestDecrypt_ByAes_CTR_PKCS5(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByAes_CTR_PKCS7(t *testing.T) {
+func TestEncrypt_ByAes_CTR_PKCS7Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {
@@ -367,7 +367,7 @@ func TestEncrypt_ByAes_CTR_PKCS7(t *testing.T) {
 	}
 }
 
-func TestDecrypt_ByAes_CTR_PKCS7(t *testing.T) {
+func TestDecrypt_ByAes_CTR_PKCS7Padding(t *testing.T) {
 	assert := assert.New(t)
 
 	hexTests := []struct {

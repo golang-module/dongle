@@ -121,14 +121,14 @@ func (d decrypt) ToBytes() []byte {
 // decrypts with given mode and padding
 // 根据指定的分组模式和填充模式进行解密
 func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
-	if c.padding == None && len(d.src)%b.BlockSize() != 0 {
+	if c.padding == No && len(d.src)%b.BlockSize() != 0 {
 		return nil, invalidSrcError(len(d.src))
 	}
 	if len(c.iv) != b.BlockSize() {
 		return nil, invalidIVError(len(c.iv), b.BlockSize())
 	}
 	switch {
-	case c.mode == CBC && c.padding == None:
+	case c.mode == CBC && c.padding == No:
 		return c.CBCDecrypt(d.src, b), nil
 	case c.mode == CBC && c.padding == Zero:
 		return c.ZeroUnPadding(c.CBCDecrypt(d.src, b)), nil
@@ -136,7 +136,7 @@ func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return c.PKCS5UnPadding(c.CBCDecrypt(d.src, b)), nil
 	case c.mode == CBC && c.padding == PKCS7:
 		return c.PKCS7UnPadding(c.CBCDecrypt(d.src, b)), nil
-	case c.mode == CTR && c.padding == None:
+	case c.mode == CTR && c.padding == No:
 		return c.CTRDecrypt(d.src, b), nil
 	case c.mode == CTR && c.padding == Zero:
 		return c.ZeroUnPadding(c.CTRDecrypt(d.src, b)), nil
@@ -144,7 +144,7 @@ func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return c.PKCS5UnPadding(c.CTRDecrypt(d.src, b)), nil
 	case c.mode == CTR && c.padding == PKCS7:
 		return c.PKCS7UnPadding(c.CTRDecrypt(d.src, b)), nil
-	case c.mode == CFB && c.padding == None:
+	case c.mode == CFB && c.padding == No:
 		return c.CFBDecrypt(d.src, b), nil
 	case c.mode == CFB && c.padding == Zero:
 		return c.ZeroUnPadding(c.CFBDecrypt(d.src, b)), nil
@@ -152,7 +152,7 @@ func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return c.PKCS5UnPadding(c.CFBDecrypt(d.src, b)), nil
 	case c.mode == CFB && c.padding == PKCS7:
 		return c.PKCS7UnPadding(c.CFBDecrypt(d.src, b)), nil
-	case c.mode == OFB && c.padding == None:
+	case c.mode == OFB && c.padding == No:
 		return c.OFBDecrypt(d.src, b), nil
 	case c.mode == OFB && c.padding == Zero:
 		return c.ZeroUnPadding(c.OFBDecrypt(d.src, b)), nil

@@ -19,7 +19,7 @@ const (
 // padding constants
 // 填充常量
 const (
-	None  = "none"
+	No    = "no"
 	Zero  = "zero"
 	PKCS5 = "pkcs5"
 	PKCS7 = "pkcs7"

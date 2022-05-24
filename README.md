@@ -440,7 +440,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() 
 ```go
 cipher := NewCipher()
 cipher.SetMode(dongle.CBC) // CBC, ECB, CFB, OFB, CTR, GCM
-cipher.SetPadding(dongle.PKCS7) // None, Zero, PKCS5, PKCS7
+cipher.SetPadding(dongle.PKCS7) // No, Zero, PKCS5, PKCS7
 cipher.SetKey("1234567887654321") // key must be 16, 24 or 32 bytes
 cipher.SetIV("1234567887654321") // iv must be 16, 24 or 32 bytes
 
@@ -517,23 +517,23 @@ invalid file "./demo.txt", please make sure the file exists
  - [ ] Encryption by SM2
  - [ ] Encryption by SM3
  - [ ] Encryption by SM4
- - [x] Encryption and decryption by AES-CBC-NonePadding
+ - [x] Encryption and decryption by AES-CBC-NoPadding
  - [x] Encryption and decryption by AES-CBC-ZeroPadding
  - [x] Encryption and decryption by AES-CBC-PKCS5Padding
  - [x] Encryption and decryption by AES-CBC-PKCS7Padding
- - [x] Encryption and decryption by AES-CTR-NonePadding
+ - [x] Encryption and decryption by AES-CTR-NoPadding
  - [x] Encryption and decryption by AES-CTR-ZeroPadding
  - [x] Encryption and decryption by AES-CTR-PKCS5Padding
  - [x] Encryption and decryption by AES-CTR-PKCS7Padding
- - [x] Encryption and decryption by AES-CFB-NonePadding
+ - [x] Encryption and decryption by AES-CFB-NoPadding
  - [x] Encryption and decryption by AES-CFB-ZeroPadding
  - [x] Encryption and decryption by AES-CFB-PKCS5Padding
  - [x] Encryption and decryption by AES-CFB-PKCS7Padding
- - [x] Encryption and decryption by AES-OFB-NonePadding
+ - [x] Encryption and decryption by AES-OFB-NoPadding
  - [x] Encryption and decryption by AES-OFB-ZeroPadding
  - [x] Encryption and decryption by AES-OFB-PKCS5Padding
  - [x] Encryption and decryption by AES-OFB-PKCS7Padding
- - [ ] Encryption and decryption by AES-GCM-NonePadding
+ - [ ] Encryption and decryption by AES-GCM-NoPadding
  - [ ] Encryption and decryption by AES-GCM-ZeroPadding
  - [ ] Encryption and decryption by AES-GCM-PKCS5Padding
  - [ ] Encryption and decryption by AES-GCM-PKCS7Padding
