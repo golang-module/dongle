@@ -545,6 +545,9 @@ invalid file "./demo.txt", please make sure the file exists
 
 ### References
 * [brix/crypto-js](https://github.com/brix/crypto-js)
+* [nodejs/crypto](https://nodejs.org/api/crypto.html)
+* [paramiko/paramiko](https://github.com/paramiko/paramiko)
+* [cossacklabs/themis](https://github.com/cossacklabs/themis)
 
 ### Sponsors
 `Dongle` is a non-commercial open source project. If you want to support `Dongle`, you can [buy a cup of coffee](https://www.gouguoyin.cn/zanzhu.html) for developer.
