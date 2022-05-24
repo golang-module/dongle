@@ -101,26 +101,52 @@ dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64().ToBytes() // []byte("hel
 dongle.Encode.FromString("hello world").ByBase64().ToBytes() // []byte("aGVsbG8gd29ybGQ=")
 // 对字节切片进行 base64 解码，输出字节切片
 dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToBytes() // []byte("hello world")
+```
 
+#### Base64URL 编码、解码
+```go
 // 对 url 字符进行 base64 编码，输出字符串
 dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
 // 对 url 字符进行 base64 解码，输出字符串
-dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64URL().ToString() // www.gouguoyin.cn
+dongle.Decode.FromString("d3d3LmdvdWd1b3lpbi5jbg==").ByBase64URL().ToString() // www.gouguoyin.cn
 
 // 对 url 字节切片进行 base64 编码，输出字符串
 dongle.Encode.FromBytes([]byte("www.gouguoyin.cn")).ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
 // 对 url 字节切片进行 base64 解码，输出字符串
-dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64URL().ToString() // www.gouguoyin.cn
+dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToString() // www.gouguoyin.cn
 
 // 对 url 字符进行 base64 编码，输出字节切片
 dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToBytes() // []byte("d3d3LmdvdWd1b3lpbi5jbg==")
 // 对 url 字符进行 base64 解码，输出字节切片
-dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
+dongle.Decode.FromString("d3d3LmdvdWd1b3lpbi5jbg==").ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
 
 // 对 url 字节切片进行 base64 编码，输出字节切片
 dongle.Encode.FromBytes([]byte("www.gouguoyin.cn")).ByBase64URL().ToBytes() // []byte("d3d3LmdvdWd1b3lpbi5jbg==")
 // 对 url 字符进行 base64 解码，输出字节切片
-dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
+dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
+```
+
+#### SafeURL 编码、解码
+```go
+// 对 url 字符进行转义编码，输出字符串
+dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
+// 对 url 字符进行转义解码，输出字符串
+dongle.Decode.FromString("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18").BySafeURL().ToString() // www.gouguoyin.cn?sex=男&age=18
+
+// 对 url 字节切片进行转义编码，输出字符串
+dongle.Encode.FromBytes([]byte("www.gouguoyin.cn?sex=男&age=18")).BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
+// 对 url 字节切片进行转义解码，输出字符串
+dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")).BySafeURL().ToString() // www.gouguoyin.cn?sex=男&age=18
+
+// 对 url 字符进行转义编码，输出字节切片
+dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToBytes() // []byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")
+// 对 url 字符进行转义解码，输出字节切片
+dongle.Decode.FromString("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18").BySafeURL().ToBytes() // []byte("www.gouguoyin.cn?sex=男&age=18")
+
+// 对 url 字节切片进行转义编码，输出字节切片
+dongle.Encode.FromBytes([]byte("www.gouguoyin.cn?sex=男&age=18")).BySafeURL().ToBytes() // []byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")
+// 对 url 字符进行转义解码，输出字节切片
+dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")).BySafeURL().ToBytes() // []byte("www.gouguoyin.cn?sex=男&age=18")
 ```
 
 ### 加密&解密

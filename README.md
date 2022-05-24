@@ -104,25 +104,52 @@ dongle.Encode.FromBytes([]byte("hello world")).ByBase64().ToBytes() // []byte("a
 // Decode by base64 from byte slice and output byte slice
 dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToBytes() // []byte("hello world")
 
-// Encode url by base64 from string and output string
+```
+
+#### Encode and decode by base64URL
+```go
+// Encode by base64 from url string and output string
 dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
-// Decode url by base64 from string and output string
-dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64URL().ToString() // www.gouguoyin.cn
+// Decode by base64 from string and output url string
+dongle.Decode.FromString("d3d3LmdvdWd1b3lpbi5jbg==").ByBase64URL().ToString() // www.gouguoyin.cn
 
-// Encode url by base64 from byte slice and output string
+// Encode by base64 from url byte slice and output string
 dongle.Encode.FromBytes([]byte("www.gouguoyin.cn")).ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
-// Decode url by base64 from byte slice and output string
-dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64URL().ToString() // www.gouguoyin.cn
+// Decode by base64 from byte slice and output url string
+dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToString() // www.gouguoyin.cn
 
-// Encode url by base64 from string and output byte slice
+// Encode by base64 from url string and output byte slice
 dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToBytes() // []byte("d3d3LmdvdWd1b3lpbi5jbg==")
-// Decode url by base64 from string and output byte slice
-dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
+// Decode by base64 from string and output url byte slice
+dongle.Decode.FromString("d3d3LmdvdWd1b3lpbi5jbg==").ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
 
-// Encode url by base64 from byte slice and output byte slice
+// Encode by base64 from url byte slice and output byte slice
 dongle.Encode.FromBytes([]byte("www.gouguoyin.cn")).ByBase64URL().ToBytes() // []byte("d3d3LmdvdWd1b3lpbi5jbg==")
-// Decode url by base64 from byte slice and output byte slice
-dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
+// Decode by base64 from byte slice and output url byte slice
+dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
+```
+
+#### Encode and decode by SafeURL
+```go
+// Encode by escape from url string and output string
+dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
+// Decode by escape from string and output url string
+dongle.Decode.FromString("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18").BySafeURL().ToString() // www.gouguoyin.cn?sex=男&age=18
+
+// Encode by escape from url byte slice and output string
+dongle.Encode.FromBytes([]byte("www.gouguoyin.cn?sex=男&age=18")).BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
+// Decode by escape from byte slice and output url string
+dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")).BySafeURL().ToString() // www.gouguoyin.cn?sex=男&age=18
+
+// Encode by escape from url string and output byte slice
+dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToBytes() // []byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")
+// Decode by escape from string and output url byte slice
+dongle.Decode.FromString("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18").BySafeURL().ToBytes() // []byte("www.gouguoyin.cn?sex=男&age=18")
+
+// Encode by escape from url byte slice and output byte slice
+dongle.Encode.FromBytes([]byte("www.gouguoyin.cn?sex=男&age=18")).BySafeURL().ToBytes() // []byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")
+// Decode by escape from byte slice and output url byte slice
+dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")).BySafeURL().ToBytes() // []byte("www.gouguoyin.cn?sex=男&age=18")
 ```
 
 ### Encrypt and decrypt
