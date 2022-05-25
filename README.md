@@ -498,7 +498,7 @@ invalid file "./demo.txt", please make sure the file exists
 - [x] Encoding and decoding by Base64URL
 - [x] Encoding and decoding by SafeURL
 - [x] Encryption by Md4
-- [x] Encryption by HmaC-md4
+- [x] Encryption by Hmac-md4
 - [x] Encryption by Md5
 - [x] Encryption by Hmac-md5
 - [x] Encryption by Sha1
