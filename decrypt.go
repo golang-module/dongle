@@ -1,6 +1,5 @@
 package dongle
 
-import "C"
 import (
 	"crypto/cipher"
 )
