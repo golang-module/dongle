@@ -494,7 +494,7 @@ invalid file "./demo.txt", please make sure the file exists
 - [x] Base64URL 编码、解码
 - [x] SafeURL 编码、解码
 - [x] Md4 加密
-- [x] HmaC-md4 加密
+- [x] Hmac-md4 加密
 - [x] Md5 加密
 - [x] Hmac-md5 加密
 - [x] Sha1 加密
