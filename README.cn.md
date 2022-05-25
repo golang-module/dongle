@@ -174,11 +174,11 @@ dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase32String() // CJAMLQH3E22YLGM
 dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase64String() // EkDFwPsmtYWZk1eRXFa1EQ==
 
 // 对文件进行 md4 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToHexBytes() // []byte("1240c5c0fb26b585999357915c56b511")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd4().ToHexBytes() // []byte("1240c5c0fb26b585999357915c56b511")
 // 对文件进行 md4 加密，输出经过 base32 编码的字节切片
-dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase32Bytes() // []byte("CJAMLQH3E22YLGMTK6IVYVVVCE======")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd4().ToBase32Bytes() // []byte("CJAMLQH3E22YLGMTK6IVYVVVCE======")
 // 对文件进行 md4 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase64Bytes() // []byte("EkDFwPsmtYWZk1eRXFa1EQ==")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd4().ToBase64Bytes() // []byte("EkDFwPsmtYWZk1eRXFa1EQ==")
 ```
 
 #### Hmac-md4 加密
@@ -222,11 +222,11 @@ dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase32String() // AFHQH6ICL2UBVCQ
 dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase64String() // AU8D+QJeqBqKDpc0vlQMUw==
 
 // 对文件进行 md5 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToHexBytes() // []byte("014f03f9025ea81a8a0e9734be540c53")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToHexBytes() // []byte("014f03f9025ea81a8a0e9734be540c53")
 // 对文件进行 md5 加密，输出经过 base32 编码的字节切片
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase32Bytes() // []byte("AFHQH6ICL2UBVCQOS42L4VAMKM======")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToBase32Bytes() // []byte("AFHQH6ICL2UBVCQOS42L4VAMKM======")
 // 对文件进行 md5 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase64Bytes() // []byte("AU8D+QJeqBqKDpc0vlQMUw==")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToBase64Bytes() // []byte("AU8D+QJeqBqKDpc0vlQMUw==")
 ```
 
 #### Hmac-md5 加密

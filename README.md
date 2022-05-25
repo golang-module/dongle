@@ -177,11 +177,11 @@ dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase32String() // CJAMLQH3E22YLGM
 dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase64String() // EkDFwPsmtYWZk1eRXFa1EQ==
 
 // Encrypt by md4 from file and output byte slice with hex encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToHexBytes() // []byte("1240c5c0fb26b585999357915c56b511")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd4().ToHexBytes() // []byte("1240c5c0fb26b585999357915c56b511")
 // Encrypt by md4 from file and output byte slice with base32 encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase32Bytes() // []byte("CJAMLQH3E22YLGMTK6IVYVVVCE======")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd4().ToBase32Bytes() // []byte("CJAMLQH3E22YLGMTK6IVYVVVCE======")
 // Encrypt by md4 from file and output byte slice with base64 encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd4().ToBase64Bytes() // []byte("EkDFwPsmtYWZk1eRXFa1EQ==")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd4().ToBase64Bytes() // []byte("EkDFwPsmtYWZk1eRXFa1EQ==")
 ```
 
 #### Encrypt by hmac-md4
@@ -225,11 +225,11 @@ dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase32String() // AFHQH6ICL2UBVCQ
 dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase64String() // AU8D+QJeqBqKDpc0vlQMUw==
 
 // Encrypt by md5 from file and output byte slice with hex encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToHexBytes() // []byte("014f03f9025ea81a8a0e9734be540c53")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToHexBytes() // []byte("014f03f9025ea81a8a0e9734be540c53")
 // Encrypt by md5 from file and output byte slice with base32 encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase32Bytes() // []byte("AFHQH6ICL2UBVCQOS42L4VAMKM======")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToBase32Bytes() // []byte("AFHQH6ICL2UBVCQOS42L4VAMKM======")
 // Encrypt by md5 from file and output byte slice with base64 encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase64Bytes() // []byte("AU8D+QJeqBqKDpc0vlQMUw==")
+dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToBase64Bytes() // []byte("AU8D+QJeqBqKDpc0vlQMUw==")
 ```
 
 #### Encrypt by hmac-md5
