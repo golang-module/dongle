@@ -43,16 +43,6 @@ dongle.Encode.FromString("hello world").ByHex().ToString() // 68656c6c6f20776f72
 // Decode by hex from string and output string
 dongle.Decode.FromString("68656c6c6f20776f726c64").ByHex().ToString() // hello world
 
-// Encode by hex from byte slice and output string
-dongle.Encode.FromBytes([]byte("hello world")).ByHex().ToString() // 68656c6c6f20776f726c64
-// Decode by hex from byte slice and output string
-dongle.Decode.FromBytes([]byte("68656c6c6f20776f726c64")).ByHex().ToString() // hello world
-
-// Encode by hex from string and output byte slice
-dongle.Encode.FromString("hello world").ByHex().ToBytes() // []byte("68656c6c6f20776f726c64")
-// Decode by hex from string and output byte slice
-dongle.Decode.FromString("68656c6c6f20776f726c64").ByHex().ToBytes() // []byte("hello world")
-
 // Encode by hex from byte slice and output byte slice
 dongle.Encode.FromBytes([]byte("hello world")).ByHex().ToBytes() // []byte("68656c6c6f20776f726c64")
 // Decode by hex from byte slice and output byte slice
@@ -66,16 +56,6 @@ dongle.Encode.FromString("hello world").ByBase32().ToString() // NBSWY3DPEB3W64T
 // Decode by base32 from string and output string
 dongle.Decode.FromString("NBSWY3DPEB3W64TMMQ======").ByBase32().ToString() // hello world
 
-// Encode by base32 from byte slice and output string
-dongle.Encode.FromBytes([]byte("hello world")).ByBase32().ToString() // NBSWY3DPEB3W64TMMQ======
-// Decode by base32 from byte slice and output string
-dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToString() // hello world
-
-// Encode by base32 from string and output byte slice
-dongle.Encode.FromString("hello world").ByBase32().ToBytes() // []byte("NBSWY3DPEB3W64TMMQ======")
-// Decode by base32 from string and output byte slice
-dongle.Decode.FromString("NBSWY3DPEB3W64TMMQ======").ByBase32().ToBytes() // []byte("hello world")
-
 // Encode by base32 from byte slice and output byte slice
 dongle.Encode.FromBytes([]byte("hello world")).ByBase32().ToBytes() // []byte("NBSWY3DPEB3W64TMMQ======")
 // Decode by base32 from byte slice and output byte slice
@@ -88,16 +68,6 @@ dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToBytes()
 dongle.Encode.FromString("hello world").ByBase64().ToString() // aGVsbG8gd29ybGQ=
 // Decode by base64 from string and output string
 dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64().ToString() // hello world
-
-// Encode by base64 from byte slice and output string
-dongle.Encode.FromBytes([]byte("hello world")).ByBase64().ToString() // aGVsbG8gd29ybGQ=
-// Decode by base64 from byte slice and output string
-dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToString() // hello world
-
-// Encode by base64 from string and output byte slice
-dongle.Encode.FromString("hello world").ByBase64().ToBytes() // []byte("aGVsbG8gd29ybGQ=")
-// Decode by base64 from string and output byte slice
-dongle.Decode.FromString("aGVsbG8gd29ybGQ=").ByBase64().ToBytes() // []byte("hello world")
 
 // Encode by base64 from byte slice and output byte slice
 dongle.Encode.FromBytes([]byte("hello world")).ByBase64().ToBytes() // []byte("aGVsbG8gd29ybGQ=")
@@ -113,16 +83,6 @@ dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToString() // d3d3Lmd
 // Decode by base64 from string and output url string
 dongle.Decode.FromString("d3d3LmdvdWd1b3lpbi5jbg==").ByBase64URL().ToString() // www.gouguoyin.cn
 
-// Encode by base64 from url byte slice and output string
-dongle.Encode.FromBytes([]byte("www.gouguoyin.cn")).ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
-// Decode by base64 from byte slice and output url string
-dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToString() // www.gouguoyin.cn
-
-// Encode by base64 from url string and output byte slice
-dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToBytes() // []byte("d3d3LmdvdWd1b3lpbi5jbg==")
-// Decode by base64 from string and output url byte slice
-dongle.Decode.FromString("d3d3LmdvdWd1b3lpbi5jbg==").ByBase64URL().ToBytes() // []byte("www.gouguoyin.cn")
-
 // Encode by base64 from url byte slice and output byte slice
 dongle.Encode.FromBytes([]byte("www.gouguoyin.cn")).ByBase64URL().ToBytes() // []byte("d3d3LmdvdWd1b3lpbi5jbg==")
 // Decode by base64 from byte slice and output url byte slice
@@ -135,16 +95,6 @@ dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToByte
 dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
 // Decode by escape from string and output url string
 dongle.Decode.FromString("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18").BySafeURL().ToString() // www.gouguoyin.cn?sex=男&age=18
-
-// Encode by escape from url byte slice and output string
-dongle.Encode.FromBytes([]byte("www.gouguoyin.cn?sex=男&age=18")).BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
-// Decode by escape from byte slice and output url string
-dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")).BySafeURL().ToString() // www.gouguoyin.cn?sex=男&age=18
-
-// Encode by escape from url string and output byte slice
-dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToBytes() // []byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")
-// Decode by escape from string and output url byte slice
-dongle.Decode.FromString("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18").BySafeURL().ToBytes() // []byte("www.gouguoyin.cn?sex=男&age=18")
 
 // Encode by escape from url byte slice and output byte slice
 dongle.Encode.FromBytes([]byte("www.gouguoyin.cn?sex=男&age=18")).BySafeURL().ToBytes() // []byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")
