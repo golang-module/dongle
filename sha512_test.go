@@ -15,8 +15,6 @@ var (
 )
 
 func TestEncrypt_BySha512_FromStringToString(t *testing.T) {
-	assert := assert.New(t)
-
 	hexTests := []struct {
 		input    string // 输入值
 		expected string // 期望值
@@ -27,8 +25,8 @@ func TestEncrypt_BySha512_FromStringToString(t *testing.T) {
 
 	for index, test := range hexTests {
 		e := Encrypt.FromString(test.input).BySha512()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
 	}
 
 	base32Tests := []struct {
@@ -41,8 +39,8 @@ func TestEncrypt_BySha512_FromStringToString(t *testing.T) {
 
 	for index, test := range base32Tests {
 		e := Encrypt.FromString(test.input).BySha512()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
 	}
 
 	base64Tests := []struct {
@@ -55,14 +53,12 @@ func TestEncrypt_BySha512_FromStringToString(t *testing.T) {
 
 	for index, test := range base64Tests {
 		e := Encrypt.FromString(test.input).BySha512()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncrypt_BySha512_FromBytesToString(t *testing.T) {
-	assert := assert.New(t)
-
 	hexTests := []struct {
 		input    []byte // 输入值
 		expected string // 期望值
@@ -73,8 +69,8 @@ func TestEncrypt_BySha512_FromBytesToString(t *testing.T) {
 
 	for index, test := range hexTests {
 		e := Encrypt.FromBytes(test.input).BySha512()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
 	}
 
 	base32Tests := []struct {
@@ -87,8 +83,8 @@ func TestEncrypt_BySha512_FromBytesToString(t *testing.T) {
 
 	for index, test := range base32Tests {
 		e := Encrypt.FromBytes(test.input).BySha512()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
 	}
 
 	base64Tests := []struct {
@@ -101,7 +97,7 @@ func TestEncrypt_BySha512_FromBytesToString(t *testing.T) {
 
 	for index, test := range base64Tests {
 		e := Encrypt.FromBytes(test.input).BySha512()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
 	}
 }

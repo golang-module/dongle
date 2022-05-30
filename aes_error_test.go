@@ -90,7 +90,7 @@ func TestEncryptKeyError_ByAes(t *testing.T) {
 	cipher.SetKey(aesErrorKey)
 	cipher.SetIV(aesRightIV)
 
-	expected := invalidKeyError(3)
+	expected := invalidAesKeyError(3)
 
 	e1 := Encrypt.FromString(aesRightInput).ByAes(cipher)
 	assert.Equal(t, expected, e1.Error, "Should catch an exception")
@@ -106,7 +106,7 @@ func TestDecryptKeyError_ByAes(t *testing.T) {
 	cipher.SetKey([]byte(aesErrorKey))
 	cipher.SetIV([]byte(aesRightIV))
 
-	expected := invalidKeyError(len(aesErrorKey))
+	expected := invalidAesKeyError(len(aesErrorKey))
 
 	d1 := Decrypt.FromString(aesRightInput).ByAes(cipher)
 	assert.Equal(t, expected, d1.Error, "Should catch an exception")

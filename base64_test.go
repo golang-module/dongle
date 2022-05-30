@@ -13,8 +13,6 @@ var (
 )
 
 func TestEncode_ByBase64_FromStringToString(t *testing.T) {
-	assert := assert.New(t)
-
 	tests := []struct {
 		input    string // 输入值
 		expected string // 期望值
@@ -25,14 +23,12 @@ func TestEncode_ByBase64_FromStringToString(t *testing.T) {
 
 	for index, test := range tests {
 		e := Encode.FromString(test.input).ByBase64()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecode_ByBase64_FromStringToString(t *testing.T) {
-	assert := assert.New(t)
-
 	tests := []struct {
 		input    string // 输入值
 		expected string // 期望值
@@ -43,14 +39,12 @@ func TestDecode_ByBase64_FromStringToString(t *testing.T) {
 
 	for index, test := range tests {
 		d := Decode.FromString(test.input).ByBase64()
-		assert.Nil(d.Error)
-		assert.Equal(test.expected, d.ToString(), "Current test id is "+strconv.Itoa(index))
+		assert.Nil(t, d.Error)
+		assert.Equal(t, test.expected, d.ToString(), "Current test id is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncode_ByBase64_FromBytesToBytes(t *testing.T) {
-	assert := assert.New(t)
-
 	tests := []struct {
 		input    []byte // 输入值
 		expected []byte // 期望值
@@ -61,14 +55,12 @@ func TestEncode_ByBase64_FromBytesToBytes(t *testing.T) {
 
 	for index, test := range tests {
 		e := Encode.FromBytes(test.input).ByBase64()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToBytes(), "Current test id is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecode_ByBase64_FromBytesToBytes(t *testing.T) {
-	assert := assert.New(t)
-
 	tests := []struct {
 		input    []byte // 输入值
 		expected []byte // 期望值
@@ -79,14 +71,12 @@ func TestDecode_ByBase64_FromBytesToBytes(t *testing.T) {
 
 	for index, test := range tests {
 		d := Decode.FromBytes(test.input).ByBase64()
-		assert.Nil(d.Error)
-		assert.Equal(test.expected, d.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Nil(t, d.Error)
+		assert.Equal(t, test.expected, d.ToBytes(), "Current test id is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncode_ByBase64_FromFileToString(t *testing.T) {
-	assert := assert.New(t)
-
 	base64Tests := []struct {
 		input    string // 输入值
 		expected string // 期望值
@@ -97,14 +87,12 @@ func TestEncode_ByBase64_FromFileToString(t *testing.T) {
 
 	for index, test := range base64Tests {
 		e := Encode.FromFile(test.input).ByBase64()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncode_ByBase64_FromFileToBytes(t *testing.T) {
-	assert := assert.New(t)
-
 	base64Tests := []struct {
 		input    []byte // 输入值
 		expected []byte // 期望值
@@ -115,8 +103,8 @@ func TestEncode_ByBase64_FromFileToBytes(t *testing.T) {
 
 	for index, test := range base64Tests {
 		e := Encode.FromFile(test.input).ByBase64()
-		assert.Nil(e.Error)
-		assert.Equal(test.expected, e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, test.expected, e.ToBytes(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
