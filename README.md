@@ -538,8 +538,8 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher
 ```go
 e := dongle.Encrypy.FromFile("./demo.txt").ByMd5()
 if e.Error != nil {
-	// Error handle...
-	log.Fatal(e.Error)
+    // Error handle...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToHexString())
 // Output
