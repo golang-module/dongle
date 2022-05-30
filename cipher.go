@@ -9,11 +9,11 @@ import (
 // 模式常量
 const (
 	CBC = "cbc"
-	ECB = "ecb"
+	ECB = "ecb" // todo
 	CFB = "cfb"
 	OFB = "ofb"
 	CTR = "ctr"
-	GCM = "gcm"
+	GCM = "gcm" // todo
 )
 
 // padding constants
@@ -57,7 +57,7 @@ func (c *Cipher) SetPadding(padding string) {
 	c.padding = padding
 }
 
-// SetKey sets key, key size must be 16, 24 or 32 bytes.
+// SetKey sets key.
 // 设置密钥
 func (c *Cipher) SetKey(key interface{}) {
 	switch v := key.(type) {
@@ -68,7 +68,7 @@ func (c *Cipher) SetKey(key interface{}) {
 	}
 }
 
-// SetIV sets iv, iv size must be 16, 24 or 32 bytes.
+// SetIV sets iv.
 // 设置偏移向量
 func (c *Cipher) SetIV(iv interface{}) {
 	switch v := iv.(type) {
@@ -138,6 +138,9 @@ func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
 		return nil
 	}
 	trim := len(src) - int(src[len(src)-1])
+	if trim < 0 {
+		return nil
+	}
 	return src[:trim]
 }
 
