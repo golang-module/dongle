@@ -16,7 +16,7 @@ func (e encode) ByBase64() encode {
 	return e
 }
 
-// ByBase64 encodes by base64.
+// ByBase64 decodes by base64.
 // 通过 base64 解码
 func (d decode) ByBase64() decode {
 	if len(d.src) == 0 {

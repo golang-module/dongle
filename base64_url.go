@@ -16,7 +16,7 @@ func (e encode) ByBase64URL() encode {
 	return e
 }
 
-// ByBase64URL encodes by base64 for url.
+// ByBase64URL decodes by base64 for url.
 // 通过 base64 对 url 解码
 func (d decode) ByBase64URL() decode {
 	if len(d.src) == 0 {

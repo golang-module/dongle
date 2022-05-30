@@ -14,7 +14,7 @@ func (e encode) BySafeURL() encode {
 	return e
 }
 
-// BySafeURL encodes as safe url.
+// BySafeURL decodes as safe url.
 // 对 URL 进行转义解码
 func (d decode) BySafeURL() decode {
 	if len(d.src) == 0 {

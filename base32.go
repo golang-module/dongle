@@ -16,7 +16,7 @@ func (e encode) ByBase32() encode {
 	return e
 }
 
-// ByBase32 encodes by base32.
+// ByBase32 decodes by base32.
 // 通过 base32 解码
 func (d decode) ByBase32() decode {
 	if len(d.src) == 0 {
