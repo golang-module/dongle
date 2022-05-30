@@ -31,7 +31,7 @@ import (
 go get -u gitee.com/golang-module/dongle
 
 import (
-	"gitee.com/golang-module/dongle"
+    "gitee.com/golang-module/dongle"
 )
 ```
 
