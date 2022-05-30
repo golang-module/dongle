@@ -10,18 +10,13 @@ var invalidFileError = func(file string) error {
 }
 
 // returns a decode src error
-var decodeSrcError = func(decoding string) error {
-	return fmt.Errorf("invalid src, the src can't be decoded by %s", decoding)
+var decodeSrcError = func(mode string) error {
+	return fmt.Errorf("invalid src, the src can't be decoded by %s", mode)
 }
 
 // returns an invalid src error
 var invalidSrcError = func(size int) error {
 	return fmt.Errorf("invalid src size %d, the src must be multiple of 16", size)
-}
-
-// returns an invalid key error
-var invalidKeyError = func(size int) error {
-	return fmt.Errorf("invalid key size %d, the key must be 16, 24 or 32 bytes", size)
 }
 
 // returns a overflow key error
