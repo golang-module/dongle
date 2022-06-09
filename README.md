@@ -404,11 +404,11 @@ dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToBase32String() // 5OQ
 dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToBase64String() // 66FUtMtakDjbv50=
 
 // Encrypt by rc4 from byte slice and output byte slice with hex encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
 // Encrypt by rc4 from byte slice and output byte slice with base32 encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase32Bytes() // []byte("5OQVJNGLLKIDRW57TU======")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBase32Bytes() // []byte("5OQVJNGLLKIDRW57TU======")
 // Encrypt by rc4 from byte slice and output byte slice with base64 encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
 ```
 
 ##### Encrypt and decrypt by aes

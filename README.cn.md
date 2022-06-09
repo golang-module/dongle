@@ -397,11 +397,11 @@ dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToBase32String() // 5OQ
 dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToBase64String() // 66FUtMtakDjbv50=
 
 // 对字节切片进行 rc4 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
 // 对字节切片进行 rc4 加密，输出经过 base32 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase32Bytes() // []byte("5OQVJNGLLKIDRW57TU======")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBase32Bytes() // []byte("5OQVJNGLLKIDRW57TU======")
 // 对字节切片进行 rc4 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
 ```
 
 ##### Aes 加密、解密
