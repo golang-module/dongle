@@ -7,71 +7,50 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var (
-	HexInput    = "hello world"
-	HexExpected = "68656c6c6f20776f726c64"
-)
+var hexTest = []struct {
+	input  string // 输入值
+	output string // 期望值
+}{
+	{"", ""},
+	{"hello world", "68656c6c6f20776f726c64"},
+}
 
 func TestEncode_ByHex_FromStringToString(t *testing.T) {
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{HexInput, HexExpected},
-	}
-
-	for index, test := range tests {
+	for index, test := range hexTest {
 		e := Encode.FromString(test.input).ByHex()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, test.output, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecode_ByHex_FromStringToString(t *testing.T) {
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{HexExpected, HexInput},
-	}
-
-	for index, test := range tests {
-		d := Decode.FromString(test.input).ByHex()
+	for index, test := range hexTest {
+		d := Decode.FromString(test.output).ByHex()
 		assert.Nil(t, d.Error)
-		assert.Equal(t, test.expected, d.ToString(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, d.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncode_ByHex_FromBytesToBytes(t *testing.T) {
-	tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(HexInput), []byte(HexExpected)},
-	}
-
-	for index, test := range tests {
-		e := Encode.FromBytes(test.input).ByHex()
+	for index, test := range hexTest {
+		e := Encode.FromBytes([]byte(test.input)).ByHex()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecode_ByHex_FromBytesToBytes(t *testing.T) {
-	tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(HexExpected), []byte(HexInput)},
-	}
-
-	for index, test := range tests {
-		d := Decode.FromBytes(test.input).ByHex()
+	for index, test := range hexTest {
+		d := Decode.FromBytes([]byte(test.output)).ByHex()
 		assert.Nil(t, d.Error)
-		assert.Equal(t, test.expected, d.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.input), d.ToBytes(), "Current test index is "+strconv.Itoa(index))
 	}
+}
+
+func TestDecode_ByHex_Error(t *testing.T) {
+	d1 := Decode.FromString("xxxxxx").ByHex()
+	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
+
+	d2 := Decode.FromBytes([]byte("xxxxxx")).ByHex()
+	assert.Equal(t, invalidCiphertextError("hex"), d2.Error)
 }

@@ -9,11 +9,10 @@ import (
 // 模式常量
 const (
 	CBC = "cbc"
-	ECB = "ecb" // todo
+	ECB = "ecb"
 	CFB = "cfb"
 	OFB = "ofb"
 	CTR = "ctr"
-	GCM = "gcm" // todo
 )
 
 // padding constants
@@ -25,15 +24,20 @@ const (
 	PKCS7 = "pkcs7"
 )
 
+// pem version constants
+// 证书版本
+const (
+	PKCS1 = "pkcs1"
+	PKCS8 = "pkcs8"
+)
+
 // Cipher defines a Cipher struct.
 // 定义 Cipher 结构体
 type Cipher struct {
-	mode       string // 分组模式
-	padding    string // 填充模式
-	key        []byte // 密钥
-	iv         []byte // 偏移向量
-	publicKey  []byte // 公钥
-	privateKey []byte // 私钥
+	mode    string // 分组模式
+	padding string // 填充模式
+	key     []byte // 密钥
+	iv      []byte // 偏移向量
 }
 
 // NewCipher returns a new Cipher instance.
@@ -82,9 +86,6 @@ func (c *Cipher) SetIV(iv interface{}) {
 // ZeroPadding padding with Zero mode.
 // 进行零填充
 func (c *Cipher) ZeroPadding(src []byte, size int) []byte {
-	if len(src) == 0 {
-		return nil
-	}
 	padding := bytes.Repeat([]byte{byte(0)}, size-len(src)%size)
 	return append(src, padding...)
 }
@@ -92,9 +93,6 @@ func (c *Cipher) ZeroPadding(src []byte, size int) []byte {
 // ZeroUnPadding removes padding with Zero mode.
 // 移除零填充
 func (c *Cipher) ZeroUnPadding(src []byte) []byte {
-	if len(src) == 0 {
-		return nil
-	}
 	for i := len(src) - 1; ; i-- {
 		if src[i] != 0 {
 			return src[:i+1]
@@ -105,27 +103,18 @@ func (c *Cipher) ZeroUnPadding(src []byte) []byte {
 // PKCS5Padding padding with PKCS5 mode.
 // 进行 PKCS5 填充
 func (c *Cipher) PKCS5Padding(src []byte) []byte {
-	if len(src) == 0 {
-		return nil
-	}
 	return c.PKCS7Padding(src, 8)
 }
 
 // PKCS5UnPadding removes padding with PKCS5 mode.
 // 移除 PKCS5 填充
 func (c *Cipher) PKCS5UnPadding(src []byte) []byte {
-	if len(src) == 0 {
-		return nil
-	}
 	return c.PKCS7UnPadding(src)
 }
 
 // PKCS7Padding padding with PKCS7 mode.
 // 进行 PKCS7 填充
 func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
-	if len(src) == 0 {
-		return nil
-	}
 	paddingCount := size - len(src)%size
 	paddingText := bytes.Repeat([]byte{byte(paddingCount)}, paddingCount)
 	return append(src, paddingText...)
@@ -134,13 +123,7 @@ func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
 // PKCS7UnPadding removes padding with PKCS7 mode.
 // 移除 PKCS7 填充
 func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
-	if len(src) == 0 {
-		return nil
-	}
 	trim := len(src) - int(src[len(src)-1])
-	if trim < 0 {
-		return nil
-	}
 	return src[:trim]
 }
 
@@ -148,15 +131,15 @@ func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
 // CBC 加密
 func (c *Cipher) CBCEncrypt(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
-	cipher.NewCBCEncrypter(block, c.iv).CryptBlocks(dst, src)
+	cipher.NewCBCEncrypter(block, c.iv[:block.BlockSize()]).CryptBlocks(dst, src)
 	return
 }
 
 // CBCDecrypt decrypts with CBC mode.
 // CBC 解密
-func (c *Cipher) CBCDecrypt(dst []byte, block cipher.Block) (src []byte) {
-	src = make([]byte, len(dst))
-	cipher.NewCBCDecrypter(block, c.iv).CryptBlocks(src, dst)
+func (c *Cipher) CBCDecrypt(src []byte, block cipher.Block) (dst []byte) {
+	dst = make([]byte, len(src))
+	cipher.NewCBCDecrypter(block, c.iv[:block.BlockSize()]).CryptBlocks(dst, src)
 	return
 }
 
@@ -170,9 +153,9 @@ func (c *Cipher) CFBEncrypt(src []byte, block cipher.Block) (dst []byte) {
 
 // CFBDecrypt decrypts with CFB mode.
 // CFB 解密
-func (c *Cipher) CFBDecrypt(dst []byte, block cipher.Block) (src []byte) {
-	src = make([]byte, len(dst))
-	cipher.NewCFBDecrypter(block, c.iv[:block.BlockSize()]).XORKeyStream(src, dst)
+func (c *Cipher) CFBDecrypt(src []byte, block cipher.Block) (dst []byte) {
+	dst = make([]byte, len(src))
+	cipher.NewCFBDecrypter(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
@@ -186,9 +169,35 @@ func (c *Cipher) CTREncrypt(src []byte, block cipher.Block) (dst []byte) {
 
 // CTRDecrypt decrypts with CTR mode.
 // CTR 解密
-func (c *Cipher) CTRDecrypt(dst []byte, block cipher.Block) (src []byte) {
-	src = make([]byte, len(dst))
-	cipher.NewCTR(block, c.iv[:block.BlockSize()]).XORKeyStream(src, dst)
+func (c *Cipher) CTRDecrypt(src []byte, block cipher.Block) (dst []byte) {
+	dst = make([]byte, len(src))
+	cipher.NewCTR(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
+	return
+}
+
+// ECBEncrypt encrypts with ECB mode.
+// ECB 加密
+func (c *Cipher) ECBEncrypt(src []byte, block cipher.Block) (dst []byte) {
+	dst = make([]byte, len(src))
+	encrypted, size := dst, block.BlockSize()
+	for len(src) > 0 {
+		block.Encrypt(encrypted, src[:size])
+		src = src[size:]
+		encrypted = encrypted[size:]
+	}
+	return
+}
+
+// ECBDecrypt decrypts with ECB mode.
+// ECB 解密
+func (c *Cipher) ECBDecrypt(src []byte, block cipher.Block) (dst []byte) {
+	dst = make([]byte, len(src))
+	decrypted, size := dst, block.BlockSize()
+	for len(src) > 0 {
+		block.Decrypt(decrypted, src[:size])
+		src = src[size:]
+		decrypted = decrypted[size:]
+	}
 	return
 }
 
@@ -202,8 +211,8 @@ func (c *Cipher) OFBEncrypt(src []byte, block cipher.Block) (dst []byte) {
 
 // OFBDecrypt decrypts with OFB mode.
 // OFB 解密
-func (c *Cipher) OFBDecrypt(dst []byte, block cipher.Block) (src []byte) {
-	src = make([]byte, len(dst))
-	cipher.NewOFB(block, c.iv[:block.BlockSize()]).XORKeyStream(src, dst)
+func (c *Cipher) OFBDecrypt(src []byte, block cipher.Block) (dst []byte) {
+	dst = make([]byte, len(src))
+	cipher.NewOFB(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }

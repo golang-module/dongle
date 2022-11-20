@@ -7,71 +7,42 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var (
-	base58Input    = "hello world"
-	base58Expected = "StV1DL6CwTryKyV"
-)
+var base58Test = []struct {
+	input  string // 输入值
+	output string // 期望值
+}{
+	{"", ""},
+	{"hello world", "StV1DL6CwTryKyV"},
+}
 
 func TestEncode_ByBase58_FromStringToString(t *testing.T) {
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{base58Input, base58Expected},
-	}
-
-	for index, test := range tests {
+	for index, test := range base58Test {
 		e := Encode.FromString(test.input).ByBase58()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, test.output, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecode_ByBase58_FromStringToString(t *testing.T) {
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{base58Expected, base58Input},
-	}
-
-	for index, test := range tests {
-		d := Decode.FromString(test.input).ByBase58()
+	for index, test := range base58Test {
+		d := Decode.FromString(test.output).ByBase58()
 		assert.Nil(t, d.Error)
-		assert.Equal(t, test.expected, d.ToString(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, d.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncode_ByBase58_FromBytesToBytes(t *testing.T) {
-	tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(base58Input), []byte(base58Expected)},
-	}
-
-	for index, test := range tests {
-		e := Encode.FromBytes(test.input).ByBase58()
+	for index, test := range base58Test {
+		e := Encode.FromBytes([]byte(test.input)).ByBase58()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecode_ByBase58_FromBytesToBytes(t *testing.T) {
-	tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(base58Expected), []byte(base58Input)},
-	}
-
-	for index, test := range tests {
-		d := Decode.FromBytes(test.input).ByBase58()
+	for index, test := range base58Test {
+		d := Decode.FromBytes([]byte(test.output)).ByBase58()
 		assert.Nil(t, d.Error)
-		assert.Equal(t, test.expected, d.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.input), d.ToBytes(), "Current test index is "+strconv.Itoa(index))
 	}
 }

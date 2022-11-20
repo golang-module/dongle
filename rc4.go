@@ -21,7 +21,7 @@ func (e encrypt) ByRc4(key interface{}) encrypt {
 		cipher, e.Error = rc4.NewCipher(v)
 	}
 	if e.Error != nil {
-		e.Error = overflowKeyError(size)
+		e.Error = invalidRc4KeyError(size)
 		return e
 	}
 	dst := make([]byte, len(e.src))

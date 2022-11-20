@@ -1,103 +1,36 @@
 package dongle
 
 import (
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
-var (
-	sha1Input          = "hello world"
-	sha1HexExpected    = "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
-	sha1Base32Expected = "FKXGYNOJJ7H3IFO35FPUBC445EPOQRXN"
-	sha1Base64Expected = "Kq5sNclPz7QV2+lfQIuc6R7oRu0="
-)
+var sha1Test = []struct {
+	input    string
+	toHex    string
+	toBase64 string
+}{
+	{"", "", ""},
+	{"hello world", "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed", "Kq5sNclPz7QV2+lfQIuc6R7oRu0="},
+}
 
 func TestEncrypt_BySha1_FromStringToString(t *testing.T) {
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{sha1Input, sha1HexExpected},
-	}
-
-	for index, test := range hexTests {
+	for index, test := range sha1Test {
 		e := Encrypt.FromString(test.input).BySha1()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
-	}
 
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{sha1Input, sha1Base32Expected},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input).BySha1()
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{sha1Input, sha1Base64Expected},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input).BySha1()
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toHex, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toBase64, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncrypt_BySha1_FromBytesToBytes(t *testing.T) {
-	hexTests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(sha1Input), []byte(sha1HexExpected)},
-	}
-
-	for index, test := range hexTests {
-		e := Encrypt.FromBytes(test.input).BySha1()
+	for index, test := range sha1Test {
+		e := Encrypt.FromBytes([]byte(test.input)).BySha1()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexBytes(), "Current test index is "+strconv.Itoa(index))
-	}
 
-	base32Tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(sha1Input), []byte(sha1Base32Expected)},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromBytes(test.input).BySha1()
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32Bytes(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(sha1Input), []byte(sha1Base64Expected)},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromBytes(test.input).BySha1()
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64Bytes(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Current test index is "+strconv.Itoa(index))
 	}
 }

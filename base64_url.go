@@ -24,6 +24,10 @@ func (d decode) ByBase64URL() decode {
 	}
 	buf := make([]byte, base64.URLEncoding.DecodedLen(len(d.src)))
 	n, err := base64.URLEncoding.Decode(buf, d.src)
+	if err != nil {
+		d.Error = invalidCiphertextError("base64URL")
+		return d
+	}
 	d.dst, d.Error = buf[:n], err
 	return d
 }

@@ -1,9 +1,5 @@
 package dongle
 
-import (
-	"io/ioutil"
-)
-
 // encode defines a encode struct.
 // 定义 encode 结构体
 type encode struct {
@@ -27,28 +23,6 @@ func (e encode) FromString(s string) encode {
 // 对字节切片进行编码
 func (e encode) FromBytes(b []byte) encode {
 	e.src = b
-	return e
-}
-
-// FromFile encodes from file.
-// 对文件进行编码
-func (e encode) FromFile(f interface{}) encode {
-	filename := ""
-	switch v := f.(type) {
-	case string:
-		filename = v
-	case []byte:
-		filename = bytes2string(v)
-	}
-	if len(filename) == 0 {
-		return e
-	}
-	bytes, err := ioutil.ReadFile(filename)
-	if err != nil {
-		e.Error = invalidFileError(filename)
-		return e
-	}
-	e.src = bytes
 	return e
 }
 

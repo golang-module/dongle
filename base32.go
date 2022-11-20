@@ -24,6 +24,10 @@ func (d decode) ByBase32() decode {
 	}
 	buf := make([]byte, base32.StdEncoding.DecodedLen(len(d.src)))
 	n, err := base32.StdEncoding.Decode(buf, d.src)
+	if err != nil {
+		d.Error = invalidCiphertextError("base32")
+		return d
+	}
 	d.dst, d.Error = buf[:n], err
 	return d
 }

@@ -6,393 +6,80 @@ import (
 	"testing"
 )
 
-var (
-	tripleDesCbcInput = "hello world"
-	tripleDesCbcKey   = "123456781234567812345678"
-	tripleDesCbcIV    = "12345678"
-
-	// 3DES-CBC-NoPadding
-	tripleDesCbcNoHexExpected    = "3d7595a98bff809d3ea6f8aa28affd7f"
-	tripleDesCbcNoBase32Expected = "HV2ZLKML76AJ2PVG7CVCRL75P4======"
-	tripleDesCbcNoBase64Expected = "PXWVqYv/gJ0+pviqKK/9fw=="
-
-	// 3DES-CBC-ZeroPadding
-	tripleDesCbcZeroHexExpected    = "0b2a92e81fb49ce1e02ecfa986df2ec8"
-	tripleDesCbcZeroBase32Expected = "BMVJF2A7WSOODYBOZ6UYNXZOZA======"
-	tripleDesCbcZeroBase64Expected = "CyqS6B+0nOHgLs+pht8uyA=="
-
-	// 3DES-CBC-PKCS5Padding
-	tripleDesCbcPkcs5HexExpected    = "0b2a92e81fb49ce1a43266aacaea7b81"
-	tripleDesCbcPkcs5Base32Expected = "BMVJF2A7WSOODJBSM2VMV2T3QE======"
-	tripleDesCbcPkcs5Base64Expected = "CyqS6B+0nOGkMmaqyup7gQ=="
-
-	// 3DES-CBC-PKCS7Padding
-	tripleDesCbcPkcs7HexExpected    = "0b2a92e81fb49ce1a43266aacaea7b81"
-	tripleDesCbcPkcs7Base32Expected = "BMVJF2A7WSOODJBSM2VMV2T3QE======"
-	tripleDesCbcPkcs7Base64Expected = "CyqS6B+0nOGkMmaqyup7gQ=="
-)
-
-func tripleDesCbcCipher(padding string) *Cipher {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(padding)
-	cipher.SetKey(tripleDesCbcKey)
-	cipher.SetIV(tripleDesCbcIV)
-	return cipher
+var tripleDesCbcTest = []struct {
+	padding  string
+	input    string
+	key      string
+	iv       string
+	toHex    string
+	toBase32 string
+	toBase64 string
+}{
+	{"", "", "0123456789abcdefghijklmn", "12345678", "", "", ""},
+	{No, "hello world, go!", "0123456789abcdefghijklmn", "12345678", "7e9194cc827a325d49111eaa503110fe", "P2IZJTECPIZF2SIRD2VFAMIQ7Y======", "fpGUzIJ6Ml1JER6qUDEQ/g=="},
+	{Zero, "hello world", "0123456789abcdefghijklmn", "12345678", "7e9194cc827a325ddaee992a89c5cd8d", "P2IZJTECPIZF3WXOTEVITRONRU======", "fpGUzIJ6Ml3a7pkqicXNjQ=="},
+	{PKCS5, "hello world", "0123456789abcdefghijklmn", "12345678", "7e9194cc827a325db9c765859716cc97", "P2IZJTECPIZF3OOHMWCZOFWMS4======", "fpGUzIJ6Ml25x2WFlxbMlw=="},
+	{PKCS7, "hello world", "0123456789abcdefghijklmn", "12345678", "7e9194cc827a325db9c765859716cc97", "P2IZJTECPIZF3OOHMWCZOFWMS4======", "fpGUzIJ6Ml25x2WFlxbMlw=="},
 }
 
-func TestEncrypt_By3Des_CBC_NoPadding(t *testing.T) {
-	input := "12345678asdfghjk"
-
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{input, tripleDesCbcNoHexExpected},
-	}
-
-	for index, test := range hexTests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(No))
+func TestEncrypt_By3Des_CBC_ToString(t *testing.T) {
+	for index, test := range tripleDesCbcTest {
+		e := Encrypt.FromString(test.input).By3Des(tripleDesCipher(CBC, test.padding, test.key, test.iv))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
-	}
 
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{input, tripleDesCbcNoBase32Expected},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(No))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{input, tripleDesCbcNoBase64Expected},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(No))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toHex, e.ToHexString(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toBase32, e.ToBase32String(), "Base32 test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestDecrypt_By3Des_CBC_NoPadding(t *testing.T) {
-	input := "12345678asdfghjk"
-
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcNoHexExpected, input},
-	}
-
-	for index, test := range hexTests {
-		e := Decrypt.FromHexString(test.input).By3Des(tripleDesCbcCipher(No))
+func TestDecrypt_By3Des_CBC_ToString(t *testing.T) {
+	for index, test := range tripleDesCbcTest {
+		e := Decrypt.FromHexString(test.toHex).By3Des(tripleDesCipher(CBC, test.padding, test.key, test.iv))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, e.ToString(), "Hex test index is "+strconv.Itoa(index))
 	}
 
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcNoBase32Expected, input},
-	}
-
-	for index, test := range base32Tests {
-		e := Decrypt.FromBase32String(test.input).By3Des(tripleDesCbcCipher(No))
+	for index, test := range tripleDesCbcTest {
+		e := Decrypt.FromBase32String(test.toBase32).By3Des(tripleDesCipher(CBC, test.padding, test.key, test.iv))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, e.ToString(), "Base32 test index is "+strconv.Itoa(index))
 	}
 
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcNoBase64Expected, input},
-	}
-
-	for index, test := range base64Tests {
-		e := Decrypt.FromBase64String(test.input).By3Des(tripleDesCbcCipher(No))
+	for index, test := range tripleDesCbcTest {
+		e := Decrypt.FromBase64String(test.toBase64).By3Des(tripleDesCipher(CBC, test.padding, test.key, test.iv))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, e.ToString(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestEncrypt_By3Des_CBC_ZeroPadding(t *testing.T) {
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcZeroHexExpected},
-	}
-
-	for index, test := range hexTests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(Zero))
+func TestEncrypt_By3Des_CBC_ToBytes(t *testing.T) {
+	for index, test := range tripleDesCbcTest {
+		e := Encrypt.FromString(test.input).By3Des(tripleDesCipher(CBC, test.padding, []byte(test.key), []byte(test.iv)))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
-	}
 
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcZeroBase32Expected},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(Zero))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcZeroBase64Expected},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(Zero))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toBase32), e.ToBase32Bytes(), "Base32 test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestDecrypt_By3Des_CBC_ZeroPadding(t *testing.T) {
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcZeroHexExpected, tripleDesCbcInput},
-	}
-
-	for index, test := range hexTests {
-		e := Decrypt.FromHexString(test.input).By3Des(tripleDesCbcCipher(Zero))
+func TestDecrypt_By3Des_CBC_ToBytes(t *testing.T) {
+	for index, test := range tripleDesCbcTest {
+		e := Decrypt.FromHexBytes([]byte(test.toHex)).By3Des(tripleDesCipher(CBC, test.padding, []byte(test.key), []byte(test.iv)))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Hex test index is "+strconv.Itoa(index))
 	}
 
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcZeroBase32Expected, tripleDesCbcInput},
-	}
-
-	for index, test := range base32Tests {
-		e := Decrypt.FromBase32String(test.input).By3Des(tripleDesCbcCipher(Zero))
+	for index, test := range tripleDesCbcTest {
+		e := Decrypt.FromBase32Bytes([]byte(test.toBase32)).By3Des(tripleDesCipher(CBC, test.padding, []byte(test.key), []byte(test.iv)))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base32 test index is "+strconv.Itoa(index))
 	}
 
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcZeroBase64Expected, tripleDesCbcInput},
-	}
-
-	for index, test := range base64Tests {
-		e := Decrypt.FromBase64String(test.input).By3Des(tripleDesCbcCipher(Zero))
+	for index, test := range tripleDesCbcTest {
+		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).By3Des(tripleDesCipher(CBC, test.padding, []byte(test.key), []byte(test.iv)))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
-	}
-}
-
-func TestEncrypt_By3Des_CBC_PKCS5Padding(t *testing.T) {
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcPkcs5HexExpected},
-	}
-
-	for index, test := range hexTests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(PKCS5))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcPkcs5Base32Expected},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(PKCS5))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcPkcs5Base64Expected},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(PKCS5))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
-	}
-}
-
-func TestDecrypt_By3Des_CBC_PKCS5Padding(t *testing.T) {
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcPkcs5HexExpected, tripleDesCbcInput},
-	}
-
-	for index, test := range hexTests {
-		e := Decrypt.FromHexString(test.input).By3Des(tripleDesCbcCipher(PKCS5))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcPkcs5Base32Expected, tripleDesCbcInput},
-	}
-
-	for index, test := range base32Tests {
-		e := Decrypt.FromBase32String(test.input).By3Des(tripleDesCbcCipher(PKCS5))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcPkcs5Base64Expected, tripleDesCbcInput},
-	}
-
-	for index, test := range base64Tests {
-		e := Decrypt.FromBase64String(test.input).By3Des(tripleDesCbcCipher(PKCS5))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
-	}
-}
-
-func TestEncrypt_By3Des_CBC_PKCS7Padding(t *testing.T) {
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcPkcs7HexExpected},
-	}
-
-	for index, test := range hexTests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(PKCS7))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcPkcs7Base32Expected},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(PKCS7))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcInput, tripleDesCbcPkcs7Base64Expected},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input).By3Des(tripleDesCbcCipher(PKCS7))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
-	}
-}
-
-func TestDecrypt_By3Des_CBC_PKCS7Padding(t *testing.T) {
-	hexTests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcPkcs7HexExpected, tripleDesCbcInput},
-	}
-
-	for index, test := range hexTests {
-		e := Decrypt.FromHexString(test.input).By3Des(tripleDesCbcCipher(PKCS7))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base32Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcPkcs7Base32Expected, tripleDesCbcInput},
-	}
-
-	for index, test := range base32Tests {
-		e := Decrypt.FromBase32String(test.input).By3Des(tripleDesCbcCipher(PKCS7))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{tripleDesCbcPkcs7Base64Expected, tripleDesCbcInput},
-	}
-
-	for index, test := range base64Tests {
-		e := Decrypt.FromBase64String(test.input).By3Des(tripleDesCbcCipher(PKCS7))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }

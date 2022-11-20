@@ -1,77 +1,51 @@
 package dongle
 
 import (
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
-var (
-	safeUrlInput    = "www.gouguoyin.cn?sex=男&age=18"
-	safeUrlExpected = "www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18"
-)
+var safeUrlTest = []struct {
+	input  string
+	output string
+}{
+	{"", ""},
+	{"www.gouguoyin.cn?sex=男&age=18", "www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18"},
+}
 
-func TestEncode_BySafeURL_FromStringToString(t *testing.T) {
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{safeUrlInput, safeUrlExpected},
-	}
-
-	for index, test := range tests {
+func TestEncrypt_BySafeURL_FromStringToString(t *testing.T) {
+	for index, test := range safeUrlTest {
 		e := Encode.FromString(test.input).BySafeURL()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToString(), "Current test id is "+strconv.Itoa(index))
+
+		assert.Equal(t, test.output, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestDecode_BySafeURL_FromStringToString(t *testing.T) {
-	tests := []struct {
-		input    string // 输入值
-		expected string // 期望值
-	}{
-		{"", ""},
-		{safeUrlExpected, safeUrlInput},
-	}
-
-	for index, test := range tests {
-		d := Decode.FromString(test.input).BySafeURL()
-		assert.Nil(t, d.Error)
-		assert.Equal(t, test.expected, d.ToString(), "Current test id is "+strconv.Itoa(index))
-	}
-}
-
-func TestEncode_ByBySafeURL_FromBytesToBytes(t *testing.T) {
-	tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(safeUrlInput), []byte(safeUrlExpected)},
-	}
-
-	for index, test := range tests {
-		e := Encode.FromBytes(test.input).BySafeURL()
+func TestDecrypt_BySafeURL_FromStringToString(t *testing.T) {
+	for index, test := range safeUrlTest {
+		e := Decode.FromString(test.output).BySafeURL()
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBytes(), "Current test id is "+strconv.Itoa(index))
+
+		assert.Equal(t, test.input, e.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestDecode_ByBySafeURL_FromBytesToBytes(t *testing.T) {
-	tests := []struct {
-		input    []byte // 输入值
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte("")},
-		{[]byte(safeUrlExpected), []byte(safeUrlInput)},
-	}
+func TestEncrypt_BySafeURL_FromBytesToBytes(t *testing.T) {
+	for index, test := range safeUrlTest {
+		e := Encode.FromBytes([]byte(test.input)).BySafeURL()
+		assert.Nil(t, e.Error)
 
-	for index, test := range tests {
-		d := Decode.FromBytes(test.input).BySafeURL()
-		assert.Nil(t, d.Error)
-		assert.Equal(t, test.expected, d.ToBytes(), "Current test id is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+	}
+}
+
+func TestDecrypt_BySafeURL_FromBytesToBytes(t *testing.T) {
+	for index, test := range safeUrlTest {
+		e := Decode.FromBytes([]byte(test.output)).BySafeURL()
+		assert.Nil(t, e.Error)
+
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
 	}
 }

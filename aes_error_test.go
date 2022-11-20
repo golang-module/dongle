@@ -6,209 +6,80 @@ import (
 )
 
 var (
-	aesRightInput   = "hello world"
-	aesRightMode    = CBC
-	aesRightPadding = PKCS7
-	aesRightKey     = "1234567887654321"
-	aesRightIV      = "1234567887654321"
-
-	aesErrorInput   = "xxx"
-	aesErrorMode    = "xxx"
-	aesErrorPadding = "xxx"
-	aesErrorKey     = "xxx"
-	aesErrorIV      = "xxx"
+	aesInput = "hello world"
+	aesKey   = "0123456789abcdef"
+	aesIV    = "0123456789abcdef"
 )
 
-func TestEncryptModeError_ByAes(t *testing.T) {
+var aesCipher = func(mode, padding string, key, iv interface{}) *Cipher {
 	cipher := NewCipher()
-	cipher.SetMode(aesErrorMode)
-	cipher.SetPadding(aesRightPadding)
-	cipher.SetKey(aesRightKey)
-	cipher.SetIV(aesRightIV)
-
-	expected := invalidModeOrPaddingError(aesErrorMode, aesRightPadding)
-
-	e1 := Encrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, e1.Error, "Should catch an exception")
-
-	e2 := Encrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, e2.Error, "Should catch an exception")
+	cipher.SetMode(mode)
+	cipher.SetPadding(padding)
+	cipher.SetKey(key)
+	cipher.SetIV(iv)
+	return cipher
 }
 
-func TestDecryptModeError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(aesErrorMode)
-	cipher.SetPadding(aesRightPadding)
-	cipher.SetKey([]byte(aesRightKey))
-	cipher.SetIV([]byte(aesRightIV))
+func TestEncrypt_ByAes_FromString_Error(t *testing.T) {
+	e1 := Encrypt.FromString(aesInput).ByAes(aesCipher("xxxx", PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidModeError("xxxx"), e1.Error)
 
-	expected := invalidModeOrPaddingError(aesErrorMode, aesRightPadding)
+	e2 := Encrypt.FromString(aesInput).ByAes(aesCipher(CBC, "xxxx", aesKey, aesIV))
+	assert.Equal(t, invalidPaddingError("xxxx"), e2.Error)
 
-	d1 := Decrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, d1.Error, "Should catch an exception")
+	e3 := Encrypt.FromString(aesInput).ByAes(aesCipher(CBC, PKCS7, "xxxx", aesIV))
+	assert.Equal(t, invalidAesKeyError(4), e3.Error)
 
-	d2 := Decrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, d2.Error, "Should catch an exception")
+	e4 := Encrypt.FromString(aesInput).ByAes(aesCipher(CBC, PKCS7, aesKey, "xxxx"))
+	assert.Equal(t, invalidAesIVError(4), e4.Error)
 }
 
-func TestEncryptPaddingError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(aesRightMode)
-	cipher.SetPadding(aesErrorPadding)
-	cipher.SetKey(aesRightKey)
-	cipher.SetIV(aesRightIV)
+func TestEncrypt_ByAes_FromBytes_Error(t *testing.T) {
+	e1 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher("xxxx", PKCS7, []byte(aesKey), []byte(aesIV)))
+	assert.Equal(t, invalidModeError("xxxx"), e1.Error)
 
-	expected := invalidModeOrPaddingError(aesRightMode, aesErrorPadding)
+	e2 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher(CBC, "xxxx", []byte(aesKey), []byte(aesIV)))
+	assert.Equal(t, invalidPaddingError("xxxx"), e2.Error)
 
-	e1 := Encrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, e1.Error, "Should catch an exception")
+	e3 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher(CBC, PKCS7, []byte("xxxx"), []byte(aesIV)))
+	assert.Equal(t, invalidAesKeyError(4), e3.Error)
 
-	e2 := Encrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, e2.Error, "Should catch an exception")
+	e4 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher(CBC, PKCS7, []byte(aesKey), []byte("xxxx")))
+	assert.Equal(t, invalidAesIVError(4), e4.Error)
 }
 
-func TestDecryptPaddingError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(aesRightMode)
-	cipher.SetPadding(aesErrorPadding)
-	cipher.SetKey([]byte(aesRightKey))
-	cipher.SetIV([]byte(aesRightIV))
+func TestDecrypt_ByAes_FromString_Error(t *testing.T) {
+	d1 := Decrypt.FromHexString("xxxx").ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
+	d2 := Decrypt.FromBase32String("xxxx").ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("base32"), d2.Error)
+	d3 := Decrypt.FromBase64String("xxxxxx").ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("base64"), d3.Error)
 
-	expected := invalidModeOrPaddingError(aesRightMode, aesErrorPadding)
-
-	d1 := Decrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, d1.Error, "Should catch an exception")
-
-	d2 := Decrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, d2.Error, "Should catch an exception")
+	d4 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher("xxxx", PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidModeError("xxxx"), d4.Error)
+	d5 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, "xxxx", aesKey, aesIV))
+	assert.Equal(t, invalidPaddingError("xxxx"), d5.Error)
+	d6 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, PKCS7, "xxxx", aesIV))
+	assert.Equal(t, invalidAesKeyError(4), d6.Error)
+	d7 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, PKCS7, aesKey, "xxxx"))
+	assert.Equal(t, invalidAesIVError(4), d7.Error)
 }
 
-func TestEncryptKeyError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(aesRightPadding)
-	cipher.SetKey(aesErrorKey)
-	cipher.SetIV(aesRightIV)
+func TestDecrypt_ByAes_FromBytes_Error(t *testing.T) {
+	d1 := Decrypt.FromHexBytes([]byte("xxxx")).ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
+	d2 := Decrypt.FromBase32Bytes([]byte("xxxx")).ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("base32"), d2.Error)
+	d3 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("base64"), d3.Error)
 
-	expected := invalidAesKeyError(3)
-
-	e1 := Encrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, e1.Error, "Should catch an exception")
-
-	e2 := Encrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, e2.Error, "Should catch an exception")
-}
-
-func TestDecryptKeyError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(aesRightPadding)
-	cipher.SetKey([]byte(aesErrorKey))
-	cipher.SetIV([]byte(aesRightIV))
-
-	expected := invalidAesKeyError(len(aesErrorKey))
-
-	d1 := Decrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, d1.Error, "Should catch an exception")
-
-	d2 := Decrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, d2.Error, "Should catch an exception")
-}
-
-func TestEncryptIVError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(aesRightPadding)
-	cipher.SetKey(aesRightKey)
-	cipher.SetIV(aesErrorIV)
-
-	expected := invalidIVError(len(aesErrorIV), 16)
-
-	e1 := Encrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, e1.Error, "Should catch an exception")
-
-	e2 := Encrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, e2.Error, "Should catch an exception")
-}
-
-func TestDecryptIVError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(aesRightPadding)
-	cipher.SetKey([]byte(aesRightKey))
-	cipher.SetIV([]byte(aesErrorIV))
-
-	expected := invalidIVError(len(aesErrorIV), 16)
-
-	d1 := Decrypt.FromString(aesRightInput).ByAes(cipher)
-	assert.Equal(t, expected, d1.Error, "Should catch an exception")
-
-	d2 := Decrypt.FromBytes([]byte(aesRightInput)).ByAes(cipher)
-	assert.Equal(t, expected, d2.Error, "Should catch an exception")
-}
-
-func TestEncryptSrcError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(No)
-	cipher.SetKey(aesRightKey)
-	cipher.SetIV(aesRightIV)
-
-	expected := invalidSrcError(len(aesErrorInput))
-
-	e1 := Encrypt.FromString(aesErrorInput).ByAes(cipher)
-	assert.Equal(t, expected, e1.Error, "Should catch an exception")
-
-	e2 := Encrypt.FromBytes([]byte(aesErrorInput)).ByAes(cipher)
-	assert.Equal(t, expected, e2.Error, "Should catch an exception")
-}
-
-func TestDecryptSrcError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(No)
-	cipher.SetKey([]byte(aesRightKey))
-	cipher.SetIV([]byte(aesRightIV))
-
-	expected := invalidSrcError(len(aesErrorInput))
-
-	d1 := Decrypt.FromString(aesErrorInput).ByAes(cipher)
-	assert.Equal(t, expected, d1.Error, "Should catch an exception")
-
-	d2 := Decrypt.FromBytes([]byte(aesErrorInput)).ByAes(cipher)
-	assert.Equal(t, expected, d2.Error, "Should catch an exception")
-}
-
-func TestEncryptDecodeError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(PKCS7)
-	cipher.SetKey(aesRightKey)
-	cipher.SetIV(aesRightIV)
-
-	e1 := Decrypt.FromHexString(aesErrorInput).ByAes(cipher)
-	assert.Equal(t, decodeSrcError("hex"), e1.Error, "Should catch an exception")
-
-	e2 := Decrypt.FromBase32String(aesErrorInput).ByAes(cipher)
-	assert.Equal(t, decodeSrcError("base32"), e2.Error, "Should catch an exception")
-
-	e3 := Decrypt.FromBase64String(aesErrorInput).ByAes(cipher)
-	assert.Equal(t, decodeSrcError("base64"), e3.Error, "Should catch an exception")
-}
-
-func TestDecryptDecodeError_ByAes(t *testing.T) {
-	cipher := NewCipher()
-	cipher.SetMode(CBC)
-	cipher.SetPadding(PKCS7)
-	cipher.SetKey([]byte(aesRightKey))
-	cipher.SetIV([]byte(aesRightIV))
-
-	d1 := Decrypt.FromHexBytes([]byte(aesErrorInput)).ByAes(cipher)
-	assert.Equal(t, decodeSrcError("hex"), d1.Error, "Should catch an exception")
-
-	d2 := Decrypt.FromBase32Bytes([]byte(aesErrorInput)).ByAes(cipher)
-	assert.Equal(t, decodeSrcError("base32"), d2.Error, "Should catch an exception")
-
-	d3 := Decrypt.FromBase64Bytes([]byte(aesErrorInput)).ByAes(cipher)
-	assert.Equal(t, decodeSrcError("base64"), d3.Error, "Should catch an exception")
+	d4 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher("xxxx", PKCS7, []byte(aesKey), []byte(aesIV)))
+	assert.Equal(t, invalidModeError("xxxx"), d4.Error, "mode error")
+	d5 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher(CBC, "xxxx", []byte(aesKey), []byte(aesIV)))
+	assert.Equal(t, invalidPaddingError("xxxx"), d5.Error, "padding error")
+	d6 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher(CBC, PKCS7, []byte("xxxx"), []byte(aesIV)))
+	assert.Equal(t, invalidAesKeyError(4), d6.Error, "key error")
+	d7 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher(CBC, PKCS7, []byte(aesKey), []byte("xxxx")))
+	assert.Equal(t, invalidAesIVError(4), d7.Error, "iv error")
 }

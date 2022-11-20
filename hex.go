@@ -21,6 +21,9 @@ func (d decode) ByHex() decode {
 	if n > 0 {
 		d.dst = buf
 	}
-	d.Error = err
+	if err != nil {
+		d.Error = invalidCiphertextError("hex")
+		return d
+	}
 	return d
 }

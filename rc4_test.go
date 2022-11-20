@@ -1,121 +1,45 @@
 package dongle
 
 import (
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
-var (
-	rc4Input, rc4Key  = "hello world", "dongle"
-	rc4HexExpected    = "eba154b4cb5a9038dbbf9d"
-	rc4Base32Expected = "5OQVJNGLLKIDRW57TU======"
-	rc4Base64Expected = "66FUtMtakDjbv50="
-)
+var rc4Test = []struct {
+	input    string
+	key      string
+	toHex    string
+	toBase64 string
+}{
+	{"", "", "", ""},
+	{"hello world", "dongle", "eba154b4cb5a9038dbbf9d", "66FUtMtakDjbv50="},
+}
 
-func TestEncrypt_ByRC4_FromStringToString(t *testing.T) {
-	hexTests := []struct {
-		input1   string // 输入值1
-		input2   string // 输入值2
-		expected string // 期望值
-	}{
-		{"", "", ""},
-		{"", rc4Key, ""},
-		{rc4Input, rc4Key, rc4HexExpected},
-	}
-
-	for index, test := range hexTests {
-		e := Encrypt.FromString(test.input1).ByRc4(test.input2)
+func TestEncrypt_ByRc4_FromStringToString(t *testing.T) {
+	for index, test := range rc4Test {
+		e := Encrypt.FromString(test.input).ByRc4(test.key)
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
-	}
 
-	base32Tests := []struct {
-		input1   string // 输入值1
-		input2   string // 输入值2
-		expected string // 期望值
-	}{
-		{"", "", ""},
-		{"", rc4Key, ""},
-		{rc4Input, rc4Key, rc4Base32Expected},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromString(test.input1).ByRc4(test.input2)
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32String(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input1   string // 输入值1
-		input2   string // 输入值2
-		expected string // 期望值
-	}{
-		{"", "", ""},
-		{"", rc4Key, ""},
-		{rc4Input, rc4Key, rc4Base64Expected},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromString(test.input1).ByRc4(test.input2)
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toHex, e.ToHexString(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestEncrypt_ByRC4_FromBytesToBytes(t *testing.T) {
-	hexTests := []struct {
-		input1   []byte // 输入值1
-		input2   []byte // 输入值2
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte(""), []byte("")},
-		{[]byte(""), []byte(rc4Key), []byte("")},
-		{[]byte(rc4Input), []byte(rc4Key), []byte(rc4HexExpected)},
-	}
-
-	for index, test := range hexTests {
-		e := Encrypt.FromBytes(test.input1).ByRc4(test.input2)
+func TestEncrypt_ByRc4_FromBytesToBytes(t *testing.T) {
+	for index, test := range rc4Test {
+		e := Encrypt.FromBytes([]byte(test.input)).ByRc4([]byte(test.key))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToHexBytes(), "Current test index is "+strconv.Itoa(index))
-	}
 
-	base32Tests := []struct {
-		input1   []byte // 输入值1
-		input2   []byte // 输入值2
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte(""), []byte("")},
-		{[]byte(""), []byte(rc4Key), []byte("")},
-		{[]byte(rc4Input), []byte(rc4Key), []byte(rc4Base32Expected)},
-	}
-
-	for index, test := range base32Tests {
-		e := Encrypt.FromBytes(test.input1).ByRc4(test.input2)
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase32Bytes(), "Current test index is "+strconv.Itoa(index))
-	}
-
-	base64Tests := []struct {
-		input1   []byte // 输入值1
-		input2   []byte // 输入值2
-		expected []byte // 期望值
-	}{
-		{[]byte(""), []byte(""), []byte("")},
-		{[]byte(""), []byte(rc4Key), []byte("")},
-		{[]byte(rc4Input), []byte(rc4Key), []byte(rc4Base64Expected)},
-	}
-
-	for index, test := range base64Tests {
-		e := Encrypt.FromBytes(test.input1).ByRc4(test.input2)
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.expected, e.ToBase64Bytes(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestError_ByRc4_FromString(t *testing.T) {
-	e := Encrypt.FromString("hello world").ByRc4("")
-	expected := overflowKeyError(0)
-	assert.Equal(t, expected, e.Error, "Should catch an exception")
+func TestEncrypt_ByRc4_Error(t *testing.T) {
+	e1 := Encrypt.FromString("hello world").ByRc4("")
+	assert.Equal(t, invalidRc4KeyError(0), e1.Error, "Should catch an exception")
+
+	e2 := Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte(""))
+	assert.Equal(t, invalidRc4KeyError(0), e2.Error, "Should catch an exception")
 }

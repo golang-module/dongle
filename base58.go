@@ -29,13 +29,13 @@ func (d decode) ByBase58() decode {
 	if len(d.src) == 0 {
 		return d
 	}
-	Int0 := big.NewInt(0)
+	bigInt := big.NewInt(0)
 	for _, v := range d.src {
 		index := bytes.IndexByte([]byte(base58table), v)
-		Int0.Mul(Int0, big.NewInt(58))
-		Int0.Add(Int0, big.NewInt(int64(index)))
+		bigInt.Mul(bigInt, big.NewInt(58))
+		bigInt.Add(bigInt, big.NewInt(int64(index)))
 	}
-	d.dst = Int0.Bytes()
+	d.dst = bigInt.Bytes()
 	return d
 }
 

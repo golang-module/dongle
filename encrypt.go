@@ -2,7 +2,6 @@ package dongle
 
 import (
 	"crypto/cipher"
-	"io/ioutil"
 )
 
 // encrypt defines a encrypt struct.
@@ -28,28 +27,6 @@ func (e encrypt) FromString(s string) encrypt {
 // 对字节切片加密
 func (e encrypt) FromBytes(b []byte) encrypt {
 	e.src = b
-	return e
-}
-
-// FromFile encrypts from file.
-// 对文件加密
-func (e encrypt) FromFile(f interface{}) encrypt {
-	filename := ""
-	switch v := f.(type) {
-	case string:
-		filename = v
-	case []byte:
-		filename = bytes2string(v)
-	}
-	if len(filename) == 0 {
-		return e
-	}
-	bytes, err := ioutil.ReadFile(filename)
-	if err != nil {
-		e.Error = invalidFileError(filename)
-		return e
-	}
-	e.src = bytes
 	return e
 }
 
@@ -113,45 +90,39 @@ func (e encrypt) ToBase64Bytes() []byte {
 // encrypts with given mode and padding
 // 根据指定的分组模式和填充模式进行加密
 func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
-	if c.padding == No && len(e.src)%b.BlockSize() != 0 {
-		return nil, invalidSrcError(len(e.src))
+	src, mode, padding, size := e.src, c.mode, c.padding, b.BlockSize()
+
+	if len(src) == 0 {
+		return nil, nil
 	}
-	if len(c.iv) != b.BlockSize() {
-		return nil, invalidIVError(len(c.iv), b.BlockSize())
+
+	switch padding {
+	case No:
+		if len(src)%size != 0 {
+			return nil, invalidPlaintextError()
+		}
+	case Zero:
+		src = c.ZeroPadding(src, size)
+	case PKCS5:
+		src = c.PKCS5Padding(src)
+	case PKCS7:
+		src = c.PKCS7Padding(src, size)
+	default:
+		return nil, invalidPaddingError(padding)
 	}
-	switch {
-	case c.mode == CBC && c.padding == No:
-		return c.CBCEncrypt(e.src, b), nil
-	case c.mode == CBC && c.padding == Zero:
-		return c.CBCEncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil
-	case c.mode == CBC && c.padding == PKCS5:
-		return c.CBCEncrypt(c.PKCS5Padding(e.src), b), nil
-	case c.mode == CBC && c.padding == PKCS7:
-		return c.CBCEncrypt(c.PKCS7Padding(e.src, b.BlockSize()), b), nil
-	case c.mode == CTR && c.padding == No:
-		return c.CTREncrypt(e.src, b), nil
-	case c.mode == CTR && c.padding == Zero:
-		return c.CTREncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil
-	case c.mode == CTR && c.padding == PKCS5:
-		return c.CTREncrypt(c.PKCS5Padding(e.src), b), nil
-	case c.mode == CTR && c.padding == PKCS7:
-		return c.CTREncrypt(c.PKCS7Padding(e.src, b.BlockSize()), b), nil
-	case c.mode == CFB && c.padding == No:
-		return c.CFBEncrypt(e.src, b), nil
-	case c.mode == CFB && c.padding == Zero:
-		return c.CFBEncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil
-	case c.mode == CFB && c.padding == PKCS5:
-		return c.CFBEncrypt(c.PKCS5Padding(e.src), b), nil
-	case c.mode == CFB && c.padding == PKCS7:
-		return c.CFBEncrypt(c.PKCS7Padding(e.src, b.BlockSize()), b), nil
-	case c.mode == OFB && c.padding == No:
-		return c.OFBEncrypt(e.src, b), nil
-	case c.mode == OFB && c.padding == Zero:
-		return c.OFBEncrypt(c.ZeroPadding(e.src, b.BlockSize()), b), nil
-	case c.mode == OFB && c.padding == PKCS5:
-		return c.OFBEncrypt(c.PKCS5Padding(e.src), b), nil
-	case c.mode == OFB && c.padding == PKCS7:
-		return c.OFBEncrypt(c.PKCS7Padding(e.src, b.BlockSize()), b), nil
+
+	switch mode {
+	case ECB:
+		return c.ECBEncrypt(src, b), nil
+	case CBC:
+		return c.CBCEncrypt(src, b), nil
+	case CTR:
+		return c.CTREncrypt(src, b), nil
+	case CFB:
+		return c.CFBEncrypt(src, b), nil
+	case OFB:
+		return c.OFBEncrypt(src, b), nil
+	default:
+		return nil, invalidModeError(mode)
 	}
-	return nil, invalidModeOrPaddingError(c.mode, c.padding)
 }
