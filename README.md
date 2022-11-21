@@ -85,14 +85,14 @@ dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToBytes()
 
 ```go
 // Encode by base58 from string and output string
-dongle.Encode.FromString("hello world").ByBase32().ToString() // StV1DL6CwTryKyV
+dongle.Encode.FromString("hello world").ByBase58().ToString() // StV1DL6CwTryKyV
 // Decode by base58 from string and output string
-dongle.Decode.FromString("StV1DL6CwTryKyV").ByBase32().ToString() // hello world
+dongle.Decode.FromString("StV1DL6CwTryKyV").ByBase58().ToString() // hello world
 
 // Encode by base58 from byte slice and output byte slice
-dongle.Encode.FromBytes([]byte("hello world")).ByBase32().ToBytes() // []byte("StV1DL6CwTryKyV")
+dongle.Encode.FromBytes([]byte("hello world")).ByBase58().ToBytes() // []byte("StV1DL6CwTryKyV")
 // Decode by base58 from byte slice and output byte slice
-dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase32().ToBytes() // []byte("hello world")
+dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToBytes() // []byte("hello world")
 ```
 
 ##### Encode and decode by base64
