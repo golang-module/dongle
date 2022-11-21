@@ -122,14 +122,14 @@ dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToByte
 
 ```go
 // 对字符串进行 base85 编码，输出字符串
-dongle.Encode.FromString("hello world").ByBase64().ToString() // BOu!rD]j7BEbo7
+dongle.Encode.FromString("hello world").ByBase85().ToString() // BOu!rD]j7BEbo7
 // 对字符串进行 base85 解码，输出字符串
-dongle.Decode.FromString("BOu!rD]j7BEbo7").ByBase64().ToString() // hello world
+dongle.Decode.FromString("BOu!rD]j7BEbo7").ByBase85().ToString() // hello world
 
 // 对字节切片进行 base85 编码，输出字节切片
-dongle.Encode.FromBytes([]byte("hello world")).ByBase64().ToBytes() // []byte("BOu!rD]j7BEbo7")
+dongle.Encode.FromBytes([]byte("hello world")).ByBase85().ToBytes() // []byte("BOu!rD]j7BEbo7")
 // 对字节切片进行 base85 解码，输出字节切片
-dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase64().ToBytes() // []byte("hello world")
+dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase85().ToBytes() // []byte("hello world")
 ```
 
 ##### SafeURL 编码、解码
