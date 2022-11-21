@@ -127,14 +127,14 @@ dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToByte
 
 ```go
 // Encode by base85 from string and output string
-dongle.Encode.FromString("hello world").ByBase64().ToString() // BOu!rD]j7BEbo7
+dongle.Encode.FromString("hello world").ByBase85().ToString() // BOu!rD]j7BEbo7
 // Decode by base85 from string and output string
-dongle.Decode.FromString("BOu!rD]j7BEbo7").ByBase64().ToString() // hello world
+dongle.Decode.FromString("BOu!rD]j7BEbo7").ByBase85().ToString() // hello world
 
 // Encode by base85 from byte slice and output byte slice
-dongle.Encode.FromBytes([]byte("hello world")).ByBase64().ToBytes() // []byte("BOu!rD]j7BEbo7")
+dongle.Encode.FromBytes([]byte("hello world")).ByBase85().ToBytes() // []byte("BOu!rD]j7BEbo7")
 // Decode by base85 from byte slice and output byte slice
-dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase64().ToBytes() // []byte("hello world")
+dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase85().ToBytes() // []byte("hello world")
 ```
 
 ##### Encode and decode by safeURL
