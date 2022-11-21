@@ -1,6 +1,6 @@
 # dongle  #
 [![Carbon Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
-[![Go Build](https://github.com/golang-module/dongle/actions/workflows/bulid.yml/badge.svg)](https://github.com/golang-module/dongle/actions)
+[![Go Build](https://github.com/golang-module/dongle/actions/workflows/test.yml/badge.svg)](https://github.com/golang-module/dongle/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-module/dongle)](https://goreportcard.com/report/github.com/golang-module/dongle)
 [![codecov](https://codecov.io/gh/golang-module/openssl/branch/main/graph/badge.svg)](https://codecov.io/gh/golang-module/dongle)
 [![Go doc](https://img.shields.io/badge/go.dev-reference-brightgreen?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/golang-module/dongle)
