@@ -598,4 +598,4 @@ invalid public key, please make sure the public key is valid
 
 `Dongle`已获取免费的 JetBrains 开源许可证，在此表示感谢
 
-<a href="https://www.jetbrains.com"><img src="https://raw.githubusercontent.com/panjf2000/illustrations/master/jetbrains/jetbrains-variant-4.png" height="100" alt="JetBrains"/></a>
+<a href="https://www.jetbrains.com"><img src="https://github-oss.oss-cn-beijing.aliyuncs.com/jetbrains.png" height="100" alt="JetBrains"/></a>
