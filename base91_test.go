@@ -17,6 +17,7 @@ var base91Test = []struct {
 	{"hello world", "TPwJh>Io2Tv!lE"},
 	{"\x14\xfb\x9c\x03", "Q<c[A"},
 	{"\xf2\x8e\x88\x31\x1a\xf0\x68\xce\x7a\x3f", "EquimSayaka~A"},
+	{"\x35\x5e\x56\xe0\xc6\x29\x38\xf4\x81\x00\xab\x81\x7e\xd7\x08\x95\x62\x20\xa7\xda\x64\xa2\xce\xb3\xc5", "~_1H=x_t{|$AjJX(nMFdjL~:?1b3HgM"},
 }
 
 func TestEncode_ByBase91_FromStringToString(t *testing.T) {

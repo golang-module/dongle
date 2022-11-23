@@ -159,8 +159,8 @@ func (e encode) ByBase91() encode {
 		return e
 	}
 	buf := make([]byte, base91StdEncoding.EncodedLen(len(e.src)))
-	base91StdEncoding.Encode(buf, e.src)
-	e.dst = buf
+	n := base91StdEncoding.Encode(buf, e.src)
+	e.dst = buf[:n]
 	return e
 }
 
