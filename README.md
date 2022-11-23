@@ -95,6 +95,20 @@ dongle.Encode.FromBytes([]byte("hello world")).ByBase58().ToBytes() // []byte("S
 dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToBytes() // []byte("hello world")
 ```
 
+##### Encode and decode by base62
+
+```go
+// Encode by base62 from string and output string
+dongle.Encode.FromString("hello world").ByBase62().ToString() // AAwf93rvy4aWQVw
+// Decode by base62 from string and output string
+dongle.Decode.FromString("AAwf93rvy4aWQVw").ByBase62().ToString() // hello world
+
+// Encode by base62 from byte slice and output byte slice
+dongle.Encode.FromBytes([]byte("hello world")).ByBase62().ToBytes() // []byte("AAwf93rvy4aWQVw")
+// Decode by base62 from byte slice and output byte slice
+dongle.Decode.FromBytes([]byte("AAwf93rvy4aWQVw")).ByBase62().ToBytes() // []byte("hello world")
+```
+
 ##### Encode and decode by base64
 
 ```go
@@ -124,7 +138,6 @@ dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToByte
 ```
 
 ##### Encode and decode by base85
-
 ```go
 // Encode by base85 from string and output string
 dongle.Encode.FromString("hello world").ByBase85().ToString() // BOu!rD]j7BEbo7
@@ -135,6 +148,34 @@ dongle.Decode.FromString("BOu!rD]j7BEbo7").ByBase85().ToString() // hello world
 dongle.Encode.FromBytes([]byte("hello world")).ByBase85().ToBytes() // []byte("BOu!rD]j7BEbo7")
 // Decode by base85 from byte slice and output byte slice
 dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase85().ToBytes() // []byte("hello world")
+```
+
+##### Encode and decode by base91
+
+```go
+// Encode by base91 from string and output string
+dongle.Encode.FromString("hello world").ByBase91().ToString() // TPwJh>Io2Tv!lE
+// Decode by base91 from string and output string
+dongle.Decode.FromString("TPwJh>Io2Tv!lE").ByBase91().ToString() // hello world
+
+// Encode by base91 from byte slice and output byte slice
+dongle.Encode.FromBytes([]byte("hello world")).ByBase91().ToBytes() // []byte("TPwJh>Io2Tv!lE")
+// Decode by base91 from byte slice and output byte slice
+dongle.Decode.FromBytes([]byte("TPwJh>Io2Tv!lE")).ByBase91().ToBytes() // []byte("hello world")
+```
+
+##### Encode and decode by base100
+
+```go
+// Encode by base100 from string and output string
+dongle.Encode.FromString("hello world").ByBase100().ToString() // 👟👜👣👣👦🐗👮👦👩👣👛
+// Decode by base100 from string and output string
+dongle.Decode.FromString("TPwJh>Io2Tv!lE").ByBase100().ToString() // hello world
+
+// Encode by base100 from byte slice and output byte slice
+dongle.Encode.FromBytes([]byte("hello world")).ByBase100().ToBytes() // []byte("👟👜👣👣👦🐗👮👦👩👣👛")
+// Decode by base100 from byte slice and output byte slice
+dongle.Decode.FromBytes([]byte("👟👜👣👣👦🐗👮👦👩👣👛")).ByBase100().ToBytes() // []byte("hello world")
 ```
 
 ##### Encode and decode by safeURL
@@ -201,16 +242,6 @@ dongle.Encrypt.FromString("hello world").ByMd5().ToBase64String() // XrY7u+Ae7tC
 dongle.Encrypt.FromBytes([]byte("hello world")).ByMd5().ToHexBytes() // []byte("5eb63bbbe01eeed093cb22bb8f5acdc3")
 // Encrypt by md5 from byte slice and output byte slice with base64 encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByMd5().ToBase64Bytes() // []byte("XrY7u+Ae7tCTyyK7j1rNww==")
-
-// Encrypt by md5 from file and output string with hex encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToHexString() // 014f03f9025ea81a8a0e9734be540c53
-// Encrypt by md5 from file and output string with base64 encoding
-dongle.Encrypt.FromFile("./LICENSE").ByMd5().ToBase64String() // AU8D+QJeqBqKDpc0vlQMUw==
-
-// Encrypt by md5 from file and output byte slice with hex encoding
-dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToHexBytes() // []byte("014f03f9025ea81a8a0e9734be540c53")
-// Encrypt by md5 from file and output byte slice with base64 encoding
-dongle.Encrypt.FromFile([]byte("./LICENSE")).ByMd5().ToBase64Bytes() // []byte("AU8D+QJeqBqKDpc0vlQMUw==")
 ```
 
 ##### Encrypt by hmac-md5
@@ -360,7 +391,6 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle")).T
 ```
 
 ##### Encrypt by rc4
-
 ```go
 // Encrypt by rc4 from string and output string with hex encoding
 dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToHexString() // eba154b4cb5a9038dbbf9d
@@ -453,7 +483,6 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 ```
 
 ##### Encrypt and decrypt by aes
-
 ```go
 cipher := NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB、GCM
@@ -543,6 +572,20 @@ dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToBase64Bytes() /
 dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher).ToBytes() // []byte("hello world")
 ```
 
+##### Encrypt by sm3
+
+```go
+// Encrypt by sm3 from string and output string with hex encoding
+dongle.Encrypt.FromString("hello world").BySm3().ToHexString() // 44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88
+// Encrypt by sm3 from string and output string with base64 encoding
+dongle.Encrypt.FromString("hello world").BySm3().ToBase64String() // RPAGHmn6b9/CkMSUZUoF3AwFPaflxSuE75Op1n0//4g=
+
+// Encrypt by sm3 from byte slice and output byte slice with hex encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToHexBytes() // []byte("44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88")
+// Encrypt by sm3 from byte slice and output byte slice with base64 encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToBase64Bytes() // []byte("RPAGHmn6b9/CkMSUZUoF3AwFPaflxSuE75Op1n0//4g=")
+```
+
 ### Error handling
 
 > If more than one error occurs, only the first error is returned
@@ -550,8 +593,8 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher
 ```go
 e := dongle.Encrypy.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// 错误处理...
-log.Fatal(e.Error)
+    // 错误处理...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // Output
@@ -564,14 +607,13 @@ invalid public key, please make sure the public key is valid
 - [x] Encoding and decoding by Base16
 - [x] Encoding and decoding by Base32
 - [x] Encoding and decoding by Base58
-- [ ] Encoding and decoding by Base62
+- [x] Encoding and decoding by Base62
 - [x] Encoding and decoding by Base64
 - [x] Encoding and decoding by Base64URL
 - [x] Encoding and decoding by SafeURL
 - [x] Encoding and decoding by Base85
-- [ ] Encoding and decoding by Base91
-- [ ] Encoding and decoding by Base92
-- [ ] Encoding and decoding by Base100
+- [x] Encoding and decoding by Base91
+- [x] Encoding and decoding by Base100
 - [x] Encryption by Md4
 - [x] Encryption by Hmac-md4
 - [x] Encryption by Md5
@@ -590,28 +632,28 @@ invalid public key, please make sure the public key is valid
 - [x] Encryption by Rc4
 - [ ] Encryption by Rc5
 - [ ] Encryption by Rc6
-- [ ] Encryption and decryption by Sm2
-- [ ] Encryption and decryption by Sm3
+- [ ] Encryption and decryption by Dsa
+- [ ] Encryption and decryption by Tea
+- [ ] Encryption and decryption by Xtea
+- [x] Encryption and decryption by Rsa with PKCS1Pem/PKCS8Pem
+- [x] Encryption and decryption by Aes with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
+- [x] Encryption and decryption by Des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
+- [x] Encryption and decryption by 3des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
+- [ ] Encryption by Sm2
+- [x] Encryption and decryption by Sm3
 - [ ] Encryption and decryption by Sm4
 - [ ] Encryption and decryption by Sm7
 - [ ] Encryption and decryption by Sm9
-- [ ] Encryption and decryption by DSA
-- [ ] Encryption and decryption by Tea
-- [ ] Encryption and decryption by Xtea
-- [x] Encryption and decryption by RSA with PKCS1Pem/PKCS8Pem
-- [x] Encryption and decryption by AES with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
-- [x] Encryption and decryption by DES with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
-- [x] Encryption and decryption by 3DES with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
+- [ ] Sign and verify by Rsa
+- [ ] Sign and verify by Dsa
 
 ### References
-
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycryptodome](https://github.com/Legrandin/pycryptodome)
 
 ### Online website
-
 * [www.ssleye.com](https://www.ssleye.com/ssltool)
 * [www.sojson.com](https://www.sojson.com/encrypt.html)
 * [tool.chacuo.net](https://tool.chacuo.net/cryptaes)
@@ -620,7 +662,7 @@ invalid public key, please make sure the public key is valid
 ### Sponsors
 
 `Dongle` is a non-commercial open source project. If you want to support `Dongle`, you
-can [buy a cup of coffee](https://www.gouguoyin.cn/zanzhu.html) for developer.
+can [buy a cup of coffee](https://opencollective.com/go-carbon) for developer.
 
 ### Thanks
 

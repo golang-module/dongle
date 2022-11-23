@@ -91,6 +91,20 @@ dongle.Encode.FromBytes([]byte("hello world")).ByBase58().ToBytes() // []byte("S
 dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToBytes() // []byte("hello world")
 ```
 
+##### Base62 编码、解码
+
+```go
+// 对字符进行 base62 编码，输出字符串
+dongle.Encode.FromString("hello world").ByBase62().ToString() // AAwf93rvy4aWQVw
+// 对字符串进行 base62 解码，输出字符串
+dongle.Decode.FromString("AAwf93rvy4aWQVw").ByBase62().ToString() // hello world
+
+// 对字节切片进行 base62 编码，输出字节切片
+dongle.Encode.FromBytes([]byte("hello world")).ByBase62().ToBytes() // []byte("AAwf93rvy4aWQVw")
+// 对字节切片进行 base62 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("AAwf93rvy4aWQVw")).ByBase62().ToBytes() // []byte("hello world")
+```
+
 ##### Base64 编码、解码
 
 ```go
@@ -130,6 +144,34 @@ dongle.Decode.FromString("BOu!rD]j7BEbo7").ByBase85().ToString() // hello world
 dongle.Encode.FromBytes([]byte("hello world")).ByBase85().ToBytes() // []byte("BOu!rD]j7BEbo7")
 // 对字节切片进行 base85 解码，输出字节切片
 dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase85().ToBytes() // []byte("hello world")
+```
+
+##### Base91 编码、解码
+
+```go
+// 对字符串进行 base91 编码，输出字符串
+dongle.Encode.FromString("hello world").ByBase91().ToString() // TPwJh>Io2Tv!lE
+// 对字符串进行 base91 解码，输出字符串
+dongle.Decode.FromString("TPwJh>Io2Tv!lE").ByBase91().ToString() // hello world
+
+// 对字节切片进行 base91 编码，输出字节切片
+dongle.Encode.FromBytes([]byte("hello world")).ByBase91().ToBytes() // []byte("TPwJh>Io2Tv!lE")
+// 对字节切片进行 base91 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase91().ToBytes() // []byte("hello world")
+```
+
+##### Base100 编码、解码
+
+```go
+// 对字符串进行 base100 编码，输出字符串
+dongle.Encode.FromString("hello world").ByBase100().ToString() // 👟👜👣👣👦🐗👮👦👩👣👛
+// 对字符串进行 base100 解码，输出字符串
+dongle.Decode.FromString("👟👜👣👣👦🐗👮👦👩👣👛").ByBase100().ToString() // hello world
+
+// 对字节切片进行 base100 编码，输出字节切片
+dongle.Encode.FromBytes([]byte("hello world")).ByBase100().ToBytes() // []byte("👟👜👣👣👦🐗👮👦👩👣👛")
+// 对字节切片进行 base100 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("👟👜👣👣👦🐗👮👦👩👣👛")).ByBase100().ToBytes() // []byte("hello world")
 ```
 
 ##### SafeURL 编码、解码
@@ -187,7 +229,6 @@ dongle.Encrypt.FromString("hello world").ByMd5().ToBase64String() // XrY7u+Ae7tC
 dongle.Encrypt.FromBytes([]byte("hello world")).ByMd5().ToHexBytes() // []byte("5eb63bbbe01eeed093cb22bb8f5acdc3")
 // 对字节切片进行 md5 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByMd5().ToBase64Bytes() // []byte("XrY7u+Ae7tCTyyK7j1rNww==")
-
 ```
 
 ##### Hmac-md5 加密
@@ -334,7 +375,6 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle")).T
 ```
 
 ##### Rc4 加密
-
 ```go
 // 对字符串进行 rc4 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToHexString() // eba154b4cb5a9038dbbf9d
@@ -516,6 +556,20 @@ dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToBase64Bytes() /
 dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher).ToBytes() // []byte("hello world")
 ```
 
+##### Sm3 加密
+
+```go
+// 对字符串进行 sm3 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").BySm3().ToHexString() // 44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88
+// 对字符串进行 sm3 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").BySm3().ToBase64String() // RPAGHmn6b9/CkMSUZUoF3AwFPaflxSuE75Op1n0//4g=
+
+// 对字节切片进行 sm3 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToHexBytes() // []byte("44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88")
+// 对字节切片进行 sm3 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToBase64Bytes() // []byte("RPAGHmn6b9/CkMSUZUoF3AwFPaflxSuE75Op1n0//4g=")
+```
+
 ### 错误处理
 
 > 如果有多个错误发生，只返回第一个错误，前一个错误排除后才返回下一个错误
@@ -523,8 +577,8 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher
 ```go
 e := dongle.Encrypy.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-    // 错误处理...
-    log.Fatal(e.Error)
+// 错误处理...
+log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // 输出
@@ -537,14 +591,13 @@ invalid public key, please make sure the public key is valid
 - [x] Base16 编码、解码
 - [x] Base32 编码、解码
 - [x] Base58 编码、解码
-- [ ] Base62 编码、解码
+- [x] Base62 编码、解码
 - [x] Base64 编码、解码
 - [x] Base64URL 编码、解码
 - [x] SafeURL 编码、解码
 - [x] Base85 编码、解码
-- [ ] Base91 编码、解码
-- [ ] Base92 编码、解码
-- [ ] Base100 编码、解码
+- [x] Base91 编码、解码
+- [x] Base100 编码、解码
 - [x] Md4 加密
 - [x] Hmac-md4 加密
 - [x] Md5 加密
@@ -563,28 +616,28 @@ invalid public key, please make sure the public key is valid
 - [x] Rc4 加密
 - [ ] Rc5 加密
 - [ ] Rc6 加密
-- [ ] Sm2 加密、解密
-- [ ] Sm3 加密、解密
+- [ ] Dsa 加密、解密
+- [ ] Tea 加密、解密
+- [ ] Xtea 加密、解密
+- [x] Rsa-PKCS1Pem/PKCS8Pem 加密、解密
+- [x] Aes-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
+- [x] Dde-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
+- [x] 3des-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
+- [ ] Sm2 加密
+- [x] Sm3 加密、解密
 - [ ] Sm4 加密、解密
 - [ ] Sm7 加密、解密
 - [ ] Sm9 加密、解密
-- [ ] DSA 加密、解密
-- [ ] Tea 加密、解密
-- [ ] Xtea 加密、解密
-- [x] RSA-PKCS1Pem/PKCS8Pem 加密、解密
-- [x] AES-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
-- [x] DES-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
-- [x] 3DES-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
+- [ ] Rsa 签名、验签
+- [ ] Dsa 签名、验签
 
 ### 参考项目
-
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycryptodome](https://github.com/Legrandin/pycryptodome)
 
 ### 在线网站
-
 * [www.ssleye.com](https://www.ssleye.com/ssltool)
 * [www.sojson.com](https://www.sojson.com/encrypt.html)
 * [tool.chacuo.net](https://tool.chacuo.net/cryptaes)
@@ -592,7 +645,7 @@ invalid public key, please make sure the public key is valid
 
 ### 赞助
 
-`Dongle` 是一个非商业开源项目, 如果你想支持 `Dongle`, 你可以为开发者 [购买一杯咖啡](https://www.gouguoyin.cn/zanzhu.html)
+`Dongle` 是一个非商业开源项目, 如果你想支持 `Dongle`, 你可以为开发者 [购买一杯咖啡](https://www.gouguoyin.com/zanzhu.html)
 
 ### 致谢
 
