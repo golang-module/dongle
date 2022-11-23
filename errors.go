@@ -60,13 +60,13 @@ var invalid3DesIVError = func(size int) error {
 
 // returns an invalid encrypt or decrypt mode error
 // 返回无效的分组模式错误
-var invalidModeError = func(mode string) error {
+var invalidModeError = func(mode cipherMode) error {
 	return fmt.Errorf("invalid encrypt or decrypt mode %q", mode)
 }
 
 // returns an invalid encrypt or decrypt padding error
 // 返回无效的填充方式错误
-var invalidPaddingError = func(padding string) error {
+var invalidPaddingError = func(padding cipherPadding) error {
 	return fmt.Errorf("invalid encrypt or decrypt padding %q", padding)
 }
 

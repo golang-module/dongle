@@ -7,6 +7,15 @@ import (
 	"encoding/pem"
 )
 
+type pemFormat string
+
+// pem format constants
+// 证书格式常量
+const (
+	PKCS1 pemFormat = "pkcs1"
+	PKCS8 pemFormat = "pkcs8"
+)
+
 // ByRsa encrypts by rsa with public key.
 // 通过 rsa 公钥加密
 func (e encrypt) ByRsa(publicKey interface{}) encrypt {
@@ -24,7 +33,7 @@ func (e encrypt) ByRsa(publicKey interface{}) encrypt {
 
 // ByRsa decrypts by rsa with private key.
 // 通过 rsa 私钥解密
-func (d decrypt) ByRsa(privateKey interface{}, format string) decrypt {
+func (d decrypt) ByRsa(privateKey interface{}, format pemFormat) decrypt {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
@@ -60,7 +69,7 @@ func getRsaPublicKey(publicKey interface{}) *rsa.PublicKey {
 
 // getRsaPrivateKey gets rsa private key pointer.
 // 获取 rsa 私钥
-func getRsaPrivateKey(privateKey interface{}, format string) *rsa.PrivateKey {
+func getRsaPrivateKey(privateKey interface{}, format pemFormat) *rsa.PrivateKey {
 	var key []byte
 	switch v := privateKey.(type) {
 	case string:

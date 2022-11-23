@@ -5,39 +5,36 @@ import (
 	"crypto/cipher"
 )
 
+type cipherMode string
+
 // mode constants
 // 模式常量
 const (
-	CBC = "cbc"
-	ECB = "ecb"
-	CFB = "cfb"
-	OFB = "ofb"
-	CTR = "ctr"
+	CBC cipherMode = "cbc"
+	ECB cipherMode = "ecb"
+	CFB cipherMode = "cfb"
+	OFB cipherMode = "ofb"
+	CTR cipherMode = "ctr"
 )
+
+type cipherPadding string
 
 // padding constants
 // 填充常量
 const (
-	No    = "no"
-	Zero  = "zero"
-	PKCS5 = "pkcs5"
-	PKCS7 = "pkcs7"
-)
-
-// pem format constants
-// 证书格式常量
-const (
-	PKCS1 = "pkcs1"
-	PKCS8 = "pkcs8"
+	No    cipherPadding = "no"
+	Zero  cipherPadding = "zero"
+	PKCS5 cipherPadding = "pkcs5"
+	PKCS7 cipherPadding = "pkcs7"
 )
 
 // Cipher defines a Cipher struct.
 // 定义 Cipher 结构体
 type Cipher struct {
-	mode    string // 分组模式
-	padding string // 填充模式
-	key     []byte // 密钥
-	iv      []byte // 偏移向量
+	mode    cipherMode    // 分组模式
+	padding cipherPadding // 填充模式
+	key     []byte        // 密钥
+	iv      []byte        // 偏移向量
 }
 
 // NewCipher returns a new Cipher instance.
@@ -51,13 +48,13 @@ func NewCipher() *Cipher {
 
 // SetMode sets mode.
 // 设置分组模式
-func (c *Cipher) SetMode(mode string) {
+func (c *Cipher) SetMode(mode cipherMode) {
 	c.mode = mode
 }
 
 // SetPadding sets padding.
 // 设置填充模式
-func (c *Cipher) SetPadding(padding string) {
+func (c *Cipher) SetPadding(padding cipherPadding) {
 	c.padding = padding
 }
 
