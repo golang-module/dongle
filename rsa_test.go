@@ -87,11 +87,6 @@ func TestRsa_PKCS8_ToString(t *testing.T) {
 	d2 := Decrypt.FromHexString(e2.ToHexString()).ByRsa(pkcs8PrivateKey, PKCS8)
 	assert.Nil(t, d2.Error)
 	assert.Equal(t, rsaInput, d2.ToString())
-
-	e3 := Encrypt.FromString(rsaInput).ByRsa(pkcs8PublicKey)
-	d3 := Decrypt.FromHexString(e3.ToHexString()).ByRsa(pkcs8PrivateKey)
-	assert.Nil(t, d3.Error)
-	assert.Equal(t, rsaInput, d3.ToString())
 }
 
 func TestRsa_PKCS8_ToBytes(t *testing.T) {
@@ -104,11 +99,6 @@ func TestRsa_PKCS8_ToBytes(t *testing.T) {
 	d2 := Decrypt.FromHexBytes(e2.ToHexBytes()).ByRsa([]byte(pkcs8PrivateKey), PKCS8)
 	assert.Nil(t, d2.Error)
 	assert.Equal(t, []byte(rsaInput), d2.ToBytes())
-
-	e3 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey))
-	d3 := Decrypt.FromHexBytes(e3.ToHexBytes()).ByRsa([]byte(pkcs8PrivateKey))
-	assert.Nil(t, d3.Error)
-	assert.Equal(t, []byte(rsaInput), d3.ToBytes())
 }
 
 func TestRsa_FromString_Error(t *testing.T) {
