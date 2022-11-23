@@ -24,8 +24,8 @@ const (
 	PKCS7 = "pkcs7"
 )
 
-// pem version constants
-// 证书版本
+// pem format constants
+// 证书格式常量
 const (
 	PKCS1 = "pkcs1"
 	PKCS8 = "pkcs8"
@@ -93,11 +93,7 @@ func (c *Cipher) ZeroPadding(src []byte, size int) []byte {
 // ZeroUnPadding removes padding with Zero mode.
 // 移除零填充
 func (c *Cipher) ZeroUnPadding(src []byte) []byte {
-	for i := len(src) - 1; ; i-- {
-		if src[i] != 0 {
-			return src[:i+1]
-		}
-	}
+	return bytes.TrimRight(src, string([]byte{0}))
 }
 
 // PKCS5Padding padding with PKCS5 mode.
@@ -115,8 +111,8 @@ func (c *Cipher) PKCS5UnPadding(src []byte) []byte {
 // PKCS7Padding padding with PKCS7 mode.
 // 进行 PKCS7 填充
 func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
-	paddingCount := size - len(src)%size
-	paddingText := bytes.Repeat([]byte{byte(paddingCount)}, paddingCount)
+	paddingSize := size - len(src)%size
+	paddingText := bytes.Repeat([]byte{byte(paddingSize)}, paddingSize)
 	return append(src, paddingText...)
 }
 
