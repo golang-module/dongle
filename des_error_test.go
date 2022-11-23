@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var desCipher = func(mode, padding string, key, iv interface{}) *Cipher {
+var desCipher = func(mode cipherMode, padding cipherPadding, key, iv interface{}) *Cipher {
 	cipher := NewCipher()
 	cipher.SetMode(mode)
 	cipher.SetPadding(padding)
@@ -16,8 +16,8 @@ var desCipher = func(mode, padding string, key, iv interface{}) *Cipher {
 }
 
 var desErrorTest = []struct {
-	mode    string
-	padding string
+	mode    cipherMode
+	padding cipherPadding
 	input   string
 	key     string
 	iv      string

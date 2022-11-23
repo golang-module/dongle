@@ -7,7 +7,7 @@ import (
 )
 
 var tripleDesCtrTest = []struct {
-	padding  string
+	padding  cipherPadding
 	input    string
 	key      string
 	iv       string

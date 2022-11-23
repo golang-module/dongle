@@ -7,7 +7,7 @@ import (
 )
 
 var desCbcTest = []struct {
-	padding  string
+	padding  cipherPadding
 	input    string
 	key      string
 	iv       string

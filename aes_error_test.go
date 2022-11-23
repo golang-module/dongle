@@ -11,7 +11,7 @@ var (
 	aesIV    = "0123456789abcdef"
 )
 
-var aesCipher = func(mode, padding string, key, iv interface{}) *Cipher {
+var aesCipher = func(mode cipherMode, padding cipherPadding, key, iv interface{}) *Cipher {
 	cipher := NewCipher()
 	cipher.SetMode(mode)
 	cipher.SetPadding(padding)

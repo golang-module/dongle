@@ -7,7 +7,7 @@ import (
 )
 
 var aesCfbTest = []struct {
-	padding  string
+	padding  cipherPadding
 	input    string
 	key      string
 	iv       string
