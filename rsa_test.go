@@ -155,4 +155,10 @@ xxxx
 xxxx
 -----END PRIVATE KEY-----`), PKCS8)
 	assert.Equal(t, invalidPrivateKeyError(), d6.Error)
+
+	e7 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
+	d7 := Decrypt.FromHexString(e7.ToHexString()).ByRsa(`-----BEGIN PRIVATE KEY-----
+xxxx
+-----END PRIVATE KEY-----`, "xxxx")
+	assert.Equal(t, invalidPrivateKeyError(), d7.Error)
 }
