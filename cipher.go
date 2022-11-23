@@ -85,9 +85,9 @@ func (c *Cipher) SetIV(iv interface{}) {
 
 // ZeroPadding padding with Zero mode.
 // 进行零填充
-func (c *Cipher) ZeroPadding(src []byte, size int) []byte {
-	padding := bytes.Repeat([]byte{byte(0)}, size-len(src)%size)
-	return append(src, padding...)
+func (c *Cipher) ZeroPadding(src []byte, blockSize int) []byte {
+	paddingText := bytes.Repeat([]byte{byte(0)}, blockSize-len(src)%blockSize)
+	return append(src, paddingText...)
 }
 
 // ZeroUnPadding removes padding with Zero mode.
@@ -110,8 +110,8 @@ func (c *Cipher) PKCS5UnPadding(src []byte) []byte {
 
 // PKCS7Padding padding with PKCS7 mode.
 // 进行 PKCS7 填充
-func (c *Cipher) PKCS7Padding(src []byte, size int) []byte {
-	paddingSize := size - len(src)%size
+func (c *Cipher) PKCS7Padding(src []byte, blockSize int) []byte {
+	paddingSize := blockSize - len(src)%blockSize
 	paddingText := bytes.Repeat([]byte{byte(paddingSize)}, paddingSize)
 	return append(src, paddingText...)
 }
@@ -123,57 +123,57 @@ func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
 	return src[:trim]
 }
 
-// CBCEncrypt encrypts with CBC mode.
+// NewCBCEncrypter encrypts with CBC mode.
 // CBC 加密
-func (c *Cipher) CBCEncrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewCBCEncrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCBCEncrypter(block, c.iv[:block.BlockSize()]).CryptBlocks(dst, src)
 	return
 }
 
-// CBCDecrypt decrypts with CBC mode.
+// NewCBCDecrypter decrypts with CBC mode.
 // CBC 解密
-func (c *Cipher) CBCDecrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewCBCDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCBCDecrypter(block, c.iv[:block.BlockSize()]).CryptBlocks(dst, src)
 	return
 }
 
-// CFBEncrypt encrypts with CFB mode.
+// NewCFBEncrypter encrypts with CFB mode.
 // CFB 加密
-func (c *Cipher) CFBEncrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewCFBEncrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCFBEncrypter(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
-// CFBDecrypt decrypts with CFB mode.
+// NewCFBDecrypter decrypts with CFB mode.
 // CFB 解密
-func (c *Cipher) CFBDecrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewCFBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCFBDecrypter(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
-// CTREncrypt encrypts with CTR mode.
+// NewCTREncrypter encrypts with CTR mode.
 // CTR 加密
-func (c *Cipher) CTREncrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewCTREncrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCTR(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
-// CTRDecrypt decrypts with CTR mode.
+// NewCTRDecrypter decrypts with CTR mode.
 // CTR 解密
-func (c *Cipher) CTRDecrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewCTRDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewCTR(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
-// ECBEncrypt encrypts with ECB mode.
+// NewECBEncrypter encrypts with ECB mode.
 // ECB 加密
-func (c *Cipher) ECBEncrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewECBEncrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	encrypted, size := dst, block.BlockSize()
 	for len(src) > 0 {
@@ -184,9 +184,9 @@ func (c *Cipher) ECBEncrypt(src []byte, block cipher.Block) (dst []byte) {
 	return
 }
 
-// ECBDecrypt decrypts with ECB mode.
+// NewECBDecrypter decrypts with ECB mode.
 // ECB 解密
-func (c *Cipher) ECBDecrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewECBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	decrypted, size := dst, block.BlockSize()
 	for len(src) > 0 {
@@ -197,17 +197,17 @@ func (c *Cipher) ECBDecrypt(src []byte, block cipher.Block) (dst []byte) {
 	return
 }
 
-// OFBEncrypt encrypts with OFB mode.
+// NewOFBEncrypter encrypts with OFB mode.
 // OFB 加密
-func (c *Cipher) OFBEncrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewOFBEncrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewOFB(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return
 }
 
-// OFBDecrypt decrypts with OFB mode.
+// NewOFBDecrypter decrypts with OFB mode.
 // OFB 解密
-func (c *Cipher) OFBDecrypt(src []byte, block cipher.Block) (dst []byte) {
+func (c *Cipher) NewOFBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
 	cipher.NewOFB(block, c.iv[:block.BlockSize()]).XORKeyStream(dst, src)
 	return

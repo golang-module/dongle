@@ -139,30 +139,26 @@ func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 
 	switch mode {
 	case ECB:
-		src = c.ECBDecrypt(src, b)
+		src = c.NewECBDecrypter(src, b)
 	case CBC:
-		src = c.CBCDecrypt(src, b)
+		src = c.NewCBCDecrypter(src, b)
 	case CTR:
-		src = c.CTRDecrypt(src, b)
+		src = c.NewCTRDecrypter(src, b)
 	case CFB:
-		src = c.CFBDecrypt(src, b)
+		src = c.NewCFBDecrypter(src, b)
 	case OFB:
-		src = c.OFBDecrypt(src, b)
+		src = c.NewOFBDecrypter(src, b)
 	default:
 		return nil, invalidModeError(mode)
 	}
 
 	switch padding {
-	case No:
-		return src, nil
 	case Zero:
 		return c.ZeroUnPadding(src), nil
 	case PKCS5:
 		return c.PKCS5UnPadding(src), nil
 	case PKCS7:
 		return c.PKCS7UnPadding(src), nil
-	default:
-		return src, invalidPaddingError(padding)
 	}
-
+	return src, nil
 }

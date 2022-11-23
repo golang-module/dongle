@@ -113,15 +113,15 @@ func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 
 	switch mode {
 	case ECB:
-		return c.ECBEncrypt(src, b), nil
+		return c.NewECBEncrypter(src, b), nil
 	case CBC:
-		return c.CBCEncrypt(src, b), nil
+		return c.NewCBCEncrypter(src, b), nil
 	case CTR:
-		return c.CTREncrypt(src, b), nil
+		return c.NewCTREncrypter(src, b), nil
 	case CFB:
-		return c.CFBEncrypt(src, b), nil
+		return c.NewCFBEncrypter(src, b), nil
 	case OFB:
-		return c.OFBEncrypt(src, b), nil
+		return c.NewOFBEncrypter(src, b), nil
 	default:
 		return nil, invalidModeError(mode)
 	}
