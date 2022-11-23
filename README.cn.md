@@ -575,8 +575,8 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToBase64Bytes() // []byt
 ```go
 e := dongle.Encrypy.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// 错误处理...
-log.Fatal(e.Error)
+    // 错误处理...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // 输出
@@ -614,7 +614,6 @@ invalid public key, please make sure the public key is valid
 - [x] Rc4 加密
 - [ ] Rc5 加密
 - [ ] Rc6 加密
-- [ ] Dsa 加密、解密
 - [ ] Tea 加密、解密
 - [ ] Xtea 加密、解密
 - [x] Rsa-PKCS1Pem/PKCS8Pem 加密、解密

@@ -628,7 +628,6 @@ invalid public key, please make sure the public key is valid
 - [x] Encryption by Rc4
 - [ ] Encryption by Rc5
 - [ ] Encryption by Rc6
-- [ ] Encryption and decryption by Dsa
 - [ ] Encryption and decryption by Tea
 - [ ] Encryption and decryption by Xtea
 - [x] Encryption and decryption by Rsa with PKCS1Pem/PKCS8Pem
