@@ -175,7 +175,6 @@ dongle.Decode.FromBytes([]byte("👟👜👣👣👦🐗👮👦👩👣👛")).
 ```
 
 ##### SafeURL 编码、解码
-
 ```go
 // 对 url 字符进行转义编码，输出字符串
 dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
@@ -557,7 +556,6 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher
 ```
 
 ##### Sm3 加密
-
 ```go
 // 对字符串进行 sm3 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySm3().ToHexString() // 44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88
@@ -623,8 +621,8 @@ invalid public key, please make sure the public key is valid
 - [x] Aes-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
 - [x] Dde-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
 - [x] 3des-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
-- [ ] Sm2 加密
-- [x] Sm3 加密、解密
+- [ ] Sm2 加密、解密
+- [x] Sm3 加密
 - [ ] Sm4 加密、解密
 - [ ] Sm7 加密、解密
 - [ ] Sm9 加密、解密
@@ -644,7 +642,6 @@ invalid public key, please make sure the public key is valid
 * [www.oktools.net](https://oktools.net/aes)
 
 ### 赞助
-
 `Dongle` 是一个非商业开源项目, 如果你想支持 `Dongle`, 你可以为开发者 [购买一杯咖啡](https://www.gouguoyin.com/zanzhu.html)
 
 ### 致谢

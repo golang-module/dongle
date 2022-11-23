@@ -151,7 +151,6 @@ dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase85().ToBytes() // []byte
 ```
 
 ##### Encode and decode by base91
-
 ```go
 // Encode by base91 from string and output string
 dongle.Encode.FromString("hello world").ByBase91().ToString() // TPwJh>Io2Tv!lE
@@ -165,7 +164,6 @@ dongle.Decode.FromBytes([]byte("TPwJh>Io2Tv!lE")).ByBase91().ToBytes() // []byte
 ```
 
 ##### Encode and decode by base100
-
 ```go
 // Encode by base100 from string and output string
 dongle.Encode.FromString("hello world").ByBase100().ToString() // 👟👜👣👣👦🐗👮👦👩👣👛
@@ -179,7 +177,6 @@ dongle.Decode.FromBytes([]byte("👟👜👣👣👦🐗👮👦👩👣👛")).
 ```
 
 ##### Encode and decode by safeURL
-
 ```go
 // Encode by escape from url string and output string
 dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
@@ -573,7 +570,6 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher
 ```
 
 ##### Encrypt by sm3
-
 ```go
 // Encrypt by sm3 from string and output string with hex encoding
 dongle.Encrypt.FromString("hello world").BySm3().ToHexString() // 44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88
@@ -639,8 +635,8 @@ invalid public key, please make sure the public key is valid
 - [x] Encryption and decryption by Aes with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
 - [x] Encryption and decryption by Des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
 - [x] Encryption and decryption by 3des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
-- [ ] Encryption by Sm2
-- [x] Encryption and decryption by Sm3
+- [ ] Encryption and decryption by Sm2
+- [x] Encryption by Sm3
 - [ ] Encryption and decryption by Sm4
 - [ ] Encryption and decryption by Sm7
 - [ ] Encryption and decryption by Sm9
@@ -660,7 +656,6 @@ invalid public key, please make sure the public key is valid
 * [www.oktools.net](https://oktools.net/aes)
 
 ### Sponsors
-
 `Dongle` is a non-commercial open source project. If you want to support `Dongle`, you
 can [buy a cup of coffee](https://opencollective.com/go-carbon) for developer.
 
