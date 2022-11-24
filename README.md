@@ -630,10 +630,11 @@ invalid public key, please make sure the public key is valid
 - [ ] Encryption by Rc6
 - [ ] Encryption and decryption by Tea
 - [ ] Encryption and decryption by Xtea
-- [x] Encryption and decryption by Rsa with PKCS1Pem/PKCS8Pem
 - [x] Encryption and decryption by Aes with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
 - [x] Encryption and decryption by Des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
 - [x] Encryption and decryption by 3des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
+- [x] Encryption and decryption by Rsa with PKCS1Pem/PKCS8Pem
+- [ ] Encryption and decryption by Rsa with Ecc
 - [ ] Encryption and decryption by Sm2
 - [x] Encryption by Sm3
 - [ ] Encryption and decryption by Sm4
