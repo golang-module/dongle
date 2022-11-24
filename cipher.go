@@ -34,7 +34,7 @@ type Cipher struct {
 	mode    cipherMode    // 分组模式
 	padding cipherPadding // 填充模式
 	key     []byte        // 密钥
-	iv      []byte        // 偏移向量
+	iv      []byte        // 初始向量
 }
 
 // NewCipher returns a new Cipher instance.
@@ -70,7 +70,7 @@ func (c *Cipher) SetKey(key interface{}) {
 }
 
 // SetIV sets iv.
-// 设置偏移向量
+// 设置初始向量
 func (c *Cipher) SetIV(iv interface{}) {
 	switch v := iv.(type) {
 	case string:
@@ -83,7 +83,8 @@ func (c *Cipher) SetIV(iv interface{}) {
 // ZeroPadding padding with Zero mode.
 // 进行零填充
 func (c *Cipher) ZeroPadding(src []byte, blockSize int) []byte {
-	paddingText := bytes.Repeat([]byte{byte(0)}, blockSize-len(src)%blockSize)
+	paddingSize := blockSize - len(src)%blockSize
+	paddingText := bytes.Repeat([]byte{byte(0)}, paddingSize)
 	return append(src, paddingText...)
 }
 
