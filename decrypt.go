@@ -2,7 +2,14 @@ package dongle
 
 import (
 	"crypto/cipher"
+	"fmt"
 )
+
+// returns an invalid ciphertext error
+// 返回无效的密文错误
+var invalidCiphertextError = func(mode string) error {
+	return fmt.Errorf("invalid ciphertext, the ciphertext can't be decoded by %s", mode)
+}
 
 // decrypt defines decrypt struct
 // 定义 decrypt 结构体

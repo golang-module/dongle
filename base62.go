@@ -7,8 +7,8 @@ import (
 	"math"
 )
 
-// An Encoding is a radix 62 encoding/decoding scheme, defined by a 62-character alphabet.
-type Encoding struct {
+// An base62Encoding is a radix 62 encoding/decoding scheme, defined by a 62-character alphabet.
+type base62Encoding struct {
 	encode    [62]byte
 	decodeMap [256]byte
 }
@@ -18,17 +18,8 @@ const base62EncodeStd = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrs
 // newBase62Encoding returns a new padded Encoding defined by the given alphabet,
 // which must be a 62-byte string that does not contain the padding character
 // or CR / LF ('\r', '\n').
-func newBase62Encoding(encoder string) *Encoding {
-	// if len(encoder) != 62 {
-	// 	panic("encoding alphabet is not 62-bytes long")
-	// }
-	// for i := 0; i < len(encoder); i++ {
-	// 	if encoder[i] == '\n' || encoder[i] == '\r' {
-	// 		panic("encoding alphabet contains newline character")
-	// 	}
-	// }
-
-	e := new(Encoding)
+func newBase62Encoding(encoder string) *base62Encoding {
+	e := new(base62Encoding)
 	copy(e.encode[:], encoder)
 
 	for i := 0; i < len(e.decodeMap); i++ {
@@ -48,7 +39,7 @@ var base62StdEncoding = newBase62Encoding(base62EncodeStd)
  */
 
 // Encode encodes src using the encoding enc.
-func (enc *Encoding) Encode(src []byte) []byte {
+func (enc *base62Encoding) Encode(src []byte) []byte {
 	// enc is a pointer receiver, so the use of enc.encode within the hot
 	// loop below means a nil check at every operation. Lift that nil check
 	// outside of the loop to speed up the encoder.
@@ -81,7 +72,7 @@ func (enc *Encoding) Encode(src []byte) []byte {
 // If src contains invalid base62 data, it will return the
 // number of bytes successfully written and CorruptInputError.
 // New line characters (\r and \n) are ignored.
-func (enc *Encoding) Decode(src []byte) ([]byte, error) {
+func (enc *base62Encoding) Decode(src []byte) ([]byte, error) {
 	// Lift the nil check outside of the loop. enc.decodeMap is directly
 	// used later in this function, to let the compiler know that the
 	// receiver can't be nil.

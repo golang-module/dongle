@@ -5,15 +5,28 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"fmt"
 )
 
-type pemFormat string
+type pkcsVersion string
 
-// pem format constants
-// 证书格式常量
+// returns an invalid public key error
+// 返回无效的公钥错误
+var invalidPublicKeyError = func() error {
+	return fmt.Errorf("invalid public key, please make sure the public key is valid")
+}
+
+// returns an invalid private key error
+// 返回无效的私钥错误
+var invalidPrivateKeyError = func() error {
+	return fmt.Errorf("invalid private key, please make sure the private key is valid")
+}
+
+// pkcs version constants
+// 证书版本常量
 const (
-	PKCS1 pemFormat = "pkcs1"
-	PKCS8 pemFormat = "pkcs8"
+	PKCS1 pkcsVersion = "pkcs1"
+	PKCS8 pkcsVersion = "pkcs8"
 )
 
 // ByRsa encrypts by rsa with public key.
@@ -33,11 +46,11 @@ func (e encrypt) ByRsa(publicKey interface{}) encrypt {
 
 // ByRsa decrypts by rsa with private key.
 // 通过 rsa 私钥解密
-func (d decrypt) ByRsa(privateKey interface{}, format pemFormat) decrypt {
+func (d decrypt) ByRsa(privateKey interface{}, version pkcsVersion) decrypt {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
-	pri := getRsaPrivateKey(privateKey, format)
+	pri := getRsaPrivateKey(privateKey, version)
 	if pri == nil {
 		d.Error = invalidPrivateKeyError()
 		return d
@@ -49,15 +62,15 @@ func (d decrypt) ByRsa(privateKey interface{}, format pemFormat) decrypt {
 // getRsaPublicKey gets rsa public key pointer.
 // 获取 rsa 公钥
 func getRsaPublicKey(publicKey interface{}) *rsa.PublicKey {
-	var key []byte
+	var keyBytes []byte
 	switch v := publicKey.(type) {
 	case string:
-		key = string2bytes(v)
+		keyBytes = string2bytes(v)
 	case []byte:
-		key = v
+		keyBytes = v
 	}
-	block, _ := pem.Decode(key)
-	if block == nil {
+	block, _ := pem.Decode(keyBytes)
+	if block == nil || block.Type != "PUBLIC KEY" {
 		return nil
 	}
 	pub, err := x509.ParsePKIXPublicKey(block.Bytes)
@@ -69,20 +82,20 @@ func getRsaPublicKey(publicKey interface{}) *rsa.PublicKey {
 
 // getRsaPrivateKey gets rsa private key pointer.
 // 获取 rsa 私钥
-func getRsaPrivateKey(privateKey interface{}, format pemFormat) *rsa.PrivateKey {
-	var key []byte
+func getRsaPrivateKey(privateKey interface{}, version pkcsVersion) *rsa.PrivateKey {
+	var keyBytes []byte
 	switch v := privateKey.(type) {
 	case string:
-		key = string2bytes(v)
+		keyBytes = string2bytes(v)
 	case []byte:
-		key = v
+		keyBytes = v
 	}
-	block, _ := pem.Decode(key)
+	block, _ := pem.Decode(keyBytes)
 	if block == nil {
 		return nil
 	}
 
-	if format == PKCS1 {
+	if version == PKCS1 {
 		pri, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 		if err != nil {
 			return nil
@@ -90,7 +103,7 @@ func getRsaPrivateKey(privateKey interface{}, format pemFormat) *rsa.PrivateKey 
 		return pri
 	}
 
-	if format == PKCS8 {
+	if version == PKCS8 {
 		pri, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 		if err != nil {
 			return nil

@@ -2,6 +2,13 @@ package dongle
 
 import (
 	"crypto/rc4"
+	"fmt"
+)
+
+var (
+	invalidRc4KeyError = func(size int) error {
+		return fmt.Errorf("invalid rc4 key size %d, the key at least 1 byte and at most 256 bytes", size)
+	}
 )
 
 // ByRc4 encrypts by rc4.

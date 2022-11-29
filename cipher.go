@@ -3,12 +3,25 @@ package dongle
 import (
 	"bytes"
 	"crypto/cipher"
+	"fmt"
 )
+
+// returns an invalid encrypt or decrypt mode error
+// 返回无效的分组模式错误
+var invalidModeError = func(mode cipherMode) error {
+	return fmt.Errorf("invalid encrypt or decrypt mode %q", mode)
+}
+
+// returns an invalid encrypt or decrypt padding error
+// 返回无效的填充方式错误
+var invalidPaddingError = func(padding cipherPadding) error {
+	return fmt.Errorf("invalid encrypt or decrypt padding %q", padding)
+}
 
 type cipherMode string
 
 // mode constants
-// 模式常量
+// 分组模式常量
 const (
 	CBC cipherMode = "cbc"
 	ECB cipherMode = "ecb"
@@ -20,7 +33,7 @@ const (
 type cipherPadding string
 
 // padding constants
-// 填充常量
+// 填充模式常量
 const (
 	No    cipherPadding = "no"
 	Zero  cipherPadding = "zero"

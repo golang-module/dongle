@@ -2,6 +2,16 @@ package dongle
 
 import (
 	"crypto/aes"
+	"fmt"
+)
+
+var (
+	invalidAesKeyError = func() error {
+		return fmt.Errorf("aes: invalid aes key, the key must be 16, 24 or 32 bytes")
+	}
+	invalidAesIVError = func() error {
+		return fmt.Errorf("aes: invalid aes iv, the iv size must be 16 bytes")
+	}
 )
 
 // ByAes encrypts by aes.
@@ -9,11 +19,11 @@ import (
 func (e encrypt) ByAes(c *Cipher) encrypt {
 	block, err := aes.NewCipher(c.key)
 	if err != nil {
-		e.Error = invalidAesKeyError(len(c.key))
+		e.Error = invalidAesKeyError()
 		return e
 	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
-		e.Error = invalidAesIVError(len(c.iv))
+		e.Error = invalidAesIVError()
 		return e
 	}
 	e.dst, e.Error = e.encrypt(c, block)
@@ -28,11 +38,11 @@ func (d decrypt) ByAes(c *Cipher) decrypt {
 	}
 	block, err := aes.NewCipher(c.key)
 	if err != nil {
-		d.Error = invalidAesKeyError(len(c.key))
+		d.Error = invalidAesKeyError()
 		return d
 	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
-		d.Error = invalidAesIVError(len(c.iv))
+		d.Error = invalidAesIVError()
 		return d
 	}
 	d.dst, d.Error = d.decrypt(c, block)
