@@ -14,7 +14,7 @@ var base85Test = []struct {
 	{"hello world", "BOu!rD]j7BEbo7"},
 }
 
-func TestEncode_ByBase85_FromStringToString(t *testing.T) {
+func TestEncode_ByBase85_ToString(t *testing.T) {
 	for index, test := range base85Test {
 		e := Encode.FromString(test.input).ByBase85()
 		assert.Nil(t, e.Error)
@@ -22,7 +22,7 @@ func TestEncode_ByBase85_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase85_FromStringToString(t *testing.T) {
+func TestDecode_ByBase85_ToString(t *testing.T) {
 	for index, test := range base85Test {
 		d := Decode.FromString(test.output).ByBase85()
 		assert.Nil(t, d.Error)
@@ -30,7 +30,7 @@ func TestDecode_ByBase85_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase85_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByBase85_ToBytes(t *testing.T) {
 	for index, test := range base85Test {
 		e := Encode.FromBytes([]byte(test.input)).ByBase85()
 		assert.Nil(t, e.Error)
@@ -38,7 +38,7 @@ func TestEncode_ByBase85_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase85_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByBase85_ToBytes(t *testing.T) {
 	for index, test := range base85Test {
 		d := Decode.FromBytes([]byte(test.output)).ByBase85()
 		assert.Nil(t, d.Error)
@@ -46,7 +46,7 @@ func TestDecode_ByBase85_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase85_Error(t *testing.T) {
+func TestBase85_Ciphertext_Error(t *testing.T) {
 	d1 := Decode.FromString("xxxxxx").ByBase85()
 	assert.Equal(t, invalidCiphertextError("base85"), d1.Error)
 
