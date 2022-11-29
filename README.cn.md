@@ -386,6 +386,120 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToHexBytes() // 
 dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
 ```
 
+##### Aes 加密、解密
+
+```go
+cipher := NewCipher()
+cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB、GCM
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
+cipher.SetKey("0123456789abcdef") // key 长度必须是 16、24 或 32 字节
+cipher.SetIV("0123456789abcdef") // iv 长度必须是 16 字节，ECB 模式不需要设置 iv
+
+// 对字符串进行 aes 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByAes(cipher).ToHexString() // c1e9b4529aac9793010f4677f6358efe
+// 对经过 hex 编码的字符串进行 aes 解密，输出字符串
+dongle.Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(cipher).ToString() // hello world
+
+// 对字符串进行 aes 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByAes(cipher).ToBase64String() // wem0Upqsl5MBD0Z39jWO/g==
+// 对经过 base64 编码的字符串进行 aes 解密，输出字符串
+dongle.Decrypt.FromBase64String("wem0Upqsl5MBD0Z39jWO/g==").ByAes(cipher).ToString() // hello world
+
+// 对字节切片进行 aes 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByAes(cipher).ToHexBytes() // []byte("c1e9b4529aac9793010f4677f6358efe")
+// 对经过 hex 编码的字节切片进行 aes 解密，输出字节切片
+dongle.Decrypt.FromHexBytes([]byte("c1e9b4529aac9793010f4677f6358efe")).ByAes(cipher).ToBytes() // []byte("hello world")
+
+// 对字节切片进行 aes 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByAes(cipher).ToBase64Bytes() // []byte("ZdgjvfHFgaHe0cukLgPKUg==")
+// 对经过 base64 编码的字节切片进行 aes 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher).ToBytes() // []byte("hello world")
+```
+
+##### Des 加密、解密
+
+```go
+cipher := NewCipher()
+cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR、GCM
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
+cipher.SetKey("12345678")       // key 长度必须是 8 字节
+cipher.SetIV("12345678") // iv 长度必须是 8 字节
+
+// 对字符串进行 des 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByDes(cipher).ToHexString() // 0b2a92e81fb49ce1a43266aacaea7b81
+// 对经过 hex 编码的字符串进行 des 解密，输出字符串
+dongle.Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(cipher).ToString() // hello world
+
+// 对字符串进行 des 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByDes(cipher).ToBase64String() // CyqS6B+0nOGkMmaqyup7gQ==
+// 对经过 base64 编码的字符串进行 des 解密，输出字符串
+dongle.Decrypt.FromBase64String("CyqS6B+0nOGkMmaqyup7gQ==").ByDes(cipher).ToString() // hello world
+
+// 对字节切片进行 des 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByDes(cipher).ToHexBytes() // []byte("0b2a92e81fb49ce1a43266aacaea7b81")
+// 对经过 hex 编码的字节切片进行 des 解密，输出字符串
+dongle.Decrypt.FromHexBytes([]byte("0b2a92e81fb49ce1a43266aacaea7b81")).ByDes(cipher).ToBytes() // []byte("hello world")
+
+// 对字节切片进行 des 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByDes(cipher).ToBase64Bytes() // []byte("CyqS6B+0nOGkMmaqyup7gQ==")
+// 对经过 base64 编码的字节切片进行 des 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).ByDes(cipher).ToBytes() // []byte("hello world")
+```
+
+##### 3Des 加密、解密
+
+```go
+cipher := NewCipher()
+cipher.SetMode(dongle.CBC) // CBC, CFB, CTR, ECB, OFB
+cipher.SetPadding(dongle.PKCS7)           // No、Zero、PKCS5、PKCS7
+cipher.SetKey("123456781234567812345678") // key 长度必须是 24
+cipher.SetIV("12345678") // iv 长度必须是 8
+
+// 对字符串进行 3des 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").By3Des(cipher).ToHexString() // 0b2a92e81fb49ce1a43266aacaea7b81
+// 对经过 hex 编码的字符串进行 3des 解密，输出字符串
+dongle.Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").By3Des(cipher).ToString() // hello world
+
+// 对字符串进行 3des 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").By3Des(cipher).ToBase64String() // CyqS6B+0nOGkMmaqyup7gQ==
+// 对经过 base64 编码的字符串进行 3des 解密，输出字符串
+dongle.Decrypt.FromBase64String("CyqS6B+0nOGkMmaqyup7gQ==").By3Des(cipher).ToString() // hello world
+
+// 对字节切片进行 3des 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToHexBytes() // []byte("0b2a92e81fb49ce1a43266aacaea7b81")
+// 对经过 hex 编码的字节切片进行 3des 解密，输出字符串
+dongle.Decrypt.FromHexBytes([]byte("0b2a92e81fb49ce1a43266aacaea7b81")).By3Des(cipher).ToBytes() // []byte("hello world")
+
+// 对字节切片进行 3des 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToBase64Bytes() // []byte("CyqS6B+0nOGkMmaqyup7gQ==")
+// 对经过 base64 编码的字节切片进行 3des 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher).ToBytes() // []byte("hello world")
+```
+
+##### Tea 加密、解密
+
+```go
+// 对字符串进行 tea 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToHexString() // 06f1e586e866a2b7
+// 对经过 hex 编码的字符串进行 tea 解密，输出字符串
+dongle.Decrypt.FromHexString("06f1e586e866a2b7").ByTea("0123456789abcdef").ToString() // hello go
+
+// 对字符串进行 tea 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToBase64String() // BvHlhuhmorc=
+// 对经过 base64 编码的字符串进行 tea 解密，输出字符串
+dongle.Decrypt.FromBase64String("BvHlhuhmorc=").ByTea("0123456789abcdef").ToString() // hello go
+
+// 对字节切片进行 tea 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello go")).ByTea("0123456789abcdef").ToHexBytes() // []byte("06f1e586e866a2b7")
+// 对经过 hex 编码的字节切片进行 tea 解密，输出字节切片
+dongle.Decrypt.FromHexBytes([]byte("06f1e586e866a2b7")).ByTea("0123456789abcdef").ToBytes() // []byte("hello go")
+
+// 对字节切片进行 tea 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello go")).ByTea("0123456789abcdef").ToBase64Bytes() // []byte("BvHlhuhmorc=")
+// 对经过 base64 编码的字节切片进行 tea 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(()byte("BvHlhuhmorc=")).ByTea("0123456789abcdef").ToBytes() // []byte("hello go")
+```
+
 ##### Rsa 加密、解密
 
 ```go
@@ -465,97 +579,8 @@ dongle.Decrypt.FromHexBytes(cipherText).ByRsa(pkcs8PrivateKey, dongle.PKCS8).ToB
 dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey, dongle.PKCS8).ToByte() // []bytes("hello world)
 ```
 
-##### Aes 加密、解密
-
-```go
-cipher := NewCipher()
-cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB、GCM
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
-cipher.SetKey("0123456789abcdef") // key 长度必须是 16、24 或 32 字节
-cipher.SetIV("0123456789abcdef") // iv 长度必须是 16 字节，ECB 模式不需要设置 iv
-
-// 对字符串进行 aes 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByAes(cipher).ToHexString() // c1e9b4529aac9793010f4677f6358efe
-// 对经过 hex 编码的字符串进行 aes 解密，输出字符串
-dongle.Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(cipher).ToString() // hello world
-
-// 对字符串进行 aes 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByAes(cipher).ToBase64String() // wem0Upqsl5MBD0Z39jWO/g==
-// 对经过 base64 编码的字符串进行 aes 解密，输出字符串
-dongle.Decrypt.FromBase64String("wem0Upqsl5MBD0Z39jWO/g==").ByAes(cipher).ToString() // hello world
-
-// 对字节切片进行 aes 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByAes(cipher).ToHexBytes() // []byte("c1e9b4529aac9793010f4677f6358efe")
-// 对经过 hex 编码的字节切片进行 aes 解密，输出字节切片
-dongle.Decrypt.FromHexBytes([]byte("c1e9b4529aac9793010f4677f6358efe")).ByAes(cipher).ToBytes() // []byte("hello world")
-
-// 对字节切片进行 aes 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByAes(cipher).ToBase64Bytes() // []byte("ZdgjvfHFgaHe0cukLgPKUg==")
-// 对经过 base64 编码的字节切片进行 aes 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher).ToBytes() // []byte("hello world")
-```
-
-##### Des 加密、解密
-
-```go
-cipher := NewCipher()
-cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR、GCM
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
-cipher.SetKey("12345678") // key 长度必须是 8 字节
-cipher.SetIV("123456788") // iv 长度必须是 8 字节
-
-// 对字符串进行 des 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByDes(cipher).ToHexString() // 0b2a92e81fb49ce1a43266aacaea7b81
-// 对经过 hex 编码的字符串进行 des 解密，输出字符串
-dongle.Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(cipher).ToString() // hello world
-
-// 对字符串进行 des 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByDes(cipher).ToBase64String() // CyqS6B+0nOGkMmaqyup7gQ==
-// 对经过 base64 编码的字符串进行 des 解密，输出字符串
-dongle.Decrypt.FromBase64String("CyqS6B+0nOGkMmaqyup7gQ==").ByDes(cipher).ToString() // hello world
-
-// 对字节切片进行 des 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByDes(cipher).ToHexBytes() // []byte("0b2a92e81fb49ce1a43266aacaea7b81")
-// 对经过 hex 编码的字节切片进行 des 解密，输出字符串
-dongle.Decrypt.FromHexBytes([]byte("0b2a92e81fb49ce1a43266aacaea7b81")).ByDes(cipher).ToBytes() // []byte("hello world")
-
-// 对字节切片进行 des 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByDes(cipher).ToBase64Bytes() // []byte("CyqS6B+0nOGkMmaqyup7gQ==")
-// 对经过 base64 编码的字节切片进行 des 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).ByDes(cipher).ToBytes() // []byte("hello world")
-```
-
-##### 3Des 加密、解密
-
-```go
-cipher := NewCipher()
-cipher.SetMode(dongle.CBC) // CBC, CFB, CTR, ECB, OFB
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
-cipher.SetKey("123456781234567812345678") // key 长度必须是 24
-cipher.SetIV("123456788") // iv 长度必须是 8
-
-// 对字符串进行 3des 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").By3Des(cipher).ToHexString() // 0b2a92e81fb49ce1a43266aacaea7b81
-// 对经过 hex 编码的字符串进行 3des 解密，输出字符串
-dongle.Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").By3Des(cipher).ToString() // hello world
-
-// 对字符串进行 3des 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").By3Des(cipher).ToBase64String() // CyqS6B+0nOGkMmaqyup7gQ==
-// 对经过 base64 编码的字符串进行 3des 解密，输出字符串
-dongle.Decrypt.FromBase64String("CyqS6B+0nOGkMmaqyup7gQ==").By3Des(cipher).ToString() // hello world
-
-// 对字节切片进行 3des 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToHexBytes() // []byte("0b2a92e81fb49ce1a43266aacaea7b81")
-// 对经过 hex 编码的字节切片进行 3des 解密，输出字符串
-dongle.Decrypt.FromHexBytes([]byte("0b2a92e81fb49ce1a43266aacaea7b81")).By3Des(cipher).ToBytes() // []byte("hello world")
-
-// 对字节切片进行 3des 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToBase64Bytes() // []byte("CyqS6B+0nOGkMmaqyup7gQ==")
-// 对经过 base64 编码的字节切片进行 3des 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher).ToBytes() // []byte("hello world")
-```
-
 ##### Sm3 加密
+
 ```go
 // 对字符串进行 sm3 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySm3().ToHexString() // 44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88
@@ -566,6 +591,22 @@ dongle.Encrypt.FromString("hello world").BySm3().ToBase64String() // RPAGHmn6b9/
 dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToHexBytes() // []byte("44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88")
 // 对字节切片进行 sm3 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToBase64Bytes() // []byte("RPAGHmn6b9/CkMSUZUoF3AwFPaflxSuE75Op1n0//4g=")
+```
+
+#### 签名&验签
+
+##### Bcrypt 签名、验签
+
+```go
+// 对字符串进行 bcrypt 签名，输出字符串
+sign := dongle.Sign.FromString("hello world").ByBcrypt(10).ToString()
+// 对字符串进行 bcrypt 验签
+dongle.Verify.FromString("hello world").ByBcrypt(sign) // true
+
+// 对字节切片进行 bcrypt 签名，输出字节切片
+sign := dongle.Sign.FromBytes([]byte("hello world")).ByBcrypt(10).ToBytes()
+// 对字节切片进行 bcrypt 验签
+dongle.Verify.FromBytes([]byte("hello world")).ByBcrypt([]byte(sign)) // true
 ```
 
 ### 错误处理
@@ -614,7 +655,7 @@ invalid public key, please make sure the public key is valid
 - [x] Rc4 加密
 - [ ] Rc5 加密
 - [ ] Rc6 加密
-- [ ] Tea 加密、解密
+- [x] Tea 加密、解密
 - [ ] Xtea 加密、解密
 - [x] Aes-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
 - [x] Dde-ECB/CBC/CTR/CFB/OFB-NoPadding/ZeroPadding/PKCS5Padding/PKCS7Padding 加密、解密
@@ -626,6 +667,7 @@ invalid public key, please make sure the public key is valid
 - [ ] Sm4 加密、解密
 - [ ] Sm7 加密、解密
 - [ ] Sm9 加密、解密
+- [x] Bcrypt 签名、验签
 - [ ] Rsa 签名、验签
 - [ ] Dsa 签名、验签
 
