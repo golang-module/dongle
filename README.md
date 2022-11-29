@@ -391,7 +391,6 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() 
 ```
 
 ##### Encrypt and decrypt by aes
-
 ```go
 cipher := NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB、GCM
@@ -666,7 +665,7 @@ invalid public key, please make sure the public key is valid
 - [x] Encryption and decryption by Des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
 - [x] Encryption and decryption by 3des with ECB/CBC/CTR/CFB/OFB mode and No/Zero/PKCS5/PKCS7 padding
 - [x] Encryption and decryption by Rsa with PKCS1/PKCS8 version
-- [ ] Encryption and decryption by Rsa with Ecc
+- [ ] Encryption and decryption by Ecc
 - [ ] Encryption and decryption by Sm2
 - [x] Encryption by Sm3
 - [ ] Encryption and decryption by Sm4
