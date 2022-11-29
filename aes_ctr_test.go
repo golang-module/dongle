@@ -74,7 +74,7 @@ func TestDecrypt_ByAes_CTR_ToBytes(t *testing.T) {
 	for index, test := range aesCtrTest {
 		e := Decrypt.FromBase32Bytes([]byte(test.toBase32)).ByAes(aesCipher(CTR, test.padding, test.key, test.iv))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base32 test index is "+strconv.Itoa(index))
 	}
 
 	for index, test := range aesCtrTest {

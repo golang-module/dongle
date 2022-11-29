@@ -16,7 +16,7 @@ var base100Test = []struct {
 	{"hello world", "👟👜👣👣👦🐗👮👦👩👣👛"},
 }
 
-func TestEncode_ByBase100_FromStringToString(t *testing.T) {
+func TestEncode_ByBase100_ToString(t *testing.T) {
 	for index, test := range base100Test {
 		e := Encode.FromString(test.input).ByBase100()
 		assert.Nil(t, e.Error)
@@ -24,7 +24,7 @@ func TestEncode_ByBase100_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase100_FromStringToString(t *testing.T) {
+func TestDecode_ByBase100_ToString(t *testing.T) {
 	for index, test := range base100Test {
 		d := Decode.FromString(test.output).ByBase100()
 		assert.Nil(t, d.Error)
@@ -32,7 +32,7 @@ func TestDecode_ByBase100_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase100_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByBase100_ToBytes(t *testing.T) {
 	for index, test := range base100Test {
 		e := Encode.FromBytes([]byte(test.input)).ByBase100()
 		assert.Nil(t, e.Error)
@@ -40,7 +40,7 @@ func TestEncode_ByBase100_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase100_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByBase100_ToBytes(t *testing.T) {
 	for index, test := range base100Test {
 		d := Decode.FromBytes([]byte(test.output)).ByBase100()
 		assert.Nil(t, d.Error)
@@ -48,7 +48,7 @@ func TestDecode_ByBase100_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase100_Error(t *testing.T) {
+func TestBase100_Ciphertext_Error(t *testing.T) {
 	d1 := Decode.FromString("-").ByBase100()
 	assert.Equal(t, invalidCiphertextError("base100"), d1.Error)
 

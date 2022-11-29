@@ -16,7 +16,7 @@ var sha512Test = []struct {
 	{"hello world", "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f", "MJ7MSJwS1utMxA9QyQLytNDtd+5RGnx6m808qG1M2G+YndNbxf9JlnDaNCVbRbDP2DDoH2Bdz33FVC6TrpzXbw=="},
 }
 
-func TestEncrypt_BySha512_FromStringToString(t *testing.T) {
+func TestEncrypt_BySha512_ToString(t *testing.T) {
 	for index, test := range sha512Test {
 		e := Encrypt.FromString(test.input).BySha512()
 		assert.Nil(t, e.Error)
@@ -26,7 +26,7 @@ func TestEncrypt_BySha512_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncrypt_BySha512_FromBytesToBytes(t *testing.T) {
+func TestEncrypt_BySha512_ToBytes(t *testing.T) {
 	for index, test := range sha512Test {
 		e := Encrypt.FromBytes([]byte(test.input)).BySha512()
 		assert.Nil(t, e.Error)

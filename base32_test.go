@@ -15,7 +15,7 @@ var base32Test = []struct {
 	{"hello world", "NBSWY3DPEB3W64TMMQ======"},
 }
 
-func TestEncode_ByBase32_FromStringToString(t *testing.T) {
+func TestEncode_ByBase32_ToString(t *testing.T) {
 	for index, test := range base32Test {
 		e := Encode.FromString(test.input).ByBase32()
 		assert.Nil(t, e.Error)
@@ -23,7 +23,7 @@ func TestEncode_ByBase32_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase32_FromStringToString(t *testing.T) {
+func TestDecode_ByBase32_ToString(t *testing.T) {
 	for index, test := range base32Test {
 		d := Decode.FromString(test.output).ByBase32()
 		assert.Nil(t, d.Error)
@@ -31,7 +31,7 @@ func TestDecode_ByBase32_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase32_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByBase32_ToBytes(t *testing.T) {
 	for index, test := range base32Test {
 		e := Encode.FromBytes([]byte(test.input)).ByBase32()
 		assert.Nil(t, e.Error)
@@ -39,7 +39,7 @@ func TestEncode_ByBase32_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase32_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByBase32_ToBytes(t *testing.T) {
 	for index, test := range base32Test {
 		d := Decode.FromBytes([]byte(test.output)).ByBase32()
 		assert.Nil(t, d.Error)
@@ -47,7 +47,7 @@ func TestDecode_ByBase32_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase32_Error(t *testing.T) {
+func TestBase32_Ciphertext_Error(t *testing.T) {
 	d1 := Decode.FromString("xxxxxx").ByBase32()
 	assert.Equal(t, invalidCiphertextError("base32"), d1.Error)
 

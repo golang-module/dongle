@@ -15,7 +15,7 @@ var base64UrlTest = []struct {
 	{"www.gouguoyin.cn", "d3d3LmdvdWd1b3lpbi5jbg=="},
 }
 
-func TestEncode_ByBase64URL_FromStringToString(t *testing.T) {
+func TestEncode_ByBase64URL_ToString(t *testing.T) {
 	for index, test := range base64UrlTest {
 		e := Encode.FromString(test.input).ByBase64URL()
 		assert.Nil(t, e.Error)
@@ -23,7 +23,7 @@ func TestEncode_ByBase64URL_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase64URL_FromStringToString(t *testing.T) {
+func TestDecode_ByBase64URL_ToString(t *testing.T) {
 
 	for index, test := range base64UrlTest {
 		d := Decode.FromString(test.output).ByBase64URL()
@@ -32,7 +32,7 @@ func TestDecode_ByBase64URL_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase64URL_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByBase64URL_ToBytes(t *testing.T) {
 
 	for index, test := range base64UrlTest {
 		e := Encode.FromBytes([]byte(test.input)).ByBase64URL()
@@ -41,7 +41,7 @@ func TestEncode_ByBase64URL_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase64URL_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByBase64URL_ToBytes(t *testing.T) {
 	for index, test := range base64UrlTest {
 		d := Decode.FromBytes([]byte(test.output)).ByBase64URL()
 		assert.Nil(t, d.Error)
@@ -49,7 +49,7 @@ func TestDecode_ByBase64URL_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase64URL_Error(t *testing.T) {
+func TestBase64UrlCiphertext_Error(t *testing.T) {
 	d1 := Decode.FromString("xxxxxx").ByBase64URL()
 	assert.Equal(t, invalidCiphertextError("base64URL"), d1.Error)
 

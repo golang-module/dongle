@@ -20,7 +20,7 @@ var base62Test = []struct {
 	{"\xf2\x8e\x88\x31\x1a\xf0\x68\xce\x7a\x3f", "5j2FgcEB7vzAy7"},
 }
 
-func TestEncode_ByBase62_FromStringToString(t *testing.T) {
+func TestEncode_ByBase62_ToString(t *testing.T) {
 	for index, test := range base62Test {
 		e := Encode.FromString(test.input).ByBase62()
 		assert.Nil(t, e.Error)
@@ -28,7 +28,7 @@ func TestEncode_ByBase62_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase62_FromStringToString(t *testing.T) {
+func TestDecode_ByBase62_ToString(t *testing.T) {
 	for index, test := range base62Test {
 		d := Decode.FromString(test.output).ByBase62()
 		assert.Nil(t, d.Error)
@@ -40,7 +40,7 @@ func TestDecode_ByBase62_FromStringToString(t *testing.T) {
 	assert.Equal(t, "hello world", d.ToString())
 }
 
-func TestEncode_ByBase62_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByBase62_ToBytes(t *testing.T) {
 	for index, test := range base62Test {
 		e := Encode.FromBytes([]byte(test.input)).ByBase62()
 		assert.Nil(t, e.Error)
@@ -52,7 +52,7 @@ func TestEncode_ByBase62_FromBytesToBytes(t *testing.T) {
 	assert.Equal(t, "hello world", d.ToString())
 }
 
-func TestDecode_ByBase62_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByBase62_ToBytes(t *testing.T) {
 	for index, test := range base62Test {
 		d := Decode.FromBytes([]byte(test.output)).ByBase62()
 		assert.Nil(t, d.Error)
@@ -60,7 +60,7 @@ func TestDecode_ByBase62_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase62_Error(t *testing.T) {
+func TestBase62_Ciphertext_Error(t *testing.T) {
 	d1 := Decode.FromString("-").ByBase62()
 	assert.Equal(t, invalidCiphertextError("base62"), d1.Error)
 

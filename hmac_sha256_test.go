@@ -17,7 +17,7 @@ var hmacSha256Test = []struct {
 	{"hello world", "dongle", "77f5c8ce4147600543e70b12701e7b78b5b95172332ebbb06de65fcea7112179", "d/XIzkFHYAVD5wsScB57eLW5UXIzLruwbeZfzqcRIXk="},
 }
 
-func TestEncrypt_ByHmacSha225_FromStringToString(t *testing.T) {
+func TestEncrypt_ByHmacSha225_ToString(t *testing.T) {
 	for index, test := range hmacSha256Test {
 		e := Encrypt.FromString(test.input).ByHmacSha256(test.key)
 		assert.Nil(t, e.Error)
@@ -27,7 +27,7 @@ func TestEncrypt_ByHmacSha225_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByHmacSha225_FromBytesToBytes(t *testing.T) {
+func TestEncrypt_ByHmacSha225_ToBytes(t *testing.T) {
 	for index, test := range hmacSha256Test {
 		e := Encrypt.FromBytes([]byte(test.input)).ByHmacSha256([]byte(test.key))
 		assert.Nil(t, e.Error)

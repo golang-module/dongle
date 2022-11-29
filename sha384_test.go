@@ -16,7 +16,7 @@ var sha384Test = []struct {
 	{"hello world", "fdbd8e75a67f29f701a4e040385e2e23986303ea10239211af907fcbb83578b3e417cb71ce646efd0819dd8c088de1bd", "/b2OdaZ/KfcBpOBAOF4uI5hjA+oQI5IRr5B/y7g1eLPkF8txzmRu/QgZ3YwIjeG9"},
 }
 
-func TestEncrypt_BySha384_FromStringToString(t *testing.T) {
+func TestEncrypt_BySha384_ToString(t *testing.T) {
 	for index, test := range sha384Test {
 		e := Encrypt.FromString(test.input).BySha384()
 		assert.Nil(t, e.Error)
@@ -26,7 +26,7 @@ func TestEncrypt_BySha384_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncrypt_BySha384_FromBytesToBytes(t *testing.T) {
+func TestEncrypt_BySha384_ToBytes(t *testing.T) {
 	for index, test := range sha384Test {
 		e := Encrypt.FromBytes([]byte(test.input)).BySha384()
 		assert.Nil(t, e.Error)

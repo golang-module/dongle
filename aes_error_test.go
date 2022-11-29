@@ -20,66 +20,59 @@ var aesCipher = func(mode cipherMode, padding cipherPadding, key, iv interface{}
 	return cipher
 }
 
-func TestEncrypt_ByAes_FromString_Error(t *testing.T) {
-	e1 := Encrypt.FromString(aesInput).ByAes(aesCipher("xxxx", PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidModeError("xxxx"), e1.Error)
+func TestAes_Key_Error(t *testing.T) {
+	e := Encrypt.FromString(aesInput).ByAes(aesCipher(CBC, PKCS7, "xxxx", aesIV))
+	assert.Equal(t, invalidAesKeyError(), e.Error)
 
-	e2 := Encrypt.FromString(aesInput).ByAes(aesCipher(CBC, "xxxx", aesKey, aesIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), e2.Error)
-
-	e3 := Encrypt.FromString(aesInput).ByAes(aesCipher(CBC, PKCS7, "xxxx", aesIV))
-	assert.Equal(t, invalidAesKeyError(4), e3.Error)
-
-	e4 := Encrypt.FromString(aesInput).ByAes(aesCipher(CBC, PKCS7, aesKey, "xxxx"))
-	assert.Equal(t, invalidAesIVError(4), e4.Error)
+	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, PKCS7, "xxxx", aesIV))
+	assert.Equal(t, invalidAesKeyError(), d.Error)
 }
 
-func TestEncrypt_ByAes_FromBytes_Error(t *testing.T) {
-	e1 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher("xxxx", PKCS7, []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidModeError("xxxx"), e1.Error)
+func TestAes_IV_Error(t *testing.T) {
+	e := Encrypt.FromString(aesInput).ByAes(aesCipher(OFB, PKCS7, aesKey, "xxxx"))
+	assert.Equal(t, invalidAesIVError(), e.Error)
 
-	e2 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher(CBC, "xxxx", []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidPaddingError("xxxx"), e2.Error)
-
-	e3 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher(CBC, PKCS7, []byte("xxxx"), []byte(aesIV)))
-	assert.Equal(t, invalidAesKeyError(4), e3.Error)
-
-	e4 := Encrypt.FromBytes([]byte(aesInput)).ByAes(aesCipher(CBC, PKCS7, []byte(aesKey), []byte("xxxx")))
-	assert.Equal(t, invalidAesIVError(4), e4.Error)
+	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, PKCS7, aesKey, "xxxx"))
+	assert.Equal(t, invalidAesIVError(), d.Error)
 }
 
-func TestDecrypt_ByAes_FromString_Error(t *testing.T) {
-	d1 := Decrypt.FromHexString("xxxx").ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
+func TestAes_Mode_Error(t *testing.T) {
+	e := Encrypt.FromString(aesInput).ByAes(aesCipher("xxxx", PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidModeError("xxxx"), e.Error)
+
+	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher("xxxx", PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidModeError("xxxx"), d.Error)
+}
+
+func TestAes_Padding_Error(t *testing.T) {
+	e := Encrypt.FromString(aesInput).ByAes(aesCipher(CFB, "xxxx", aesKey, aesIV))
+	assert.Equal(t, invalidPaddingError("xxxx"), e.Error)
+
+	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, "xxxx", aesKey, aesIV))
+	assert.Equal(t, invalidPaddingError("xxxx"), d.Error)
+}
+
+func TestAes_Plaintext_Error(t *testing.T) {
+	e := Encrypt.FromString(aesInput).ByAes(aesCipher(CFB, No, aesKey, aesIV))
+	assert.Equal(t, invalidPlaintextError(), e.Error)
+
+	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, No, aesKey, aesIV))
+	assert.Equal(t, invalidPlaintextError(), d.Error)
+}
+
+func TestAes_Ciphertext_Error(t *testing.T) {
+	d1 := Decrypt.FromHexString("xxxx").ByAes(aesCipher(CTR, Zero, aesKey, aesIV))
 	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
-	d2 := Decrypt.FromBase32String("xxxx").ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("base32"), d2.Error)
-	d3 := Decrypt.FromBase64String("xxxxxx").ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("base64"), d3.Error)
+	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByAes(aesCipher(CTR, Zero, []byte(aesKey), []byte(aesIV)))
+	assert.Equal(t, invalidCiphertextError("hex"), d2.Error)
 
-	d4 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher("xxxx", PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidModeError("xxxx"), d4.Error)
-	d5 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, "xxxx", aesKey, aesIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), d5.Error)
-	d6 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, PKCS7, "xxxx", aesIV))
-	assert.Equal(t, invalidAesKeyError(4), d6.Error)
-	d7 := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(aesCipher(CBC, PKCS7, aesKey, "xxxx"))
-	assert.Equal(t, invalidAesIVError(4), d7.Error)
-}
+	d3 := Decrypt.FromBase32String("xxxx").ByAes(aesCipher(CBC, PKCS5, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("base32"), d3.Error)
+	d4 := Decrypt.FromBase32Bytes([]byte("xxxx")).ByAes(aesCipher(CBC, PKCS5, []byte(aesKey), []byte(aesIV)))
+	assert.Equal(t, invalidCiphertextError("base32"), d4.Error)
 
-func TestDecrypt_ByAes_FromBytes_Error(t *testing.T) {
-	d1 := Decrypt.FromHexBytes([]byte("xxxx")).ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
-	d2 := Decrypt.FromBase32Bytes([]byte("xxxx")).ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("base32"), d2.Error)
-	d3 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(aesCipher(CBC, PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("base64"), d3.Error)
-
-	d4 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher("xxxx", PKCS7, []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidModeError("xxxx"), d4.Error, "mode error")
-	d5 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher(CBC, "xxxx", []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidPaddingError("xxxx"), d5.Error, "padding error")
-	d6 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher(CBC, PKCS7, []byte("xxxx"), []byte(aesIV)))
-	assert.Equal(t, invalidAesKeyError(4), d6.Error, "key error")
-	d7 := Decrypt.FromHexBytes([]byte("68656c6c6f20776f726c64")).ByAes(aesCipher(CBC, PKCS7, []byte(aesKey), []byte("xxxx")))
-	assert.Equal(t, invalidAesIVError(4), d7.Error, "iv error")
+	d5 := Decrypt.FromBase64String("xxxxxx").ByAes(aesCipher(CFB, PKCS7, aesKey, aesIV))
+	assert.Equal(t, invalidCiphertextError("base64"), d5.Error)
+	d6 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(aesCipher(CFB, PKCS7, []byte(aesKey), []byte(aesIV)))
+	assert.Equal(t, invalidCiphertextError("base64"), d6.Error)
 }

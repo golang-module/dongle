@@ -20,7 +20,7 @@ var base91Test = []struct {
 	{"\x35\x5e\x56\xe0\xc6\x29\x38\xf4\x81\x00\xab\x81\x7e\xd7\x08\x95\x62\x20\xa7\xda\x64\xa2\xce\xb3\xc5", "~_1H=x_t{|$AjJX(nMFdjL~:?1b3HgM"},
 }
 
-func TestEncode_ByBase91_FromStringToString(t *testing.T) {
+func TestEncode_ByBase91_ToString(t *testing.T) {
 	for index, test := range base91Test {
 		e := Encode.FromString(test.input).ByBase91()
 		assert.Nil(t, e.Error)
@@ -28,7 +28,7 @@ func TestEncode_ByBase91_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase91_FromStringToString(t *testing.T) {
+func TestDecode_ByBase91_ToString(t *testing.T) {
 	for index, test := range base91Test {
 		d := Decode.FromString(test.output).ByBase91()
 		assert.Nil(t, d.Error)
@@ -36,7 +36,7 @@ func TestDecode_ByBase91_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase91_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByBase91_ToBytes(t *testing.T) {
 	for index, test := range base91Test {
 		e := Encode.FromBytes([]byte(test.input)).ByBase91()
 		assert.Nil(t, e.Error)
@@ -44,7 +44,7 @@ func TestEncode_ByBase91_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase91_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByBase91_ToBytes(t *testing.T) {
 	for index, test := range base91Test {
 		d := Decode.FromBytes([]byte(test.output)).ByBase91()
 		assert.Nil(t, d.Error)
@@ -52,7 +52,7 @@ func TestDecode_ByBase91_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase91_Error(t *testing.T) {
+func TestBase91_Ciphertext_ToError(t *testing.T) {
 	d1 := Decode.FromString("-").ByBase91()
 	assert.Equal(t, invalidCiphertextError("base91"), d1.Error)
 

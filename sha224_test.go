@@ -16,7 +16,7 @@ var sha224Test = []struct {
 	{"hello world", "2f05477fc24bb4faefd86517156dafdecec45b8ad3cf2522a563582b", "LwVHf8JLtPrv2GUXFW2v3s7EW4rTzyUipWNYKw=="},
 }
 
-func TestEncrypt_BySha224_FromStringToString(t *testing.T) {
+func TestEncrypt_BySha224_ToString(t *testing.T) {
 	for index, test := range sha224Test {
 		e := Encrypt.FromString(test.input).BySha224()
 		assert.Nil(t, e.Error)
@@ -26,7 +26,7 @@ func TestEncrypt_BySha224_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncrypt_BySha224_FromBytesToBytes(t *testing.T) {
+func TestEncrypt_BySha224_ToBytes(t *testing.T) {
 	for index, test := range sha224Test {
 		e := Encrypt.FromBytes([]byte(test.input)).BySha224()
 		assert.Nil(t, e.Error)

@@ -15,7 +15,7 @@ var base16Test = []struct {
 	{"hello world", "68656c6c6f20776f726c64"},
 }
 
-func TestEncode_ByBase16_FromStringToString(t *testing.T) {
+func TestEncode_ByBase16_ToString(t *testing.T) {
 	for index, test := range base16Test {
 		e := Encode.FromString(test.input).ByBase16()
 		assert.Nil(t, e.Error)
@@ -23,7 +23,7 @@ func TestEncode_ByBase16_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase16_FromStringToString(t *testing.T) {
+func TestDecode_ByBase16_ToString(t *testing.T) {
 	for index, test := range base16Test {
 		d := Decode.FromString(test.output).ByBase16()
 		assert.Nil(t, d.Error)
@@ -31,7 +31,7 @@ func TestDecode_ByBase16_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByBase16_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByBase16_ToBytes(t *testing.T) {
 	for index, test := range base16Test {
 		e := Encode.FromBytes([]byte(test.input)).ByBase16()
 		assert.Nil(t, e.Error)
@@ -39,7 +39,7 @@ func TestEncode_ByBase16_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase16_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByBase16_ToBytes(t *testing.T) {
 	for index, test := range base16Test {
 		d := Decode.FromBytes([]byte(test.output)).ByBase16()
 		assert.Nil(t, d.Error)
@@ -47,7 +47,7 @@ func TestDecode_ByBase16_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByBase16_Error(t *testing.T) {
+func TestBase16_Ciphertext_Error(t *testing.T) {
 	d1 := Decode.FromString("xxxxxx").ByBase16()
 	assert.Equal(t, invalidCiphertextError("base16"), d1.Error)
 

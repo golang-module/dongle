@@ -101,35 +101,7 @@ func TestRsa_PKCS8_ToBytes(t *testing.T) {
 	assert.Equal(t, []byte(rsaInput), d2.ToBytes())
 }
 
-func TestRsa_FromString_Error(t *testing.T) {
-	e1 := Encrypt.FromString(rsaInput).ByRsa("xxxx")
-	assert.Equal(t, invalidPublicKeyError(), e1.Error)
-
-	e2 := Encrypt.FromString(rsaInput).ByRsa(`-----BEGIN PUBLIC KEY-----
-xxxx
------END PUBLIC KEY-----`)
-	assert.Equal(t, invalidPublicKeyError(), e2.Error)
-
-	e3 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
-	d3 := Decrypt.FromHexString(e3.ToHexString()).ByRsa(pkcs1PrivateKey, PKCS8)
-	assert.Equal(t, invalidPrivateKeyError(), d3.Error)
-
-	e4 := Encrypt.FromString(rsaInput).ByRsa(pkcs8PublicKey)
-	d4 := Decrypt.FromHexString(e4.ToHexString()).ByRsa(pkcs8PrivateKey, PKCS1)
-	assert.Equal(t, invalidPrivateKeyError(), d4.Error)
-
-	e5 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
-	d5 := Decrypt.FromHexString(e5.ToHexString()).ByRsa("xxxx", PKCS1)
-	assert.Equal(t, invalidPrivateKeyError(), d5.Error)
-
-	e6 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
-	d6 := Decrypt.FromHexString(e6.ToHexString()).ByRsa(`-----BEGIN PRIVATE KEY-----
-xxxx
------END PRIVATE KEY-----`, PKCS8)
-	assert.Equal(t, invalidPrivateKeyError(), d6.Error)
-}
-
-func TestRsa_FromBytes_Error(t *testing.T) {
+func TestRsa_PublicKey_Error(t *testing.T) {
 	e1 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte("xxxx"))
 	assert.Equal(t, invalidPublicKeyError(), e1.Error)
 
@@ -137,28 +109,35 @@ func TestRsa_FromBytes_Error(t *testing.T) {
 xxxx
 -----END PUBLIC KEY-----`))
 	assert.Equal(t, invalidPublicKeyError(), e2.Error)
+}
+
+func TestRsa_PrivateKey_Error(t *testing.T) {
+	e1 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
+	d1 := Decrypt.FromHexString(e1.ToHexString()).ByRsa([]byte(pkcs1PrivateKey), PKCS8)
+	assert.Equal(t, invalidPrivateKeyError(), d1.Error)
+
+	e2 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey))
+	d2 := Decrypt.FromHexBytes(e2.ToHexBytes()).ByRsa([]byte(pkcs8PrivateKey), PKCS1)
+	assert.Equal(t, invalidPrivateKeyError(), d2.Error)
 
 	e3 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
-	d3 := Decrypt.FromHexString(e3.ToHexString()).ByRsa([]byte(pkcs1PrivateKey), PKCS8)
+	d3 := Decrypt.FromHexBytes(e3.ToHexBytes()).ByRsa("xxxx", PKCS1)
 	assert.Equal(t, invalidPrivateKeyError(), d3.Error)
 
-	e4 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey))
-	d4 := Decrypt.FromHexBytes(e4.ToHexBytes()).ByRsa([]byte(pkcs8PrivateKey), PKCS1)
+	e4 := Encrypt.FromString(rsaInput).ByRsa([]byte(pkcs1PublicKey))
+	d4 := Decrypt.FromHexBytes(e4.ToHexBytes()).ByRsa([]byte(`-----BEGIN PRIVATE KEY-----
+	xxxx
+	-----END PRIVATE KEY-----`), PKCS8)
 	assert.Equal(t, invalidPrivateKeyError(), d4.Error)
 
-	e5 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
-	d5 := Decrypt.FromHexBytes(e5.ToHexBytes()).ByRsa("xxxx", PKCS1)
+	e5 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
+	d5 := Decrypt.FromHexString(e5.ToHexString()).ByRsa(`-----BEGIN PRIVATE KEY-----
+	xxxx
+	-----END PRIVATE KEY-----`, "xxxx")
 	assert.Equal(t, invalidPrivateKeyError(), d5.Error)
 
-	e6 := Encrypt.FromString(rsaInput).ByRsa([]byte(pkcs1PublicKey))
-	d6 := Decrypt.FromHexBytes(e6.ToHexBytes()).ByRsa([]byte(`-----BEGIN PRIVATE KEY-----
-xxxx
------END PRIVATE KEY-----`), PKCS8)
-	assert.Equal(t, invalidPrivateKeyError(), d6.Error)
+	e6 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
+	d6 := Decrypt.FromHexBytes(e6.ToHexBytes()).ByRsa([]byte(pkcs1PrivateKey), "xxxx")
 
-	e7 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
-	d7 := Decrypt.FromHexString(e7.ToHexString()).ByRsa(`-----BEGIN PRIVATE KEY-----
-xxxx
------END PRIVATE KEY-----`, "xxxx")
-	assert.Equal(t, invalidPrivateKeyError(), d7.Error)
+	assert.Equal(t, invalidPrivateKeyError(), d6.Error)
 }

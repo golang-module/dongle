@@ -16,7 +16,7 @@ var rc4Test = []struct {
 	{"hello world", "dongle", "eba154b4cb5a9038dbbf9d", "66FUtMtakDjbv50="},
 }
 
-func TestEncrypt_ByRc4_FromStringToString(t *testing.T) {
+func TestEncrypt_ByRc4_ToString(t *testing.T) {
 	for index, test := range rc4Test {
 		e := Encrypt.FromString(test.input).ByRc4(test.key)
 		assert.Nil(t, e.Error)
@@ -26,7 +26,7 @@ func TestEncrypt_ByRc4_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByRc4_FromBytesToBytes(t *testing.T) {
+func TestEncrypt_ByRc4_ToBytes(t *testing.T) {
 	for index, test := range rc4Test {
 		e := Encrypt.FromBytes([]byte(test.input)).ByRc4([]byte(test.key))
 		assert.Nil(t, e.Error)
@@ -36,7 +36,7 @@ func TestEncrypt_ByRc4_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByRc4_Error(t *testing.T) {
+func TestRc4_Ciphertext_Error(t *testing.T) {
 	e1 := Encrypt.FromString("hello world").ByRc4("")
 	assert.Equal(t, invalidRc4KeyError(0), e1.Error, "Should catch an exception")
 

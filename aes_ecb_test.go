@@ -59,7 +59,7 @@ func TestEncrypt_ByAes_ECB_ToBytes(t *testing.T) {
 		assert.Nil(t, e.Error)
 
 		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test index is "+strconv.Itoa(index))
-		assert.Equal(t, []byte(test.toBase32), e.ToBase32Bytes(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toBase32), e.ToBase32Bytes(), "Base32 test index is "+strconv.Itoa(index))
 		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
@@ -74,7 +74,7 @@ func TestDecrypt_ByAes_ECB_ToBytes(t *testing.T) {
 	for index, test := range aesEcbTest {
 		e := Decrypt.FromBase32Bytes([]byte(test.toBase32)).ByAes(aesCipher(ECB, test.padding, test.key, test.iv))
 		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base32 test index is "+strconv.Itoa(index))
 	}
 
 	for index, test := range aesEcbTest {

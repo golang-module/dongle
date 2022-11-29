@@ -15,7 +15,7 @@ var hexTest = []struct {
 	{"hello world", "68656c6c6f20776f726c64"},
 }
 
-func TestEncode_ByHex_FromStringToString(t *testing.T) {
+func TestEncode_ByHex_ToString(t *testing.T) {
 	for index, test := range hexTest {
 		e := Encode.FromString(test.input).ByHex()
 		assert.Nil(t, e.Error)
@@ -23,7 +23,7 @@ func TestEncode_ByHex_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestDecode_ByHex_FromStringToString(t *testing.T) {
+func TestDecode_ByHex_ToString(t *testing.T) {
 	for index, test := range hexTest {
 		d := Decode.FromString(test.output).ByHex()
 		assert.Nil(t, d.Error)
@@ -31,7 +31,7 @@ func TestDecode_ByHex_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncode_ByHex_FromBytesToBytes(t *testing.T) {
+func TestEncode_ByHex_ToBytes(t *testing.T) {
 	for index, test := range hexTest {
 		e := Encode.FromBytes([]byte(test.input)).ByHex()
 		assert.Nil(t, e.Error)
@@ -39,7 +39,7 @@ func TestEncode_ByHex_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByHex_FromBytesToBytes(t *testing.T) {
+func TestDecode_ByHex_ToBytes(t *testing.T) {
 	for index, test := range hexTest {
 		d := Decode.FromBytes([]byte(test.output)).ByHex()
 		assert.Nil(t, d.Error)
@@ -47,7 +47,7 @@ func TestDecode_ByHex_FromBytesToBytes(t *testing.T) {
 	}
 }
 
-func TestDecode_ByHex_Error(t *testing.T) {
+func TestHex_Ciphertext_Error(t *testing.T) {
 	d1 := Decode.FromString("xxxxxx").ByHex()
 	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
 

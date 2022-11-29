@@ -16,7 +16,7 @@ var hmacMd5Test = []struct {
 	{"hello world", "dongle", "4790626a275f776956386e5a3ea7b726", "R5Biaidfd2lWOG5aPqe3Jg=="},
 }
 
-func TestEncrypt_ByHmacMd5_FromStringToString(t *testing.T) {
+func TestEncrypt_ByHmacMd5_ToString(t *testing.T) {
 	for index, test := range hmacMd5Test {
 		e := Encrypt.FromString(test.input).ByHmacMd5(test.key)
 		assert.Nil(t, e.Error)
@@ -26,7 +26,7 @@ func TestEncrypt_ByHmacMd5_FromStringToString(t *testing.T) {
 	}
 }
 
-func TestEncrypt_ByHmacMd5_FromBytesToBytes(t *testing.T) {
+func TestEncrypt_ByHmacMd5_ToBytes(t *testing.T) {
 	for index, test := range hmacMd5Test {
 		e := Encrypt.FromBytes([]byte(test.input)).ByHmacMd5([]byte(test.key))
 		assert.Nil(t, e.Error)
