@@ -614,10 +614,10 @@ dongle.Verify.FromBytes([]byte("hello world")).ByBcrypt([]byte(sign)) // true
 > 如果有多个错误发生，只返回第一个错误，前一个错误排除后才返回下一个错误
 
 ```go
-e := dongle.Encrypy.FromString("hello world").ByRsa("xxxx")
+e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// 错误处理...
-log.Fatal(e.Error)
+    // 错误处理...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // 输出
