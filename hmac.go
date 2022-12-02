@@ -17,10 +17,9 @@ func (e encrypt) ByHmacMd4(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(md4.New, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(md4.New, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -30,10 +29,9 @@ func (e encrypt) ByHmacMd5(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(md5.New, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(md5.New, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -43,10 +41,9 @@ func (e encrypt) ByHmacSha1(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(sha1.New, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(sha1.New, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -56,10 +53,9 @@ func (e encrypt) ByHmacSha224(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(sha256.New224, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(sha256.New224, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -69,10 +65,9 @@ func (e encrypt) ByHmacSha256(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(sha256.New, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(sha256.New, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -82,9 +77,9 @@ func (e encrypt) ByHmacSha384(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-	mac := hmac.New(sha512.New384, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(sha512.New384, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -94,10 +89,9 @@ func (e encrypt) ByHmacSha512(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(sha512.New, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(sha512.New, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -107,10 +101,9 @@ func (e encrypt) ByHmacRipemd160(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(ripemd160.New, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(ripemd160.New, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
 
@@ -120,9 +113,8 @@ func (e encrypt) ByHmacSm3(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
-	mac := hmac.New(sm3.New, interface2bytes(key))
-	mac.Write(e.src)
-	e.dst = mac.Sum(nil)
+	hash := hmac.New(sm3.New, interface2bytes(key))
+	hash.Write(e.src)
+	e.dst = hash.Sum(nil)
 	return e
 }
