@@ -696,8 +696,8 @@ dongle.Verify.FromBytes([]byte("hello world")).ByBcrypt([]byte(sign)) // true
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// 错误处理...
-log.Fatal(e.Error)
+    // 错误处理...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // 输出
