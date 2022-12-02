@@ -98,7 +98,7 @@ var (
 	// returns morse decoding error
 	// 返回 morse 解码错误
 	morseDecodeError = func() error {
-		return fmt.Errorf("morse: decode error, please make sure the ciphertext is valid")
+		return fmt.Errorf("morse: invalid decoding, please make sure the src is valid")
 	}
 )
 
