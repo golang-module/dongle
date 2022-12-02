@@ -33,7 +33,7 @@ func (e encrypt) FromBytes(b []byte) encrypt {
 // String implements the interface Stringer for encrypt struct.
 // 实现 Stringer 接口
 func (e encrypt) String() string {
-	return e.ToHexString()
+	return e.ToString()
 }
 
 // ToString outputs as string without encoding.
