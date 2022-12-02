@@ -14,7 +14,7 @@ import (
 
 // Version current version
 // 当前版本号
-const Version = "0.1.4"
+const Version = "0.1.5"
 
 // dongle defines a dongle struct.
 // 定义 dongle 结构体
@@ -60,4 +60,27 @@ func bytes2string(b []byte) string {
 		return ""
 	}
 	return *(*string)(unsafe.Pointer(&b))
+}
+
+// converts interface to byte slice.
+// 将接口转换为字节切片
+func interface2bytes(i interface{}) (b []byte) {
+	switch v := i.(type) {
+	case string:
+		b = string2bytes(v)
+	case []byte:
+		b = v
+	}
+	return
+}
+
+// gets Cipher pointer.
+// 获取 Cipher 指针
+func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
+	cipher = NewCipher()
+	cipher.SetMode(mode)
+	cipher.SetPadding(padding)
+	cipher.SetKey(key)
+	cipher.SetIV(iv)
+	return
 }
