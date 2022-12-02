@@ -15,7 +15,7 @@ var sm3Test = []struct {
 	{"hello world", "44f0061e69fa6fdfc290c494654a05dc0c053da7e5c52b84ef93a9d67d3fff88", "RPAGHmn6b9/CkMSUZUoF3AwFPaflxSuE75Op1n0//4g="},
 }
 
-func TestEncrypt_BySm3_ToString(t *testing.T) {
+func TestSm3_Encrypt_ToString(t *testing.T) {
 	for index, test := range sm3Test {
 		e := Encrypt.FromString(test.input).BySm3()
 		assert.Nil(t, e.Error)
@@ -25,7 +25,7 @@ func TestEncrypt_BySm3_ToString(t *testing.T) {
 	}
 }
 
-func TestEncrypt_BySm3_ToBytes(t *testing.T) {
+func TestSm3_Encrypt_ToBytes(t *testing.T) {
 	for index, test := range sm3Test {
 		e := Encrypt.FromBytes([]byte(test.input)).BySm3()
 		assert.Nil(t, e.Error)
