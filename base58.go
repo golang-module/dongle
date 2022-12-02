@@ -5,7 +5,7 @@ import (
 	"math/big"
 )
 
-const base58table = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+const base58EncodeStd = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 // ByBase58 encodes by base58.
 // 通过 base58 编码
@@ -17,7 +17,7 @@ func (e encode) ByBase58() encode {
 	int0, int58 := big.NewInt(0), big.NewInt(58)
 	for intBytes.Cmp(big.NewInt(0)) > 0 {
 		intBytes.DivMod(intBytes, int58, int0)
-		e.dst = append(e.dst, string2bytes(base58table)[int0.Int64()])
+		e.dst = append(e.dst, string2bytes(base58EncodeStd)[int0.Int64()])
 	}
 	e.dst = reverseBytes(e.dst)
 	return e
@@ -31,7 +31,7 @@ func (d decode) ByBase58() decode {
 	}
 	bigInt := big.NewInt(0)
 	for _, v := range d.src {
-		index := bytes.IndexByte([]byte(base58table), v)
+		index := bytes.IndexByte([]byte(base58EncodeStd), v)
 		bigInt.Mul(bigInt, big.NewInt(58))
 		bigInt.Add(bigInt, big.NewInt(int64(index)))
 	}

@@ -82,9 +82,6 @@ func (enc *base62Encoding) Decode(src []byte) ([]byte, error) {
 	cs := int(math.Ceil(math.Log(62) / math.Log(256) * float64(len(src))))
 	dst := make([]byte, cs)
 	for i := range src {
-		if src[i] == '\n' || src[i] == '\r' {
-			continue
-		}
 		c := 0
 		v := int(enc.decodeMap[src[i]])
 		if v == 255 {
