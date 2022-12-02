@@ -129,7 +129,7 @@ var (
 		return fmt.Errorf("invalid encrypt or decrypt padding %q", padding)
 	}
 	// returns an invalid decoding error
-	// 返回无效的解码错误
+	// 返回无效的解码方式错误
 	invalidDecodingError = func(mode string) error {
 		return fmt.Errorf("invalid decoding, the src can't be decoded by %s", mode)
 	}
