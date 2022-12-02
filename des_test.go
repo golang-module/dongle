@@ -1,6 +1,7 @@
 package dongle
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
@@ -11,7 +12,7 @@ var (
 	desIV  = "12345678"
 )
 
-var desCbcTest = []struct {
+var desTest = []struct {
 	mode     cipherMode
 	padding  cipherPadding
 	input    string
@@ -50,47 +51,59 @@ var desCbcTest = []struct {
 }
 
 func TestEncrypt_ByDes_ToString(t *testing.T) {
-	for index, test := range desCbcTest {
+	for index, test := range desTest {
 		e := Encrypt.FromString(test.input).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 		assert.Nil(t, e.Error)
 
 		assert.Equal(t, test.toHex, e.ToHexString(), "Hex test index is "+strconv.Itoa(index))
 		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
+
+		assert.Equal(t, test.toHex, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToString(), e.ToString(), "Raw test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecrypt_ByDes_ToString(t *testing.T) {
-	for index, test := range desCbcTest {
+	for index, test := range desTest {
 		e := Decrypt.FromHexString(test.toHex).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.input, e.ToString(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 	}
 
-	for index, test := range desCbcTest {
+	for index, test := range desTest {
 		e := Decrypt.FromBase64String(test.toBase64).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.input, e.ToString(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestEncrypt_ByDes_ToBytes(t *testing.T) {
-	for index, test := range desCbcTest {
+	for index, test := range desTest {
 		e := Encrypt.FromString(test.input).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 		assert.Nil(t, e.Error)
 
 		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test index is "+strconv.Itoa(index))
 		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToBytes(), e.ToBytes(), "Raw test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestDecrypt_ByDes_ToBytes(t *testing.T) {
-	for index, test := range desCbcTest {
+	for index, test := range desTest {
+		e := Decrypt.FromBytes(Decode.FromString(test.toHex).ByHex().ToBytes()).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Raw test index is "+strconv.Itoa(index))
+	}
+
+	for index, test := range desTest {
 		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, []byte(test.input), e.ToBytes(), "Hex test index is "+strconv.Itoa(index))
 	}
 
-	for index, test := range desCbcTest {
+	for index, test := range desTest {
 		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base64 test index is "+strconv.Itoa(index))

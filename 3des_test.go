@@ -1,6 +1,7 @@
 package dongle
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
@@ -58,6 +59,9 @@ func Test3Des_Encrypt_ToString(t *testing.T) {
 		assert.Equal(t, test.toHex, e.ToHexString(), "Hex test index is "+strconv.Itoa(index))
 		assert.Equal(t, test.toBase32, e.ToBase32String(), "Base32 test index is "+strconv.Itoa(index))
 		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
+
+		assert.Equal(t, test.toHex, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToString(), e.ToString(), "Raw test index is "+strconv.Itoa(index))
 	}
 }
 
@@ -66,6 +70,7 @@ func Test3Des_Decrypt_ToString(t *testing.T) {
 		e := Decrypt.FromHexString(test.toHex).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.input, e.ToString(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 	}
 
 	for index, test := range tripleDesTest {
@@ -78,6 +83,7 @@ func Test3Des_Decrypt_ToString(t *testing.T) {
 		e := Decrypt.FromBase64String(test.toBase64).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.input, e.ToString(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 	}
 }
 
@@ -89,10 +95,18 @@ func Test3Des_Encrypt_ToBytes(t *testing.T) {
 		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test index is "+strconv.Itoa(index))
 		assert.Equal(t, []byte(test.toBase32), e.ToBase32Bytes(), "Base32 test index is "+strconv.Itoa(index))
 		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
+
+		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToBytes(), e.ToBytes(), "Raw test index is "+strconv.Itoa(index))
 	}
 }
 
 func Test3Des_Decrypt_ToBytes(t *testing.T) {
+	for index, test := range tripleDesTest {
+		e := Decrypt.FromBytes(Decode.FromString(test.toHex).ByHex().ToBytes()).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Raw test index is "+strconv.Itoa(index))
+	}
+
 	for index, test := range tripleDesTest {
 		e := Decrypt.FromHexBytes([]byte(test.toHex)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
 		assert.Nil(t, e.Error)
