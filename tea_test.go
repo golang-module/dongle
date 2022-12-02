@@ -14,40 +14,60 @@ var teaTest = []struct {
 	toHex    string
 	toBase64 string
 }{
-	{"", "", 8, "", ""},
-	{"", "0123456789abcdef", 8, "", ""},
-	{"hello go", "0123456789abcdef", 8, "06f1e586e866a2b7", "BvHlhuhmorc="},
+	{"", "", 64, "", ""},
+	{"", "0123456789abcdef", 64, "", ""},
+	{"hello go", "0123456789abcdef", 64, "3f9a9d3f2f58277f", "P5qdPy9YJ38="},
 }
 
 func TestTea_Encrypt_ToString(t *testing.T) {
 	for index, test := range teaTest {
-		e := Encrypt.FromString(test.input).ByTea(test.key, test.rounds)
-		assert.Nil(t, e.Error)
+		e1 := Encrypt.FromString(test.input).ByTea(test.key, test.rounds)
+		assert.Nil(t, e1.Error)
 
-		assert.Equal(t, test.toHex, e.ToHexString(), "Hex test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toHex, e1.ToHexString(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toBase64, e1.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
+
+		e2 := Encrypt.FromString(test.input).ByTea(test.key)
+		assert.Nil(t, e2.Error)
+
+		assert.Equal(t, test.toHex, e2.ToHexString(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.toBase64, e2.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestTea_Encrypt_ToBytes(t *testing.T) {
 	for index, test := range teaTest {
-		e := Encrypt.FromBytes([]byte(test.input)).ByTea([]byte(test.key), test.rounds)
-		assert.Nil(t, e.Error)
+		e1 := Encrypt.FromBytes([]byte(test.input)).ByTea([]byte(test.key))
+		assert.Nil(t, e1.Error)
 
-		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test test index is "+strconv.Itoa(index))
-		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toHex), e1.ToHexBytes(), "Hex test test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toBase64), e1.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
+
+		e2 := Encrypt.FromBytes([]byte(test.input)).ByTea([]byte(test.key), test.rounds)
+		assert.Nil(t, e2.Error)
+
+		assert.Equal(t, []byte(test.toHex), e2.ToHexBytes(), "Hex test test index is "+strconv.Itoa(index))
+		assert.Equal(t, []byte(test.toBase64), e2.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestTea_Decrypt_ToString(t *testing.T) {
 	for index, test := range teaTest {
-		d1 := Decrypt.FromHexString(test.toHex).ByTea(test.key, test.rounds)
+		d1 := Decrypt.FromHexString(test.toHex).ByTea(test.key)
 		assert.Nil(t, d1.Error)
 		assert.Equal(t, test.input, d1.ToString(), "Hex test index is "+strconv.Itoa(index))
 
-		d2 := Decrypt.FromBase64String(test.toBase64).ByTea(test.key, test.rounds)
+		d2 := Decrypt.FromHexString(test.toHex).ByTea(test.key, test.rounds)
 		assert.Nil(t, d2.Error)
-		assert.Equal(t, test.input, d2.ToString(), "base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, d2.ToString(), "Hex test index is "+strconv.Itoa(index))
+
+		d3 := Decrypt.FromBase64String(test.toBase64).ByTea(test.key)
+		assert.Nil(t, d3.Error)
+		assert.Equal(t, test.input, d3.ToString(), "base64 test index is "+strconv.Itoa(index))
+
+		d4 := Decrypt.FromBase64String(test.toBase64).ByTea(test.key, test.rounds)
+		assert.Nil(t, d4.Error)
+		assert.Equal(t, test.input, d3.ToString(), "base64 test index is "+strconv.Itoa(index))
 	}
 }
 

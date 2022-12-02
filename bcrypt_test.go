@@ -15,6 +15,11 @@ func TestBcrypt_ToString(t *testing.T) {
 	fmt.Println("bcrypt sign：", s2)
 	v2 := Verify.FromString("hello world").ByBcrypt(s2.ToString())
 	assert.Equal(t, true, v2)
+
+	s3 := Sign.FromString("hello world").ByBcrypt()
+	fmt.Println("bcrypt sign：", s3)
+	v3 := Verify.FromString("hello world").ByBcrypt(s2.ToString())
+	assert.Equal(t, true, v3)
 }
 
 func TestBcrypt_ToBytes(t *testing.T) {

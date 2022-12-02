@@ -6,20 +6,24 @@ import (
 
 // ByTea encrypts by tea.
 // 通过 tea 加密
-func (e encrypt) ByTea(key interface{}, rounds int) encrypt {
+func (e encrypt) ByTea(key interface{}, rounds ...int) encrypt {
 	if len(e.src) == 0 {
 		return e
+	}
+	if len(rounds) == 0 {
+		// 64 is the standard number of rounds in TEA.
+		rounds = []int{64}
 	}
 	if len(e.src) != 8 {
 		e.Error = invalidTeaSrcError()
 		return e
 	}
-	if rounds&1 != 0 {
+	if rounds[0]&1 != 0 {
 		e.Error = invalidTeaRoundsError()
 		return e
 	}
 
-	block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds)
+	block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
 	if err != nil {
 		e.Error = invalidTeaKeyError()
 		return e
@@ -31,7 +35,7 @@ func (e encrypt) ByTea(key interface{}, rounds int) encrypt {
 
 // ByTea decrypts by tea.
 // 通过 tea 解密
-func (d decrypt) ByTea(key interface{}, rounds int) decrypt {
+func (d decrypt) ByTea(key interface{}, rounds ...int) decrypt {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
@@ -39,11 +43,15 @@ func (d decrypt) ByTea(key interface{}, rounds int) decrypt {
 		d.Error = invalidTeaSrcError()
 		return d
 	}
-	if rounds&1 != 0 {
+	if len(rounds) == 0 {
+		// 64 is the standard number of rounds in tea.
+		rounds = []int{64}
+	}
+	if rounds[0]&1 != 0 {
 		d.Error = invalidTeaRoundsError()
 		return d
 	}
-	block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds)
+	block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
 	if err != nil {
 		d.Error = invalidTeaKeyError()
 		return d
