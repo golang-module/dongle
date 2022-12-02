@@ -1,6 +1,7 @@
 package dongle
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 
@@ -84,6 +85,7 @@ func TestBaseX_Encode_ToString(t *testing.T) {
 
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.output, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.output, fmt.Sprintf("%s", e), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
@@ -116,6 +118,7 @@ func TestBaseX_Decode_ToString(t *testing.T) {
 
 		assert.Nil(t, d.Error)
 		assert.Equal(t, test.input, d.ToString(), "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", d), "Current test index is "+strconv.Itoa(index))
 	}
 }
 

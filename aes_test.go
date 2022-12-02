@@ -1,6 +1,7 @@
 package dongle
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
@@ -58,6 +59,9 @@ func TestAes_Encrypt_String(t *testing.T) {
 		assert.Equal(t, test.toHex, e.ToHexString(), "Hex test index is "+strconv.Itoa(index))
 		assert.Equal(t, test.toBase32, e.ToBase32String(), "Base32 test index is "+strconv.Itoa(index))
 		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
+
+		assert.Equal(t, test.toHex, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToString(), e.ToString(), "Hex test index is "+strconv.Itoa(index))
 	}
 }
 
@@ -66,47 +70,58 @@ func TestAes_Decrypt_ToString(t *testing.T) {
 		e := Decrypt.FromHexString(test.toHex).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.input, e.ToString(), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 	}
 
 	for index, test := range aesCbcTest {
 		e := Decrypt.FromBase32String(test.toBase32).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.input, e.ToString(), "Base32 test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 	}
 
 	for index, test := range aesCbcTest {
 		e := Decrypt.FromBase64String(test.toBase64).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, test.input, e.ToString(), "Base64 test index is "+strconv.Itoa(index))
+		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestAes_Encrypt_ToBytes(t *testing.T) {
 	for index, test := range aesCbcTest {
-		e := Encrypt.FromString(test.input).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
+		e := Encrypt.FromBytes([]byte(test.input)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
 		assert.Nil(t, e.Error)
 
 		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test index is "+strconv.Itoa(index))
 		assert.Equal(t, []byte(test.toBase32), e.ToBase32Bytes(), "Base32 test index is "+strconv.Itoa(index))
 		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
+
+		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToBytes(), e.ToBytes(), "Hex test index is "+strconv.Itoa(index))
 	}
 }
 
 func TestAes_Decrypt_ToBytes(t *testing.T) {
 	for index, test := range aesCbcTest {
-		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
+		e := Decrypt.FromBytes(Decode.FromString(test.toHex).ByHex().ToBytes()).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
+		assert.Nil(t, e.Error)
+		assert.Equal(t, []byte(test.input), e.ToBytes(), "Src test index is "+strconv.Itoa(index))
+	}
+
+	for index, test := range aesCbcTest {
+		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, []byte(test.input), e.ToBytes(), "Hex test index is "+strconv.Itoa(index))
 	}
 
 	for index, test := range aesCbcTest {
-		e := Decrypt.FromBase32Bytes([]byte(test.toBase32)).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
+		e := Decrypt.FromBase32Bytes([]byte(test.toBase32)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base32 test index is "+strconv.Itoa(index))
 	}
 
 	for index, test := range aesCbcTest {
-		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
+		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
 		assert.Nil(t, e.Error)
 		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base64 test index is "+strconv.Itoa(index))
 	}
