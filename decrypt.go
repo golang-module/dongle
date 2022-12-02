@@ -28,7 +28,7 @@ func (d decrypt) FromString(s string) decrypt {
 func (d decrypt) FromHexString(s string) decrypt {
 	mac := Decode.FromString(s).ByHex()
 	if mac.Error != nil {
-		d.Error = invalidCiphertextError("hex")
+		d.Error = invalidDecodingError("hex")
 		return d
 	}
 	d.src = mac.ToBytes()
@@ -40,7 +40,7 @@ func (d decrypt) FromHexString(s string) decrypt {
 func (d decrypt) FromBase32String(s string) decrypt {
 	mac := Decode.FromString(s).ByBase32()
 	if mac.Error != nil {
-		d.Error = invalidCiphertextError("base32")
+		d.Error = invalidDecodingError("base32")
 		return d
 	}
 	d.src = mac.ToBytes()
@@ -52,7 +52,7 @@ func (d decrypt) FromBase32String(s string) decrypt {
 func (d decrypt) FromBase64String(s string) decrypt {
 	mac := Decode.FromString(s).ByBase64()
 	if mac.Error != nil {
-		d.Error = invalidCiphertextError("base64")
+		d.Error = invalidDecodingError("base64")
 		return d
 	}
 	d.src = mac.ToBytes()
@@ -69,24 +69,24 @@ func (d decrypt) FromBytes(b []byte) decrypt {
 // FromHexBytes decrypts from byte slice with hex encoding.
 // 对经过 hex 编码的字节切片进行解密
 func (d decrypt) FromHexBytes(b []byte) decrypt {
-	mac := Decode.FromBytes(b).ByHex()
-	if mac.Error != nil {
-		d.Error = invalidCiphertextError("hex")
+	hash := Decode.FromBytes(b).ByHex()
+	if hash.Error != nil {
+		d.Error = invalidDecodingError("hex")
 		return d
 	}
-	d.src = mac.ToBytes()
+	d.src = hash.ToBytes()
 	return d
 }
 
 // FromBase32Bytes decrypts from byte slice with base32 encoding.
 // 对经过 base32 编码的字节切片进行解密
 func (d decrypt) FromBase32Bytes(b []byte) decrypt {
-	mac := Decode.FromBytes(b).ByBase32()
-	if mac.Error != nil {
-		d.Error = invalidCiphertextError("base32")
+	hash := Decode.FromBytes(b).ByBase32()
+	if hash.Error != nil {
+		d.Error = invalidDecodingError("base32")
 		return d
 	}
-	d.src = mac.ToBytes()
+	d.src = hash.ToBytes()
 	return d
 }
 
@@ -95,7 +95,7 @@ func (d decrypt) FromBase32Bytes(b []byte) decrypt {
 func (d decrypt) FromBase64Bytes(b []byte) decrypt {
 	mac := Decode.FromBytes(b).ByBase64()
 	if mac.Error != nil {
-		d.Error = invalidCiphertextError("base64")
+		d.Error = invalidDecodingError("base64")
 		return d
 	}
 	d.src = mac.ToBytes()

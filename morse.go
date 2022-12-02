@@ -1,8 +1,10 @@
 package dongle
 
-// reference: https://github.com/boratanrikulu/morse
+// reference: https://github.com/martinlindhe/morse/
 
 import (
+	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -79,7 +81,7 @@ var (
 func morseEncode(b []byte, letterSeparator string) (dst string, err error) {
 	s := strings.ToLower(bytes2string(b))
 	if strings.Contains(s, " ") {
-		return dst, invalidMorsePlaintextError()
+		return dst, errors.New("can't contain spaces")
 	}
 	for _, letter := range s {
 		let := string(letter)
@@ -103,7 +105,7 @@ func morseDecode(b []byte, letterSeparator string) (dst string, err error) {
 			}
 		}
 		if !found {
-			return dst, invalidMorseCiphertextError()
+			return dst, fmt.Errorf("unknown character " + part)
 		}
 	}
 	return
@@ -117,7 +119,7 @@ func (e encode) ByMorse() encode {
 	}
 	dst, err := morseEncode(e.src, "/")
 	if err != nil {
-		e.Error = err
+		e.Error = invalidMorseSrcError()
 		return e
 	}
 	e.dst = string2bytes(dst)
@@ -132,7 +134,7 @@ func (d decode) ByMorse() decode {
 	}
 	dst, err := morseDecode(d.src, "/")
 	if err != nil {
-		d.Error = err
+		d.Error = morseDecodeError()
 		return d
 	}
 	d.dst = string2bytes(dst)

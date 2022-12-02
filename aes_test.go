@@ -169,17 +169,17 @@ func TestAes_Plaintext_Error(t *testing.T) {
 
 func TestAes_Ciphertext_Error(t *testing.T) {
 	d1 := Decrypt.FromHexString("xxxx").ByAes(getCipher(CTR, Zero, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
+	assert.Equal(t, invalidDecodingError("hex"), d1.Error)
 	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByAes(getCipher(CTR, Zero, []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidCiphertextError("hex"), d2.Error)
+	assert.Equal(t, invalidDecodingError("hex"), d2.Error)
 
 	d3 := Decrypt.FromBase32String("xxxx").ByAes(getCipher(CBC, PKCS5, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("base32"), d3.Error)
+	assert.Equal(t, invalidDecodingError("base32"), d3.Error)
 	d4 := Decrypt.FromBase32Bytes([]byte("xxxx")).ByAes(getCipher(CBC, PKCS5, []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidCiphertextError("base32"), d4.Error)
+	assert.Equal(t, invalidDecodingError("base32"), d4.Error)
 
 	d5 := Decrypt.FromBase64String("xxxxxx").ByAes(getCipher(CFB, PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidCiphertextError("base64"), d5.Error)
+	assert.Equal(t, invalidDecodingError("base64"), d5.Error)
 	d6 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(getCipher(CFB, PKCS7, []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidCiphertextError("base64"), d6.Error)
+	assert.Equal(t, invalidDecodingError("base64"), d6.Error)
 }

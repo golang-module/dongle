@@ -85,7 +85,7 @@ func (enc *base62Encoding) Decode(src []byte) ([]byte, error) {
 		c := 0
 		v := int(enc.decodeMap[src[i]])
 		if v == 255 {
-			return nil, invalidCiphertextError("base62")
+			return nil, invalidDecodingError("base62")
 		}
 		for j := cs - 1; j >= 0 && (v != 0 || c < rs); j-- {
 			v += 62 * int(dst[j])

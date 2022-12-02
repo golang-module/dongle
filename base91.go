@@ -107,7 +107,7 @@ func (enc *base91Encoding) Decode(dst, src []byte) (int, error) {
 	for i := 0; i < len(src); i++ {
 		if enc.decodeMap[src[i]] == 0xff {
 			// The character is not in the encoding alphabet.
-			return n, invalidCiphertextError("base91")
+			return n, invalidDecodingError("base91")
 		}
 
 		if v == -1 {
@@ -173,7 +173,7 @@ func (d decode) ByBase91() decode {
 	buf := make([]byte, base91StdEncoding.DecodedLen(len(d.src)))
 	n, err := base91StdEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidCiphertextError("base91")
+		d.Error = invalidDecodingError("base91")
 		return d
 	}
 	d.dst = buf[:n]

@@ -168,11 +168,11 @@ func Test3Des_Plaintext_Error(t *testing.T) {
 
 func Test3Des_Ciphertext_Error(t *testing.T) {
 	d1 := Decrypt.FromHexBytes([]byte("xxxx")).By3Des(getCipher(CTR, Zero, []byte(tripleDesKey), []byte(tripleDesIV)))
-	assert.Equal(t, invalidCiphertextError("hex"), d1.Error)
+	assert.Equal(t, invalidDecodingError("hex"), d1.Error)
 
 	d2 := Decrypt.FromBase32Bytes([]byte("xxxx")).By3Des(getCipher(CBC, PKCS5, []byte(tripleDesKey), []byte(tripleDesIV)))
-	assert.Equal(t, invalidCiphertextError("base32"), d2.Error)
+	assert.Equal(t, invalidDecodingError("base32"), d2.Error)
 
 	d3 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).By3Des(getCipher(CFB, PKCS7, []byte(tripleDesKey), []byte(tripleDesIV)))
-	assert.Equal(t, invalidCiphertextError("base64"), d3.Error)
+	assert.Equal(t, invalidDecodingError("base64"), d3.Error)
 }

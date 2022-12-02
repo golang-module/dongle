@@ -26,16 +26,14 @@ func (d decode) ByBase100() decode {
 	if len(d.src) == 0 {
 		return d
 	}
-
 	if len(d.src)%4 != 0 {
-		d.Error = invalidCiphertextError("base100")
+		d.Error = invalidDecodingError("base100")
 		return d
 	}
-
 	buf := make([]byte, len(d.src)/4)
 	for i := 0; i != len(d.src); i += 4 {
 		if d.src[i+0] != 0xf0 || d.src[i+1] != 0x9f {
-			d.Error = invalidCiphertextError("base100")
+			d.Error = invalidDecodingError("base100")
 			return d
 		}
 		buf[i/4] = (d.src[i+2]-0x8f)*64 + d.src[i+3] - 0x80 - 55

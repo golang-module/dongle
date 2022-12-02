@@ -90,15 +90,15 @@ var (
 )
 
 var (
-	// returns an invalid morse plaintext error
+	// returns an invalid morse src error
 	// 返回无效的 morse 明文错误
-	invalidMorsePlaintextError = func() error {
-		return fmt.Errorf("morse: invalid plaintext, the plaintext can't contain spaces")
+	invalidMorseSrcError = func() error {
+		return fmt.Errorf("morse: invalid src, the src can't contain spaces")
 	}
-	// returns an invalid ciphertext error
-	// 返回无效的 morse 密文错误
-	invalidMorseCiphertextError = func() error {
-		return fmt.Errorf("morse: invalid ciphertext, please make sure the ciphertext is valid")
+	// returns morse decoding error
+	// 返回 morse 解码错误
+	morseDecodeError = func() error {
+		return fmt.Errorf("morse: decode error, please make sure the ciphertext is valid")
 	}
 )
 
@@ -128,9 +128,9 @@ var (
 	invalidPaddingError = func(padding cipherPadding) error {
 		return fmt.Errorf("invalid encrypt or decrypt padding %q", padding)
 	}
-	// returns an invalid ciphertext error
-	// 返回无效的密文错误
-	invalidCiphertextError = func(mode string) error {
-		return fmt.Errorf("invalid ciphertext, the ciphertext can't be decoded by %s", mode)
+	// returns an invalid decoding error
+	// 返回无效的解码错误
+	invalidDecodingError = func(mode string) error {
+		return fmt.Errorf("invalid decoding, the src can't be decoded by %s", mode)
 	}
 )

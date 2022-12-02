@@ -25,7 +25,7 @@ func (d decode) ByHex() decode {
 		d.dst = buf
 	}
 	if err != nil {
-		d.Error = invalidCiphertextError("hex")
+		d.Error = invalidDecodingError("hex")
 		return d
 	}
 	return d
@@ -41,7 +41,7 @@ func (e encode) ByBase16() encode {
 // 通过 base16 解码
 func (d decode) ByBase16() decode {
 	if d.ByHex().Error != nil {
-		d.Error = invalidCiphertextError("base16")
+		d.Error = invalidDecodingError("base16")
 		return d
 	}
 	return d.ByHex()
@@ -68,7 +68,7 @@ func (d decode) ByBase32() decode {
 	buf := make([]byte, base32.StdEncoding.DecodedLen(len(d.src)))
 	n, err := base32.StdEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidCiphertextError("base32")
+		d.Error = invalidDecodingError("base32")
 		return d
 	}
 	d.dst, d.Error = buf[:n], err
@@ -96,7 +96,7 @@ func (d decode) ByBase64() decode {
 	buf := make([]byte, base64.StdEncoding.DecodedLen(len(d.src)))
 	n, err := base64.StdEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidCiphertextError("base64")
+		d.Error = invalidDecodingError("base64")
 		return d
 	}
 	d.dst = buf[:n]
@@ -124,7 +124,7 @@ func (d decode) ByBase64URL() decode {
 	buf := make([]byte, base64.URLEncoding.DecodedLen(len(d.src)))
 	n, err := base64.URLEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidCiphertextError("base64URL")
+		d.Error = invalidDecodingError("base64URL")
 		return d
 	}
 	d.dst, d.Error = buf[:n], err
@@ -152,7 +152,7 @@ func (d decode) ByBase85() decode {
 	buf := make([]byte, len(d.src))
 	n, _, err := ascii85.Decode(buf, d.src, true)
 	if err != nil {
-		d.Error = invalidCiphertextError("base85")
+		d.Error = invalidDecodingError("base85")
 		return d
 	}
 	d.dst = buf[:n]

@@ -193,16 +193,16 @@ func TestBaseX_Ciphertext_Error(t *testing.T) {
 		input string // 输入值
 		error error  // 期望值
 	}{
-		{"hex", "xxxxxx", invalidCiphertextError("hex")},
-		{"base16", "xxxxxx", invalidCiphertextError("base16")},
-		{"base32", "xxxxxx", invalidCiphertextError("base32")},
-		{"base62", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidCiphertextError("base62")},
-		{"base64", "xxxxxx", invalidCiphertextError("base64")},
-		{"base64URL", "xxxxxx", invalidCiphertextError("base64URL")},
-		{"base85", "xxxxxx", invalidCiphertextError("base85")},
-		{"base91", "'", invalidCiphertextError("base91")},
-		{"base100", "\\", invalidCiphertextError("base100")},
-		{"base100", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidCiphertextError("base100")},
+		{"hex", "xxxxxx", invalidDecodingError("hex")},
+		{"base16", "xxxxxx", invalidDecodingError("base16")},
+		{"base32", "xxxxxx", invalidDecodingError("base32")},
+		{"base62", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidDecodingError("base62")},
+		{"base64", "xxxxxx", invalidDecodingError("base64")},
+		{"base64URL", "xxxxxx", invalidDecodingError("base64URL")},
+		{"base85", "xxxxxx", invalidDecodingError("base85")},
+		{"base91", "'", invalidDecodingError("base91")},
+		{"base100", "\\", invalidDecodingError("base100")},
+		{"base100", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidDecodingError("base100")},
 	}
 
 	for index, test := range tests {
@@ -229,6 +229,6 @@ func TestBaseX_Ciphertext_Error(t *testing.T) {
 		case "base100":
 			d = d.ByBase100()
 		}
-		assert.Equal(t, invalidCiphertextError(test.baseX), d.Error, "Current test index is "+strconv.Itoa(index))
+		assert.Equal(t, invalidDecodingError(test.baseX), d.Error, "Current test index is "+strconv.Itoa(index))
 	}
 }

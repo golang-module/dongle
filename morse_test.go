@@ -51,12 +51,12 @@ func TestMorse_Decode_ToBytes(t *testing.T) {
 	}
 }
 
-func TestMorse_Plaintext_Error(t *testing.T) {
+func TestMorse_Src_Error(t *testing.T) {
 	e := Encode.FromString("hello world").ByMorse()
-	assert.Equal(t, invalidMorsePlaintextError(), e.Error)
+	assert.Equal(t, invalidMorseSrcError(), e.Error)
 }
 
-func TestMorse_Ciphertext_Error(t *testing.T) {
+func TestMorse_Decode_Error(t *testing.T) {
 	e := Decode.FromString("hello world").ByMorse()
-	assert.Equal(t, invalidMorseCiphertextError(), e.Error)
+	assert.Equal(t, morseDecodeError(), e.Error)
 }
