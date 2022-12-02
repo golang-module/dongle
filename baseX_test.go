@@ -12,6 +12,9 @@ var baseXTest = []struct {
 	input  string // 输入值
 	output string // 期望值
 }{
+	{"hex", "", ""},
+	{"hex", "hello world", "68656c6c6f20776f726c64"},
+
 	{"base16", "", ""},
 	{"base16", "hello world", "68656c6c6f20776f726c64"},
 
@@ -57,6 +60,8 @@ func TestBaseX_Encode_ToString(t *testing.T) {
 		e := Encode.FromString(test.input)
 
 		switch test.baseX {
+		case "hex":
+			e = e.ByHex()
 		case "base16":
 			e = e.ByBase16()
 		case "base32":
@@ -87,6 +92,8 @@ func TestBaseX_Decode_ToString(t *testing.T) {
 		d := Decode.FromString(test.output)
 
 		switch test.baseX {
+		case "hex":
+			d = d.ByHex()
 		case "base16":
 			d = d.ByBase16()
 		case "base32":
@@ -117,6 +124,8 @@ func TestBaseX_Encode_ToBytes(t *testing.T) {
 		e := Encode.FromBytes([]byte(test.input))
 
 		switch test.baseX {
+		case "hex":
+			e = e.ByHex()
 		case "base16":
 			e = e.ByBase16()
 		case "base32":
@@ -147,6 +156,8 @@ func TestBaseX_Decode_ToBytes(t *testing.T) {
 		d := Decode.FromBytes([]byte(test.output))
 
 		switch test.baseX {
+		case "hex":
+			d = d.ByHex()
 		case "base16":
 			d = d.ByBase16()
 		case "base32":
@@ -179,6 +190,7 @@ func TestBaseX_Ciphertext_Error(t *testing.T) {
 		input string // 输入值
 		error error  // 期望值
 	}{
+		{"hex", "xxxxxx", invalidCiphertextError("hex")},
 		{"base16", "xxxxxx", invalidCiphertextError("base16")},
 		{"base32", "xxxxxx", invalidCiphertextError("base32")},
 		{"base62", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidCiphertextError("base62")},
@@ -193,6 +205,8 @@ func TestBaseX_Ciphertext_Error(t *testing.T) {
 	for index, test := range tests {
 		d := Decode.FromString(test.input)
 		switch test.baseX {
+		case "hex":
+			d = d.ByHex()
 		case "base16":
 			d = d.ByBase16()
 		case "base32":
