@@ -60,7 +60,7 @@ func Test3Des_Encrypt_ToString(t *testing.T) {
 		assert.Equal(t, test.toBase32, e.ToBase32String(), "Base32 test index is "+strconv.Itoa(index))
 		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
 
-		assert.Equal(t, test.toHex, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
+		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToString(), fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
 		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToString(), e.ToString(), "Raw test index is "+strconv.Itoa(index))
 	}
 }
