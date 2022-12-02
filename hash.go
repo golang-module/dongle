@@ -94,7 +94,6 @@ func (e encrypt) ByRipemd160() encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-
 	hash := ripemd160.New()
 	hash.Write(e.src)
 	e.dst = hash.Sum(nil)
