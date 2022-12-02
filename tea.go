@@ -10,13 +10,13 @@ func (e encrypt) ByTea(key interface{}, rounds ...int) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-	if len(rounds) == 0 {
-		// 64 is the standard number of rounds in TEA.
-		rounds = []int{64}
-	}
 	if len(e.src) != 8 {
 		e.Error = invalidTeaSrcError()
 		return e
+	}
+	if len(rounds) == 0 {
+		// 64 is the standard number of rounds in TEA.
+		rounds = []int{64}
 	}
 	if rounds[0]&1 != 0 {
 		e.Error = invalidTeaRoundsError()
