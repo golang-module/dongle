@@ -2,16 +2,6 @@ package dongle
 
 import (
 	"crypto/des"
-	"fmt"
-)
-
-var (
-	invalidDesKeyError = func() error {
-		return fmt.Errorf("des: invalid key, the key must be 8 bytes")
-	}
-	invalidDesIVError = func() error {
-		return fmt.Errorf("des: invalid iv, the iv size must be 8 bytes")
-	}
 )
 
 // ByDes encrypts by des.
@@ -20,6 +10,10 @@ func (e encrypt) ByDes(c *Cipher) encrypt {
 	block, err := des.NewCipher(c.key)
 	if err != nil {
 		e.Error = invalidDesKeyError()
+		return e
+	}
+	if c.padding == No && len(e.src)%block.BlockSize() != 0 {
+		e.Error = invalidDesSrcError()
 		return e
 	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
@@ -39,6 +33,10 @@ func (d decrypt) ByDes(c *Cipher) decrypt {
 	block, err := des.NewCipher(c.key)
 	if err != nil {
 		d.Error = invalidDesKeyError()
+		return d
+	}
+	if c.padding == No && len(d.src)%block.BlockSize() != 0 {
+		d.Error = invalidDesSrcError()
 		return d
 	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
