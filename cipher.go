@@ -3,20 +3,7 @@ package dongle
 import (
 	"bytes"
 	"crypto/cipher"
-	"fmt"
 )
-
-// returns an invalid encrypt or decrypt mode error
-// 返回无效的分组模式错误
-var invalidModeError = func(mode cipherMode) error {
-	return fmt.Errorf("invalid encrypt or decrypt mode %q", mode)
-}
-
-// returns an invalid encrypt or decrypt padding error
-// 返回无效的填充方式错误
-var invalidPaddingError = func(padding cipherPadding) error {
-	return fmt.Errorf("invalid encrypt or decrypt padding %q", padding)
-}
 
 type cipherMode string
 
@@ -74,23 +61,13 @@ func (c *Cipher) SetPadding(padding cipherPadding) {
 // SetKey sets key.
 // 设置密钥
 func (c *Cipher) SetKey(key interface{}) {
-	switch v := key.(type) {
-	case string:
-		c.key = string2bytes(v)
-	case []byte:
-		c.key = v
-	}
+	c.key = interface2bytes(key)
 }
 
 // SetIV sets iv.
 // 设置初始向量
 func (c *Cipher) SetIV(iv interface{}) {
-	switch v := iv.(type) {
-	case string:
-		c.iv = string2bytes(v)
-	case []byte:
-		c.iv = v
-	}
+	c.iv = interface2bytes(iv)
 }
 
 // ZeroPadding padding with Zero mode.

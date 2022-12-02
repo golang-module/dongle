@@ -2,14 +2,7 @@ package dongle
 
 import (
 	"crypto/cipher"
-	"fmt"
 )
-
-// returns an invalid no padding plaintext error
-// 返回无效的明文错误
-var invalidPlaintextError = func() error {
-	return fmt.Errorf("invalid plaintext, the plaintext with no padding must be multiple of 16 bytes")
-}
 
 // encrypt defines a encrypt struct.
 // 定义 encrypt 结构体
@@ -105,9 +98,6 @@ func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 
 	switch padding {
 	case No:
-		if len(src)%size != 0 {
-			return nil, invalidPlaintextError()
-		}
 	case Zero:
 		src = c.ZeroPadding(src, size)
 	case PKCS5:

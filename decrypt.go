@@ -2,14 +2,7 @@ package dongle
 
 import (
 	"crypto/cipher"
-	"fmt"
 )
-
-// returns an invalid ciphertext error
-// 返回无效的密文错误
-var invalidCiphertextError = func(mode string) error {
-	return fmt.Errorf("invalid ciphertext, the ciphertext can't be decoded by %s", mode)
-}
 
 // decrypt defines decrypt struct
 // 定义 decrypt 结构体
@@ -133,15 +126,12 @@ func (d decrypt) ToBytes() []byte {
 // decrypts with given mode and padding.
 // 根据指定的分组模式和填充模式进行解密
 func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
-	src, mode, padding, size := d.src, c.mode, c.padding, b.BlockSize()
+	src, mode, padding := d.src, c.mode, c.padding
 	if len(src) == 0 {
 		return nil, nil
 	}
 	if padding != No && padding != Zero && padding != PKCS5 && padding != PKCS7 {
 		return nil, invalidPaddingError(padding)
-	}
-	if padding == No && len(src)%size != 0 {
-		return nil, invalidPlaintextError()
 	}
 
 	switch mode {

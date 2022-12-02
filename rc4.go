@@ -2,13 +2,6 @@ package dongle
 
 import (
 	"crypto/rc4"
-	"fmt"
-)
-
-var (
-	invalidRc4KeyError = func(size int) error {
-		return fmt.Errorf("invalid rc4 key size %d, the key at least 1 byte and at most 256 bytes", size)
-	}
 )
 
 // ByRc4 encrypts by rc4.
@@ -17,22 +10,30 @@ func (e encrypt) ByRc4(key interface{}) encrypt {
 	if len(e.src) == 0 {
 		return e
 	}
-	var cipher *rc4.Cipher
-	size := 0
-	switch v := key.(type) {
-	case string:
-		size = len(v)
-		cipher, e.Error = rc4.NewCipher(string2bytes(v))
-	case []byte:
-		size = len(v)
-		cipher, e.Error = rc4.NewCipher(v)
-	}
-	if e.Error != nil {
-		e.Error = invalidRc4KeyError(size)
+	cipher, err := rc4.NewCipher(interface2bytes(key))
+	if err != nil {
+		e.Error = invalidRc4KeyError()
 		return e
 	}
 	dst := make([]byte, len(e.src))
 	cipher.XORKeyStream(dst, e.src)
 	e.dst = dst
 	return e
+}
+
+// ByRc4 decrypts by rc4.
+// 通过 rc4 解密
+func (d decrypt) ByRc4(key interface{}) decrypt {
+	if len(d.src) == 0 || d.Error != nil {
+		return d
+	}
+	cipher, err := rc4.NewCipher(interface2bytes(key))
+	if err != nil {
+		d.Error = invalidRc4KeyError()
+		return d
+	}
+	dst := make([]byte, len(d.src))
+	cipher.XORKeyStream(dst, d.src)
+	d.dst = dst
+	return d
 }
