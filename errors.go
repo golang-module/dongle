@@ -69,6 +69,11 @@ var (
 	invalidRsaPrivateKeyError = func() error {
 		return fmt.Errorf("rsa: invalid private key, please make sure the private key is valid")
 	}
+	// returns an invalid rsa hash function error
+	// 返回无效的 rsa 哈希函数错误
+	invalidRsaHashError = func() error {
+		return fmt.Errorf("rsa: invalid hash function, the hash function is unsupported")
+	}
 )
 
 var (
@@ -78,7 +83,7 @@ var (
 		return fmt.Errorf("tea: invalid src, the src must be 8 bytes")
 	}
 	// returns an invalid tea round error
-	// 返回无效的 tea 频次错误
+	// 返回无效的 tea 迭代轮数错误
 	invalidTeaRoundsError = func() error {
 		return fmt.Errorf("tea: invalid rounds, the rounds must be even")
 	}
@@ -95,18 +100,18 @@ var (
 	invalidMorseSrcError = func() error {
 		return fmt.Errorf("morse: invalid src, the src can't contain spaces")
 	}
-	// returns morse decoding error
+	// returns a morse decoding error
 	// 返回 morse 解码错误
 	morseDecodeError = func() error {
-		return fmt.Errorf("morse: invalid decoding, please make sure the src is valid")
+		return fmt.Errorf("morse: invalid decoding, the src can't be decoded")
 	}
 )
 
 var (
 	// returns an invalid bcrypt round error
-	// 返回无效的 bcrypt 频次错误
+	// 返回无效的 bcrypt 迭代轮数错误
 	invalidBcryptRoundsError = func() error {
-		return fmt.Errorf("bcrypt: invalid bcrypt round, the round is outside allowed range (4,31)")
+		return fmt.Errorf("bcrypt: invalid round, the round is outside allowed range (4,31)")
 	}
 )
 var (
@@ -114,6 +119,13 @@ var (
 	// 返回无效的 rc4 密钥错误
 	invalidRc4KeyError = func() error {
 		return fmt.Errorf("rc4: invalid key, the key at least 1 byte and at most 256 bytes")
+	}
+)
+var (
+	// returns an invalid hash digests error
+	// 返回无效的哈希数字错误
+	invalidHashDigestsError = func() error {
+		return fmt.Errorf("hash: invalid digest, the digest is unsupported")
 	}
 )
 
