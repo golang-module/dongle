@@ -26,24 +26,24 @@ func (d decrypter) FromRawString(s string) decrypter {
 // FromHexString decrypts from string with hex encoding.
 // 对经过 hex 编码的字符串进行解密
 func (d decrypter) FromHexString(s string) decrypter {
-	mac := Decode.FromString(s).ByHex()
-	if mac.Error != nil {
+	decode := Decode.FromString(s).ByHex()
+	if decode.Error != nil {
 		d.Error = invalidDecodingError("hex")
 		return d
 	}
-	d.src = mac.ToBytes()
+	d.src = decode.ToBytes()
 	return d
 }
 
 // FromBase64String decrypts from string with base64 encoding.
 // 对经过 base64 编码的字符串进行解密
 func (d decrypter) FromBase64String(s string) decrypter {
-	mac := Decode.FromString(s).ByBase64()
-	if mac.Error != nil {
+	decode := Decode.FromString(s).ByBase64()
+	if decode.Error != nil {
 		d.Error = invalidDecodingError("base64")
 		return d
 	}
-	d.src = mac.ToBytes()
+	d.src = decode.ToBytes()
 	return d
 }
 
@@ -57,24 +57,24 @@ func (d decrypter) FromRawBytes(b []byte) decrypter {
 // FromHexBytes decrypts from byte slice with hex encoding.
 // 对经过 hex 编码的字节切片进行解密
 func (d decrypter) FromHexBytes(b []byte) decrypter {
-	mac := Decode.FromBytes(b).ByHex()
-	if mac.Error != nil {
+	decode := Decode.FromBytes(b).ByHex()
+	if decode.Error != nil {
 		d.Error = invalidDecodingError("hex")
 		return d
 	}
-	d.src = mac.ToBytes()
+	d.src = decode.ToBytes()
 	return d
 }
 
 // FromBase64Bytes decrypts from byte slice with base64 encoding.
 // 对经过 base64 编码的字节切片进行解密
 func (d decrypter) FromBase64Bytes(b []byte) decrypter {
-	mac := Decode.FromBytes(b).ByBase64()
-	if mac.Error != nil {
+	decode := Decode.FromBytes(b).ByBase64()
+	if decode.Error != nil {
 		d.Error = invalidDecodingError("base64")
 		return d
 	}
-	d.src = mac.ToBytes()
+	d.src = decode.ToBytes()
 	return d
 }
 

@@ -24,12 +24,12 @@ func (v verifier) FromRawString(sign, message string) verifier {
 // FromHexString decrypts from string with hex encoding.
 // 对经过 hex 编码的字符串进行验签
 func (v verifier) FromHexString(sign, message string) verifier {
-	mac := Decode.FromString(sign).ByHex()
-	if mac.Error != nil {
+	decode := Decode.FromString(sign).ByHex()
+	if decode.Error != nil {
 		v.Error = invalidDecodingError("hex")
 		return v
 	}
-	v.sign = mac.ToBytes()
+	v.sign = decode.ToBytes()
 	v.src = string2bytes(message)
 	return v
 }
@@ -37,12 +37,12 @@ func (v verifier) FromHexString(sign, message string) verifier {
 // FromBase64String decrypts from string with base64 encoding.
 // 对经过 base64 编码的字符串进行验签
 func (v verifier) FromBase64String(sign, message string) verifier {
-	hash := Decode.FromString(sign).ByBase64()
-	if hash.Error != nil {
+	decode := Decode.FromString(sign).ByBase64()
+	if decode.Error != nil {
 		v.Error = invalidDecodingError("base64")
 		return v
 	}
-	v.sign = hash.ToBytes()
+	v.sign = decode.ToBytes()
 	v.src = string2bytes(message)
 	return v
 }
@@ -58,12 +58,12 @@ func (v verifier) FromRawBytes(sign, message []byte) verifier {
 // FromHexBytes verify from byte slice with hex encoding.
 // 对经过 hex 编码的字节切片进行验签
 func (v verifier) FromHexBytes(sign, message []byte) verifier {
-	mac := Decode.FromBytes(sign).ByHex()
-	if mac.Error != nil {
+	decode := Decode.FromBytes(sign).ByHex()
+	if decode.Error != nil {
 		v.Error = invalidDecodingError("hex")
 		return v
 	}
-	v.sign = mac.ToBytes()
+	v.sign = decode.ToBytes()
 	v.src = message
 	return v
 }
@@ -71,12 +71,12 @@ func (v verifier) FromHexBytes(sign, message []byte) verifier {
 // FromBase64Bytes verify from byte slice with base64 encoding.
 // 对经过 base64 编码的字节切片进行验签
 func (v verifier) FromBase64Bytes(sign, message []byte) verifier {
-	mac := Decode.FromBytes(sign).ByBase64()
-	if mac.Error != nil {
+	decode := Decode.FromBytes(sign).ByBase64()
+	if decode.Error != nil {
 		v.Error = invalidDecodingError("base64")
 		return v
 	}
-	v.sign = mac.ToBytes()
+	v.sign = decode.ToBytes()
 	v.src = message
 	return v
 }
