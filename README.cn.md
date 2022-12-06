@@ -898,13 +898,13 @@ RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
 
 // 对字符串进行 rsa 签名
-sign := dongle.Sign.FromString("hello world").ByRsa(pkcs1PrivateKey, dongle.SHA256)
+sign := dongle.Sign.FromString("hello world").ByRsa(pkcs1PrivateKey, dongle.MD5)
 // 对未经编码的原始签名字符串进行 rsa 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByRsa(pkcs1PublicKey, dongle.SHA256).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByRsa(pkcs1PublicKey, dongle.MD5).ToBool() // true
 // 对经过 hex 编码的签名字符串进行 rsa 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByRsa(pkcs1PublicKey, dongle.SHA256).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByRsa(pkcs1PublicKey, dongle.MD5).ToBool() // true
 // 对经过 base64 编码的s签名字符串进行 rsa 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByRsa(pkcs1PublicKey, dongle.SHA256).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByRsa(pkcs1PublicKey, dongle.MD5).ToBool() // true
 
 // 对字节切片进行 rsa 签名
 sign := dongle.Sign.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PrivateKey), dongle.SHA512)

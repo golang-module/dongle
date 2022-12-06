@@ -909,13 +909,13 @@ RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
 
 // Sign by rsa from string
-sign := dongle.Sign.FromString("hello world").ByRsa(pkcs1PrivateKey, dongle.SHA256)
+sign := dongle.Sign.FromString("hello world").ByRsa(pkcs1PrivateKey, dongle.MD5)
 // Verify by rsa from raw signature string without encoding and message string, output bool
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByRsa(pkcs1PublicKey, dongle.SHA256).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByRsa(pkcs1PublicKey, dongle.MD5).ToBool() // true
 // Verify by rsa from signature string with hex encoding and message string, output bool
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByRsa(pkcs1PublicKey, dongle.SHA256).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByRsa(pkcs1PublicKey, dongle.MD5).ToBool() // true
 // Verify by rsa from signature string with base64 encoding and message string, output bool
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByRsa(pkcs1PublicKey, dongle.SHA256).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByRsa(pkcs1PublicKey, dongle.MD5).ToBool() // true
 
 // Sign by rsa from byte slice
 sign := dongle.Sign.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PrivateKey), dongle.SHA512).ToRawBytes()
@@ -934,8 +934,8 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// 错误处理...
-log.Fatal(e.Error)
+    // 错误处理...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // Output
