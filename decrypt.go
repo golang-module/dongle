@@ -4,28 +4,28 @@ import (
 	"crypto/cipher"
 )
 
-// decrypt defines decrypt struct
-// 定义 decrypt 结构体
-type decrypt struct {
+// decrypter defines decrypter struct
+// 定义 decrypter 结构体
+type decrypter struct {
 	dongle
 }
 
-// newDecrypt returns a new decrypt instance.
-// 初始化 decrypt 结构体
-func newDecrypt() decrypt {
-	return decrypt{}
+// newDecrypter returns a new decrypter instance.
+// 初始化 decrypter 结构体
+func newDecrypter() decrypter {
+	return decrypter{}
 }
 
-// FromString decrypts from string without encoding.
+// FromRawString decrypts from raw string without encoding.
 // 对未经编码的原始字符串进行解密
-func (d decrypt) FromString(s string) decrypt {
+func (d decrypter) FromRawString(s string) decrypter {
 	d.src = string2bytes(s)
 	return d
 }
 
 // FromHexString decrypts from string with hex encoding.
 // 对经过 hex 编码的字符串进行解密
-func (d decrypt) FromHexString(s string) decrypt {
+func (d decrypter) FromHexString(s string) decrypter {
 	mac := Decode.FromString(s).ByHex()
 	if mac.Error != nil {
 		d.Error = invalidDecodingError("hex")
@@ -35,21 +35,9 @@ func (d decrypt) FromHexString(s string) decrypt {
 	return d
 }
 
-// FromBase32String decrypts from string with base32 encoding.
-// 对经过 base32 编码的字符串进行解密
-func (d decrypt) FromBase32String(s string) decrypt {
-	mac := Decode.FromString(s).ByBase32()
-	if mac.Error != nil {
-		d.Error = invalidDecodingError("base32")
-		return d
-	}
-	d.src = mac.ToBytes()
-	return d
-}
-
 // FromBase64String decrypts from string with base64 encoding.
 // 对经过 base64 编码的字符串进行解密
-func (d decrypt) FromBase64String(s string) decrypt {
+func (d decrypter) FromBase64String(s string) decrypter {
 	mac := Decode.FromString(s).ByBase64()
 	if mac.Error != nil {
 		d.Error = invalidDecodingError("base64")
@@ -59,40 +47,28 @@ func (d decrypt) FromBase64String(s string) decrypt {
 	return d
 }
 
-// FromBytes decrypts from byte slice without encoding.
+// FromRawBytes decrypts from raw byte slice without encoding.
 // 对未经编码的原始字节切片进行解密
-func (d decrypt) FromBytes(b []byte) decrypt {
+func (d decrypter) FromRawBytes(b []byte) decrypter {
 	d.src = b
 	return d
 }
 
 // FromHexBytes decrypts from byte slice with hex encoding.
 // 对经过 hex 编码的字节切片进行解密
-func (d decrypt) FromHexBytes(b []byte) decrypt {
-	hash := Decode.FromBytes(b).ByHex()
-	if hash.Error != nil {
+func (d decrypter) FromHexBytes(b []byte) decrypter {
+	mac := Decode.FromBytes(b).ByHex()
+	if mac.Error != nil {
 		d.Error = invalidDecodingError("hex")
 		return d
 	}
-	d.src = hash.ToBytes()
-	return d
-}
-
-// FromBase32Bytes decrypts from byte slice with base32 encoding.
-// 对经过 base32 编码的字节切片进行解密
-func (d decrypt) FromBase32Bytes(b []byte) decrypt {
-	hash := Decode.FromBytes(b).ByBase32()
-	if hash.Error != nil {
-		d.Error = invalidDecodingError("base32")
-		return d
-	}
-	d.src = hash.ToBytes()
+	d.src = mac.ToBytes()
 	return d
 }
 
 // FromBase64Bytes decrypts from byte slice with base64 encoding.
 // 对经过 base64 编码的字节切片进行解密
-func (d decrypt) FromBase64Bytes(b []byte) decrypt {
+func (d decrypter) FromBase64Bytes(b []byte) decrypter {
 	mac := Decode.FromBytes(b).ByBase64()
 	if mac.Error != nil {
 		d.Error = invalidDecodingError("base64")
@@ -104,19 +80,19 @@ func (d decrypt) FromBase64Bytes(b []byte) decrypt {
 
 // String implements the interface Stringer for decrypt struct.
 // 实现 Stringer 接口
-func (d decrypt) String() string {
+func (d decrypter) String() string {
 	return d.ToString()
 }
 
 // ToString outputs as string.
 // 输出字符串
-func (d decrypt) ToString() string {
+func (d decrypter) ToString() string {
 	return bytes2string(d.dst)
 }
 
 // ToBytes outputs as byte slice.
 // 输出字节切片
-func (d decrypt) ToBytes() []byte {
+func (d decrypter) ToBytes() []byte {
 	if len(d.dst) == 0 {
 		return []byte("")
 	}
@@ -125,7 +101,7 @@ func (d decrypt) ToBytes() []byte {
 
 // decrypts with given mode and padding.
 // 根据指定的分组模式和填充模式进行解密
-func (d decrypt) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
+func (d decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	src, mode, padding := d.src, c.mode, c.padding
 	if len(src) == 0 {
 		return nil, nil

@@ -6,7 +6,7 @@ import (
 
 // ByDes encrypts by des.
 // 通过 des 加密
-func (e encrypt) ByDes(c *Cipher) encrypt {
+func (e encrypter) ByDes(c *Cipher) encrypter {
 	block, err := des.NewCipher(c.key)
 	if err != nil {
 		e.Error = invalidDesKeyError()
@@ -26,7 +26,7 @@ func (e encrypt) ByDes(c *Cipher) encrypt {
 
 // ByDes decrypts by des.
 // 通过 des 解密
-func (d decrypt) ByDes(c *Cipher) decrypt {
+func (d decrypter) ByDes(c *Cipher) decrypter {
 	if d.Error != nil {
 		return d
 	}

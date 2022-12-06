@@ -4,65 +4,59 @@ import (
 	"crypto/cipher"
 )
 
-// encrypt defines a encrypt struct.
-// 定义 encrypt 结构体
-type encrypt struct {
+// encrypter defines a encrypter struct.
+// 定义 encrypter 结构体
+type encrypter struct {
 	dongle
 }
 
-// returns a new encrypt instance.
-// 初始化 encrypt 结构体
-func newEncrypt() encrypt {
-	return encrypt{}
+// returns a new encrypter instance.
+// 初始化 encrypter 结构体
+func newEncrypter() encrypter {
+	return encrypter{}
 }
 
 // FromString encrypts from string.
 // 对字符串加密
-func (e encrypt) FromString(s string) encrypt {
+func (e encrypter) FromString(s string) encrypter {
 	e.src = string2bytes(s)
 	return e
 }
 
 // FromBytes encrypts from byte slice.
 // 对字节切片加密
-func (e encrypt) FromBytes(b []byte) encrypt {
+func (e encrypter) FromBytes(b []byte) encrypter {
 	e.src = b
 	return e
 }
 
-// String implements the interface Stringer for encrypt struct.
+// String implements the interface Stringer for encrypter struct.
 // 实现 Stringer 接口
-func (e encrypt) String() string {
-	return e.ToString()
+func (e encrypter) String() string {
+	return e.ToRawString()
 }
 
-// ToString outputs as string without encoding.
+// ToRawString outputs as raw string without encoding.
 // 输出未经编码的原始字符串
-func (e encrypt) ToString() string {
+func (e encrypter) ToRawString() string {
 	return bytes2string(e.dst)
 }
 
 // ToHexString outputs as string with hex encoding.
 // 输出经过 hex 编码的字符串
-func (e encrypt) ToHexString() string {
+func (e encrypter) ToHexString() string {
 	return Encode.FromBytes(e.dst).ByHex().ToString()
-}
-
-// ToBase32String outputs as string with base32 encoding.
-// 输出经过 base32 编码的字符串
-func (e encrypt) ToBase32String() string {
-	return Encode.FromBytes(e.dst).ByBase32().ToString()
 }
 
 // ToBase64String outputs as string with base64 encoding.
 // 输出经过 base64 编码的字符串
-func (e encrypt) ToBase64String() string {
+func (e encrypter) ToBase64String() string {
 	return Encode.FromBytes(e.dst).ByBase64().ToString()
 }
 
-// ToBytes outputs as byte slice without encoding.
+// ToRawBytes outputs as raw byte slice without encoding.
 // 输出未经编码的原始字节切片
-func (e encrypt) ToBytes() []byte {
+func (e encrypter) ToRawBytes() []byte {
 	if len(e.dst) == 0 {
 		return []byte("")
 	}
@@ -71,25 +65,19 @@ func (e encrypt) ToBytes() []byte {
 
 // ToHexBytes outputs as byte with hex encoding.
 // 输出经过 hex 编码的字节切片
-func (e encrypt) ToHexBytes() []byte {
+func (e encrypter) ToHexBytes() []byte {
 	return Encode.FromBytes(e.dst).ByHex().ToBytes()
-}
-
-// ToBase32Bytes outputs as byte slice with base32 encoding.
-// 输出经过 base32 编码的字节切片
-func (e encrypt) ToBase32Bytes() []byte {
-	return Encode.FromBytes(e.dst).ByBase32().ToBytes()
 }
 
 // ToBase64Bytes outputs as byte slice with base64 encoding.
 // 输出经过 base64 编码的字节切片
-func (e encrypt) ToBase64Bytes() []byte {
+func (e encrypter) ToBase64Bytes() []byte {
 	return Encode.FromBytes(e.dst).ByBase64().ToBytes()
 }
 
 // encrypts with given mode and padding
 // 根据指定的分组模式和填充模式进行加密
-func (e encrypt) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
+func (e encrypter) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	src, mode, padding, size := e.src, c.mode, c.padding, b.BlockSize()
 
 	if len(src) == 0 {

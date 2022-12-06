@@ -6,7 +6,7 @@ import (
 
 // ByRc4 encrypts by rc4.
 // 通过 rc4 加密
-func (e encrypt) ByRc4(key interface{}) encrypt {
+func (e encrypter) ByRc4(key interface{}) encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -23,7 +23,7 @@ func (e encrypt) ByRc4(key interface{}) encrypt {
 
 // ByRc4 decrypts by rc4.
 // 通过 rc4 解密
-func (d decrypt) ByRc4(key interface{}) decrypt {
+func (d decrypter) ByRc4(key interface{}) decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
