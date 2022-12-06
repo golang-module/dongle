@@ -59,7 +59,7 @@ func Test3Des_Encrypt_ToString(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, raw, e.ToRawString())
 		})
-		t.Run(fmt.Sprintf(string(test.mode)+"_hex_hex_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.toHex, e.ToHexString())
 		})
@@ -95,7 +95,7 @@ func Test3Des_Decrypt_ToString(t *testing.T) {
 	for index, test := range tripleDesTests {
 		e := Decrypt.FromBase64String(test.toBase64).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_base64_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.input, e.ToString())
 			assert.Equal(t, test.input, fmt.Sprintf("%s", e))
@@ -112,7 +112,7 @@ func Test3Des_Encrypt_ToBytes(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, raw, e.ToRawBytes())
 		})
-		t.Run(fmt.Sprintf(string(test.mode)+"_hex_hex_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
 		})
