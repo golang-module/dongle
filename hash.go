@@ -64,11 +64,11 @@ func (e encrypter) BySha1() encrypter {
 
 // BySha3 encrypts by sha3.
 // 通过 BySha3 加密
-func (e encrypter) BySha3(digests int) encrypter {
+func (e encrypter) BySha3(size int) encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	switch digests {
+	switch size {
 	case 224:
 		e.dst = hashEncrypt(e.src, SHA3_224)
 	case 256:
@@ -78,7 +78,7 @@ func (e encrypter) BySha3(digests int) encrypter {
 	case 512:
 		e.dst = hashEncrypt(e.src, SHA3_512)
 	default:
-		e.Error = invalidHashDigestsError()
+		e.Error = invalidHashSizeError()
 	}
 	return e
 }
@@ -115,21 +115,21 @@ func (e encrypter) BySha384() encrypter {
 
 // BySha512 encrypts by sha512.
 // 通过 sha512 加密
-func (e encrypter) BySha512(digests ...int) encrypter {
+func (e encrypter) BySha512(size ...int) encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	if len(digests) == 0 {
+	if len(size) == 0 {
 		e.dst = hashEncrypt(e.src, SHA512)
 		return e
 	}
-	switch digests[0] {
+	switch size[0] {
 	case 224:
 		e.dst = hashEncrypt(e.src, SHA512_224)
 	case 256:
 		e.dst = hashEncrypt(e.src, SHA512_256)
 	default:
-		e.Error = invalidHashDigestsError()
+		e.Error = invalidHashSizeError()
 	}
 	return e
 }

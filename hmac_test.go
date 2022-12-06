@@ -153,12 +153,12 @@ func TestHmac_Encrypt_ToBytes(t *testing.T) {
 
 func TestHmac_Digests_Error(t *testing.T) {
 	e1 := Encrypt.FromString("hello world").ByHmacSha3("dongle", 100)
-	assert.Equal(t, invalidHashDigestsError(), e1.Error)
+	assert.Equal(t, invalidHashSizeError(), e1.Error)
 	e2 := Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 100)
-	assert.Equal(t, invalidHashDigestsError(), e2.Error)
+	assert.Equal(t, invalidHashSizeError(), e2.Error)
 
 	e3 := Encrypt.FromString("hello world").ByHmacSha512("dongle", 100)
-	assert.Equal(t, invalidHashDigestsError(), e3.Error)
+	assert.Equal(t, invalidHashSizeError(), e3.Error)
 	e4 := Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 100)
-	assert.Equal(t, invalidHashDigestsError(), e4.Error)
+	assert.Equal(t, invalidHashSizeError(), e4.Error)
 }

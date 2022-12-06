@@ -123,9 +123,9 @@ var (
 )
 var (
 	// returns an invalid hash digests error
-	// 返回无效的哈希数字错误
-	invalidHashDigestsError = func() error {
-		return fmt.Errorf("hash: invalid digest, the digest is unsupported")
+	// 返回无效的哈希大小错误
+	invalidHashSizeError = func() error {
+		return fmt.Errorf("hash: invalid size, the size is unsupported")
 	}
 )
 

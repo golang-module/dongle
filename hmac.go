@@ -51,12 +51,12 @@ func (e encrypter) ByHmacSha1(key interface{}) encrypter {
 
 // ByHmacSha3 encrypts by hmac with sha3.
 // 通过 hmac-sha3 加密
-func (e encrypter) ByHmacSha3(key interface{}, digests int) encrypter {
+func (e encrypter) ByHmacSha3(key interface{}, size int) encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
 	var hashFun func() hash.Hash
-	switch digests {
+	switch size {
 	case 224:
 		hashFun = sha3.New224
 	case 256:
@@ -66,7 +66,7 @@ func (e encrypter) ByHmacSha3(key interface{}, digests int) encrypter {
 	case 512:
 		hashFun = sha3.New512
 	default:
-		e.Error = invalidHashDigestsError()
+		e.Error = invalidHashSizeError()
 		return e
 	}
 	mac := hmac.New(hashFun, interface2bytes(key))
@@ -113,15 +113,15 @@ func (e encrypter) ByHmacSha384(key interface{}) encrypter {
 
 // ByHmacSha512 encrypts by hmac with sha512.
 // 通过 hmac-sha512 加密
-func (e encrypter) ByHmacSha512(key interface{}, digests ...int) encrypter {
+func (e encrypter) ByHmacSha512(key interface{}, size ...int) encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
 	var hashFun func() hash.Hash
-	if len(digests) == 0 {
-		digests = []int{512}
+	if len(size) == 0 {
+		size = []int{512}
 	}
-	switch digests[0] {
+	switch size[0] {
 	case 512:
 		hashFun = sha512.New
 	case 224:
@@ -129,7 +129,7 @@ func (e encrypter) ByHmacSha512(key interface{}, digests ...int) encrypter {
 	case 256:
 		hashFun = sha512.New512_256
 	default:
-		e.Error = invalidHashDigestsError()
+		e.Error = invalidHashSizeError()
 		return e
 	}
 	mac := hmac.New(hashFun, interface2bytes(key))
