@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var baseXTest = []struct {
+var baseXTests = []struct {
 	baseX  string
 	input  string // 输入值
 	output string // 期望值
@@ -57,7 +57,7 @@ var baseXTest = []struct {
 }
 
 func TestBaseX_Encode_ToString(t *testing.T) {
-	for index, test := range baseXTest {
+	for index, test := range baseXTests {
 		e := Encode.FromString(test.input)
 
 		switch test.baseX {
@@ -83,14 +83,16 @@ func TestBaseX_Encode_ToString(t *testing.T) {
 			e = e.ByBase100()
 		}
 
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.output, e.ToString(), "Current test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.output, fmt.Sprintf("%s", e), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.output, e.ToString())
+			assert.Equal(t, test.output, fmt.Sprintf("%s", e))
+		})
 	}
 }
 
 func TestBaseX_Decode_ToString(t *testing.T) {
-	for index, test := range baseXTest {
+	for index, test := range baseXTests {
 		d := Decode.FromString(test.output)
 
 		switch test.baseX {
@@ -116,14 +118,16 @@ func TestBaseX_Decode_ToString(t *testing.T) {
 			d = d.ByBase100()
 		}
 
-		assert.Nil(t, d.Error)
-		assert.Equal(t, test.input, d.ToString(), "Current test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.input, fmt.Sprintf("%s", d), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, d.Error)
+			assert.Equal(t, test.input, d.ToString())
+			assert.Equal(t, test.input, fmt.Sprintf("%s", d))
+		})
 	}
 }
 
 func TestBaseX_Encode_ToBytes(t *testing.T) {
-	for index, test := range baseXTest {
+	for index, test := range baseXTests {
 		e := Encode.FromBytes([]byte(test.input))
 
 		switch test.baseX {
@@ -149,13 +153,15 @@ func TestBaseX_Encode_ToBytes(t *testing.T) {
 			e = e.ByBase100()
 		}
 
-		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.output), e.ToBytes())
+		})
 	}
 }
 
 func TestBaseX_Decode_ToBytes(t *testing.T) {
-	for index, test := range baseXTest {
+	for index, test := range baseXTests {
 		d := Decode.FromBytes([]byte(test.output))
 
 		switch test.baseX {
@@ -181,13 +187,14 @@ func TestBaseX_Decode_ToBytes(t *testing.T) {
 			d = d.ByBase100()
 		}
 
-		assert.Nil(t, d.Error)
-		assert.Equal(t, []byte(test.input), d.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, d.Error)
+			assert.Equal(t, []byte(test.input), d.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		})
 	}
 }
 
 func TestBaseX_Ciphertext_Error(t *testing.T) {
-
 	tests := []struct {
 		baseX string
 		input string // 输入值
@@ -201,6 +208,7 @@ func TestBaseX_Ciphertext_Error(t *testing.T) {
 		{"base64URL", "xxxxxx", invalidDecodingError("base64URL")},
 		{"base85", "xxxxxx", invalidDecodingError("base85")},
 		{"base91", "'", invalidDecodingError("base91")},
+		{"base91", "-", invalidDecodingError("base91")},
 		{"base100", "\\", invalidDecodingError("base100")},
 		{"base100", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidDecodingError("base100")},
 	}
@@ -229,6 +237,9 @@ func TestBaseX_Ciphertext_Error(t *testing.T) {
 		case "base100":
 			d = d.ByBase100()
 		}
-		assert.Equal(t, invalidDecodingError(test.baseX), d.Error, "Current test index is "+strconv.Itoa(index))
+
+		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+			assert.Equal(t, invalidDecodingError(test.baseX), d.Error)
+		})
 	}
 }
