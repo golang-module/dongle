@@ -78,7 +78,7 @@ func (d decrypter) FromBase64Bytes(b []byte) decrypter {
 	return d
 }
 
-// String implements the interface Stringer for decrypt struct.
+// String implements the interface Stringer for decrypter struct.
 // 实现 Stringer 接口
 func (d decrypter) String() string {
 	return d.ToString()
