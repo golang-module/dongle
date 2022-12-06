@@ -6,7 +6,7 @@ import (
 
 // BySafeURL encodes as safe url.
 // 对 URL 进行转义编码
-func (e encode) BySafeURL() encode {
+func (e encoder) BySafeURL() encoder {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -16,7 +16,7 @@ func (e encode) BySafeURL() encode {
 
 // BySafeURL decodes as safe url.
 // 对 URL 进行转义解码
-func (d decode) BySafeURL() decode {
+func (d decoder) BySafeURL() decoder {
 	if len(d.src) == 0 {
 		return d
 	}

@@ -1,53 +1,66 @@
 package dongle
 
 import (
-	"strconv"
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var morseTest = []struct {
-	input  string // 输入值
-	output string // 期望值
+var morseTests = []struct {
+	input     string // 输入值
+	separator string // 分隔符
+	output    string // 期望值
 }{
-	{"", ""},
-	{"1", ".----"},
-	{"F", "..-."},
-	{"dongle", "-../---/-./--./.-../."},
-	{"SOS", ".../---/..."},
+	{"", "", ""},
+	{"1", "/", ".----"},
+	{"F", "/", "..-."},
+	{"dongle", "|", "-..|---|-.|--.|.-..|."},
+	{"SOS", "/", ".../---/..."},
 }
 
 func TestMorse_Encode_ToString(t *testing.T) {
-	for index, test := range morseTest {
-		e := Encode.FromString(test.input).ByMorse()
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.output, e.ToString(), "Current test index is "+strconv.Itoa(index))
+	for index, test := range morseTests {
+		e := Encode.FromString(test.input).ByMorse(test.separator)
+
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.output, e.ToString())
+		})
 	}
 }
 
 func TestMorse_Decode_ToString(t *testing.T) {
-	for index, test := range morseTest {
-		d := Decode.FromString(test.output).ByMorse()
-		assert.Nil(t, d.Error)
-		assert.Equal(t, strings.ToLower(test.input), d.ToString(), "Current test index is "+strconv.Itoa(index))
+	for index, test := range morseTests {
+		d := Decode.FromString(test.output).ByMorse(test.separator)
+
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, d.Error)
+			assert.Equal(t, strings.ToLower(test.input), d.ToString())
+		})
 	}
 }
 
 func TestMorse_Encode_ToBytes(t *testing.T) {
-	for index, test := range morseTest {
-		e := Encode.FromBytes([]byte(test.input)).ByMorse()
-		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+	for index, test := range morseTests {
+		e := Encode.FromBytes([]byte(test.input)).ByMorse(test.separator)
+
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.output), e.ToBytes())
+		})
 	}
 }
 
 func TestMorse_Decode_ToBytes(t *testing.T) {
-	for index, test := range morseTest {
-		d := Decode.FromBytes([]byte(test.output)).ByMorse()
-		assert.Nil(t, d.Error)
-		assert.Equal(t, []byte(strings.ToLower(test.input)), d.ToBytes(), "Current test index is "+strconv.Itoa(index))
+	for index, test := range morseTests {
+		d := Decode.FromBytes([]byte(test.output)).ByMorse(test.separator)
+
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, d.Error)
+			assert.Equal(t, []byte(strings.ToLower(test.input)), d.ToBytes())
+		})
 	}
 }
 
