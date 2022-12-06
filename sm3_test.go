@@ -1,12 +1,12 @@
 package dongle
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
-	"strconv"
 	"testing"
 )
 
-var sm3Test = []struct {
+var sm3Tests = []struct {
 	input    string
 	toHex    string
 	toBase64 string
@@ -16,21 +16,25 @@ var sm3Test = []struct {
 }
 
 func TestSm3_Encrypt_ToString(t *testing.T) {
-	for index, test := range sm3Test {
+	for index, test := range sm3Tests {
 		e := Encrypt.FromString(test.input).BySm3()
-		assert.Nil(t, e.Error)
 
-		assert.Equal(t, test.toHex, e.ToHexString(), "Current test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.toBase64, e.ToBase64String(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.toHex, e.ToHexString())
+			assert.Equal(t, test.toBase64, e.ToBase64String())
+		})
 	}
 }
 
 func TestSm3_Encrypt_ToBytes(t *testing.T) {
-	for index, test := range sm3Test {
+	for index, test := range sm3Tests {
 		e := Encrypt.FromBytes([]byte(test.input)).BySm3()
-		assert.Nil(t, e.Error)
 
-		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Current test index is "+strconv.Itoa(index))
-		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
+			assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes())
+		})
 	}
 }

@@ -3,7 +3,6 @@ package dongle
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"strconv"
 	"testing"
 )
 
@@ -12,7 +11,7 @@ var (
 	tripleDesIV  = "12345678"
 )
 
-var tripleDesTest = []struct {
+var tripleDesTests = []struct {
 	mode     cipherMode
 	padding  cipherPadding
 	input    string
@@ -52,77 +51,105 @@ var tripleDesTest = []struct {
 }
 
 func Test3Des_Encrypt_ToString(t *testing.T) {
-	for index, test := range tripleDesTest {
+	for index, test := range tripleDesTests {
+		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Encrypt.FromString(test.input).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
-		assert.Nil(t, e.Error)
 
-		assert.Equal(t, test.toHex, e.ToHexString(), "Hex test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.toBase32, e.ToBase32String(), "Base32 test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.toBase64, e.ToBase64String(), "Base64 test index is "+strconv.Itoa(index))
-
-		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToString(), fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
-		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToString(), e.ToString(), "Raw test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, raw, e.ToRawString())
+		})
+		t.Run(fmt.Sprintf(string(test.mode)+"_hex_hex_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.toHex, e.ToHexString())
+		})
+		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.toBase64, e.ToBase64String())
+		})
 	}
 }
 
 func Test3Des_Decrypt_ToString(t *testing.T) {
-	for index, test := range tripleDesTest {
+	for index, test := range tripleDesTests {
+		raw := Decode.FromString(test.toHex).ByHex().ToString()
+		e := Decrypt.FromRawString(raw).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
+
+		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.input, e.ToString())
+			assert.Equal(t, test.input, fmt.Sprintf("%s", e))
+		})
+	}
+
+	for index, test := range tripleDesTests {
 		e := Decrypt.FromHexString(test.toHex).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.input, e.ToString(), "Hex test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
+
+		t.Run(fmt.Sprintf(string(test.mode)+"_hex_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.input, e.ToString())
+			assert.Equal(t, test.input, fmt.Sprintf("%s", e))
+		})
 	}
 
-	for index, test := range tripleDesTest {
-		e := Decrypt.FromBase32String(test.toBase32).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.input, e.ToString(), "Base32 test index is "+strconv.Itoa(index))
-	}
-
-	for index, test := range tripleDesTest {
+	for index, test := range tripleDesTests {
 		e := Decrypt.FromBase64String(test.toBase64).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, test.input, e.ToString(), "Base64 test index is "+strconv.Itoa(index))
-		assert.Equal(t, test.input, fmt.Sprintf("%s", e), "Hex test index is "+strconv.Itoa(index))
+
+		t.Run(fmt.Sprintf(string(test.mode)+"_base64_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.input, e.ToString())
+			assert.Equal(t, test.input, fmt.Sprintf("%s", e))
+		})
 	}
 }
 
 func Test3Des_Encrypt_ToBytes(t *testing.T) {
-	for index, test := range tripleDesTest {
-		e := Encrypt.FromString(test.input).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
-		assert.Nil(t, e.Error)
+	for index, test := range tripleDesTests {
+		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
+		e := Encrypt.FromBytes([]byte(test.input)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
 
-		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test index is "+strconv.Itoa(index))
-		assert.Equal(t, []byte(test.toBase32), e.ToBase32Bytes(), "Base32 test index is "+strconv.Itoa(index))
-		assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes(), "Base64 test index is "+strconv.Itoa(index))
-
-		assert.Equal(t, Decode.FromString(test.toHex).ByHex().ToBytes(), e.ToBytes(), "Raw test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, raw, e.ToRawBytes())
+		})
+		t.Run(fmt.Sprintf(string(test.mode)+"_hex_hex_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
+		})
+		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes())
+		})
 	}
 }
 
 func Test3Des_Decrypt_ToBytes(t *testing.T) {
-	for index, test := range tripleDesTest {
-		e := Decrypt.FromBytes(Decode.FromString(test.toHex).ByHex().ToBytes()).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.input), e.ToBytes(), "Raw test index is "+strconv.Itoa(index))
+	for index, test := range tripleDesTests {
+		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
+		e := Decrypt.FromRawBytes(raw).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
+
+		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.input), e.ToBytes())
+		})
 	}
 
-	for index, test := range tripleDesTest {
+	for index, test := range tripleDesTests {
 		e := Decrypt.FromHexBytes([]byte(test.toHex)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.input), e.ToBytes(), "Hex test index is "+strconv.Itoa(index))
+
+		t.Run(fmt.Sprintf(string(test.mode)+"_hex_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.input), e.ToBytes())
+		})
 	}
 
-	for index, test := range tripleDesTest {
-		e := Decrypt.FromBase32Bytes([]byte(test.toBase32)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base32 test index is "+strconv.Itoa(index))
-	}
-
-	for index, test := range tripleDesTest {
+	for index, test := range tripleDesTests {
 		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
-		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.input), e.ToBytes(), "Base64 test index is "+strconv.Itoa(index))
+
+		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.input), e.ToBytes())
+		})
 	}
 }
 
@@ -158,7 +185,7 @@ func Test3Des_Padding_Error(t *testing.T) {
 	assert.Equal(t, invalidPaddingError("xxxx"), d.Error)
 }
 
-func Test3Des_Plaintext_Error(t *testing.T) {
+func Test3Des_Src_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").By3Des(getCipher(CFB, No, tripleDesKey, tripleDesIV))
 	assert.Equal(t, invalid3DesSrcError(), e.Error)
 
@@ -166,13 +193,10 @@ func Test3Des_Plaintext_Error(t *testing.T) {
 	assert.Equal(t, invalid3DesSrcError(), d.Error)
 }
 
-func Test3Des_Ciphertext_Error(t *testing.T) {
+func Test3Des_Decoding_Error(t *testing.T) {
 	d1 := Decrypt.FromHexBytes([]byte("xxxx")).By3Des(getCipher(CTR, Zero, []byte(tripleDesKey), []byte(tripleDesIV)))
 	assert.Equal(t, invalidDecodingError("hex"), d1.Error)
 
-	d2 := Decrypt.FromBase32Bytes([]byte("xxxx")).By3Des(getCipher(CBC, PKCS5, []byte(tripleDesKey), []byte(tripleDesIV)))
-	assert.Equal(t, invalidDecodingError("base32"), d2.Error)
-
-	d3 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).By3Des(getCipher(CFB, PKCS7, []byte(tripleDesKey), []byte(tripleDesIV)))
-	assert.Equal(t, invalidDecodingError("base64"), d3.Error)
+	d2 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).By3Des(getCipher(CFB, PKCS7, []byte(tripleDesKey), []byte(tripleDesIV)))
+	assert.Equal(t, invalidDecodingError("base64"), d2.Error)
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var teaTest = []struct {
+var teaTests = []struct {
 	input    string
 	key      string
 	rounds   int
@@ -20,7 +20,7 @@ var teaTest = []struct {
 }
 
 func TestTea_Encrypt_ToString(t *testing.T) {
-	for index, test := range teaTest {
+	for index, test := range teaTests {
 		e1 := Encrypt.FromString(test.input).ByTea(test.key, test.rounds)
 		assert.Nil(t, e1.Error)
 
@@ -36,7 +36,7 @@ func TestTea_Encrypt_ToString(t *testing.T) {
 }
 
 func TestTea_Encrypt_ToBytes(t *testing.T) {
-	for index, test := range teaTest {
+	for index, test := range teaTests {
 		e1 := Encrypt.FromBytes([]byte(test.input)).ByTea([]byte(test.key))
 		assert.Nil(t, e1.Error)
 
@@ -52,7 +52,7 @@ func TestTea_Encrypt_ToBytes(t *testing.T) {
 }
 
 func TestTea_Decrypt_ToString(t *testing.T) {
-	for index, test := range teaTest {
+	for index, test := range teaTests {
 		d1 := Decrypt.FromHexString(test.toHex).ByTea(test.key)
 		assert.Nil(t, d1.Error)
 		assert.Equal(t, test.input, d1.ToString(), "Hex test index is "+strconv.Itoa(index))
@@ -72,7 +72,7 @@ func TestTea_Decrypt_ToString(t *testing.T) {
 }
 
 func TestTea_Decrypt_ToBytes(t *testing.T) {
-	for index, test := range teaTest {
+	for index, test := range teaTests {
 		e1 := Decrypt.FromHexBytes([]byte(test.toHex)).ByTea([]byte(test.key), test.rounds)
 		assert.Nil(t, e1.Error)
 		assert.Equal(t, []byte(test.input), e1.ToBytes(), "Hex test index is "+strconv.Itoa(index))
@@ -87,7 +87,7 @@ func TestTea_Src_Error(t *testing.T) {
 	e := Encrypt.FromString("xxxx").ByTea("0123456789abcdefghijklmn", 8)
 	assert.Equal(t, invalidTeaSrcError(), e.Error)
 
-	d := Decrypt.FromString("xxxx").ByTea("0123456789abcdefghijklmn", 8)
+	d := Decrypt.FromRawString("xxxx").ByTea("0123456789abcdefghijklmn", 8)
 	assert.Equal(t, invalidTeaSrcError(), d.Error)
 }
 
@@ -95,7 +95,7 @@ func TestTea_Key_Error(t *testing.T) {
 	e := Encrypt.FromString("hello go").ByTea("xxxx", 8)
 	assert.Equal(t, invalidTeaKeyError(), e.Error)
 
-	d := Decrypt.FromString("hello go").ByTea("xxxx", 8)
+	d := Decrypt.FromRawString("hello go").ByTea("xxxx", 8)
 	assert.Equal(t, invalidTeaKeyError(), d.Error)
 }
 
@@ -103,6 +103,6 @@ func TestTea_Rounds_Error(t *testing.T) {
 	e := Encrypt.FromString("hello go").ByTea("0123456789abcdefghijklmn", 1)
 	assert.Equal(t, invalidTeaRoundsError(), e.Error)
 
-	d := Decrypt.FromString("hello go").ByTea("0123456789abcdefghijklmn", 1)
+	d := Decrypt.FromRawString("hello go").ByTea("0123456789abcdefghijklmn", 1)
 	assert.Equal(t, invalidTeaRoundsError(), d.Error)
 }

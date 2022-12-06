@@ -1,12 +1,12 @@
 package dongle
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
-	"strconv"
 	"testing"
 )
 
-var safeUrlTest = []struct {
+var safeUrlTestS = []struct {
 	input  string
 	output string
 }{
@@ -15,37 +15,45 @@ var safeUrlTest = []struct {
 }
 
 func TestSafeURL_Encrypt_ToString(t *testing.T) {
-	for index, test := range safeUrlTest {
+	for index, test := range safeUrlTestS {
 		e := Encode.FromString(test.input).BySafeURL()
-		assert.Nil(t, e.Error)
 
-		assert.Equal(t, test.output, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.output, e.ToString())
+		})
 	}
 }
 
 func TestSafeURL_Decrypt_ToString(t *testing.T) {
-	for index, test := range safeUrlTest {
+	for index, test := range safeUrlTestS {
 		e := Decode.FromString(test.output).BySafeURL()
-		assert.Nil(t, e.Error)
 
-		assert.Equal(t, test.input, e.ToString(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.input, e.ToString())
+		})
 	}
 }
 
 func TestSafeURL_Encrypt_ToBytes(t *testing.T) {
-	for index, test := range safeUrlTest {
+	for index, test := range safeUrlTestS {
 		e := Encode.FromBytes([]byte(test.input)).BySafeURL()
-		assert.Nil(t, e.Error)
 
-		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.output), e.ToBytes())
+		})
 	}
 }
 
 func TestSafeURL_Decrypt_ToBytes(t *testing.T) {
-	for index, test := range safeUrlTest {
+	for index, test := range safeUrlTestS {
 		e := Decode.FromBytes([]byte(test.output)).BySafeURL()
-		assert.Nil(t, e.Error)
 
-		assert.Equal(t, []byte(test.input), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.input), e.ToBytes())
+		})
 	}
 }
