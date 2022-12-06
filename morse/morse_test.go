@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var Tests = []struct {
+var tests = []struct {
 	input     string // 输入值
 	separator string // 分隔符
 	output    string // 期望值
@@ -22,7 +22,7 @@ var Tests = []struct {
 }
 
 func TestEncode(t *testing.T) {
-	for index, test := range Tests {
+	for index, test := range tests {
 		dst, err := Encode(string2bytes(test.input), test.separator)
 
 		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
@@ -33,7 +33,7 @@ func TestEncode(t *testing.T) {
 }
 
 func TestDecode(t *testing.T) {
-	for index, test := range Tests {
+	for index, test := range tests {
 		dst, err := Decode(string2bytes(test.output), test.separator)
 
 		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
