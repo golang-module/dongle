@@ -14,7 +14,7 @@ import (
 
 // Version current version
 // 当前版本号
-const Version = "0.1.5"
+const Version = "0.2.0"
 
 // dongle defines a dongle struct.
 // 定义 dongle 结构体
@@ -25,18 +25,18 @@ type dongle struct {
 }
 
 var (
-	// Encode returns a new encode instance
-	Encode = newEncode()
-	// Decode returns a new decode instance
-	Decode = newDecode()
-	// Encrypt returns a new encrypt instance
-	Encrypt = newEncrypt()
-	// Decrypt returns a new decrypt instance
-	Decrypt = newDecrypt()
-	// Sign returns a new sign instance
-	Sign = newSign()
-	// Verify returns a new verify instance
-	Verify = newVerify()
+	// Encode returns a new encoder instance
+	Encode = newEncoder()
+	// Decode returns a new decoder instance
+	Decode = newDecoder()
+	// Encrypt returns a new encrypter instance
+	Encrypt = newEncrypter()
+	// Decrypt returns a new decrypter instance
+	Decrypt = newDecrypter()
+	// Sign returns a new signer instance
+	Sign = newSigner()
+	// Verify returns a new verifier instance
+	Verify = newVerifier()
 )
 
 // converts string to byte slice without a memory allocation.
@@ -74,8 +74,8 @@ func interface2bytes(i interface{}) (b []byte) {
 	return
 }
 
-// gets Cipher pointer.
-// 获取 Cipher 指针
+// gets Cipher instance.
+// 获取 Cipher 对象
 func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
 	cipher = NewCipher()
 	cipher.SetMode(mode)
