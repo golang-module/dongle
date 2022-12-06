@@ -763,14 +763,14 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 
 ```go
 // 对字符串进行 tea 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef", 64).ToHexString() // 06f1e586e866a2b7
+dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToHexString() // 06f1e586e866a2b7
 // 对经过 hex 编码的字符串进行 tea 解密，输出字符串
-dongle.Decrypt.FromHexString("06f1e586e866a2b7").ByTea("0123456789abcdef", 64).ToString() // hello go
+dongle.Decrypt.FromHexString("06f1e586e866a2b7").ByTea("0123456789abcdef").ToString() // hello go
 
 // 对字符串进行 tea 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef", 64).ToBase64String() // BvHlhuhmorc=
+dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToBase64String() // BvHlhuhmorc=
 // 对经过 base64 编码的字符串进行 tea 解密，输出字符串
-dongle.Decrypt.FromBase64String("BvHlhuhmorc=").ByTea("0123456789abcdef", 64).ToString() // hello go
+dongle.Decrypt.FromBase64String("BvHlhuhmorc=").ByTea("0123456789abcdef").ToString() // hello go
 
 // 对字节切片进行 tea 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello go")).ByTea("0123456789abcdef", 64).ToHexBytes() // []byte("06f1e586e866a2b7")
@@ -829,13 +829,13 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToBase64Bytes() // []byt
 
 ```go
 // 对字符串进行 bcrypt 签名
-sign := dongle.Sign.FromString("hello world").ByBcrypt(10)
+sign := dongle.Sign.FromString("hello world").ByBcrypt()
 // 对未经编码的原始签名字符串进行 bcrypt 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByBcrypt(10).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByBcrypt().ToBool() // true
 // 对经过 hex 编码的签名字符串进行 bcrypt 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByBcrypt(10).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByBcrypt().ToBool() // true
 // 对经过 base64 编码的签名字符串进行 bcrypt 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByBcrypt(10).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByBcrypt().ToBool() // true
 
 // 对字节切片进行 bcrypt 签名
 sign := dongle.Sign.FromBytes([]byte("hello world")).ByBcrypt(10)

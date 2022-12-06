@@ -782,14 +782,14 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 
 ```go
 // Encrypt by tea from string and output string with hex encoding
-dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef", 64).ToHexString() // 06f1e586e866a2b7
+dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToHexString() // 06f1e586e866a2b7
 // Decrypt by tea from string with hex encoding and output string
-dongle.Decrypt.FromHexString("06f1e586e866a2b7").ByTea("0123456789abcdef", 64).ToString() // hello go
+dongle.Decrypt.FromHexString("06f1e586e866a2b7").ByTea("0123456789abcdef").ToString() // hello go
 
 // Encrypt by tea from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef", 64).ToBase64String() // BvHlhuhmorc=
+dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToBase64String() // BvHlhuhmorc=
 // Decrypt by tea from string with base64 encoding and output string
-dongle.Decrypt.FromBase64String("BvHlhuhmorc=").ByTea("0123456789abcdef", 64).ToString() // hello go
+dongle.Decrypt.FromBase64String("BvHlhuhmorc=").ByTea("0123456789abcdef").ToString() // hello go
 
 // Encrypt by tea from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello go")).ByTea("0123456789abcdef", 64).ToHexBytes() // []byte("06f1e586e866a2b7")
@@ -848,9 +848,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySm3().ToBase64Bytes() // []byt
 
 ```go
 // Sign by bcrypt from string and output string
-sign := dongle.Sign.FromString("hello world").ByBcrypt(10)
+sign := dongle.Sign.FromString("hello world").ByBcrypt()
 // Verify by bcrypt from signature string without encoding and message string, output bool
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByBcrypt(10).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByBcrypt().ToBool() // true
 
 // Sign by bcrypt from byte slice and output byte slice
 sign := dongle.Sign.FromBytes([]byte("hello world")).ByBcrypt(10)
