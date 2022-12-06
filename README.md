@@ -190,7 +190,7 @@ dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18"))
 ```
 
 ##### Encode and decode by morse
-> The default value of rounds is `/`
+> The default value of separator is `/`
 
 ```go
 // Encode by morse from string and output string
