@@ -247,7 +247,6 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha1().ToBase64Bytes() // []by
 ```
 
 ##### Encrypt by sha3
-
 > include sha3-224, sha3-256, sha3-384, sha3-512
 
 ```go
@@ -279,7 +278,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).Sha3(384).ToHexBytes() // []byte
 dongle.Encrypt.FromBytes([]byte("hello world")).Sha3(384).ToBase64Bytes() // []byte("g7/yjd4bG/WBAHHGZDwI5bBb24Nu/9cLQD6o6gpjTcSZfrEFOqNZP1kPnGNjDdkL")
 
 // Encrypt by sha3-512 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").Sha3(C).ToHexString() // 840006653e9ac9e95117a15c915caab81662918e925de9e004f774ff82d7079a40d4d27b1b372657c61d46d470304c88c788b3a4527ad074d1dccbee5dbaa99a
+dongle.Encrypt.FromString("hello world").Sha3(512).ToHexString() // 840006653e9ac9e95117a15c915caab81662918e925de9e004f774ff82d7079a40d4d27b1b372657c61d46d470304c88c788b3a4527ad074d1dccbee5dbaa99a
 // Encrypt by sha3-512 from string and output string with base64 encoding
 dongle.Encrypt.FromString("hello world").Sha3(512).ToBase64String() // hAAGZT6ayelRF6FckVyquBZikY6SXengBPd0/4LXB5pA1NJ7GzcmV8YdRtRwMEyIx4izpFJ60HTR3MvuXbqpmg==
 // Encrypt by sha3-512 from byte slice and output byte slice with hex encoding
@@ -779,7 +778,6 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 ```
 
 ##### Encrypt and decrypt by tea
-
 > Rounds must be even, the default value is 64
 
 ```go
@@ -861,7 +859,6 @@ dongle.Verify.FromRawBytes([]byte(sign.ToRawBytes()), []byte("hello world")).ByB
 ```
 
 ##### Rsa sign and verify
-
 > Hash algorithm only supports MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160
 
 ```go

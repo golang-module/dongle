@@ -246,7 +246,6 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha1().ToBase64Bytes() // []by
 ```
 
 ##### Sha3 加密
-
 > 包含 sha3-224, sha3-256, sha3-384, sha3-512
 
 ```go
@@ -760,7 +759,6 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 ```
 
 ##### Tea 加密、解密
-
 > 迭代轮次(rounds) 必须是偶数，默认是 64
 
 ```go
@@ -850,7 +848,6 @@ dongle.Verify.FromBase64Bytes([]byte(sign.ToBase64Bytes()), []byte("hello world"
 ```
 
 ##### Rsa 签名、验签
-
 > hash 算法仅支持 MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160
 
 ```go
