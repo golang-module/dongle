@@ -108,10 +108,10 @@ var (
 )
 
 var (
-	// returns an invalid bcrypt round error
+	// returns an invalid bcrypt rounds error
 	// 返回无效的 bcrypt 迭代轮数错误
 	invalidBcryptRoundsError = func() error {
-		return fmt.Errorf("bcrypt: invalid round, the round is outside allowed range (4,31)")
+		return fmt.Errorf("bcrypt: invalid rounds, the rounds is outside allowed range (4,31)")
 	}
 )
 var (
@@ -122,7 +122,7 @@ var (
 	}
 )
 var (
-	// returns an invalid hash digests error
+	// returns an invalid hash size error
 	// 返回无效的哈希大小错误
 	invalidHashSizeError = func() error {
 		return fmt.Errorf("hash: invalid size, the size is unsupported")
