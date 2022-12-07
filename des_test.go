@@ -156,7 +156,7 @@ func TestDes_Key_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByDes(getCipher(CBC, PKCS7, "xxxx", desIV))
 	assert.Equal(t, invalidDesKeyError(), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByDes(getCipher(CBC, PKCS7, "xxxx", desIV))
+	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher(CBC, PKCS7, "xxxx", desIV))
 	assert.Equal(t, invalidDesKeyError(), d.Error)
 }
 
@@ -164,7 +164,7 @@ func TestDes_IV_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByDes(getCipher(OFB, PKCS7, desKey, "xxxx"))
 	assert.Equal(t, invalidDesIVError(), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByDes(getCipher(CBC, PKCS7, desKey, "xxxx"))
+	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher(CBC, PKCS7, desKey, "xxxx"))
 	assert.Equal(t, invalidDesIVError(), d.Error)
 }
 
@@ -172,7 +172,7 @@ func TestDes_Mode_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByDes(getCipher("xxxx", PKCS7, desKey, desIV))
 	assert.Equal(t, invalidModeError("xxxx"), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByDes(getCipher("xxxx", PKCS7, desKey, desIV))
+	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher("xxxx", PKCS7, desKey, desIV))
 	assert.Equal(t, invalidModeError("xxxx"), d.Error)
 }
 
@@ -180,7 +180,7 @@ func TestDes_Padding_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByDes(getCipher(CFB, "xxxx", desKey, desIV))
 	assert.Equal(t, invalidPaddingError("xxxx"), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByDes(getCipher(CBC, "xxxx", desKey, desIV))
+	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher(CBC, "xxxx", desKey, desIV))
 	assert.Equal(t, invalidPaddingError("xxxx"), d.Error)
 }
 

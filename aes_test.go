@@ -156,7 +156,7 @@ func TestAes_Key_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByAes(getCipher(CBC, PKCS7, "xxxx", aesIV))
 	assert.Equal(t, invalidAesKeyError(), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(getCipher(CBC, PKCS7, "xxxx", aesIV))
+	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, "xxxx", aesIV))
 	assert.Equal(t, invalidAesKeyError(), d.Error)
 }
 
@@ -164,7 +164,7 @@ func TestAes_IV_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByAes(getCipher(OFB, PKCS7, aesKey, "xxxx"))
 	assert.Equal(t, invalidAesIVError(), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(getCipher(CBC, PKCS7, aesKey, "xxxx"))
+	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efec1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, aesKey, "xxxx"))
 	assert.Equal(t, invalidAesIVError(), d.Error)
 }
 
@@ -172,7 +172,7 @@ func TestAes_Mode_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByAes(getCipher("xxxx", PKCS7, aesKey, aesIV))
 	assert.Equal(t, invalidModeError("xxxx"), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(getCipher("xxxx", PKCS7, aesKey, aesIV))
+	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(getCipher("xxxx", PKCS7, aesKey, aesIV))
 	assert.Equal(t, invalidModeError("xxxx"), d.Error)
 }
 
@@ -180,7 +180,7 @@ func TestAes_Padding_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByAes(getCipher(CFB, "xxxx", aesKey, aesIV))
 	assert.Equal(t, invalidPaddingError("xxxx"), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(getCipher(CBC, "xxxx", aesKey, aesIV))
+	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, "xxxx", aesKey, aesIV))
 	assert.Equal(t, invalidPaddingError("xxxx"), d.Error)
 }
 
