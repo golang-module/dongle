@@ -7,7 +7,7 @@ import (
 
 type cipherMode string
 
-// mode constants
+// cipher mode constants
 // 分组模式常量
 const (
 	CBC cipherMode = "cbc"
@@ -19,7 +19,7 @@ const (
 
 type cipherPadding string
 
-// padding constants
+// cipher padding constants
 // 填充模式常量
 const (
 	No    cipherPadding = "no"
