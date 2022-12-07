@@ -35,12 +35,12 @@ func (d decrypter) ByAes(c *Cipher) decrypter {
 		d.Error = invalidAesKeyError()
 		return d
 	}
-	if c.padding == No && len(d.src)%block.BlockSize() != 0 {
-		d.Error = invalidAesSrcError()
-		return d
-	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
 		d.Error = invalidAesIVError()
+		return d
+	}
+	if (c.mode == CBC || c.padding == No) && len(d.src)%block.BlockSize() != 0 {
+		d.Error = invalidAesSrcError()
 		return d
 	}
 	d.dst, d.Error = d.decrypt(c, block)

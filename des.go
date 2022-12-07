@@ -35,12 +35,12 @@ func (d decrypter) ByDes(c *Cipher) decrypter {
 		d.Error = invalidDesKeyError()
 		return d
 	}
-	if c.padding == No && len(d.src)%block.BlockSize() != 0 {
-		d.Error = invalidDesSrcError()
-		return d
-	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
 		d.Error = invalidDesIVError()
+		return d
+	}
+	if (c.mode == CBC || c.padding == No) && len(d.src)%block.BlockSize() != 0 {
+		d.Error = invalidDesSrcError()
 		return d
 	}
 	d.dst, d.Error = d.decrypt(c, block)
