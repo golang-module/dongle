@@ -51,7 +51,7 @@ RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
 )
 
-func TestRsa_PKCS1_ToString(t *testing.T) {
+func TestRsa_PKCS1_String(t *testing.T) {
 	e := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
 	assert.Nil(t, e.Error)
 	d1 := Decrypt.FromRawString(e.ToRawString()).ByRsa(pkcs1PrivateKey)
@@ -77,7 +77,7 @@ func TestRsa_PKCS1_ToString(t *testing.T) {
 	assert.Equal(t, true, v3.ToBool())
 }
 
-func TestRsa_PKCS1_ToBytes(t *testing.T) {
+func TestRsa_PKCS1_Bytes(t *testing.T) {
 	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
 	assert.Nil(t, e.Error)
 	d1 := Decrypt.FromRawBytes(e.ToRawBytes()).ByRsa([]byte(pkcs1PrivateKey))
@@ -103,7 +103,7 @@ func TestRsa_PKCS1_ToBytes(t *testing.T) {
 	assert.Equal(t, true, v3.ToBool())
 }
 
-func TestRsa_PKCS8_ToString(t *testing.T) {
+func TestRsa_PKCS8_String(t *testing.T) {
 	e := Encrypt.FromString(rsaInput).ByRsa(pkcs8PublicKey)
 	assert.Nil(t, e.Error)
 	d1 := Decrypt.FromRawString(e.ToRawString()).ByRsa(pkcs8PrivateKey)
@@ -129,7 +129,7 @@ func TestRsa_PKCS8_ToString(t *testing.T) {
 	assert.Equal(t, true, v3.ToBool())
 }
 
-func TestRsa_PKCS8_ToBytes(t *testing.T) {
+func TestRsa_PKCS8_Bytes(t *testing.T) {
 	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey))
 	assert.Nil(t, e.Error)
 	d1 := Decrypt.FromRawBytes(e.ToRawBytes()).ByRsa([]byte(pkcs8PrivateKey))
@@ -155,7 +155,7 @@ func TestRsa_PKCS8_ToBytes(t *testing.T) {
 	assert.Equal(t, true, v3.ToBool())
 }
 
-func TestRsa_Empty_ToString(t *testing.T) {
+func TestRsa_Empty_String(t *testing.T) {
 	empty := ""
 	e := Encrypt.FromString(empty).ByRsa(pkcs1PublicKey)
 	assert.Nil(t, e.Error)
@@ -182,7 +182,7 @@ func TestRsa_Empty_ToString(t *testing.T) {
 	assert.Equal(t, true, v3.ToBool())
 }
 
-func TestRsa_Empty_ToBytes(t *testing.T) {
+func TestRsa_Empty_Bytes(t *testing.T) {
 	empty := ""
 	e := Encrypt.FromBytes([]byte(empty)).ByRsa([]byte(pkcs1PublicKey))
 	assert.Nil(t, e.Error)

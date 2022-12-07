@@ -60,7 +60,7 @@ var hmacTests = []struct {
 	{"sm3", "hello world", "dongle", "8c733aae1d553c466a08c3e9e5daac3e99ae220181c7c1bc8c2564961de751b3", "jHM6rh1VPEZqCMPp5dqsPpmuIgGBx8G8jCVklh3nUbM="},
 }
 
-func TestHmac_Encrypt_ToString(t *testing.T) {
+func TestHmac_Encrypt_String(t *testing.T) {
 	for index, test := range hmacTests {
 		e := Encrypt.FromString(test.input)
 
@@ -106,7 +106,7 @@ func TestHmac_Encrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestHmac_Encrypt_ToBytes(t *testing.T) {
+func TestHmac_Encrypt_Bytes(t *testing.T) {
 	for index, test := range hmacTests {
 		e := Encrypt.FromBytes([]byte(test.input)).ByHmacMd4([]byte(test.key))
 
@@ -151,7 +151,7 @@ func TestHmac_Encrypt_ToBytes(t *testing.T) {
 	}
 }
 
-func TestHmac_Digests_Error(t *testing.T) {
+func TestHmac_Size_Error(t *testing.T) {
 	e1 := Encrypt.FromString("hello world").ByHmacSha3("dongle", 100)
 	assert.Equal(t, invalidHashSizeError(), e1.Error)
 	e2 := Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 100)

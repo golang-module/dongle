@@ -56,42 +56,58 @@ var baseXTests = []struct {
 	{"base100", "hello world", "👟👜👣👣👦🐗👮👦👩👣👛"},
 }
 
-func TestBaseX_Encode_ToString(t *testing.T) {
+func TestBaseX_Encode_String(t *testing.T) {
 	for index, test := range baseXTests {
-		e := Encode.FromString(test.input)
+		e1 := Encode.FromString(test.input)
+		e2 := Encode.FromBytes([]byte(test.input))
 
 		switch test.baseX {
 		case "hex":
-			e = e.ByHex()
+			e1 = e1.ByHex()
+			e2 = e2.ByHex()
 		case "base16":
-			e = e.ByBase16()
+			e1 = e1.ByBase16()
+			e2 = e2.ByBase16()
 		case "base32":
-			e = e.ByBase32()
+			e1 = e1.ByBase32()
+			e2 = e2.ByBase32()
 		case "base58":
-			e = e.ByBase58()
+			e1 = e1.ByBase58()
+			e2 = e2.ByBase58()
 		case "base62":
-			e = e.ByBase62()
+			e1 = e1.ByBase62()
+			e2 = e2.ByBase62()
 		case "base64":
-			e = e.ByBase64()
+			e1 = e1.ByBase64()
+			e2 = e2.ByBase64()
 		case "base64URL":
-			e = e.ByBase64URL()
+			e1 = e1.ByBase64URL()
+			e2 = e2.ByBase64URL()
 		case "base85":
-			e = e.ByBase85()
+			e1 = e1.ByBase85()
+			e2 = e2.ByBase85()
 		case "base91":
-			e = e.ByBase91()
+			e1 = e1.ByBase91()
+			e2 = e2.ByBase91()
 		case "base100":
-			e = e.ByBase100()
+			e1 = e1.ByBase100()
+			e2 = e2.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
-			assert.Nil(t, e.Error)
-			assert.Equal(t, test.output, e.ToString())
-			assert.Equal(t, test.output, fmt.Sprintf("%s", e))
+		t.Run(fmt.Sprintf(test.baseX+"_e1_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e1.Error)
+			assert.Equal(t, test.output, e1.ToString())
+			assert.Equal(t, test.output, fmt.Sprintf("%s", e1))
+		})
+
+		t.Run(fmt.Sprintf(test.baseX+"_e2_%d", index), func(t *testing.T) {
+			assert.Nil(t, e2.Error)
+			assert.Equal(t, []byte(test.output), e2.ToBytes())
 		})
 	}
 }
 
-func TestBaseX_Decode_ToString(t *testing.T) {
+func TestBaseX_Decode_String(t *testing.T) {
 	for index, test := range baseXTests {
 		d := Decode.FromString(test.output)
 
@@ -118,15 +134,12 @@ func TestBaseX_Decode_ToString(t *testing.T) {
 			d = d.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
-			assert.Nil(t, d.Error)
-			assert.Equal(t, test.input, d.ToString())
-			assert.Equal(t, test.input, fmt.Sprintf("%s", d))
-		})
+		assert.Nil(t, d.Error)
+		assert.Equal(t, test.input, d.ToString(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestBaseX_Encode_ToBytes(t *testing.T) {
+func TestBaseX_Encode_Bytes(t *testing.T) {
 	for index, test := range baseXTests {
 		e := Encode.FromBytes([]byte(test.input))
 
@@ -153,14 +166,12 @@ func TestBaseX_Encode_ToBytes(t *testing.T) {
 			e = e.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
-			assert.Nil(t, e.Error)
-			assert.Equal(t, []byte(test.output), e.ToBytes())
-		})
+		assert.Nil(t, e.Error)
+		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
 	}
 }
 
-func TestBaseX_Decode_ToBytes(t *testing.T) {
+func TestBaseX_Decode_Bytes(t *testing.T) {
 	for index, test := range baseXTests {
 		d := Decode.FromBytes([]byte(test.output))
 
@@ -194,7 +205,7 @@ func TestBaseX_Decode_ToBytes(t *testing.T) {
 	}
 }
 
-func TestBaseX_Ciphertext_Error(t *testing.T) {
+func TestBaseX_Decoding_Error(t *testing.T) {
 	tests := []struct {
 		baseX string
 		input string // 输入值
@@ -214,32 +225,48 @@ func TestBaseX_Ciphertext_Error(t *testing.T) {
 	}
 
 	for index, test := range tests {
-		d := Decode.FromString(test.input)
+		d1 := Decode.FromString(test.input)
+		d2 := Decode.FromBytes([]byte(test.input))
+
 		switch test.baseX {
 		case "hex":
-			d = d.ByHex()
+			d1 = d1.ByHex()
+			d2 = d2.ByHex()
 		case "base16":
-			d = d.ByBase16()
+			d1 = d1.ByBase16()
+			d2 = d2.ByBase16()
 		case "base32":
-			d = d.ByBase32()
+			d1 = d1.ByBase32()
+			d2 = d2.ByBase32()
 		case "base58":
-			d = d.ByBase58()
+			d1 = d1.ByBase58()
+			d2 = d2.ByBase58()
 		case "base62":
-			d = d.ByBase62()
+			d1 = d1.ByBase62()
+			d2 = d2.ByBase62()
 		case "base64":
-			d = d.ByBase64()
+			d1 = d1.ByBase64()
+			d2 = d2.ByBase64()
 		case "base64URL":
-			d = d.ByBase64URL()
+			d1 = d1.ByBase64URL()
+			d2 = d2.ByBase64URL()
 		case "base85":
-			d = d.ByBase85()
+			d1 = d1.ByBase85()
+			d2 = d2.ByBase85()
 		case "base91":
-			d = d.ByBase91()
+			d1 = d1.ByBase91()
+			d2 = d2.ByBase91()
 		case "base100":
-			d = d.ByBase100()
+			d1 = d1.ByBase100()
+			d2 = d2.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
-			assert.Equal(t, invalidDecodingError(test.baseX), d.Error)
+		t.Run(fmt.Sprintf(test.baseX+"_d1_test_%d", index), func(t *testing.T) {
+			assert.Equal(t, invalidDecodingError(test.baseX), d1.Error)
+		})
+
+		t.Run(fmt.Sprintf(test.baseX+"_d2_test_%d", index), func(t *testing.T) {
+			assert.Equal(t, invalidDecodingError(test.baseX), d2.Error)
 		})
 	}
 }

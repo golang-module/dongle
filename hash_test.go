@@ -56,7 +56,7 @@ var hashTests = []struct {
 	{"ripemd160", "hello world", "98c615784ccb5fe5936fbc0cbe9dfdb408d92f0f", "mMYVeEzLX+WTb7wMvp39tAjZLw8="},
 }
 
-func TestHash_Encrypt_ToString(t *testing.T) {
+func TestHash_Encrypt_String(t *testing.T) {
 	for index, test := range hashTests {
 		e := Encrypt.FromString(test.input)
 
@@ -100,7 +100,7 @@ func TestHash_Encrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestHash_Encrypt_ToBytes(t *testing.T) {
+func TestHash_Encrypt_Bytes(t *testing.T) {
 	for index, test := range hashTests {
 		e := Encrypt.FromBytes([]byte(test.input))
 
@@ -143,7 +143,7 @@ func TestHash_Encrypt_ToBytes(t *testing.T) {
 	}
 }
 
-func TestHash_Digests_Error(t *testing.T) {
+func TestHash_Size_Error(t *testing.T) {
 	e1 := Encrypt.FromString("hello world").BySha3(100)
 	assert.Equal(t, invalidHashSizeError(), e1.Error)
 	e2 := Encrypt.FromBytes([]byte("hello world")).BySha3(100)

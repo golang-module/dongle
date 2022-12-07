@@ -49,7 +49,7 @@ var desTests = []struct {
 	{ECB, PKCS7, "hello world", "28dba02eb5f6dd475d82e3681c83bb77", "KNugLrX23UddguNoHIO7dw=="},
 }
 
-func TestDes_Encrypt_ToString(t *testing.T) {
+func TestDes_Encrypt_String(t *testing.T) {
 	for index, test := range desTests {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Encrypt.FromString(test.input).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
@@ -69,7 +69,7 @@ func TestDes_Encrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestDes_Decrypt_ToString(t *testing.T) {
+func TestDes_Decrypt_String(t *testing.T) {
 	for index, test := range desTests {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Decrypt.FromRawString(raw).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
@@ -102,7 +102,7 @@ func TestDes_Decrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestDes_Encrypt_ToBytes(t *testing.T) {
+func TestDes_Encrypt_Bytes(t *testing.T) {
 	for index, test := range desTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Encrypt.FromBytes([]byte(test.input)).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
@@ -122,7 +122,7 @@ func TestDes_Encrypt_ToBytes(t *testing.T) {
 	}
 }
 
-func TestDes_Decrypt_ToBytes(t *testing.T) {
+func TestDes_Decrypt_Bytes(t *testing.T) {
 	for index, test := range desTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Decrypt.FromRawBytes(raw).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))

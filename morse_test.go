@@ -20,7 +20,7 @@ var morseTests = []struct {
 	{"SOS", "/", ".../---/..."},
 }
 
-func TestMorse_Encode_ToString(t *testing.T) {
+func TestMorse_Encode_String(t *testing.T) {
 	for index, test := range morseTests {
 		e := Encode.FromString(test.input).ByMorse(test.separator)
 
@@ -31,7 +31,7 @@ func TestMorse_Encode_ToString(t *testing.T) {
 	}
 }
 
-func TestMorse_Decode_ToString(t *testing.T) {
+func TestMorse_Decode_String(t *testing.T) {
 	for index, test := range morseTests {
 		d := Decode.FromString(test.output).ByMorse(test.separator)
 
@@ -42,7 +42,7 @@ func TestMorse_Decode_ToString(t *testing.T) {
 	}
 }
 
-func TestMorse_Encode_ToBytes(t *testing.T) {
+func TestMorse_Encode_Bytes(t *testing.T) {
 	for index, test := range morseTests {
 		e := Encode.FromBytes([]byte(test.input)).ByMorse(test.separator)
 
@@ -53,7 +53,7 @@ func TestMorse_Encode_ToBytes(t *testing.T) {
 	}
 }
 
-func TestMorse_Decode_ToBytes(t *testing.T) {
+func TestMorse_Decode_Bytes(t *testing.T) {
 	for index, test := range morseTests {
 		d := Decode.FromBytes([]byte(test.output)).ByMorse(test.separator)
 

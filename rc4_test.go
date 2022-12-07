@@ -16,7 +16,7 @@ var rc4Tests = []struct {
 	{"hello world", "dongle", "eba154b4cb5a9038dbbf9d", "66FUtMtakDjbv50="},
 }
 
-func TestRc4_Encrypt_ToString(t *testing.T) {
+func TestRc4_Encrypt_String(t *testing.T) {
 	for index, test := range rc4Tests {
 		e := Encrypt.FromString(test.input).ByRc4(test.key)
 
@@ -28,19 +28,7 @@ func TestRc4_Encrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestRc4_Encrypt_ToBytes(t *testing.T) {
-	for index, test := range rc4Tests {
-		e := Encrypt.FromBytes([]byte(test.input)).ByRc4([]byte(test.key))
-
-		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
-			assert.Nil(t, e.Error)
-			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
-			assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes())
-		})
-	}
-}
-
-func TestRc4_Decrypt_ToString(t *testing.T) {
+func TestRc4_Decrypt_String(t *testing.T) {
 	for index, test := range rc4Tests {
 		d1 := Decrypt.FromHexString(test.toHex).ByRc4(test.key)
 
@@ -57,7 +45,19 @@ func TestRc4_Decrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestRc4_Decrypt_ToBytes(t *testing.T) {
+func TestRc4_Encrypt_Bytes(t *testing.T) {
+	for index, test := range rc4Tests {
+		e := Encrypt.FromBytes([]byte(test.input)).ByRc4([]byte(test.key))
+
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
+			assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes())
+		})
+	}
+}
+
+func TestRc4_Decrypt_Bytes(t *testing.T) {
 	for index, test := range rc4Tests {
 		d1 := Decrypt.FromHexBytes([]byte(test.toHex)).ByRc4([]byte(test.key))
 		t.Run(fmt.Sprintf("test_hex_%d", index), func(t *testing.T) {

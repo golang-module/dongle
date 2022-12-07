@@ -50,7 +50,7 @@ var tripleDesTests = []struct {
 	{ECB, PKCS7, "hello world", "b8097975c76319c6172687e0d90fd4d1", "XAEXS5OHMMM4MFZGQ7QNSD6U2E======", "uAl5dcdjGcYXJofg2Q/U0Q=="},
 }
 
-func Test3Des_Encrypt_ToString(t *testing.T) {
+func Test3Des_Encrypt_String(t *testing.T) {
 	for index, test := range tripleDesTests {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Encrypt.FromString(test.input).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
@@ -70,7 +70,7 @@ func Test3Des_Encrypt_ToString(t *testing.T) {
 	}
 }
 
-func Test3Des_Decrypt_ToString(t *testing.T) {
+func Test3Des_Decrypt_String(t *testing.T) {
 	for index, test := range tripleDesTests {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Decrypt.FromRawString(raw).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
@@ -103,7 +103,7 @@ func Test3Des_Decrypt_ToString(t *testing.T) {
 	}
 }
 
-func Test3Des_Encrypt_ToBytes(t *testing.T) {
+func Test3Des_Encrypt_Bytes(t *testing.T) {
 	for index, test := range tripleDesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Encrypt.FromBytes([]byte(test.input)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
@@ -123,7 +123,7 @@ func Test3Des_Encrypt_ToBytes(t *testing.T) {
 	}
 }
 
-func Test3Des_Decrypt_ToBytes(t *testing.T) {
+func Test3Des_Decrypt_Bytes(t *testing.T) {
 	for index, test := range tripleDesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Decrypt.FromRawBytes(raw).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))

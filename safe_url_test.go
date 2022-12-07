@@ -14,7 +14,7 @@ var safeUrlTestS = []struct {
 	{"www.gouguoyin.cn?sex=男&age=18", "www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18"},
 }
 
-func TestSafeURL_Encrypt_ToString(t *testing.T) {
+func TestSafeURL_Encrypt_String(t *testing.T) {
 	for index, test := range safeUrlTestS {
 		e := Encode.FromString(test.input).BySafeURL()
 
@@ -25,7 +25,7 @@ func TestSafeURL_Encrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestSafeURL_Decrypt_ToString(t *testing.T) {
+func TestSafeURL_Decrypt_String(t *testing.T) {
 	for index, test := range safeUrlTestS {
 		e := Decode.FromString(test.output).BySafeURL()
 
@@ -36,7 +36,7 @@ func TestSafeURL_Decrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestSafeURL_Encrypt_ToBytes(t *testing.T) {
+func TestSafeURL_Encrypt_Bytes(t *testing.T) {
 	for index, test := range safeUrlTestS {
 		e := Encode.FromBytes([]byte(test.input)).BySafeURL()
 
@@ -47,7 +47,7 @@ func TestSafeURL_Encrypt_ToBytes(t *testing.T) {
 	}
 }
 
-func TestSafeURL_Decrypt_ToBytes(t *testing.T) {
+func TestSafeURL_Decrypt_Bytes(t *testing.T) {
 	for index, test := range safeUrlTestS {
 		e := Decode.FromBytes([]byte(test.output)).BySafeURL()
 
