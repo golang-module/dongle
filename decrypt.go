@@ -114,6 +114,9 @@ func (d decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	case ECB:
 		src = c.NewECBDecrypter(src, b)
 	case CBC:
+		if len(src)%b.BlockSize() != 0 {
+			return nil, invalidAesSrcError()
+		}
 		src = c.NewCBCDecrypter(src, b)
 	case CTR:
 		src = c.NewCTRDecrypter(src, b)
