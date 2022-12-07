@@ -1,4 +1,4 @@
-// Package base58 implements base58 encoding.
+// Package base58 implements base58 encoding
 package base58
 
 import (

@@ -117,6 +117,7 @@ func TestBaseX_Decode_String(t *testing.T) {
 		case "base100":
 			d = d.ByBase100()
 		}
+
 		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, d.Error)
 			assert.Equal(t, test.input, d.ToString())
