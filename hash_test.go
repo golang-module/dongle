@@ -8,7 +8,7 @@ import (
 )
 
 var hashTests = []struct {
-	hash     string
+	algo     string
 	input    string
 	toHex    string
 	toBase64 string
@@ -60,7 +60,7 @@ func TestHash_Encrypt_String(t *testing.T) {
 	for index, test := range hashTests {
 		e := Encrypt.FromString(test.input)
 
-		switch test.hash {
+		switch test.algo {
 		case "ripemd160":
 			e = e.ByRipemd160()
 		case "md4":
@@ -91,7 +91,7 @@ func TestHash_Encrypt_String(t *testing.T) {
 			e = e.BySha512(256)
 		}
 
-		t.Run(fmt.Sprintf(test.hash+"_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, fmt.Sprintf("%s", e), e.ToRawString())
 			assert.Equal(t, test.toHex, e.ToHexString())
@@ -104,7 +104,7 @@ func TestHash_Encrypt_Bytes(t *testing.T) {
 	for index, test := range hashTests {
 		e := Encrypt.FromBytes([]byte(test.input))
 
-		switch test.hash {
+		switch test.algo {
 		case "ripemd160":
 			e = e.ByRipemd160()
 		case "md4":
@@ -135,7 +135,7 @@ func TestHash_Encrypt_Bytes(t *testing.T) {
 			e = e.BySha512(256)
 		}
 
-		t.Run(fmt.Sprintf(test.hash+"_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
 			assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes())

@@ -9,7 +9,7 @@ import (
 )
 
 var baseXTests = []struct {
-	baseX  string
+	algo   string // 算法
 	input  string // 输入值
 	output string // 期望值
 }{
@@ -60,7 +60,7 @@ func TestBaseX_Encode_String(t *testing.T) {
 	for index, test := range baseXTests {
 		e := Encode.FromString(test.input)
 
-		switch test.baseX {
+		switch test.algo {
 		case "hex":
 			e = e.ByHex()
 		case "base16":
@@ -95,7 +95,7 @@ func TestBaseX_Decode_String(t *testing.T) {
 	for index, test := range baseXTests {
 		d := Decode.FromString(test.output)
 
-		switch test.baseX {
+		switch test.algo {
 		case "hex":
 			d = d.ByHex()
 		case "base16":
@@ -118,7 +118,7 @@ func TestBaseX_Decode_String(t *testing.T) {
 			d = d.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, d.Error)
 			assert.Equal(t, test.input, d.ToString())
 			assert.Equal(t, test.input, fmt.Sprintf("%s", d))
@@ -130,7 +130,7 @@ func TestBaseX_Encode_Bytes(t *testing.T) {
 	for index, test := range baseXTests {
 		e := Encode.FromBytes([]byte(test.input))
 
-		switch test.baseX {
+		switch test.algo {
 		case "hex":
 			e = e.ByHex()
 		case "base16":
@@ -153,7 +153,7 @@ func TestBaseX_Encode_Bytes(t *testing.T) {
 			e = e.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
 		})
@@ -164,7 +164,7 @@ func TestBaseX_Decode_Bytes(t *testing.T) {
 	for index, test := range baseXTests {
 		d := Decode.FromBytes([]byte(test.output))
 
-		switch test.baseX {
+		switch test.algo {
 		case "hex":
 			d = d.ByHex()
 		case "base16":
@@ -187,7 +187,7 @@ func TestBaseX_Decode_Bytes(t *testing.T) {
 			d = d.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, d.Error)
 			assert.Equal(t, []byte(test.input), d.ToBytes())
 		})
@@ -196,7 +196,7 @@ func TestBaseX_Decode_Bytes(t *testing.T) {
 
 func TestBaseX_Decoding_Error(t *testing.T) {
 	tests := []struct {
-		baseX string
+		algo  string // 算法
 		input string // 输入值
 		error error  // 期望值
 	}{
@@ -217,7 +217,7 @@ func TestBaseX_Decoding_Error(t *testing.T) {
 		d1 := Decode.FromString(test.input)
 		d2 := Decode.FromBytes([]byte(test.input))
 
-		switch test.baseX {
+		switch test.algo {
 		case "hex":
 			d1 = d1.ByHex()
 			d2 = d2.ByHex()
@@ -250,12 +250,12 @@ func TestBaseX_Decoding_Error(t *testing.T) {
 			d2 = d2.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_d1_test_%d", index), func(t *testing.T) {
-			assert.Equal(t, invalidDecodingError(test.baseX), d1.Error)
+		t.Run(fmt.Sprintf(test.algo+"_d1_test_%d", index), func(t *testing.T) {
+			assert.Equal(t, invalidDecodingError(test.algo), d1.Error)
 		})
 
-		t.Run(fmt.Sprintf(test.baseX+"_d2_test_%d", index), func(t *testing.T) {
-			assert.Equal(t, invalidDecodingError(test.baseX), d2.Error)
+		t.Run(fmt.Sprintf(test.algo+"_d2_test_%d", index), func(t *testing.T) {
+			assert.Equal(t, invalidDecodingError(test.algo), d2.Error)
 		})
 	}
 }

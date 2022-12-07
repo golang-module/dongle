@@ -8,7 +8,7 @@ import (
 )
 
 var hmacTests = []struct {
-	hash     string
+	algo     string
 	input    string
 	key      string
 	toHex    string
@@ -64,7 +64,7 @@ func TestHmac_Encrypt_String(t *testing.T) {
 	for index, test := range hmacTests {
 		e := Encrypt.FromString(test.input)
 
-		switch test.hash {
+		switch test.algo {
 		case "md4":
 			e = e.ByHmacMd4(test.key)
 		case "md5":
@@ -97,7 +97,7 @@ func TestHmac_Encrypt_String(t *testing.T) {
 			e = e.ByHmacSm3(test.key)
 		}
 
-		t.Run(fmt.Sprintf(test.hash+"_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, fmt.Sprintf("%s", e), e.ToRawString())
 			assert.Equal(t, test.toHex, e.ToHexString())
@@ -110,7 +110,7 @@ func TestHmac_Encrypt_Bytes(t *testing.T) {
 	for index, test := range hmacTests {
 		e := Encrypt.FromBytes([]byte(test.input)).ByHmacMd4([]byte(test.key))
 
-		switch test.hash {
+		switch test.algo {
 		case "md4":
 			e = e.ByHmacMd4([]byte(test.key))
 		case "md5":
@@ -143,7 +143,7 @@ func TestHmac_Encrypt_Bytes(t *testing.T) {
 			e = e.ByHmacSm3([]byte(test.key))
 		}
 
-		t.Run(fmt.Sprintf(test.hash+"_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
 			assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes())
