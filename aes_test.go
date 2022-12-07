@@ -49,7 +49,7 @@ var aesTests = []struct {
 	{ECB, PKCS7, "hello world", "8169bed4ef49a8874559c5b200daade7", "gWm+1O9JqIdFWcWyANqt5w=="},
 }
 
-func TestAes_Encrypt_ToString(t *testing.T) {
+func TestAes_Encrypt_String(t *testing.T) {
 	for index, test := range aesTests {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Encrypt.FromString(test.input).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
@@ -69,7 +69,7 @@ func TestAes_Encrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestAes_Decrypt_ToString(t *testing.T) {
+func TestAes_Decrypt_String(t *testing.T) {
 	for index, test := range aesTests {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Decrypt.FromRawString(raw).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
@@ -102,7 +102,7 @@ func TestAes_Decrypt_ToString(t *testing.T) {
 	}
 }
 
-func TestAes_Encrypt_ToBytes(t *testing.T) {
+func TestAes_Encrypt_Bytes(t *testing.T) {
 	for index, test := range aesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Encrypt.FromBytes([]byte(test.input)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
@@ -122,7 +122,7 @@ func TestAes_Encrypt_ToBytes(t *testing.T) {
 	}
 }
 
-func TestAes_Decrypt_ToBytes(t *testing.T) {
+func TestAes_Decrypt_Bytes(t *testing.T) {
 	for index, test := range aesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Decrypt.FromRawBytes(raw).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))

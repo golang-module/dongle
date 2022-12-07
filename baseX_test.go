@@ -58,51 +58,35 @@ var baseXTests = []struct {
 
 func TestBaseX_Encode_String(t *testing.T) {
 	for index, test := range baseXTests {
-		e1 := Encode.FromString(test.input)
-		e2 := Encode.FromBytes([]byte(test.input))
+		e := Encode.FromString(test.input)
 
 		switch test.baseX {
 		case "hex":
-			e1 = e1.ByHex()
-			e2 = e2.ByHex()
+			e = e.ByHex()
 		case "base16":
-			e1 = e1.ByBase16()
-			e2 = e2.ByBase16()
+			e = e.ByBase16()
 		case "base32":
-			e1 = e1.ByBase32()
-			e2 = e2.ByBase32()
+			e = e.ByBase32()
 		case "base58":
-			e1 = e1.ByBase58()
-			e2 = e2.ByBase58()
+			e = e.ByBase58()
 		case "base62":
-			e1 = e1.ByBase62()
-			e2 = e2.ByBase62()
+			e = e.ByBase62()
 		case "base64":
-			e1 = e1.ByBase64()
-			e2 = e2.ByBase64()
+			e = e.ByBase64()
 		case "base64URL":
-			e1 = e1.ByBase64URL()
-			e2 = e2.ByBase64URL()
+			e = e.ByBase64URL()
 		case "base85":
-			e1 = e1.ByBase85()
-			e2 = e2.ByBase85()
+			e = e.ByBase85()
 		case "base91":
-			e1 = e1.ByBase91()
-			e2 = e2.ByBase91()
+			e = e.ByBase91()
 		case "base100":
-			e1 = e1.ByBase100()
-			e2 = e2.ByBase100()
+			e = e.ByBase100()
 		}
 
-		t.Run(fmt.Sprintf(test.baseX+"_e1_test_%d", index), func(t *testing.T) {
-			assert.Nil(t, e1.Error)
-			assert.Equal(t, test.output, e1.ToString())
-			assert.Equal(t, test.output, fmt.Sprintf("%s", e1))
-		})
-
-		t.Run(fmt.Sprintf(test.baseX+"_e2_%d", index), func(t *testing.T) {
-			assert.Nil(t, e2.Error)
-			assert.Equal(t, []byte(test.output), e2.ToBytes())
+		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, test.output, e.ToString())
+			assert.Equal(t, test.output, fmt.Sprintf("%s", e))
 		})
 	}
 }
@@ -133,9 +117,11 @@ func TestBaseX_Decode_String(t *testing.T) {
 		case "base100":
 			d = d.ByBase100()
 		}
-
-		assert.Nil(t, d.Error)
-		assert.Equal(t, test.input, d.ToString(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, d.Error)
+			assert.Equal(t, test.input, d.ToString())
+			assert.Equal(t, test.input, fmt.Sprintf("%s", d))
+		})
 	}
 }
 
@@ -166,8 +152,10 @@ func TestBaseX_Encode_Bytes(t *testing.T) {
 			e = e.ByBase100()
 		}
 
-		assert.Nil(t, e.Error)
-		assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
+			assert.Nil(t, e.Error)
+			assert.Equal(t, []byte(test.output), e.ToBytes(), "Current test index is "+strconv.Itoa(index))
+		})
 	}
 }
 
@@ -200,7 +188,7 @@ func TestBaseX_Decode_Bytes(t *testing.T) {
 
 		t.Run(fmt.Sprintf(test.baseX+"_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, d.Error)
-			assert.Equal(t, []byte(test.input), d.ToBytes(), "Current test index is "+strconv.Itoa(index))
+			assert.Equal(t, []byte(test.input), d.ToBytes())
 		})
 	}
 }
