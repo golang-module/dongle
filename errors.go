@@ -8,7 +8,7 @@ var (
 	// returns an invalid aes src error
 	// 返回无效的 aes 明文错误
 	invalidAesSrcError = func() error {
-		return fmt.Errorf("aes: invalid src, the src with no padding must be multiple of 16 bytes")
+		return fmt.Errorf("aes: invalid src, the src is not full blocks")
 	}
 	// returns an invalid aes key error
 	// 返回无效的 aes 密钥错误
@@ -26,7 +26,7 @@ var (
 	// returns an invalid des src error
 	// 返回无效的 des 明文错误
 	invalidDesSrcError = func() error {
-		return fmt.Errorf("des: invalid src, the src with no padding must be multiple of 16 bytes")
+		return fmt.Errorf("des: invalid src, the src is not full blocks")
 	}
 	// returns an invalid des key error
 	// 返回无效的 des 密钥错误
@@ -44,7 +44,7 @@ var (
 	// returns an invalid 3des src error
 	// 返回无效的 3des 明文错误
 	invalid3DesSrcError = func() error {
-		return fmt.Errorf("3des: invalid src, the src with no padding must be multiple of 16 bytes")
+		return fmt.Errorf("3des: invalid src, the src is not full blocks")
 	}
 	// returns an invalid 3des key error
 	// 返回无效的 3des 密钥错误
@@ -130,15 +130,15 @@ var (
 )
 
 var (
-	// returns an invalid encrypt or decrypt mode error
+	// returns an invalid cipher mode error
 	// 返回无效的分组模式错误
 	invalidModeError = func(mode cipherMode) error {
-		return fmt.Errorf("invalid encrypt or decrypt mode %q", mode)
+		return fmt.Errorf("invalid cipher mode %q, currently only support CBC, ECB, CFB, OFB, CTR mode", mode)
 	}
-	// returns an invalid encrypt or decrypt padding error
+	// returns an invalid cipher padding error
 	// 返回无效的填充方式错误
 	invalidPaddingError = func(padding cipherPadding) error {
-		return fmt.Errorf("invalid encrypt or decrypt padding %q", padding)
+		return fmt.Errorf("invalid cipher padding %q, currently only support No, Zero, PKCS5, PKCS7 padding", padding)
 	}
 	// returns an invalid decoding error
 	// 返回无效的解码方式错误
