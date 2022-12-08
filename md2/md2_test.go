@@ -6,12 +6,10 @@ import (
 	"testing"
 )
 
-type md2Test struct {
-	in  string
-	out string
-}
-
-var golden = []md2Test{
+var tests = []struct {
+	input  string
+	output string
+}{
 	{"", "8350e5a3e24c153df2275c9f80692773"},
 	{"a", "32ec01ec4a6dac72c0ab96fb34c0b5d1"},
 	{"abc", "da853b0d3f88d99b30283a69e6ded6bb"},
@@ -21,23 +19,23 @@ var golden = []md2Test{
 	{"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "da33def2a42df13975352846c30338cd"},
 }
 
-func TestGolden(t *testing.T) {
-	for i := 0; i < len(golden); i++ {
-		g := golden[i]
+func TestMd2(t *testing.T) {
+	for i := 0; i < len(tests); i++ {
+		g := tests[i]
 		c := New()
 		for j := 0; j < 3; j++ {
 			if j < 2 {
-				io.WriteString(c, g.in)
+				io.WriteString(c, g.input)
 			} else {
-				io.WriteString(c, g.in[0:len(g.in)/2])
+				io.WriteString(c, g.input[0:len(g.input)/2])
 				c.Sum(nil)
-				io.WriteString(c, g.in[len(g.in)/2:])
+				io.WriteString(c, g.input[len(g.input)/2:])
 			}
 			s := fmt.Sprintf("%x", c.Sum(nil))
-			if s != g.out {
-				t.Fatalf("md2[%d](%s) = %s want %s", j, g.in, s, g.out)
+			if s != g.output {
+				t.Fatalf("md2[%d](%s) = %s want %s", j, g.input, s, g.output)
 			} else {
-				fmt.Printf("md2[%d](%s) = %s want %s - Passed\n", j, g.in, s, g.out)
+				fmt.Printf("md2[%d](%s) = %s want %s - Passed\n", j, g.input, s, g.output)
 			}
 			c.Reset()
 		}

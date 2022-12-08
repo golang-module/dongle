@@ -78,9 +78,9 @@ func (d *digest) Write(p []byte) (nn int, err error) {
 		p = p[n:]
 	}
 
-	imax := len(p) / _Chunk
+	max := len(p) / _Chunk
 	// For the rest, try hashing by the block size
-	for i := 0; i < imax; i++ {
+	for i := 0; i < max; i++ {
 		block(d, p[:_Chunk])
 		p = p[_Chunk:]
 	}
@@ -93,38 +93,37 @@ func (d *digest) Write(p []byte) (nn int, err error) {
 	return
 }
 
-func (d0 *digest) Sum(in []byte) []byte {
+func (d *digest) Sum(in []byte) []byte {
 	// Make a copy of d0 so that caller can keep writing and summing.
-	d := new(digest)
-	*d = *d0
+	dig := new(digest)
+	*dig = *d
 
 	// Padding.  Add a 1 bit and 0 bits until 56 bytes mod 64.
-	len := d.nx
 	var tmp [_Chunk]byte
 
 	for i := range tmp {
-		tmp[i] = _Chunk - len
+		tmp[i] = _Chunk - dig.nx
 	}
 
-	d.Write(tmp[0 : _Chunk-len])
+	dig.Write(tmp[0 : _Chunk-dig.nx])
 
 	// At this state we should have nothing left in buffer
-	if d.nx != 0 {
+	if dig.nx != 0 {
 		panic("d.nx != 0")
 	}
 
-	d.Write(d.digest[0:16])
+	dig.Write(dig.digest[0:16])
 
 	// At this state we should have nothing left in buffer
-	if d.nx != 0 {
+	if dig.nx != 0 {
 		panic("d.nx != 0")
 	}
 
-	return append(in, d.state[0:16]...)
+	return append(in, dig.state[0:16]...)
 }
 
 func block(dig *digest, p []byte) {
-	_Block := []uint8{
+	blocks := []uint8{
 		41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6,
 		19, 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188,
 		76, 130, 202, 30, 155, 87, 60, 253, 212, 224, 22, 103, 66, 111, 24,
@@ -155,7 +154,7 @@ func block(dig *digest, p []byte) {
 
 	for i = 0; i < 18; i++ {
 		for j = 0; j < 48; j++ {
-			dig.state[j] = dig.state[j] ^ _Block[t]
+			dig.state[j] = dig.state[j] ^ blocks[t]
 			t = dig.state[j]
 		}
 		t = t + i
@@ -164,7 +163,7 @@ func block(dig *digest, p []byte) {
 	t = dig.digest[15]
 
 	for i = 0; i < 16; i++ {
-		dig.digest[i] = dig.digest[i] ^ _Block[p[i]^t]
+		dig.digest[i] = dig.digest[i] ^ blocks[p[i]^t]
 		t = dig.digest[i]
 	}
 }
