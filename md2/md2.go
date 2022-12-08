@@ -122,7 +122,7 @@ func (d *digest) Sum(in []byte) []byte {
 	return append(in, dig.state[0:16]...)
 }
 
-func block(dig *digest, p []byte) {
+func block(d *digest, p []byte) {
 	blocks := []uint8{
 		41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6,
 		19, 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188,
@@ -148,22 +148,22 @@ func block(dig *digest, p []byte) {
 	t = 0
 
 	for i = 0; i < 16; i++ {
-		dig.state[i+16] = p[i]
-		dig.state[i+32] = p[i] ^ dig.state[i]
+		d.state[i+16] = p[i]
+		d.state[i+32] = p[i] ^ d.state[i]
 	}
 
 	for i = 0; i < 18; i++ {
 		for j = 0; j < 48; j++ {
-			dig.state[j] = dig.state[j] ^ blocks[t]
-			t = dig.state[j]
+			d.state[j] = d.state[j] ^ blocks[t]
+			t = d.state[j]
 		}
 		t = t + i
 	}
 
-	t = dig.digest[15]
+	t = d.digest[15]
 
 	for i = 0; i < 16; i++ {
-		dig.digest[i] = dig.digest[i] ^ blocks[p[i]^t]
-		t = dig.digest[i]
+		d.digest[i] = d.digest[i] ^ blocks[p[i]^t]
+		t = d.digest[i]
 	}
 }
