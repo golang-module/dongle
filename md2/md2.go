@@ -71,7 +71,7 @@ func (d *digest) Write(p []byte) (nn int, err error) {
 
 		// if we have exactly 1 block in the buffer than hash that block
 		if d.nx == _Chunk {
-			block(d, d.x[0:_Chunk])
+			_Block(d, d.x[0:_Chunk])
 			d.nx = 0
 		}
 
@@ -81,7 +81,7 @@ func (d *digest) Write(p []byte) (nn int, err error) {
 	max := len(p) / _Chunk
 	// For the rest, try hashing by the block size
 	for i := 0; i < max; i++ {
-		block(d, p[:_Chunk])
+		_Block(d, p[:_Chunk])
 		p = p[_Chunk:]
 	}
 
@@ -122,7 +122,7 @@ func (d *digest) Sum(in []byte) []byte {
 	return append(in, dig.state[0:16]...)
 }
 
-func block(d *digest, p []byte) {
+func _Block(d *digest, p []byte) {
 	blocks := []uint8{
 		41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6,
 		19, 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188,
