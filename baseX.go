@@ -5,6 +5,7 @@ import (
 	"encoding/base32"
 	"encoding/base64"
 	"encoding/hex"
+
 	"github.com/golang-module/dongle/base100"
 	"github.com/golang-module/dongle/base58"
 	"github.com/golang-module/dongle/base62"
