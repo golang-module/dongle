@@ -112,6 +112,7 @@ func Decode(b []byte, separator string) (dst string, err error) {
 }
 
 // converts string to byte slice without a memory allocation.
+// 将字符串转换为字节切片
 func string2bytes(s string) []byte {
 	if len(s) == 0 {
 		return nil
@@ -125,6 +126,7 @@ func string2bytes(s string) []byte {
 }
 
 // converts byte slice to string without a memory allocation.
+// 将字节切片转换为字符串
 func bytes2string(b []byte) string {
 	if len(b) == 0 {
 		return ""
