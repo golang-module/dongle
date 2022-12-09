@@ -6,12 +6,26 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
+	"hash"
+
+	"github.com/golang-module/dongle/md2"
 	"github.com/tjfoc/gmsm/sm3"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
-	"hash"
 )
+
+// ByHmacMd2 encrypts by hmac with md2.
+// 通过 hmac-md2 加密
+func (e encrypter) ByHmacMd2(key interface{}) encrypter {
+	if len(e.src) == 0 {
+		return e
+	}
+	mac := hmac.New(md2.New, interface2bytes(key))
+	mac.Write(e.src)
+	e.dst = mac.Sum(nil)
+	return e
+}
 
 // ByHmacMd4 encrypts by hmac with md4.
 // 通过 hmac-md4 加密

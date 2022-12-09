@@ -14,6 +14,9 @@ var hmacTests = []struct {
 	toHex    string
 	toBase64 string
 }{
+	{"md2", "", "", "", ""},
+	{"md2", "hello world", "dongle", "88ed6ef9ab699d03a702f2a6fb1c0673", "iO1u+atpnQOnAvKm+xwGcw=="},
+
 	{"md4", "", "", "", ""},
 	{"md4", "hello world", "dongle", "7a9df5247cbf76a8bc17c9c4f5a75b6b", "ep31JHy/dqi8F8nE9adbaw=="},
 
@@ -65,6 +68,8 @@ func TestHmac_Encrypt_String(t *testing.T) {
 		e := Encrypt.FromString(test.input)
 
 		switch test.algo {
+		case "md2":
+			e = e.ByHmacMd2(test.key)
 		case "md4":
 			e = e.ByHmacMd4(test.key)
 		case "md5":
@@ -111,6 +116,8 @@ func TestHmac_Encrypt_Bytes(t *testing.T) {
 		e := Encrypt.FromBytes([]byte(test.input)).ByHmacMd4([]byte(test.key))
 
 		switch test.algo {
+		case "md2":
+			e = e.ByHmacMd2([]byte(test.key))
 		case "md4":
 			e = e.ByHmacMd4([]byte(test.key))
 		case "md5":
