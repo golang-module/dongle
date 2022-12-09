@@ -204,6 +204,21 @@ dongle.Decode.FromBytes([]byte("-..|---|-.|--.|.-..|.")).ByMorse("|").ToBytes() 
 
 #### 加密&解密
 
+##### Md2 加密
+
+```go
+// 对字符串进行 md2 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByMd2().ToHexString() // d9cce882ee690a5c1ce70beff3a78c77
+// 对字符串进行 md2 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByMd2().ToBase64String() // 2czogu5pClwc5wvv86eMdw==
+
+// 对字节切片进行 md2 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByMd2().ToHexBytes() // []byte("d9cce882ee690a5c1ce70beff3a78c77")
+// 对字节切片进行 md2 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByMd2().ToBase64Bytes() // []byte("2czogu5pClwc5wvv86eMdw==")
+
+```
+
 ##### Md4 加密
 
 ```go
@@ -372,6 +387,20 @@ dongle.Encrypt.FromString("hello world").ByRipemd160().ToBase64String() // mMYVe
 dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToHexBytes() // []byte("98c615784ccb5fe5936fbc0cbe9dfdb408d92f0f")
 // 对字节切片进行 ripemd160 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToBase64Bytes() // []byte("mMYVeEzLX+WTb7wMvp39tAjZLw8=")
+```
+
+##### Hmac-md2 加密
+
+```go
+// 对字符串进行 hmac-md2 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToHexString() // 88ed6ef9ab699d03a702f2a6fb1c0673
+// 对字符串进行 hmac-md2 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToBase64String() // iO1u+atpnQOnAvKm+xwGcw==
+
+// 对字节切片进行 hmac-md2 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToHexBytes() // []byte("88ed6ef9ab699d03a702f2a6fb1c0673")
+// 对字节切片进行 hmac-md2 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToBase64Bytes() // []byte("iO1u+atpnQOnAvKm+xwGcw==")
 ```
 
 ##### Hmac-md4 加密
@@ -847,7 +876,54 @@ dongle.Verify.FromHexBytes([]byte(sign.ToHexBytes()), []byte("hello world")).ByB
 dongle.Verify.FromBase64Bytes([]byte(sign.ToBase64Bytes()), []byte("hello world")).ByBcrypt(10).ToBool() // true
 ```
 
+##### Ed25519 签名、验签
+
+```go
+var publicKey, privateKey []byte
+
+// 生成未经编码的原始公钥、私钥
+publicKey, privateKey, _ = ed25519.GenerateKey(nil)
+
+// 获取经过 hex 编码的公钥
+hexPublicKey := dongle.Encode.FromBytes(rawPublicKey).ByHex().ToBytes()
+// 获取经过 hex 编码的私钥
+hexPrivateKey := dongle.Encode.FromBytes(rawPrivateKey).ByHex().ToBytes()
+// 获取经过 base64 编码的公钥
+base64PublicKey := dongle.Encode.FromBytes(publicKey).ByBase64().ToBytes()
+// 获取经过 base64 编码的私钥
+base64PrivateKey := dongle.Encode.FromBytes(privateKey).ByBase64().ToBytes()
+
+// 通过未经编码的原始私钥对字符串进行 ed25519 签名
+sign := dongle.Sign.FromString("hello world").Ed25519(privateKey, dongle.Raw)
+// 通过未经编码的原始公钥对未经编码的原始签名字符串进行 ed25519 验签
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+// 通过未经编码的原始公钥对经过 hex 编码的签名字符串进行 ed25519 验签
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+// 通过未经编码的原始公钥对经过 base64 编码的签名字符串进行 ed25519 验签
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+
+// 通过经过 hex 编码的私钥对字符串进行 ed25519 签名
+sign := dongle.Sign.FromString("hello world").Ed25519(hexPrivateKey, dongle.HEX)
+// 通过经过 hex 编码的公钥对未经编码的原始签名字符串进行 ed25519 验签
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+// 通过经过 hex 编码的公钥对经过 hex 编码的签名字符串进行 ed25519 验签
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+// 通过经过 hex 编码的公钥对经过 base64 编码的签名字符串进行 ed25519 验签
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+
+// 通过经过 base64 编码的私钥对字符串进行 ed25519 签名
+sign := dongle.Sign.FromString("hello world").Ed25519(base64PrivateKey, dongle.BASE64)
+// 通过经过 base64 编码的公钥对未经编码的原始签名字符串进行 ed25519 验签
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+// 通过经过 base64 编码的公钥对经过 hex 编码的签名字符串进行 ed25519 验签
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+// 通过经过 base64 编码的公钥对经过 base64 编码的签名字符串进行 ed25519 验签
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+
+```
+
 ##### Rsa 签名、验签
+
 > hash 算法仅支持 MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160
 
 ```go
@@ -923,8 +999,8 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// 错误处理...
-log.Fatal(e.Error)
+    // 错误处理...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // 输出
@@ -945,6 +1021,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Base91 编码、解码
 - [x] Base100 编码、解码
 - [x] Morse(摩斯) 编码、解码
+- [x] Md2 加密
 - [x] Md4 加密
 - [x] Md5 加密
 - [x] Sha1 加密
@@ -959,6 +1036,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Sha512-224 加密
 - [x] Sha512-256 加密
 - [x] Ripemd160 加密
+- [x] Hmac-md2 加密
 - [x] Hmac-md4 加密
 - [x] Hmac-md5 加密
 - [x] Hmac-sha1 加密
@@ -991,6 +1069,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [ ] Sm7 加密、解密
 - [ ] Sm9 加密、解密
 - [x] Bcrypt 签名、验签
+- [x] Ed25519 签名、验签
 - [x] Rsa 签名、验签
 - [ ] Dsa 签名、验签
 
@@ -1002,10 +1081,10 @@ rsa: invalid public key, please make sure the public key is valid
 
 ### 在线网站
 * [www.ssleye.com](https://www.ssleye.com/ssltool)
+* [base62.js.org](https://base62.js.org)
 * [www.sojson.com](https://www.sojson.com/encrypt.html)
 * [tool.chacuo.net](https://tool.chacuo.net/cryptaes)
 * [www.oktools.net](https://oktools.net/aes)
-* [base62.js.org](https://base62.js.org)
 
 ### 赞助
 `Dongle` 是一个非商业开源项目, 如果你想支持 `Dongle`, 你可以为开发者 [购买一杯咖啡](https://www.gouguoyin.com/zanzhu.html)

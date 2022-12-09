@@ -206,6 +206,21 @@ dongle.Decode.FromBytes([]byte("-..|---|-.|--.|.-..|.")).ByMorse("|").ToBytes() 
 
 #### Encrypt and decrypt
 
+##### Encrypt by md2
+
+```go
+// Encrypt by md2 from string and output string with hex encoding
+dongle.Encrypt.FromString("hello world").ByMd2().ToHexString() // d9cce882ee690a5c1ce70beff3a78c77
+// Encrypt by md2 from string and output string with base64 encoding
+dongle.Encrypt.FromString("hello world").ByMd2().ToBase64String() // 2czogu5pClwc5wvv86eMdw==
+
+// Encrypt by md2 from byte slice and output byte slice with hex encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByMd2().ToHexBytes() // []byte("d9cce882ee690a5c1ce70beff3a78c77")
+// Encrypt by md2 from byte slice and output byte slice with base64 encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByMd2().ToBase64Bytes() // []byte("2czogu5pClwc5wvv86eMdw==")
+
+```
+
 ##### Encrypt by md4
 
 ```go
@@ -377,18 +392,18 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToHexBytes() // []
 dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToBase64Bytes() // []byte("mMYVeEzLX+WTb7wMvp39tAjZLw8=")
 ```
 
-##### Encrypt by rc4
+##### Encrypt by hmac-md2
 
 ```go
-// Encrypt by rc4 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToHexString() // eba154b4cb5a9038dbbf9d
-// Encrypt by rc4 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToBase64String() // 66FUtMtakDjbv50=
+// Encrypt by hmac-md2 from string and output string with hex encoding
+dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToHexString() // 88ed6ef9ab699d03a702f2a6fb1c0673
+// Encrypt by hmac-md2 from string and output string with base64 encoding
+dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToBase64String() // iO1u+atpnQOnAvKm+xwGcw==
 
-// Encrypt by rc4 from byte slice and output byte slice with hex encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
-// Encrypt by rc4 from byte slice and output byte slice with base64 encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
+// Encrypt by hmac-md2 from byte slice and output byte slice with hex encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToHexBytes() // []byte("88ed6ef9ab699d03a702f2a6fb1c0673")
+// Encrypt by hmac-md2 from byte slice and output byte slice with base64 encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToBase64Bytes() // []byte("iO1u+atpnQOnAvKm+xwGcw==")
 ```
 
 ##### Encrypt by hmac-md4
@@ -802,7 +817,7 @@ dongle.Encrypt.FromBytes([]byte("hello go")).ByTea("0123456789abcdef", 32).ToBas
 dongle.Decrypt.FromBase64Bytes(()byte("RTllgXOln8I=")).ByTea("0123456789abcdef", 32).ToBytes() // []byte("hello go")
 ```
 
-##### Rc4 加密、解密
+##### Encrypt and decrypt by rc4
 
 ```go
 // Encrypt by rc4 from string and output string with hex encoding
@@ -858,7 +873,54 @@ sign := dongle.Sign.FromBytes([]byte("hello world")).ByBcrypt(10)
 dongle.Verify.FromRawBytes([]byte(sign.ToRawBytes()), []byte("hello world")).ByBcrypt(10).ToBool() // true
 ```
 
+##### Ed25519 sign and verify
+
+```go
+var publicKey, privateKey []byte
+
+// generate raw public key and private key
+publicKey, privateKey, _ = ed25519.GenerateKey(nil)
+
+// get public key with hex encoding
+hexPublicKey := dongle.Encode.FromBytes(rawPublicKey).ByHex().ToBytes()
+// get private key with hex encoding
+hexPrivateKey := dongle.Encode.FromBytes(rawPrivateKey).ByHex().ToBytes()
+// get public key with base64 encoding
+base64PublicKey := dongle.Encode.FromBytes(publicKey).ByBase64().ToBytes()
+// get private key with base64 encoding
+base64PrivateKey := dongle.Encode.FromBytes(privateKey).ByBase64().ToBytes()
+
+// Sign by ed25519 use raw private key
+sign := dongle.Sign.FromString("hello world").Ed25519(privateKey, dongle.Raw)
+// Verify by ed25519 from raw signature string and message string use raw public key, output bool
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+// Verify by ed25519 from hex signature string and message string use raw public key, output bool
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+// Verify by ed25519 from base64 signature string and message string use raw public key, output bool
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+
+// Sign by ed25519 use hex private key
+sign := dongle.Sign.FromString("hello world").Ed25519(hexPrivateKey, dongle.HEX)
+// Verify by ed25519 from raw signature string and message string use hex public key, output bool
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+// Verify by ed25519 from hex signature string and message string use hex public key, output bool
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+// Verify by ed25519 from base64 signature string and message string use hex public key, output bool
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+
+// Sign by ed25519 use base64 private key
+sign := dongle.Sign.FromString("hello world").Ed25519(base64PrivateKey, dongle.BASE64)
+// Verify by ed25519 from raw signature string and message string use base64 public key, output bool
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+// Verify by ed25519 from hex signature string and message string use base64 public key, output bool
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+// Verify by ed25519 from base64 signature string and message string use base64 public key, output bool
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+
+```
+
 ##### Rsa sign and verify
+
 > Hash algorithm only supports MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160
 
 ```go
@@ -934,7 +996,7 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-    // 错误处理...
+    // Error handle...
     log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
@@ -956,6 +1018,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Encoding and decoding by Base91
 - [x] Encoding and decoding by Base100
 - [x] Encoding and decoding by Morse
+- [x] Encryption by Md2
 - [x] Encryption by Md4
 - [x] Encryption by Md5
 - [x] Encryption by Sha1
@@ -970,6 +1033,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Encryption by Sha512-224
 - [x] Encryption by Sha512-256
 - [x] Encryption by Ripemd160
+- [x] Encryption by Hmac-md2
 - [x] Encryption by Hmac-md4
 - [x] Encryption by Hmac-md5
 - [x] Encryption by Hmac-sha1
@@ -1002,6 +1066,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [ ] Encryption and decryption by Sm7
 - [ ] Encryption and decryption by Sm9
 - [x] Sign and verify by Bcrypt
+- [x] Sign and verify by Ed25519
 - [x] Sign and verify by Rsa
 - [ ] Sign and verify by Dsa
 
@@ -1013,10 +1078,10 @@ rsa: invalid public key, please make sure the public key is valid
 
 ### Online website
 * [www.ssleye.com](https://www.ssleye.com/ssltool)
+* [base62.js.org](https://base62.js.org)
 * [www.sojson.com](https://www.sojson.com/encrypt.html)
 * [tool.chacuo.net](https://tool.chacuo.net/cryptaes)
 * [www.oktools.net](https://oktools.net/aes)
-* [base62.js.org](https://base62.js.org)
 
 ### Sponsors
 `Dongle` is a non-commercial open source project. If you want to support `Dongle`, you
