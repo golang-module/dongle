@@ -57,7 +57,9 @@ func (s signer) ByRsa(privateKey interface{}, hash crypto.Hash) signer {
 		s.Error = err
 		return s
 	}
-	s.dst, s.Error = rsa.SignPKCS1v15(rand.Reader, pri, hash, hashEncrypt(s.src, hash))
+	hasher := hash.New()
+	hasher.Write(s.src)
+	s.dst, s.Error = rsa.SignPKCS1v15(rand.Reader, pri, hash, hasher.Sum(nil))
 	return s
 }
 
@@ -76,7 +78,9 @@ func (v verifier) ByRsa(publicKey interface{}, hash crypto.Hash) verifier {
 		v.Error = err
 		return v
 	}
-	v.Error = rsa.VerifyPKCS1v15(pub, hash, hashEncrypt(v.src, hash), v.sign)
+	hasher := hash.New()
+	hasher.Write(v.src)
+	v.Error = rsa.VerifyPKCS1v15(pub, hash, hasher.Sum(nil), v.sign)
 	return v
 }
 
@@ -87,11 +91,11 @@ func ParseRsaPublicKey(publicKey interface{}) (*rsa.PublicKey, error) {
 	if block == nil {
 		return nil, invalidRsaPublicKeyError()
 	}
-	// pkcs1 format pem
+	// pkcs1 pem
 	if block.Type == "RSA PUBLIC KEY" {
 		return x509.ParsePKCS1PublicKey(block.Bytes)
 	}
-	// pkcs8 format pem
+	// pkcs8 pem
 	pub, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
 		return nil, invalidRsaPublicKeyError()
@@ -106,11 +110,11 @@ func ParseRsaPrivateKey(privateKey interface{}) (*rsa.PrivateKey, error) {
 	if block == nil {
 		return nil, invalidRsaPrivateKeyError()
 	}
-	// pkcs1 format pem
+	// pkcs1 pem
 	if block.Type == "RSA PRIVATE KEY" {
 		return x509.ParsePKCS1PrivateKey(block.Bytes)
 	}
-	// pkcs8 format pem
+	// pkcs8 pem
 	pri, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
 		return nil, invalidRsaPrivateKeyError()
@@ -120,12 +124,12 @@ func ParseRsaPrivateKey(privateKey interface{}) (*rsa.PrivateKey, error) {
 
 // whether is a supported hash function
 // 判断是否是支持的哈希函数
-func isSupportedHash(needle crypto.Hash) bool {
+func isSupportedHash(hash crypto.Hash) bool {
 	hashes := []crypto.Hash{
 		MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160,
 	}
 	for _, e := range hashes {
-		if e == needle {
+		if e == hash {
 			return true
 		}
 	}
