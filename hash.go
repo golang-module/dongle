@@ -6,10 +6,12 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
+	"hash"
+
+	"github.com/golang-module/dongle/md2"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
-	"hash"
 )
 
 // hash algorithm constants
@@ -23,14 +25,19 @@ const (
 	SHA384    = crypto.SHA384
 	SHA512    = crypto.SHA512
 	RIPEMD160 = crypto.RIPEMD160
-
-	SHA3_224   = crypto.SHA3_224
-	SHA3_256   = crypto.SHA3_256
-	SHA3_384   = crypto.SHA3_384
-	SHA3_512   = crypto.SHA3_512
-	SHA512_224 = crypto.SHA512_224
-	SHA512_256 = crypto.SHA512_256
 )
+
+// ByMd2 encrypts by md2.
+// 通过 md2 加密
+func (e encrypter) ByMd2() encrypter {
+	if len(e.src) == 0 {
+		return e
+	}
+	hasher := md2.New()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
+	return e
+}
 
 // ByMd4 encrypts by md4.
 // 通过 md4 加密
@@ -38,7 +45,9 @@ func (e encrypter) ByMd4() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	e.dst = hashEncrypt(e.src, MD4)
+	hasher := md4.New()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
@@ -48,7 +57,9 @@ func (e encrypter) ByMd5() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	e.dst = hashEncrypt(e.src, MD5)
+	hasher := md5.New()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
@@ -58,28 +69,34 @@ func (e encrypter) BySha1() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	e.dst = hashEncrypt(e.src, SHA1)
+	hasher := sha1.New()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
 // BySha3 encrypts by sha3.
 // 通过 BySha3 加密
 func (e encrypter) BySha3(size int) encrypter {
+	var hasher hash.Hash
 	if len(e.src) == 0 {
 		return e
 	}
 	switch size {
 	case 224:
-		e.dst = hashEncrypt(e.src, SHA3_224)
+		hasher = sha3.New224()
 	case 256:
-		e.dst = hashEncrypt(e.src, SHA3_256)
+		hasher = sha3.New256()
 	case 384:
-		e.dst = hashEncrypt(e.src, SHA3_384)
+		hasher = sha3.New384()
 	case 512:
-		e.dst = hashEncrypt(e.src, SHA3_512)
+		hasher = sha3.New512()
 	default:
 		e.Error = invalidHashSizeError()
+		return e
 	}
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
@@ -89,7 +106,9 @@ func (e encrypter) BySha224() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	e.dst = hashEncrypt(e.src, SHA224)
+	hasher := sha256.New224()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
@@ -99,7 +118,9 @@ func (e encrypter) BySha256() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	e.dst = hashEncrypt(e.src, SHA256)
+	hasher := sha256.New()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
@@ -109,28 +130,36 @@ func (e encrypter) BySha384() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	e.dst = hashEncrypt(e.src, SHA384)
+	hasher := sha512.New384()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
 // BySha512 encrypts by sha512.
 // 通过 sha512 加密
 func (e encrypter) BySha512(size ...int) encrypter {
+	var hasher hash.Hash
 	if len(e.src) == 0 {
 		return e
 	}
 	if len(size) == 0 {
-		e.dst = hashEncrypt(e.src, SHA512)
+		hasher = sha512.New()
+		hasher.Write(e.src)
+		e.dst = hasher.Sum(nil)
 		return e
 	}
 	switch size[0] {
 	case 224:
-		e.dst = hashEncrypt(e.src, SHA512_224)
+		hasher = sha512.New512_224()
 	case 256:
-		e.dst = hashEncrypt(e.src, SHA512_256)
+		hasher = sha512.New512_256()
 	default:
 		e.Error = invalidHashSizeError()
+		return e
 	}
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
 
@@ -140,62 +169,8 @@ func (e encrypter) ByRipemd160() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	e.dst = hashEncrypt(e.src, RIPEMD160)
+	hasher := ripemd160.New()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
-}
-
-// hashEncrypt hash encrypt src.
-// 对 src 进行哈希加密
-func hashEncrypt(src []byte, algo crypto.Hash) (dst []byte) {
-	var mac hash.Hash
-	switch algo {
-	case MD4:
-		mac = md4.New()
-		mac.Write(src)
-		dst = mac.Sum(nil)
-	case MD5:
-		mac = md5.New()
-		mac.Write(src)
-		dst = mac.Sum(nil)
-	case RIPEMD160:
-		mac = ripemd160.New()
-		mac.Write(src)
-		dst = mac.Sum(nil)
-	case SHA1:
-		bytes := sha1.Sum(src)
-		dst = bytes[:]
-	case SHA3_224:
-		bytes := sha3.Sum224(src)
-		dst = bytes[:]
-	case SHA3_256:
-		bytes := sha3.Sum256(src)
-		dst = bytes[:]
-	case SHA3_384:
-		bytes := sha3.Sum384(src)
-		dst = bytes[:]
-	case SHA3_512:
-		bytes := sha3.Sum512(src)
-		dst = bytes[:]
-	case SHA224:
-		bytes := sha256.Sum224(src)
-		dst = bytes[:]
-	case SHA256:
-		bytes := sha256.Sum256(src)
-		dst = bytes[:]
-	case SHA384:
-		bytes := sha512.Sum384(src)
-		dst = bytes[:]
-	case SHA512:
-		bytes := sha512.Sum512(src)
-		dst = bytes[:]
-	case SHA512_224:
-		mac = sha512.New512_224()
-		mac.Write(src)
-		dst = mac.Sum(nil)
-	case SHA512_256:
-		mac = sha512.New512_256()
-		mac.Write(src)
-		dst = mac.Sum(nil)
-	}
-	return dst
 }

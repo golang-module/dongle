@@ -13,6 +13,9 @@ var hashTests = []struct {
 	toHex    string
 	toBase64 string
 }{
+	{"md2", "", "", ""},
+	{"md2", "hello world", "d9cce882ee690a5c1ce70beff3a78c77", "2czogu5pClwc5wvv86eMdw=="},
+
 	{"md4", "", "", ""},
 	{"md4", "hello world", "aa010fbc1d14c795d86ef98c95479d17", "qgEPvB0Ux5XYbvmMlUedFw=="},
 
@@ -61,8 +64,8 @@ func TestHash_Encrypt_String(t *testing.T) {
 		e := Encrypt.FromString(test.input)
 
 		switch test.algo {
-		case "ripemd160":
-			e = e.ByRipemd160()
+		case "md2":
+			e = e.ByMd2()
 		case "md4":
 			e = e.ByMd4()
 		case "md5":
@@ -89,6 +92,8 @@ func TestHash_Encrypt_String(t *testing.T) {
 			e = e.BySha512(224)
 		case "sha512-256":
 			e = e.BySha512(256)
+		case "ripemd160":
+			e = e.ByRipemd160()
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
@@ -105,8 +110,8 @@ func TestHash_Encrypt_Bytes(t *testing.T) {
 		e := Encrypt.FromBytes([]byte(test.input))
 
 		switch test.algo {
-		case "ripemd160":
-			e = e.ByRipemd160()
+		case "md2":
+			e = e.ByMd2()
 		case "md4":
 			e = e.ByMd4()
 		case "md5":
@@ -133,6 +138,8 @@ func TestHash_Encrypt_Bytes(t *testing.T) {
 			e = e.BySha512(224)
 		case "sha512-256":
 			e = e.BySha512(256)
+		case "ripemd160":
+			e = e.ByRipemd160()
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
