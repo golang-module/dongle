@@ -10,8 +10,8 @@ func (e encrypter) BySm3() encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	h := sm3.New()
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
+	hasher := sm3.New()
+	hasher.Write(e.src)
+	e.dst = hasher.Sum(nil)
 	return e
 }
