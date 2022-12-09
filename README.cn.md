@@ -592,7 +592,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSm3([]byte("dongle")).ToBa
 ##### Aes 加密、解密
 
 ```go
-cipher := NewCipher()
+cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
 cipher.SetPadding(dongle.PKCS7)   // No、Zero、PKCS5、PKCS7
 cipher.SetKey("0123456789abcdef") // key 长度必须是 16、24 或 32 字节
@@ -632,7 +632,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher)
 ##### Des 加密、解密
 
 ```go
-cipher := NewCipher()
+cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
 cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
 cipher.SetKey("12345678")       // key 长度必须是 8 字节
@@ -672,7 +672,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).ByDes(cipher)
 ##### 3Des 加密、解密
 
 ```go
-cipher := NewCipher()
+cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC, CFB, CTR, ECB, OFB
 cipher.SetPadding(dongle.PKCS7)           // No、Zero、PKCS5、PKCS7
 cipher.SetKey("123456781234567812345678") // key 长度必须是 24
@@ -894,31 +894,31 @@ base64PublicKey := dongle.Encode.FromBytes(publicKey).ByBase64().ToBytes()
 base64PrivateKey := dongle.Encode.FromBytes(privateKey).ByBase64().ToBytes()
 
 // 通过未经编码的原始私钥对字符串进行 ed25519 签名
-sign := dongle.Sign.FromString("hello world").ByEd25519(privateKey, dongle.Raw)
+sign := dongle.Sign.FromString("hello world").Ed25519(privateKey, dongle.Raw)
 // 通过未经编码的原始公钥对未经编码的原始签名字符串进行 ed25519 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
 // 通过未经编码的原始公钥对经过 hex 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
 // 通过未经编码的原始公钥对经过 base64 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
 
 // 通过经过 hex 编码的私钥对字符串进行 ed25519 签名
-sign := dongle.Sign.FromString("hello world").ByEd25519(hexPrivateKey, dongle.HEX)
+sign := dongle.Sign.FromString("hello world").Ed25519(hexPrivateKey, dongle.HEX)
 // 通过经过 hex 编码的公钥对未经编码的原始签名字符串进行 ed25519 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
 // 通过经过 hex 编码的公钥对经过 hex 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
 // 通过经过 hex 编码的公钥对经过 base64 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
 
 // 通过经过 base64 编码的私钥对字符串进行 ed25519 签名
-sign := dongle.Sign.FromString("hello world").ByEd25519(base64PrivateKey, dongle.BASE64)
+sign := dongle.Sign.FromString("hello world").Ed25519(base64PrivateKey, dongle.BASE64)
 // 通过经过 base64 编码的公钥对未经编码的原始签名字符串进行 ed25519 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
 // 通过经过 base64 编码的公钥对经过 hex 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
 // 通过经过 base64 编码的公钥对经过 base64 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
 
 ```
 
@@ -999,8 +999,8 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-    // 错误处理...
-    log.Fatal(e.Error)
+// 错误处理...
+log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // 输出

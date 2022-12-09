@@ -596,7 +596,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSm3().ToBase64Bytes() // [
 ##### Encrypt and decrypt by aes
 
 ```go
-cipher := NewCipher()
+cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
 cipher.SetPadding(dongle.PKCS7)   // No、Zero、PKCS5、PKCS7
 cipher.SetKey("0123456789abcdef") // key must be 16, 24 or 32 bytes
@@ -637,7 +637,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher)
 ##### Encrypt and decrypt by des
 
 ```go
-cipher := NewCipher()
+cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
 cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
 cipher.SetKey("12345678")       // key must be 8 bytes
@@ -677,7 +677,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).ByDes(cipher)
 ##### Encrypt and decrypt by 3des
 
 ```go
-cipher := NewCipher()
+cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
 cipher.SetPadding(dongle.PKCS7)           // No、Zero、PKCS5、PKCS7
 cipher.SetKey("123456781234567812345678") // key must be 24 bytes
@@ -891,31 +891,31 @@ base64PublicKey := dongle.Encode.FromBytes(publicKey).ByBase64().ToBytes()
 base64PrivateKey := dongle.Encode.FromBytes(privateKey).ByBase64().ToBytes()
 
 // Sign by ed25519 use raw private key
-sign := dongle.Sign.FromString("hello world").ByEd25519(privateKey, dongle.Raw)
+sign := dongle.Sign.FromString("hello world").Ed25519(privateKey, dongle.Raw)
 // Verify by ed25519 from raw signature string and message string use raw public key, output bool
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
 // Verify by ed25519 from hex signature string and message string use raw public key, output bool
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
 // Verify by ed25519 from base64 signature string and message string use raw public key, output bool
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
 
 // Sign by ed25519 use hex private key
-sign := dongle.Sign.FromString("hello world").ByEd25519(hexPrivateKey, dongle.HEX)
+sign := dongle.Sign.FromString("hello world").Ed25519(hexPrivateKey, dongle.HEX)
 // Verify by ed25519 from raw signature string and message string use hex public key, output bool
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
 // Verify by ed25519 from hex signature string and message string use hex public key, output bool
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
 // Verify by ed25519 from base64 signature string and message string use hex public key, output bool
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
 
 // Sign by ed25519 use base64 private key
-sign := dongle.Sign.FromString("hello world").ByEd25519(base64PrivateKey, dongle.BASE64)
+sign := dongle.Sign.FromString("hello world").Ed25519(base64PrivateKey, dongle.BASE64)
 // Verify by ed25519 from raw signature string and message string use base64 public key, output bool
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
 // Verify by ed25519 from hex signature string and message string use base64 public key, output bool
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
 // Verify by ed25519 from base64 signature string and message string use base64 public key, output bool
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
 
 ```
 
@@ -996,8 +996,8 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-    // Error handle...
-    log.Fatal(e.Error)
+// Error handle...
+log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // Output
