@@ -28,7 +28,7 @@ func (e encrypter) ByTea(key interface{}, rounds ...int) encrypter {
 		e.Error = invalidTeaKeyError()
 		return e
 	}
-	e.dst = make([]byte, 8)
+	e.dst = make([]byte, tea.BlockSize)
 	block.Encrypt(e.dst, e.src)
 	return e
 }
