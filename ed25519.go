@@ -1,7 +1,5 @@
 package dongle
 
-// https://cyphr.me/ed25519_applet/ed.html
-
 import (
 	"crypto/ed25519"
 )
