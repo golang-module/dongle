@@ -12,12 +12,12 @@ func (e encrypter) ByAes(c *Cipher) encrypter {
 		e.Error = invalidAesKeyError()
 		return e
 	}
-	if c.padding == No && len(e.src)%block.BlockSize() != 0 {
-		e.Error = invalidAesSrcError()
-		return e
-	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
 		e.Error = invalidAesIVError()
+		return e
+	}
+	if c.padding == No && len(e.src)%block.BlockSize() != 0 {
+		e.Error = invalidAesSrcError()
 		return e
 	}
 	e.dst, e.Error = e.encrypt(c, block)

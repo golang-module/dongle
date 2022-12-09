@@ -12,12 +12,12 @@ func (e encrypter) By3Des(c *Cipher) encrypter {
 		e.Error = invalid3DesKeyError()
 		return e
 	}
-	if c.padding == No && len(e.src)%block.BlockSize() != 0 {
-		e.Error = invalid3DesSrcError()
-		return e
-	}
 	if c.mode != ECB && len(c.iv) != block.BlockSize() {
 		e.Error = invalid3DesIVError()
+		return e
+	}
+	if c.padding == No && len(e.src)%block.BlockSize() != 0 {
+		e.Error = invalid3DesSrcError()
 		return e
 	}
 	e.dst, e.Error = e.encrypt(c, block)
