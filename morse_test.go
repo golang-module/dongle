@@ -69,7 +69,7 @@ func TestMorse_Src_Error(t *testing.T) {
 	assert.Equal(t, invalidMorseSrcError(), e.Error)
 }
 
-func TestMorse_Decode_Error(t *testing.T) {
+func TestMorse_Decoding_Error(t *testing.T) {
 	e := Decode.FromString("hello world").ByMorse()
-	assert.Equal(t, morseDecodeError(), e.Error)
+	assert.Equal(t, morseDecodingError(), e.Error)
 }

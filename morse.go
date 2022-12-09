@@ -33,7 +33,7 @@ func (d decoder) ByMorse(separator ...string) decoder {
 	}
 	dst, err := morse.Decode(d.src, separator[0])
 	if err != nil {
-		d.Error = morseDecodeError()
+		d.Error = morseDecodingError()
 		return d
 	}
 	d.dst = string2bytes(dst)
