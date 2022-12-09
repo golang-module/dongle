@@ -77,6 +77,26 @@ var (
 )
 
 var (
+	// returns an invalid ed25519 private key error
+	// 返回无效的 ed25519 私钥错误
+	invalidEd25519PrivateKeyError = func() error {
+		return fmt.Errorf("ed25519: invalid private key, please make sure the private key is valid")
+	}
+
+	// returns an invalid ed25519 public key error
+	// 返回无效的 ed25519 公钥错误
+	invalidEd25519PublicKeyError = func() error {
+		return fmt.Errorf("ed25519: invalid public key, please make sure the public key is valid")
+	}
+
+	// returns an invalid ed25519 signature error
+	// 返回无效的 ed25519 签名错误
+	invalidEd25519SignatureError = func() error {
+		return fmt.Errorf("ed25519: invalid signature, please make sure the signature is valid")
+	}
+)
+
+var (
 	// returns an invalid tea src error
 	// 返回无效的 tea 明文错误
 	invalidTeaSrcError = func() error {
@@ -102,7 +122,7 @@ var (
 	}
 	// returns a morse decoding error
 	// 返回 morse 解码错误
-	morseDecodeError = func() error {
+	morseDecodingError = func() error {
 		return fmt.Errorf("morse: invalid decoding, the src can't be decoded")
 	}
 )
@@ -114,6 +134,7 @@ var (
 		return fmt.Errorf("bcrypt: invalid rounds, the rounds is outside allowed range (4,31)")
 	}
 )
+
 var (
 	// returns an invalid rc4 key error
 	// 返回无效的 rc4 密钥错误
@@ -121,6 +142,7 @@ var (
 		return fmt.Errorf("rc4: invalid key, the key at least 1 byte and at most 256 bytes")
 	}
 )
+
 var (
 	// returns an invalid hash size error
 	// 返回无效的哈希大小错误
