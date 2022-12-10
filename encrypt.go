@@ -10,9 +10,9 @@ type encrypter struct {
 	dongle
 }
 
-// NewEncrypter returns a new encrypter instance.
+// newEncrypter returns a new encrypter instance.
 // 初始化 encrypter 结构体
-func NewEncrypter() encrypter {
+func newEncrypter() encrypter {
 	return encrypter{}
 }
 

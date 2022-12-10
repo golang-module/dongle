@@ -16,7 +16,7 @@ const (
 
 // ByEd25519 signs by ed25519.
 // 通过 ed25519 私钥签名
-func (s signer) ByEd25519(privateKey interface{}, mode encodingMode) signer {
+func (s Signer) ByEd25519(privateKey interface{}, mode encodingMode) Signer {
 	if len(s.src) == 0 || s.Error != nil {
 		return s
 	}
@@ -35,7 +35,7 @@ func (s signer) ByEd25519(privateKey interface{}, mode encodingMode) signer {
 
 // ByEd25519 verify by ed25519.
 // 通过 ed25519 公钥验签
-func (v verifier) ByEd25519(publicKey interface{}, mode encodingMode) verifier {
+func (v Verifier) ByEd25519(publicKey interface{}, mode encodingMode) Verifier {
 	if len(v.src) == 0 || v.Error != nil {
 		return v
 	}
@@ -58,7 +58,7 @@ func (v verifier) ByEd25519(publicKey interface{}, mode encodingMode) verifier {
 // gets the decoded key
 // 获取解码的 key
 func getDecodedKey(key []byte, mode encodingMode) (dst []byte, err error) {
-	var decode decoder
+	var decode Decoder
 	switch mode {
 	case RAW:
 		dst = key
