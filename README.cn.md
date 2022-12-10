@@ -1,4 +1,5 @@
 # dongle  #
+
 [![Carbon Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
 [![Go Build](https://github.com/golang-module/dongle/actions/workflows/test.yml/badge.svg)](https://github.com/golang-module/dongle/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-module/dongle)](https://goreportcard.com/report/github.com/golang-module/dongle)
@@ -17,6 +18,7 @@
 [gitee.com/golang-module/dongle](https://gitee.com/golang-module/dongle "gitee.com/golang-module/dongle")
 
 ### 安装使用
+
 ```go
 // 使用 github 库
 go get -u github.com/golang-module/dongle
@@ -34,9 +36,11 @@ import (
 ```
 
 ### 用法示例
+
 #### 编码&解码
 
 ##### Hex 编码、解码
+
 ```go
 // 对字符串进行 hex 编码，输出字符串
 dongle.Encode.FromString("hello world").ByHex().ToString() // 68656c6c6f20776f726c64
@@ -120,6 +124,7 @@ dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToBytes() // []by
 ```
 
 ##### Base64URL 编码、解码
+
 ```go
 // 对 url 字符进行 base64 编码，输出字符串
 dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
@@ -175,6 +180,7 @@ dongle.Decode.FromBytes([]byte("👟👜👣👣👦🐗👮👦👩👣👛")).
 ```
 
 ##### SafeURL 编码、解码
+
 ```go
 // 对 url 字符进行转义编码，输出字符串
 dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
@@ -188,6 +194,7 @@ dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18"))
 ```
 
 ##### Morse(摩斯) 编码、解码
+
 > 默认分隔符是 `/`
 
 ```go
@@ -235,6 +242,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByMd4().ToBase64Bytes() // []byt
 ```
 
 ##### Md5 加密
+
 ```go
 // 对字符串进行 md5 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").ByMd5().ToHexString() // 5eb63bbbe01eeed093cb22bb8f5acdc3
@@ -248,6 +256,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByMd5().ToBase64Bytes() // []byt
 ```
 
 ##### Sha1 加密
+
 ```go
 // 对字符串进行 sha1 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySha1().ToHexString() // 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
@@ -261,6 +270,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha1().ToBase64Bytes() // []by
 ```
 
 ##### Sha3 加密
+
 > 包含 sha3-224, sha3-256, sha3-384, sha3-512
 
 ```go
@@ -317,6 +327,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha224().ToBase64Bytes() // []
 ```
 
 ##### Sha256 加密
+
 ```go
 // 对字符串进行 sha256 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySha256().ToHexString() // b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9
@@ -330,6 +341,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha256().ToBase64Bytes() // []
 ```
 
 ##### Sha384 加密
+
 ```go
 // 对字符串进行 sha384 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySha384().ToHexString() // fdbd8e75a67f29f701a4e040385e2e23986303ea10239211af907fcbb83578b3e417cb71ce646efd0819dd8c088de1bd
@@ -788,6 +800,7 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 ```
 
 ##### Tea 加密、解密
+
 > 迭代轮次(rounds) 必须是偶数，默认是 64
 
 ```go
@@ -999,8 +1012,8 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// 错误处理...
-log.Fatal(e.Error)
+    // 错误处理...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // 输出
@@ -1074,12 +1087,14 @@ rsa: invalid public key, please make sure the public key is valid
 - [ ] Dsa 签名、验签
 
 ### 参考项目
+
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycryptodome](https://github.com/Legrandin/pycryptodome)
 
 ### 在线网站
+
 * [www.ssleye.com](https://www.ssleye.com/ssltool)
 * [base62.js.org](https://base62.js.org)
 * [www.sojson.com](https://www.sojson.com/encrypt.html)
@@ -1087,6 +1102,7 @@ rsa: invalid public key, please make sure the public key is valid
 * [www.oktools.net](https://oktools.net/aes)
 
 ### 赞助
+
 `Dongle` 是一个非商业开源项目, 如果你想支持 `Dongle`, 你可以为开发者 [购买一杯咖啡](https://www.gouguoyin.com/zanzhu.html)
 
 ### 致谢

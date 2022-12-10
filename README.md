@@ -1,4 +1,5 @@
 # dongle  #
+
 [![Carbon Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
 [![Go Build](https://github.com/golang-module/dongle/actions/workflows/test.yml/badge.svg)](https://github.com/golang-module/dongle/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-module/dongle)](https://goreportcard.com/report/github.com/golang-module/dongle)
@@ -9,6 +10,7 @@
 English | [简体中文](README.cn.md)
 
 ### Introduction
+
 A simple, semantic and developer-friendly golang package for encoding&decoding and encryption&decryption
 
 `Dongle` has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go"), if you think
@@ -19,6 +21,7 @@ it is helpful, please give me a star
 [gitee.com/golang-module/dongle](https://gitee.com/golang-module/dongle "gitee.com/golang-module/dongle")
 
 ### Installation
+
 ```go
 // By github
 go get -u github.com/golang-module/dongle
@@ -125,6 +128,7 @@ dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToBytes() // []by
 ```
 
 ##### Encode and decode by base64URL
+
 ```go
 // Encode by base64 from url string and output string
 dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
@@ -138,6 +142,7 @@ dongle.Decode.FromBytes([]byte("d3d3LmdvdWd1b3lpbi5jbg==")).ByBase64URL().ToByte
 ```
 
 ##### Encode and decode by base85
+
 ```go
 // Encode by base85 from string and output string
 dongle.Encode.FromString("hello world").ByBase85().ToString() // BOu!rD]j7BEbo7
@@ -151,6 +156,7 @@ dongle.Decode.FromBytes([]byte("BOu!rD]j7BEbo7")).ByBase85().ToBytes() // []byte
 ```
 
 ##### Encode and decode by base91
+
 ```go
 // Encode by base91 from string and output string
 dongle.Encode.FromString("hello world").ByBase91().ToString() // TPwJh>Io2Tv!lE
@@ -164,6 +170,7 @@ dongle.Decode.FromBytes([]byte("TPwJh>Io2Tv!lE")).ByBase91().ToBytes() // []byte
 ```
 
 ##### Encode and decode by base100
+
 ```go
 // Encode by base100 from string and output string
 dongle.Encode.FromString("hello world").ByBase100().ToString() // 👟👜👣👣👦🐗👮👦👩👣👛
@@ -177,6 +184,7 @@ dongle.Decode.FromBytes([]byte("👟👜👣👣👦🐗👮👦👩👣👛")).
 ```
 
 ##### Encode and decode by safeURL
+
 ```go
 // Encode by escape from url string and output string
 dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
@@ -190,6 +198,7 @@ dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18"))
 ```
 
 ##### Encode and decode by morse
+
 > The default value of separator is `/`
 
 ```go
@@ -236,6 +245,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByMd4().ToBase64Bytes() // []byt
 ```
 
 ##### Encrypt by md5
+
 ```go
 // Encrypt by md5 from string and output string with hex encoding
 dongle.Encrypt.FromString("hello world").ByMd5().ToHexString() // 5eb63bbbe01eeed093cb22bb8f5acdc3
@@ -249,6 +259,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByMd5().ToBase64Bytes() // []byt
 ```
 
 ##### Encrypt by sha1
+
 ```go
 // Encrypt by sha1 from string and output string with hex encoding
 dongle.Encrypt.FromString("hello world").BySha1().ToHexString() // 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
@@ -262,6 +273,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha1().ToBase64Bytes() // []by
 ```
 
 ##### Encrypt by sha3
+
 > include sha3-224, sha3-256, sha3-384, sha3-512
 
 ```go
@@ -793,6 +805,7 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 ```
 
 ##### Encrypt and decrypt by tea
+
 > Rounds must be even, the default value is 64
 
 ```go
@@ -996,8 +1009,8 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
 if e.Error != nil {
-// Error handle...
-log.Fatal(e.Error)
+    // Error handle...
+    log.Fatal(e.Error)
 }
 fmt.Println(e.ToString())
 // Output
@@ -1071,12 +1084,14 @@ rsa: invalid public key, please make sure the public key is valid
 - [ ] Sign and verify by Dsa
 
 ### References
+
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycryptodome](https://github.com/Legrandin/pycryptodome)
 
 ### Online website
+
 * [www.ssleye.com](https://www.ssleye.com/ssltool)
 * [base62.js.org](https://base62.js.org)
 * [www.sojson.com](https://www.sojson.com/encrypt.html)
@@ -1084,12 +1099,11 @@ rsa: invalid public key, please make sure the public key is valid
 * [www.oktools.net](https://oktools.net/aes)
 
 ### Sponsors
-`Dongle` is a non-commercial open source project. If you want to support `Dongle`, you
-can [buy a cup of coffee](https://opencollective.com/go-carbon) for developer.
+
+`Dongle` is a non-commercial open source project. If you want to support `Dongle`, you can [buy a cup of coffee](https://opencollective.com/go-carbon) for developer.
 
 ### Thanks
 
-`Dongle` had been being developed with GoLand under the free JetBrains Open Source license, I would like to express my
-thanks here.
+`Dongle` had been being developed with GoLand under the free JetBrains Open Source license, I would like to express my thanks here.
 
 <a href="https://www.jetbrains.com"><img src="https://github-oss.oss-cn-beijing.aliyuncs.com/jetbrains.png" height="100" alt="JetBrains"/></a>
