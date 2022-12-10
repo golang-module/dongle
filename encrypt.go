@@ -4,15 +4,15 @@ import (
 	"crypto/cipher"
 )
 
-// encrypter defines a encrypter struct.
+// defines a encrypter struct.
 // 定义 encrypter 结构体
 type encrypter struct {
 	dongle
 }
 
-// returns a new encrypter instance.
+// NewEncrypter returns a new encrypter instance.
 // 初始化 encrypter 结构体
-func newEncrypter() encrypter {
+func NewEncrypter() encrypter {
 	return encrypter{}
 }
 
