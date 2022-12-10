@@ -10,9 +10,9 @@ type decrypter struct {
 	dongle
 }
 
-// newDecrypter returns a new decrypter instance.
+// NewDecrypter returns a new decrypter instance.
 // 初始化 decrypter 结构体
-func newDecrypter() decrypter {
+func NewDecrypter() decrypter {
 	return decrypter{}
 }
 
