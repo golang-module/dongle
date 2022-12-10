@@ -27,22 +27,22 @@ type dongle struct {
 var (
 	// Encode returns a new encoder instance
 	// 返回 encoder 实例
-	Encode = newEncoder()
+	Encode = NewEncoder()
 	// Decode returns a new decoder instance
 	// 返回 decoder 实例
-	Decode = newDecoder()
+	Decode = NewDecoder()
 	// Encrypt returns a new encrypter instance
 	// 返回 encrypter 实例
-	Encrypt = newEncrypter()
+	Encrypt = NewEncrypter()
 	// Decrypt returns a new decrypter instance
 	// 返回 decrypter 实例
-	Decrypt = newDecrypter()
+	Decrypt = NewDecrypter()
 	// Sign returns a new signer instance
 	// 返回 signer 实例
-	Sign = newSigner()
+	Sign = NewSigner()
 	// Verify returns a new verifier instance
 	// 返回 verifier 实例
-	Verify = newVerifier()
+	Verify = NewVerifier()
 )
 
 // converts string to byte slice without a memory allocation.

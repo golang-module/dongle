@@ -7,9 +7,9 @@ type verifier struct {
 	sign []byte
 }
 
-// returns a new verifier instance.
+// NewVerifier returns a new verifier instance.
 // 初始化 verify 结构体
-func newVerifier() verifier {
+func NewVerifier() verifier {
 	return verifier{}
 }
 
