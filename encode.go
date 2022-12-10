@@ -1,14 +1,14 @@
 package dongle
 
-// encode defines a encoder struct.
+// defines a encoder struct.
 // 定义 encoder 结构体
 type encoder struct {
 	dongle
 }
 
-// returns a new encoder instance.
+// NewEncoder returns a new encoder instance.
 // 初始化 encoder 结构体
-func newEncoder() encoder {
+func NewEncoder() encoder {
 	return encoder{}
 }
 
