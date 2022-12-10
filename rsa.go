@@ -44,7 +44,7 @@ func (d decrypter) ByRsa(privateKey interface{}) decrypter {
 
 // ByRsa signs by rsa.
 // 通过 rsa 私钥签名
-func (s signer) ByRsa(privateKey interface{}, hash crypto.Hash) signer {
+func (s Signer) ByRsa(privateKey interface{}, hash crypto.Hash) Signer {
 	if len(s.src) == 0 || s.Error != nil {
 		return s
 	}
@@ -65,7 +65,7 @@ func (s signer) ByRsa(privateKey interface{}, hash crypto.Hash) signer {
 
 // ByRsa verify sign by rsa with public key.
 // 通过 rsa 公钥验签
-func (v verifier) ByRsa(publicKey interface{}, hash crypto.Hash) verifier {
+func (v Verifier) ByRsa(publicKey interface{}, hash crypto.Hash) Verifier {
 	if len(v.src) == 0 || v.Error != nil {
 		return v
 	}
