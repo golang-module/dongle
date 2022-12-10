@@ -5,9 +5,11 @@ import (
 	"crypto/cipher"
 )
 
+// defines cipher mode enum type.
+// 定义分组模式枚举类型
 type cipherMode string
 
-// cipher mode constants
+// cipher mode constants.
 // 分组模式常量
 const (
 	CBC cipherMode = "cbc"
@@ -17,9 +19,11 @@ const (
 	CTR cipherMode = "ctr"
 )
 
+// defines cipher padding enum type.
+// 定义填充模式枚举类型
 type cipherPadding string
 
-// cipher padding constants
+// cipher padding constants.
 // 填充模式常量
 const (
 	No    cipherPadding = "no"
