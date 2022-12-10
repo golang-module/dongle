@@ -6,7 +6,7 @@ import (
 
 // ByMorse encodes by morse.
 // 通过 morse 编码
-func (e encoder) ByMorse(separator ...string) encoder {
+func (e Encoder) ByMorse(separator ...string) Encoder {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -24,7 +24,7 @@ func (e encoder) ByMorse(separator ...string) encoder {
 
 // ByMorse decodes by morse.
 // 通过 morse 解码
-func (d decoder) ByMorse(separator ...string) decoder {
+func (d Decoder) ByMorse(separator ...string) Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
