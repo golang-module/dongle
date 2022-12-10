@@ -6,9 +6,9 @@ type decoder struct {
 	dongle
 }
 
-// returns a new decoder instance.
+// NewDecoder returns a new decoder instance.
 // 初始化 decoder 结构体
-func newDecoder() decoder {
+func NewDecoder() decoder {
 	return decoder{}
 }
 
