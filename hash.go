@@ -8,7 +8,7 @@ import (
 	"crypto/sha512"
 	"hash"
 
-	"github.com/golang-module/dongle/md2"
+	"gitee.com/golang-package/dongle/md2"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
@@ -29,7 +29,7 @@ const (
 
 // ByMd2 encrypts by md2.
 // 通过 md2 加密
-func (e encrypter) ByMd2() encrypter {
+func (e Encrypter) ByMd2() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -41,7 +41,7 @@ func (e encrypter) ByMd2() encrypter {
 
 // ByMd4 encrypts by md4.
 // 通过 md4 加密
-func (e encrypter) ByMd4() encrypter {
+func (e Encrypter) ByMd4() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -53,7 +53,7 @@ func (e encrypter) ByMd4() encrypter {
 
 // ByMd5 encrypts by md5.
 // 通过 md5 加密
-func (e encrypter) ByMd5() encrypter {
+func (e Encrypter) ByMd5() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -65,7 +65,7 @@ func (e encrypter) ByMd5() encrypter {
 
 // BySha1 encrypts by sha1.
 // 通过 sha1 加密
-func (e encrypter) BySha1() encrypter {
+func (e Encrypter) BySha1() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -77,7 +77,7 @@ func (e encrypter) BySha1() encrypter {
 
 // BySha3 encrypts by sha3.
 // 通过 BySha3 加密
-func (e encrypter) BySha3(size int) encrypter {
+func (e Encrypter) BySha3(size int) Encrypter {
 	var hasher hash.Hash
 	if len(e.src) == 0 {
 		return e
@@ -102,7 +102,7 @@ func (e encrypter) BySha3(size int) encrypter {
 
 // BySha224 encrypts by sha224.
 // 通过 sha224 加密
-func (e encrypter) BySha224() encrypter {
+func (e Encrypter) BySha224() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -114,7 +114,7 @@ func (e encrypter) BySha224() encrypter {
 
 // BySha256 encrypts by sha256.
 // 通过 sha256 加密
-func (e encrypter) BySha256() encrypter {
+func (e Encrypter) BySha256() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -126,7 +126,7 @@ func (e encrypter) BySha256() encrypter {
 
 // BySha384 encrypts by sha384.
 // 通过 sha384 加密
-func (e encrypter) BySha384() encrypter {
+func (e Encrypter) BySha384() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -138,7 +138,7 @@ func (e encrypter) BySha384() encrypter {
 
 // BySha512 encrypts by sha512.
 // 通过 sha512 加密
-func (e encrypter) BySha512(size ...int) encrypter {
+func (e Encrypter) BySha512(size ...int) Encrypter {
 	var hasher hash.Hash
 	if len(e.src) == 0 {
 		return e
@@ -165,7 +165,7 @@ func (e encrypter) BySha512(size ...int) encrypter {
 
 // ByRipemd160 encrypts by ripemd160.
 // 通过 ripemd160 加密
-func (e encrypter) ByRipemd160() encrypter {
+func (e Encrypter) ByRipemd160() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}

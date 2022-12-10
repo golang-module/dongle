@@ -6,7 +6,7 @@ import (
 
 // By3Des encrypts by 3des.
 // 通过 3des 加密
-func (e encrypter) By3Des(c *Cipher) encrypter {
+func (e Encrypter) By3Des(c *Cipher) Encrypter {
 	block, err := des.NewTripleDESCipher(c.key)
 	if err != nil {
 		e.Error = invalid3DesKeyError()

@@ -10,7 +10,7 @@ import (
 
 // ByRsa encrypts by rsa with public key.
 // 通过 rsa 公钥加密
-func (e encrypter) ByRsa(publicKey interface{}) encrypter {
+func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}

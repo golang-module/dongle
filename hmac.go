@@ -8,7 +8,7 @@ import (
 	"crypto/sha512"
 	"hash"
 
-	"github.com/golang-module/dongle/md2"
+	"gitee.com/golang-package/dongle/md2"
 	"github.com/tjfoc/gmsm/sm3"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
@@ -17,7 +17,7 @@ import (
 
 // ByHmacMd2 encrypts by hmac with md2.
 // 通过 hmac-md2 加密
-func (e encrypter) ByHmacMd2(key interface{}) encrypter {
+func (e Encrypter) ByHmacMd2(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -29,7 +29,7 @@ func (e encrypter) ByHmacMd2(key interface{}) encrypter {
 
 // ByHmacMd4 encrypts by hmac with md4.
 // 通过 hmac-md4 加密
-func (e encrypter) ByHmacMd4(key interface{}) encrypter {
+func (e Encrypter) ByHmacMd4(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -41,7 +41,7 @@ func (e encrypter) ByHmacMd4(key interface{}) encrypter {
 
 // ByHmacMd5 encrypts by hmac with md5.
 // 通过 hmac-md5 加密
-func (e encrypter) ByHmacMd5(key interface{}) encrypter {
+func (e Encrypter) ByHmacMd5(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -53,7 +53,7 @@ func (e encrypter) ByHmacMd5(key interface{}) encrypter {
 
 // ByHmacSha1 encrypts by hmac with sha1.
 // 通过 hmac-sha1 加密
-func (e encrypter) ByHmacSha1(key interface{}) encrypter {
+func (e Encrypter) ByHmacSha1(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -65,7 +65,7 @@ func (e encrypter) ByHmacSha1(key interface{}) encrypter {
 
 // ByHmacSha3 encrypts by hmac with sha3.
 // 通过 hmac-sha3 加密
-func (e encrypter) ByHmacSha3(key interface{}, size int) encrypter {
+func (e Encrypter) ByHmacSha3(key interface{}, size int) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -91,7 +91,7 @@ func (e encrypter) ByHmacSha3(key interface{}, size int) encrypter {
 
 // ByHmacSha224 encrypts by hmac with sha224.
 // 通过 hmac-sha224 加密
-func (e encrypter) ByHmacSha224(key interface{}) encrypter {
+func (e Encrypter) ByHmacSha224(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -103,7 +103,7 @@ func (e encrypter) ByHmacSha224(key interface{}) encrypter {
 
 // ByHmacSha256 encrypts by hmac with sha256.
 // 通过 hmac-sha256 加密
-func (e encrypter) ByHmacSha256(key interface{}) encrypter {
+func (e Encrypter) ByHmacSha256(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -115,7 +115,7 @@ func (e encrypter) ByHmacSha256(key interface{}) encrypter {
 
 // ByHmacSha384 encrypts by hmac with sha384.
 // 通过 hmac-sha384 加密
-func (e encrypter) ByHmacSha384(key interface{}) encrypter {
+func (e Encrypter) ByHmacSha384(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -127,7 +127,7 @@ func (e encrypter) ByHmacSha384(key interface{}) encrypter {
 
 // ByHmacSha512 encrypts by hmac with sha512.
 // 通过 hmac-sha512 加密
-func (e encrypter) ByHmacSha512(key interface{}, size ...int) encrypter {
+func (e Encrypter) ByHmacSha512(key interface{}, size ...int) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -154,7 +154,7 @@ func (e encrypter) ByHmacSha512(key interface{}, size ...int) encrypter {
 
 // ByHmacRipemd160 encrypts by hmac with ripemd160.
 // 通过 hmac-ripemd160 加密
-func (e encrypter) ByHmacRipemd160(key interface{}) encrypter {
+func (e Encrypter) ByHmacRipemd160(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -166,7 +166,7 @@ func (e encrypter) ByHmacRipemd160(key interface{}) encrypter {
 
 // ByHmacSm3 encrypts by hmac with sm3.
 // 通过 hmac-sm3 加密
-func (e encrypter) ByHmacSm3(key interface{}) encrypter {
+func (e Encrypter) ByHmacSm3(key interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
