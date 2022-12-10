@@ -35,7 +35,7 @@ func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 
 // ByTea decrypts by tea.
 // 通过 tea 解密
-func (d decrypter) ByTea(key interface{}, rounds ...int) decrypter {
+func (d Decrypter) ByTea(key interface{}, rounds ...int) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}

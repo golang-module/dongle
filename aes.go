@@ -26,7 +26,7 @@ func (e Encrypter) ByAes(c *Cipher) Encrypter {
 
 // ByAes decrypts by aes.
 // 通过 aes 解密
-func (d decrypter) ByAes(c *Cipher) decrypter {
+func (d Decrypter) ByAes(c *Cipher) Decrypter {
 	if d.Error != nil {
 		return d
 	}

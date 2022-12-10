@@ -25,7 +25,7 @@ func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
 
 // ByRsa decrypts by rsa with private key.
 // 通过 rsa 私钥解密
-func (d decrypter) ByRsa(privateKey interface{}) decrypter {
+func (d Decrypter) ByRsa(privateKey interface{}) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}

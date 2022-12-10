@@ -8,7 +8,7 @@ import (
 	"crypto/sha512"
 	"hash"
 
-	"gitee.com/golang-package/dongle/md2"
+	"github.com/golang-module/dongle/md2"
 	"github.com/tjfoc/gmsm/sm3"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"

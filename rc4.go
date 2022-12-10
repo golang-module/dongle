@@ -23,7 +23,7 @@ func (e Encrypter) ByRc4(key interface{}) Encrypter {
 
 // ByRc4 decrypts by rc4.
 // 通过 rc4 解密
-func (d decrypter) ByRc4(key interface{}) decrypter {
+func (d Decrypter) ByRc4(key interface{}) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}

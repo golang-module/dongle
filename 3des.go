@@ -26,7 +26,7 @@ func (e Encrypter) By3Des(c *Cipher) Encrypter {
 
 // By3Des decrypts by 3des.
 // 通过 3des 解密
-func (d decrypter) By3Des(c *Cipher) decrypter {
+func (d Decrypter) By3Des(c *Cipher) Decrypter {
 	if d.Error != nil {
 		return d
 	}
