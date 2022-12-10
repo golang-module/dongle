@@ -14,7 +14,7 @@ import (
 
 // Version current version
 // 当前版本号
-const Version = "0.2.1"
+const Version = "0.2.2"
 
 // dongle defines a dongle struct.
 // 定义 dongle 结构体
@@ -27,22 +27,22 @@ type dongle struct {
 var (
 	// Encode returns a new encoder instance
 	// 返回 encoder 实例
-	Encode = NewEncoder()
+	Encode = newEncoder()
 	// Decode returns a new decoder instance
 	// 返回 decoder 实例
-	Decode = NewDecoder()
+	Decode = newDecoder()
 	// Encrypt returns a new encrypter instance
 	// 返回 encrypter 实例
-	Encrypt = NewEncrypter()
+	Encrypt = newEncrypter()
 	// Decrypt returns a new decrypter instance
 	// 返回 decrypter 实例
-	Decrypt = NewDecrypter()
+	Decrypt = newDecrypter()
 	// Sign returns a new signer instance
 	// 返回 signer 实例
-	Sign = NewSigner()
+	Sign = newSigner()
 	// Verify returns a new verifier instance
 	// 返回 verifier 实例
-	Verify = NewVerifier()
+	Verify = newVerifier()
 )
 
 // converts string to byte slice without a memory allocation.
