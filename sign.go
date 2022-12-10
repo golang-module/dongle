@@ -6,9 +6,9 @@ type signer struct {
 	dongle
 }
 
-// returns a new signer instance.
+// NewSigner returns a new signer instance.
 // 初始化 signer 结构体
-func newSigner() signer {
+func NewSigner() signer {
 	return signer{}
 }
 
