@@ -4,7 +4,7 @@ import (
 	"crypto/cipher"
 )
 
-// Decrypter defines Decrypter struct
+// Decrypter defines Decrypter struct.
 // 定义 Decrypter 结构体
 type Decrypter struct {
 	dongle
@@ -78,7 +78,7 @@ func (d Decrypter) FromBase64Bytes(b []byte) Decrypter {
 	return d
 }
 
-// String implements the interface Stringer for Decrypter struct.
+// String implements Stringer interface for Decrypter struct.
 // 实现 Stringer 接口
 func (d Decrypter) String() string {
 	return d.ToString()
@@ -106,7 +106,7 @@ func (d Decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	if len(src) == 0 {
 		return nil, nil
 	}
-	if padding != No && padding != Zero && padding != PKCS5 && padding != PKCS7 {
+	if !isSupportedPadding(padding) {
 		return nil, invalidPaddingError(padding)
 	}
 
@@ -132,6 +132,10 @@ func (d Decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		return c.PKCS5UnPadding(src), nil
 	case PKCS7:
 		return c.PKCS7UnPadding(src), nil
+	case AnsiX923:
+		return c.AnsiX923UnPadding(src), nil
+	case ISO97971:
+		return c.ISO97971UnPadding(src), nil
 	}
 	return src, nil
 }

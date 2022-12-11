@@ -4,7 +4,7 @@ import (
 	"crypto/cipher"
 )
 
-// Encrypter defines a Encrypter struct.
+// Encrypter defines Encrypter struct.
 // 定义 Encrypter 结构体
 type Encrypter struct {
 	dongle
@@ -30,7 +30,7 @@ func (e Encrypter) FromBytes(b []byte) Encrypter {
 	return e
 }
 
-// String implements the interface Stringer for Encrypter struct.
+// String implements Stringer interface for Encrypter struct.
 // 实现 Stringer 接口
 func (e Encrypter) String() string {
 	return e.ToRawString()
@@ -92,6 +92,10 @@ func (e Encrypter) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 		src = c.PKCS5Padding(src)
 	case PKCS7:
 		src = c.PKCS7Padding(src, size)
+	case AnsiX923:
+		src = c.AnsiX923Padding(src, size)
+	case ISO97971:
+		src = c.ISO97971Padding(src, size)
 	default:
 		return nil, invalidPaddingError(padding)
 	}
