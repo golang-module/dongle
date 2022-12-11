@@ -107,17 +107,7 @@ func (d *digest) Sum(in []byte) []byte {
 
 	dig.Write(tmp[0 : _Chunk-dig.nx])
 
-	// At this state we should have nothing left in buffer
-	if dig.nx != 0 {
-		panic("d.nx != 0")
-	}
-
 	dig.Write(dig.digest[0:16])
-
-	// At this state we should have nothing left in buffer
-	if dig.nx != 0 {
-		panic("d.nx != 0")
-	}
 
 	return append(in, dig.state[0:16]...)
 }
