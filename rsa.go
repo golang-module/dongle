@@ -128,8 +128,8 @@ func isSupportedHash(hash crypto.Hash) bool {
 	hashes := []crypto.Hash{
 		MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160,
 	}
-	for _, e := range hashes {
-		if e == hash {
+	for _, val := range hashes {
+		if val == hash {
 			return true
 		}
 	}
