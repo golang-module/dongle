@@ -26,7 +26,7 @@ func (s Signer) FromBytes(message []byte) Signer {
 	return s
 }
 
-// String implements the interface Stringer for Signer struct.
+// String implements Stringer interface for Signer struct.
 // 实现 Stringer 接口
 func (s Signer) String() string {
 	return s.ToRawString()
