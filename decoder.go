@@ -1,6 +1,6 @@
 package dongle
 
-// Decoder defines a Decoder struct.
+// Decoder defines Decoder struct.
 // 定义 Decoder 结构体
 type Decoder struct {
 	dongle
@@ -26,7 +26,7 @@ func (d Decoder) FromBytes(b []byte) Decoder {
 	return d
 }
 
-// String implements the interface Stringer for Decoder struct.
+// String implements Stringer interface for Decoder struct.
 // 实现 Stringer 接口
 func (d Decoder) String() string {
 	return d.ToString()

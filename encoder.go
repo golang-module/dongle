@@ -1,6 +1,6 @@
 package dongle
 
-// Encoder defines a Encoder struct.
+// Encoder defines Encoder struct.
 // 定义 Encoder 结构体
 type Encoder struct {
 	dongle
@@ -26,7 +26,7 @@ func (e Encoder) FromBytes(b []byte) Encoder {
 	return e
 }
 
-// String implements the interface Stringer for Encoder struct.
+// String implements Stringer interface for Encoder struct.
 // 实现 Stringer 接口
 func (e Encoder) String() string {
 	return e.ToString()
