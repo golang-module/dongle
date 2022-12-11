@@ -18,35 +18,45 @@ var desTests = []struct {
 	toHex    string
 	toBase64 string
 }{
-	{CBC, "", "", "", ""},
+	{CBC, PKCS7, "", "", ""},
 	{CBC, No, "hello world, go!", "0b2a92e81fb49ce1b161ab1a2e35d7ce", "CyqS6B+0nOGxYasaLjXXzg=="},
 	{CBC, Zero, "hello world", "0b2a92e81fb49ce1e02ecfa986df2ec8", "CyqS6B+0nOHgLs+pht8uyA=="},
 	{CBC, PKCS5, "hello world", "0b2a92e81fb49ce1a43266aacaea7b81", "CyqS6B+0nOGkMmaqyup7gQ=="},
 	{CBC, PKCS7, "hello world", "0b2a92e81fb49ce1a43266aacaea7b81", "CyqS6B+0nOGkMmaqyup7gQ=="},
+	{CBC, AnsiX923, "hello world", "0b2a92e81fb49ce1c450d98b1e527b4a", "CyqS6B+0nOHEUNmLHlJ7Sg=="},
+	{CBC, ISO97971, "hello world", "0b2a92e81fb49ce1cd126e4be2f294cd", "CyqS6B+0nOHNEm5L4vKUzQ=="},
 
-	{CFB, "", "", "", ""},
+	{CFB, PKCS7, "", "", ""},
 	{CFB, No, "hello world, go!", "feb56ee417f5fbe61a4e5700b93c340b", "/rVu5Bf1++YaTlcAuTw0Cw=="},
 	{CFB, Zero, "hello world", "feb56ee417f5fbe61a4e572c995b5b2a", "/rVu5Bf1++YaTlcsmVtbKg=="},
 	{CFB, PKCS5, "hello world", "feb56ee417f5fbe61a4e57299c5e5e2f", "/rVu5Bf1++YaTlcpnF5eLw=="},
 	{CFB, PKCS7, "hello world", "feb56ee417f5fbe61a4e57299c5e5e2f", "/rVu5Bf1++YaTlcpnF5eLw=="},
+	{CFB, AnsiX923, "hello world", "feb56ee417f5fbe61a4e572c995b5b2f", "/rVu5Bf1++YaTlcsmVtbLw=="},
+	{CFB, ISO97971, "hello world", "feb56ee417f5fbe61a4e57ac995b5b2a", "/rVu5Bf1++YaTlesmVtbKg=="},
 
-	{OFB, "", "", "", ""},
+	{OFB, PKCS7, "", "", ""},
 	{OFB, No, "hello world, go!", "feb56ee417f5fbe69b19fcf309087d8b", "/rVu5Bf1++abGfzzCQh9iw=="},
 	{OFB, Zero, "hello world", "feb56ee417f5fbe69b19fcdf296f12aa", "/rVu5Bf1++abGfzfKW8Sqg=="},
 	{OFB, PKCS5, "hello world", "feb56ee417f5fbe69b19fcda2c6a17af", "/rVu5Bf1++abGfzaLGoXrw=="},
 	{OFB, PKCS7, "hello world", "feb56ee417f5fbe69b19fcda2c6a17af", "/rVu5Bf1++abGfzaLGoXrw=="},
+	{OFB, AnsiX923, "hello world", "feb56ee417f5fbe69b19fcdf296f12af", "/rVu5Bf1++abGfzfKW8Srw=="},
+	{OFB, ISO97971, "hello world", "feb56ee417f5fbe69b19fc5f296f12aa", "/rVu5Bf1++abGfxfKW8Sqg=="},
 
-	{CTR, "", "", "", ""},
+	{CTR, PKCS7, "", "", ""},
 	{CTR, No, "hello world, go!", "feb56ee417f5fbe6337e8b3af91e9929", "/rVu5Bf1++Yzfos6+R6ZKQ=="},
 	{CTR, Zero, "hello world", "feb56ee417f5fbe6337e8b16d979f608", "/rVu5Bf1++YzfosW2Xn2CA=="},
 	{CTR, PKCS5, "hello world", "feb56ee417f5fbe6337e8b13dc7cf30d", "/rVu5Bf1++YzfosT3HzzDQ=="},
 	{CTR, PKCS7, "hello world", "feb56ee417f5fbe6337e8b13dc7cf30d", "/rVu5Bf1++YzfosT3HzzDQ=="},
+	{CTR, AnsiX923, "hello world", "feb56ee417f5fbe6337e8b16d979f60d", "/rVu5Bf1++YzfosW2Xn2DQ=="},
+	{CTR, ISO97971, "hello world", "feb56ee417f5fbe6337e8b96d979f608", "/rVu5Bf1++YzfouW2Xn2CA=="},
 
-	{ECB, "", "", "", ""},
+	{ECB, PKCS7, "", "", ""},
 	{ECB, No, "hello world, go!", "28dba02eb5f6dd47e5a66298af31d4ca", "KNugLrX23UflpmKYrzHUyg=="},
 	{ECB, Zero, "hello world", "28dba02eb5f6dd476042daebfa59687a", "KNugLrX23UdgQtrr+lloeg=="},
 	{ECB, PKCS5, "hello world", "28dba02eb5f6dd475d82e3681c83bb77", "KNugLrX23UddguNoHIO7dw=="},
 	{ECB, PKCS7, "hello world", "28dba02eb5f6dd475d82e3681c83bb77", "KNugLrX23UddguNoHIO7dw=="},
+	{ECB, AnsiX923, "hello world", "28dba02eb5f6dd47d33696d839c770b2", "KNugLrX23UfTNpbYOcdwsg=="},
+	{ECB, ISO97971, "hello world", "28dba02eb5f6dd4706b5c56593dcbe2c", "KNugLrX23UcGtcVlk9y+LA=="},
 }
 
 func TestDes_Encrypt_String(t *testing.T) {
@@ -54,15 +64,15 @@ func TestDes_Encrypt_String(t *testing.T) {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Encrypt.FromString(test.input).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, raw, e.ToRawString())
 		})
-		t.Run(fmt.Sprintf(string(test.mode)+"_hex_hex_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.toHex, e.ToHexString())
 		})
-		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.toBase64, e.ToBase64String())
 		})
@@ -74,7 +84,7 @@ func TestDes_Decrypt_String(t *testing.T) {
 		raw := Decode.FromString(test.toHex).ByHex().ToString()
 		e := Decrypt.FromRawString(raw).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.input, e.ToString())
 			assert.Equal(t, test.input, fmt.Sprintf("%s", e))
@@ -84,7 +94,7 @@ func TestDes_Decrypt_String(t *testing.T) {
 	for index, test := range desTests {
 		e := Decrypt.FromHexString(test.toHex).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_hex_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.input, e.ToString())
 			assert.Equal(t, test.input, fmt.Sprintf("%s", e))
@@ -94,7 +104,7 @@ func TestDes_Decrypt_String(t *testing.T) {
 	for index, test := range desTests {
 		e := Decrypt.FromBase64String(test.toBase64).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.input, e.ToString())
 			assert.Equal(t, test.input, fmt.Sprintf("%s", e))
@@ -107,15 +117,15 @@ func TestDes_Encrypt_Bytes(t *testing.T) {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Encrypt.FromBytes([]byte(test.input)).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, raw, e.ToRawBytes())
 		})
-		t.Run(fmt.Sprintf(string(test.mode)+"_hex_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.toHex), e.ToHexBytes())
 		})
-		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.toBase64), e.ToBase64Bytes())
 		})
@@ -127,7 +137,7 @@ func TestDes_Decrypt_Bytes(t *testing.T) {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
 		e := Decrypt.FromRawBytes(raw).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_raw_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.input), e.ToBytes())
 		})
@@ -136,7 +146,7 @@ func TestDes_Decrypt_Bytes(t *testing.T) {
 	for index, test := range desTests {
 		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_hex_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.input), e.ToBytes())
 		})
@@ -145,7 +155,7 @@ func TestDes_Decrypt_Bytes(t *testing.T) {
 	for index, test := range desTests {
 		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
 
-		t.Run(fmt.Sprintf(string(test.mode)+"_base64_test_%d", index), func(t *testing.T) {
+		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.input), e.ToBytes())
 		})
