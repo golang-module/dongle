@@ -23,6 +23,24 @@ var (
 )
 
 var (
+	// returns an invalid blowfish src error
+	// 返回无效的 blowfish 明文错误
+	invalidBlowfishSrcError = func() error {
+		return fmt.Errorf("blowfish: invalid src, the src is not full blocks")
+	}
+	// returns an invalid blowfish key error
+	// 返回无效的 blowfish 密钥错误
+	invalidBlowfishKeyError = func() error {
+		return fmt.Errorf("blowfish: invalid key, the key must from 1 to 56 bytes")
+	}
+	// returns an invalid blowfish iv error、
+	// 返回无效的 blowfish 偏移量错误
+	invalidBlowfishIVError = func() error {
+		return fmt.Errorf("blowfish: invalid iv, the iv size must be 8 bytes")
+	}
+)
+
+var (
 	// returns an invalid des src error
 	// 返回无效的 des 明文错误
 	invalidDesSrcError = func() error {
