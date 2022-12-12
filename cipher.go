@@ -237,20 +237,9 @@ func (c *Cipher) NewOFBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	return
 }
 
-// gets Cipher instance.
-// 获取 Cipher 对象
-func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
-	cipher = NewCipher()
-	cipher.SetMode(mode)
-	cipher.SetPadding(padding)
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
-	return
-}
-
 // whether is a supported padding
 // 判断是否是支持的填充模式
-func isSupportedPadding(padding cipherPadding) bool {
+func (padding cipherPadding) isSupported() bool {
 	paddings := []cipherPadding{
 		No, Zero, PKCS5, PKCS7, AnsiX923, ISO97971,
 	}
@@ -260,4 +249,15 @@ func isSupportedPadding(padding cipherPadding) bool {
 		}
 	}
 	return false
+}
+
+// gets Cipher instance.
+// 获取 Cipher 对象
+func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
+	cipher = NewCipher()
+	cipher.SetMode(mode)
+	cipher.SetPadding(padding)
+	cipher.SetKey(key)
+	cipher.SetIV(iv)
+	return
 }
