@@ -4,6 +4,8 @@ import (
 	"crypto/ed25519"
 )
 
+// defines encoding mode enum type.
+// 定义编码模式枚举类型
 type encodingMode string
 
 // encoding mode constants
