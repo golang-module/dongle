@@ -11,7 +11,7 @@ English | [简体中文](README.cn.md)
 
 ### Introduction
 
-A simple, semantic and developer-friendly golang package for encoding&decoding and encryption&decryption
+A simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification
 
 `Dongle` has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go"), if you think
 it is helpful, please give me a star
@@ -935,9 +935,9 @@ var publicKey, privateKey []byte
 publicKey, privateKey, _ = ed25519.GenerateKey(nil)
 
 // get public key with hex encoding
-hexPublicKey := dongle.Encode.FromBytes(rawPublicKey).ByHex().ToBytes()
+hexPublicKey := dongle.Encode.FromBytes(publicKey).ByHex().ToBytes()
 // get private key with hex encoding
-hexPrivateKey := dongle.Encode.FromBytes(rawPrivateKey).ByHex().ToBytes()
+hexPrivateKey := dongle.Encode.FromBytes(privateKey).ByHex().ToBytes()
 // get public key with base64 encoding
 base64PublicKey := dongle.Encode.FromBytes(publicKey).ByBase64().ToBytes()
 // get private key with base64 encoding

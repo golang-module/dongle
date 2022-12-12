@@ -9,7 +9,7 @@
 
 简体中文 | [English](README.md)
 
-一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密库
+一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密和签名验签库
 
 `Dongle` 已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录, 如果您觉得不错，请给个 star 吧
 
@@ -938,9 +938,9 @@ var publicKey, privateKey []byte
 publicKey, privateKey, _ = ed25519.GenerateKey(nil)
 
 // 获取经过 hex 编码的公钥
-hexPublicKey := dongle.Encode.FromBytes(rawPublicKey).ByHex().ToBytes()
+hexPublicKey := dongle.Encode.FromBytes(publicKey).ByHex().ToBytes()
 // 获取经过 hex 编码的私钥
-hexPrivateKey := dongle.Encode.FromBytes(rawPrivateKey).ByHex().ToBytes()
+hexPrivateKey := dongle.Encode.FromBytes(privateKey).ByHex().ToBytes()
 // 获取经过 base64 编码的公钥
 base64PublicKey := dongle.Encode.FromBytes(publicKey).ByBase64().ToBytes()
 // 获取经过 base64 编码的私钥
