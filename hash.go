@@ -8,7 +8,7 @@ import (
 	"crypto/sha512"
 	"hash"
 
-	"github.com/golang-module/dongle/md2"
+	"gitee.com/golang-package/dongle/md2"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
@@ -19,7 +19,7 @@ import (
 type hashAlgo crypto.Hash
 
 // hash algorithm constants
-// 哈希算法常量
+// 哈希算法枚举值
 const (
 	MD4 hashAlgo = 1 + iota
 	MD5
