@@ -212,11 +212,11 @@ func (c *Cipher) NewECBEncrypter(src []byte, block cipher.Block) (dst []byte) {
 // ECB 模式解密
 func (c *Cipher) NewECBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
-	decrypted, size := dst, block.BlockSize()
+	decrypted, blockSize := dst, block.BlockSize()
 	for len(src) > 0 {
-		block.Decrypt(decrypted, src[:size])
-		src = src[size:]
-		decrypted = decrypted[size:]
+		block.Decrypt(decrypted, src[:blockSize])
+		src = src[blockSize:]
+		decrypted = decrypted[blockSize:]
 	}
 	return
 }
