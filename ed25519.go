@@ -11,9 +11,9 @@ type encodingMode string
 // encoding mode constants
 // 编码模式常量
 const (
-	RAW    encodingMode = "raw"
-	HEX    encodingMode = "hex"
-	BASE64 encodingMode = "base64"
+	Raw    encodingMode = "raw"
+	Hex    encodingMode = "hex"
+	Base64 encodingMode = "base64"
 )
 
 // ByEd25519 signs by ed25519.
@@ -62,12 +62,12 @@ func (v Verifier) ByEd25519(publicKey interface{}, mode encodingMode) Verifier {
 func getDecodedKey(key []byte, mode encodingMode) (dst []byte, err error) {
 	var decode Decoder
 	switch mode {
-	case RAW:
+	case Raw:
 		dst = key
 		return
-	case HEX:
+	case Hex:
 		decode = Decode.FromBytes(key).ByHex()
-	case BASE64:
+	case Base64:
 		decode = Decode.FromBytes(key).ByBase64()
 	}
 	if decode.Error != nil {
