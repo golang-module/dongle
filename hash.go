@@ -14,17 +14,21 @@ import (
 	"golang.org/x/crypto/sha3"
 )
 
+// defines hash algorithm enum type.
+// 定义哈希算法枚举类型
+type hashAlgo crypto.Hash
+
 // hash algorithm constants
 // 哈希算法常量
 const (
-	MD4       = crypto.MD4
-	MD5       = crypto.MD5
-	SHA1      = crypto.SHA1
-	SHA224    = crypto.SHA224
-	SHA256    = crypto.SHA256
-	SHA384    = crypto.SHA384
-	SHA512    = crypto.SHA512
-	RIPEMD160 = crypto.RIPEMD160
+	MD4 hashAlgo = 1 + iota
+	MD5
+	SHA1
+	SHA224
+	SHA256
+	SHA384
+	SHA512
+	RIPEMD160 = 19
 )
 
 // ByMd2 encrypts by md2.
