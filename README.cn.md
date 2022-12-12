@@ -885,40 +885,40 @@ var publicKey, privateKey []byte
 publicKey, privateKey, _ = ed25519.GenerateKey(nil)
 
 // 获取经过 hex 编码的公钥
-hexPublicKey := dongle.Encode.FromBytes(rawPublicKey).ByHex().ToBytes()
+hexPublicKey := dongle.Encode.FromBytes(publicKey).ByHex().ToBytes()
 // 获取经过 hex 编码的私钥
-hexPrivateKey := dongle.Encode.FromBytes(rawPrivateKey).ByHex().ToBytes()
+hexPrivateKey := dongle.Encode.FromBytes(privateKey).ByHex().ToBytes()
 // 获取经过 base64 编码的公钥
 base64PublicKey := dongle.Encode.FromBytes(publicKey).ByBase64().ToBytes()
 // 获取经过 base64 编码的私钥
 base64PrivateKey := dongle.Encode.FromBytes(privateKey).ByBase64().ToBytes()
 
 // 通过未经编码的原始私钥对字符串进行 ed25519 签名
-sign := dongle.Sign.FromString("hello world").Ed25519(privateKey, dongle.Raw)
+sign := dongle.Sign.FromString("hello world").ByEd25519(privateKey, dongle.Raw)
 // 通过未经编码的原始公钥对未经编码的原始签名字符串进行 ed25519 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
 // 通过未经编码的原始公钥对经过 hex 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
 // 通过未经编码的原始公钥对经过 base64 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(publicKey, dongle.Raw).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(publicKey, dongle.Raw).ToBool() // true
 
 // 通过经过 hex 编码的私钥对字符串进行 ed25519 签名
-sign := dongle.Sign.FromString("hello world").Ed25519(hexPrivateKey, dongle.HEX)
+sign := dongle.Sign.FromString("hello world").ByEd25519(hexPrivateKey, dongle.Hex)
 // 通过经过 hex 编码的公钥对未经编码的原始签名字符串进行 ed25519 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(hexPublicKey, dongle.Hex).ToBool() // true
 // 通过经过 hex 编码的公钥对经过 hex 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(hexPublicKey, dongle.Hex).ToBool() // true
 // 通过经过 hex 编码的公钥对经过 base64 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(hexPublicKey, dongle.HEX).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(hexPublicKey, dongle.Hex).ToBool() // true
 
 // 通过经过 base64 编码的私钥对字符串进行 ed25519 签名
-sign := dongle.Sign.FromString("hello world").Ed25519(base64PrivateKey, dongle.BASE64)
+sign := dongle.Sign.FromString("hello world").ByEd25519(base64PrivateKey, dongle.Base64)
 // 通过经过 base64 编码的公钥对未经编码的原始签名字符串进行 ed25519 验签
-dongle.Verify.FromRawString(sign.ToRawString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromRawString(sign.ToRawString(), "hello world").ByEd25519(base64PublicKey, dongle.Base64).ToBool() // true
 // 通过经过 base64 编码的公钥对经过 hex 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromHexString(sign.ToHexString(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByEd25519(base64PublicKey, dongle.Base64).ToBool() // true
 // 通过经过 base64 编码的公钥对经过 base64 编码的签名字符串进行 ed25519 验签
-dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").Ed25519(base64PublicKey, dongle.BASE64).ToBool() // true
+dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(base64PublicKey, dongle.Base64).ToBool() // true
 
 ```
 
