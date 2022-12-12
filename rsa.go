@@ -14,7 +14,7 @@ func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	pub, err := ParseRsaPublicKey(publicKey)
+	pub, err := parseRsaPublicKey(publicKey)
 	if err != nil {
 		e.Error = invalidRsaPublicKeyError()
 		return e
@@ -29,7 +29,7 @@ func (d Decrypter) ByRsa(privateKey interface{}) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
-	pri, err := ParseRsaPrivateKey(privateKey)
+	pri, err := parseRsaPrivateKey(privateKey)
 	if err != nil {
 		d.Error = invalidRsaPrivateKeyError()
 		return d
@@ -52,7 +52,7 @@ func (s Signer) ByRsa(privateKey interface{}, hash crypto.Hash) Signer {
 		s.Error = invalidRsaHashError()
 		return s
 	}
-	pri, err := ParseRsaPrivateKey(privateKey)
+	pri, err := parseRsaPrivateKey(privateKey)
 	if err != nil {
 		s.Error = err
 		return s
@@ -73,7 +73,7 @@ func (v Verifier) ByRsa(publicKey interface{}, hash crypto.Hash) Verifier {
 		v.Error = invalidRsaHashError()
 		return v
 	}
-	pub, err := ParseRsaPublicKey(publicKey)
+	pub, err := parseRsaPublicKey(publicKey)
 	if err != nil {
 		v.Error = err
 		return v
@@ -84,9 +84,9 @@ func (v Verifier) ByRsa(publicKey interface{}, hash crypto.Hash) Verifier {
 	return v
 }
 
-// ParseRsaPublicKey parses rsa public key.
+// parseRsaPublicKey parses rsa public key.
 // 解析 rsa 公钥
-func ParseRsaPublicKey(publicKey interface{}) (*rsa.PublicKey, error) {
+func parseRsaPublicKey(publicKey interface{}) (*rsa.PublicKey, error) {
 	block, _ := pem.Decode(interface2bytes(publicKey))
 	if block == nil {
 		return nil, invalidRsaPublicKeyError()
@@ -103,9 +103,9 @@ func ParseRsaPublicKey(publicKey interface{}) (*rsa.PublicKey, error) {
 	return pub.(*rsa.PublicKey), err
 }
 
-// ParseRsaPrivateKey parses rsa private key.
+// parseRsaPrivateKey parses rsa private key.
 // 解析 rsa 私钥
-func ParseRsaPrivateKey(privateKey interface{}) (*rsa.PrivateKey, error) {
+func parseRsaPrivateKey(privateKey interface{}) (*rsa.PrivateKey, error) {
 	block, _ := pem.Decode(interface2bytes(privateKey))
 	if block == nil {
 		return nil, invalidRsaPrivateKeyError()
