@@ -9,7 +9,7 @@ import (
 type encodingMode string
 
 // encoding mode constants
-// 编码模式常量
+// 编码模式枚举值
 const (
 	Raw    encodingMode = "raw"
 	Hex    encodingMode = "hex"
