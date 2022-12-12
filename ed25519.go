@@ -4,19 +4,21 @@ import (
 	"crypto/ed25519"
 )
 
+// defines encoding mode enum type.
+// 定义编码模式枚举类型
 type encodingMode string
 
 // encoding mode constants
 // 编码模式常量
 const (
-	RAW    encodingMode = "raw"
-	HEX    encodingMode = "hex"
-	BASE64 encodingMode = "base64"
+	Raw    encodingMode = "raw"
+	Hex    encodingMode = "hex"
+	Base64 encodingMode = "base64"
 )
 
 // ByEd25519 signs by ed25519.
 // 通过 ed25519 私钥签名
-func (s signer) ByEd25519(privateKey interface{}, mode encodingMode) signer {
+func (s Signer) ByEd25519(privateKey interface{}, mode encodingMode) Signer {
 	if len(s.src) == 0 || s.Error != nil {
 		return s
 	}
@@ -35,7 +37,7 @@ func (s signer) ByEd25519(privateKey interface{}, mode encodingMode) signer {
 
 // ByEd25519 verify by ed25519.
 // 通过 ed25519 公钥验签
-func (v verifier) ByEd25519(publicKey interface{}, mode encodingMode) verifier {
+func (v Verifier) ByEd25519(publicKey interface{}, mode encodingMode) Verifier {
 	if len(v.src) == 0 || v.Error != nil {
 		return v
 	}
@@ -58,14 +60,14 @@ func (v verifier) ByEd25519(publicKey interface{}, mode encodingMode) verifier {
 // gets the decoded key
 // 获取解码的 key
 func getDecodedKey(key []byte, mode encodingMode) (dst []byte, err error) {
-	var decode decoder
+	var decode Decoder
 	switch mode {
-	case RAW:
+	case Raw:
 		dst = key
 		return
-	case HEX:
+	case Hex:
 		decode = Decode.FromBytes(key).ByHex()
-	case BASE64:
+	case Base64:
 		decode = Decode.FromBytes(key).ByBase64()
 	}
 	if decode.Error != nil {
