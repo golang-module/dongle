@@ -106,7 +106,7 @@ func (d Decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	if len(src) == 0 {
 		return nil, nil
 	}
-	if !isSupportedPadding(padding) {
+	if !padding.isSupported() {
 		return nil, invalidPaddingError(padding)
 	}
 
