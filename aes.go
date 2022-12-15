@@ -6,7 +6,7 @@ import (
 
 // ByAes encrypts by aes.
 // 通过 aes 加密
-func (e encrypter) ByAes(c *Cipher) encrypter {
+func (e Encrypter) ByAes(c *Cipher) Encrypter {
 	block, err := aes.NewCipher(c.key)
 	if err != nil {
 		e.Error = invalidAesKeyError()
@@ -26,7 +26,7 @@ func (e encrypter) ByAes(c *Cipher) encrypter {
 
 // ByAes decrypts by aes.
 // 通过 aes 解密
-func (d decrypter) ByAes(c *Cipher) decrypter {
+func (d Decrypter) ByAes(c *Cipher) Decrypter {
 	if d.Error != nil {
 		return d
 	}

@@ -1,4 +1,5 @@
 # dongle  #
+
 [![Carbon Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
 [![Go Build](https://github.com/golang-module/dongle/actions/workflows/test.yml/badge.svg)](https://github.com/golang-module/dongle/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-module/dongle)](https://goreportcard.com/report/github.com/golang-module/dongle)
@@ -8,7 +9,7 @@
 
 简体中文 | [English](README.md)
 
-一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密库
+一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密和签名验签库
 
 `Dongle` 已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录, 如果您觉得不错，请给个 star 吧
 
@@ -17,6 +18,7 @@
 [gitee.com/golang-module/dongle](https://gitee.com/golang-module/dongle "gitee.com/golang-module/dongle")
 
 ### 安装使用
+
 ```go
 // 使用 github 库
 go get -u github.com/golang-module/dongle
@@ -34,9 +36,11 @@ import (
 ```
 
 ### 用法示例
+
 #### 编码&解码
 
 ##### Hex 编码、解码
+
 ```go
 // 对字符串进行 hex 编码，输出字符串
 dongle.Encode.FromString("hello world").ByHex().ToString() // 68656c6c6f20776f726c64
@@ -120,6 +124,7 @@ dongle.Decode.FromBytes([]byte("aGVsbG8gd29ybGQ=")).ByBase64().ToBytes() // []by
 ```
 
 ##### Base64URL 编码、解码
+
 ```go
 // 对 url 字符进行 base64 编码，输出字符串
 dongle.Encode.FromString("www.gouguoyin.cn").ByBase64URL().ToString() // d3d3LmdvdWd1b3lpbi5jbg==
@@ -175,6 +180,7 @@ dongle.Decode.FromBytes([]byte("👟👜👣👣👦🐗👮👦👩👣👛")).
 ```
 
 ##### SafeURL 编码、解码
+
 ```go
 // 对 url 字符进行转义编码，输出字符串
 dongle.Encode.FromString("www.gouguoyin.cn?sex=男&age=18").BySafeURL().ToString() // www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18
@@ -188,6 +194,7 @@ dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18"))
 ```
 
 ##### Morse(摩斯) 编码、解码
+
 > 默认分隔符是 `/`
 
 ```go
@@ -235,6 +242,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByMd4().ToBase64Bytes() // []byt
 ```
 
 ##### Md5 加密
+
 ```go
 // 对字符串进行 md5 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").ByMd5().ToHexString() // 5eb63bbbe01eeed093cb22bb8f5acdc3
@@ -248,6 +256,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByMd5().ToBase64Bytes() // []byt
 ```
 
 ##### Sha1 加密
+
 ```go
 // 对字符串进行 sha1 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySha1().ToHexString() // 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
@@ -261,6 +270,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha1().ToBase64Bytes() // []by
 ```
 
 ##### Sha3 加密
+
 > 包含 sha3-224, sha3-256, sha3-384, sha3-512
 
 ```go
@@ -317,6 +327,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha224().ToBase64Bytes() // []
 ```
 
 ##### Sha256 加密
+
 ```go
 // 对字符串进行 sha256 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySha256().ToHexString() // b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9
@@ -330,6 +341,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha256().ToBase64Bytes() // []
 ```
 
 ##### Sha384 加密
+
 ```go
 // 对字符串进行 sha384 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").BySha384().ToHexString() // fdbd8e75a67f29f701a4e040385e2e23986303ea10239211af907fcbb83578b3e417cb71ce646efd0819dd8c088de1bd
@@ -594,7 +606,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSm3([]byte("dongle")).ToBa
 ```go
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
-cipher.SetPadding(dongle.PKCS7)   // No、Zero、PKCS5、PKCS7
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("0123456789abcdef") // key 长度必须是 16、24 或 32 字节
 cipher.SetIV("0123456789abcdef") // iv 长度必须是 16 字节，ECB 模式不需要设置 iv
 
@@ -634,8 +646,8 @@ dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher)
 ```go
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7
-cipher.SetKey("12345678")       // key 长度必须是 8 字节
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetKey("12345678") // key 长度必须是 8 字节
 cipher.SetIV("12345678") // iv 长度必须是 8 字节
 
 // 对字符串进行 des 加密，输出未经编码的原始字符串
@@ -674,7 +686,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).ByDes(cipher)
 ```go
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC, CFB, CTR, ECB, OFB
-cipher.SetPadding(dongle.PKCS7)           // No、Zero、PKCS5、PKCS7
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("123456781234567812345678") // key 长度必须是 24
 cipher.SetIV("12345678") // iv 长度必须是 8
 
@@ -684,9 +696,9 @@ rawString := dongle.Encrypt.FromString("hello world").By3Des(cipher).ToRawString
 dongle.Decrypt.FromRawString(rawString).By3Des(cipher).ToString() // hello world
 
 // 对字符串进行 3des 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").By3Des(cipher).ToHexString() // 0b2a92e81fb49ce1a43266aacaea7b81
+dongle.Encrypt.FromString("hello world").By3Des(cipher).ToHexString() // 92c3724d720b59982d21aab9a7bb9f40
 // 对经过 hex 编码的字符串进行 3des 解密，输出字符串
-dongle.Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").By3Des(cipher).ToString() // hello world
+dongle.Decrypt.FromHexString("92c3724d720b59982d21aab9a7bb9f40").By3Des(cipher).ToString() // hello world
 
 // 对字符串进行 3des 加密，输出经过 base64 编码的字符串
 dongle.Encrypt.FromString("hello world").By3Des(cipher).ToBase64String() // CyqS6B+0nOGkMmaqyup7gQ==
@@ -699,14 +711,54 @@ rawBytes := dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToRaw
 dongle.Decrypt.FromRawBytes(rawBytes).By3Des(cipher).ToBytes() // []byte("hello world")
 
 // 对字节切片进行 3des 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToHexBytes() // []byte("0b2a92e81fb49ce1a43266aacaea7b81")
+dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToHexBytes() // []byte("92c3724d720b59982d21aab9a7bb9f40")
 // 对经过 hex 编码的字节切片进行 3des 解密，输出字符串
-dongle.Decrypt.FromHexBytes([]byte("0b2a92e81fb49ce1a43266aacaea7b81")).By3Des(cipher).ToBytes() // []byte("hello world")
+dongle.Decrypt.FromHexBytes([]byte("92c3724d720b59982d21aab9a7bb9f40")).By3Des(cipher).ToBytes() // []byte("hello world")
 
 // 对字节切片进行 3des 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToBase64Bytes() // []byte("CyqS6B+0nOGkMmaqyup7gQ==")
 // 对经过 base64 编码的字节切片进行 3des 解密，输出字节切片
 dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher).ToBytes() // []byte("hello world")
+```
+
+##### Blowfish 加密、解密
+
+```go
+cipher := dongle.NewCipher()
+cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetKey("0123456789abcdef") // key 长度必须是 1-56 字节
+cipher.SetIV("12345678")          // iv 长度必须是 8 字节，ECB 模式不需要设置 iv
+
+// 对字符串进行 blowfish 加密，输出未经编码的原始字符串
+rawString := dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToRawString()
+// 对未经编码的原始字符串进行 blowfish 解密，输出字符串
+dongle.Decrypt.FromRawString(rawString).ByBlowfish(cipher).ToString() // hello world
+
+// 对字符串进行 blowfish 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToHexString() // c1e9b4529aac9793010f4677f6358efe
+// 对经过 hex 编码的字符串进行 blowfish 解密，输出字符串
+dongle.Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(cipher).ToString() // hello world
+
+// 对字符串进行 blowfish 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToBase64String() // ksNyTXILWZgtIaq5p7ufQA==
+// 对经过 base64 编码的字符串进行 blowfish 解密，输出字符串
+dongle.Decrypt.FromBase64String("ksNyTXILWZgtIaq5p7ufQA==").ByBlowfish(cipher).ToString() // hello world
+
+// 对字节切片进行 blowfish 加密，输出未经编码的原始字节切片
+rawBytes := dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToRawBytes()
+// 对未经编码的原始字节切片进行 blowfish 解密，输出字节切片
+dongle.Decrypt.FromRawBytes(rawBytes).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+
+// 对字节切片进行 blowfish 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToHexBytes() // []byte("c1e9b4529aac9793010f4677f6358efe")
+// 对经过 hex 编码的字节切片进行 blowfish 解密，输出字节切片
+dongle.Decrypt.FromHexBytes([]byte("c1e9b4529aac9793010f4677f6358efe")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+
+// 对字节切片进行 blowfish 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToBase64Bytes() // []byte("ksNyTXILWZgtIaq5p7ufQA==")
+// 对经过 base64 编码的字节切片进行 blowfish 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(()byte("ksNyTXILWZgtIaq5p7ufQA==")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
 ```
 
 ##### Rsa 加密、解密
@@ -788,6 +840,7 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey
 ```
 
 ##### Tea 加密、解密
+
 > 迭代轮次(rounds) 必须是偶数，默认是 64
 
 ```go
@@ -1059,6 +1112,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Tea 加密、解密
 - [ ] Xtea 加密、解密
 - [x] Aes 加密、解密
+- [x] Blowfish 加密、解密
 - [x] Des 加密、解密
 - [x] 3Des 加密、解密
 - [x] Rsa 加密、解密
@@ -1074,19 +1128,22 @@ rsa: invalid public key, please make sure the public key is valid
 - [ ] Dsa 签名、验签
 
 ### 参考项目
+
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycryptodome](https://github.com/Legrandin/pycryptodome)
 
 ### 在线网站
+
 * [www.ssleye.com](https://www.ssleye.com/ssltool)
 * [base62.js.org](https://base62.js.org)
 * [www.sojson.com](https://www.sojson.com/encrypt.html)
-* [tool.chacuo.net](https://tool.chacuo.net/cryptaes)
+* [tool.chacuo.net](http://tool.chacuo.net/cryptaes)
 * [www.oktools.net](https://oktools.net/aes)
 
 ### 赞助
+
 `Dongle` 是一个非商业开源项目, 如果你想支持 `Dongle`, 你可以为开发者 [购买一杯咖啡](https://www.gouguoyin.com/zanzhu.html)
 
 ### 致谢

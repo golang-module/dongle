@@ -10,7 +10,7 @@ import (
 
 // ByRsa encrypts by rsa with public key.
 // 通过 rsa 公钥加密
-func (e encrypter) ByRsa(publicKey interface{}) encrypter {
+func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -25,7 +25,7 @@ func (e encrypter) ByRsa(publicKey interface{}) encrypter {
 
 // ByRsa decrypts by rsa with private key.
 // 通过 rsa 私钥解密
-func (d decrypter) ByRsa(privateKey interface{}) decrypter {
+func (d Decrypter) ByRsa(privateKey interface{}) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
@@ -44,11 +44,11 @@ func (d decrypter) ByRsa(privateKey interface{}) decrypter {
 
 // ByRsa signs by rsa.
 // 通过 rsa 私钥签名
-func (s signer) ByRsa(privateKey interface{}, hash crypto.Hash) signer {
+func (s Signer) ByRsa(privateKey interface{}, hash hashAlgo) Signer {
 	if len(s.src) == 0 || s.Error != nil {
 		return s
 	}
-	if !isSupportedHash(hash) {
+	if !hash.isRsaSupported() {
 		s.Error = invalidRsaHashError()
 		return s
 	}
@@ -57,19 +57,19 @@ func (s signer) ByRsa(privateKey interface{}, hash crypto.Hash) signer {
 		s.Error = err
 		return s
 	}
-	hasher := hash.New()
+	hasher := crypto.Hash(hash).New()
 	hasher.Write(s.src)
-	s.dst, s.Error = rsa.SignPKCS1v15(rand.Reader, pri, hash, hasher.Sum(nil))
+	s.dst, s.Error = rsa.SignPKCS1v15(rand.Reader, pri, crypto.Hash(hash), hasher.Sum(nil))
 	return s
 }
 
 // ByRsa verify sign by rsa with public key.
 // 通过 rsa 公钥验签
-func (v verifier) ByRsa(publicKey interface{}, hash crypto.Hash) verifier {
+func (v Verifier) ByRsa(publicKey interface{}, hash hashAlgo) Verifier {
 	if len(v.src) == 0 || v.Error != nil {
 		return v
 	}
-	if !isSupportedHash(hash) {
+	if !hash.isRsaSupported() {
 		v.Error = invalidRsaHashError()
 		return v
 	}
@@ -78,9 +78,9 @@ func (v verifier) ByRsa(publicKey interface{}, hash crypto.Hash) verifier {
 		v.Error = err
 		return v
 	}
-	hasher := hash.New()
+	hasher := crypto.Hash(hash).New()
 	hasher.Write(v.src)
-	v.Error = rsa.VerifyPKCS1v15(pub, hash, hasher.Sum(nil), v.sign)
+	v.Error = rsa.VerifyPKCS1v15(pub, crypto.Hash(hash), hasher.Sum(nil), v.sign)
 	return v
 }
 
@@ -122,14 +122,14 @@ func parseRsaPrivateKey(privateKey interface{}) (*rsa.PrivateKey, error) {
 	return pri.(*rsa.PrivateKey), nil
 }
 
-// whether is a supported hash function
-// 判断是否是支持的哈希函数
-func isSupportedHash(hash crypto.Hash) bool {
-	hashes := []crypto.Hash{
+// whether is a rsa supported hash algorithm
+// 判断是否是 rsa 支持的哈希算法
+func (hash hashAlgo) isRsaSupported() bool {
+	hashes := []hashAlgo{
 		MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160,
 	}
-	for _, e := range hashes {
-		if e == hash {
+	for _, val := range hashes {
+		if val == hash {
 			return true
 		}
 	}

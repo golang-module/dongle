@@ -6,12 +6,12 @@ import (
 
 // BySm3 encrypts by sm3.
 // 通过 sm3 加密
-func (e encrypter) BySm3() encrypter {
+func (e Encrypter) BySm3() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	hasher := sm3.New()
-	hasher.Write(e.src)
-	e.dst = hasher.Sum(nil)
+	h := sm3.New()
+	h.Write(e.src)
+	e.dst = h.Sum(nil)
 	return e
 }

@@ -1,11 +1,11 @@
 // @Package dongle
-// @Description a simple, semantic and developer-friendly golang package for encoding&decoding and encryption&decryption
+// @Description a simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification
 // @Page github.com/golang-module/dongle
 // @Developer gouguoyin
-// @Blog www.gouguoyin.cn
-// @Email contact@gouguoyin.cn
+// @Blog www.gouguoyin.com
+// @Email contact@gouguoyin.com
 
-// Package dongle is a simple, semantic and developer-friendly golang package for encoding&decoding and encryption&decryption.
+// Package dongle is a simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification.
 package dongle
 
 import (
@@ -14,7 +14,7 @@ import (
 
 // Version current version
 // 当前版本号
-const Version = "0.2.1"
+const Version = "0.2.2"
 
 // dongle defines a dongle struct.
 // 定义 dongle 结构体
@@ -25,24 +25,24 @@ type dongle struct {
 }
 
 var (
-	// Encode returns a new encoder instance
+	// Encode returns a new Encoder instance
 	// 返回 encoder 实例
-	Encode = NewEncoder()
-	// Decode returns a new decoder instance
+	Encode = newEncoder()
+	// Decode returns a new Decoder instance
 	// 返回 decoder 实例
-	Decode = NewDecoder()
-	// Encrypt returns a new encrypter instance
+	Decode = newDecoder()
+	// Encrypt returns a new Encrypter instance
 	// 返回 encrypter 实例
-	Encrypt = NewEncrypter()
-	// Decrypt returns a new decrypter instance
+	Encrypt = newEncrypter()
+	// Decrypt returns a new Decrypter instance
 	// 返回 decrypter 实例
-	Decrypt = NewDecrypter()
-	// Sign returns a new signer instance
+	Decrypt = newDecrypter()
+	// Sign returns a new Signer instance
 	// 返回 signer 实例
-	Sign = NewSigner()
-	// Verify returns a new verifier instance
+	Sign = newSigner()
+	// Verify returns a new Verifier instance
 	// 返回 verifier 实例
-	Verify = NewVerifier()
+	Verify = newVerifier()
 )
 
 // converts string to byte slice without a memory allocation.
@@ -77,16 +77,5 @@ func interface2bytes(i interface{}) (b []byte) {
 	case []byte:
 		b = v
 	}
-	return
-}
-
-// gets Cipher instance.
-// 获取 Cipher 对象
-func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
-	cipher = NewCipher()
-	cipher.SetMode(mode)
-	cipher.SetPadding(padding)
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
 	return
 }

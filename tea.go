@@ -6,7 +6,7 @@ import (
 
 // ByTea encrypts by tea.
 // 通过 tea 加密
-func (e encrypter) ByTea(key interface{}, rounds ...int) encrypter {
+func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
@@ -35,7 +35,7 @@ func (e encrypter) ByTea(key interface{}, rounds ...int) encrypter {
 
 // ByTea decrypts by tea.
 // 通过 tea 解密
-func (d decrypter) ByTea(key interface{}, rounds ...int) decrypter {
+func (d Decrypter) ByTea(key interface{}, rounds ...int) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
