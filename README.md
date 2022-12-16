@@ -838,9 +838,9 @@ dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs8PrivateK
 
 // Use pkcs8 format public key to encrypt by rsa from byte
 cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PublicKey))
-// Use pkcs8 format  private key to decrypt by rsa from byte with hex encoding
-dongle.Decrypt.FromHexBytes(cipherText).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
-// Use pkcs8 format  private key to decrypt by rsa from byte with base64 encoding
+// Use pkcs8 format private key to decrypt by rsa from byte with hex encoding
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
+// Use pkcs8 format private key to decrypt by rsa from byte with base64 encoding
 dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
 ```
 
