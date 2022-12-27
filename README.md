@@ -1159,7 +1159,7 @@ rsa: invalid public key, please make sure the public key is valid
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
-* [python/pycryptodome](https://github.com/Legrandin/pycryptodome)
+* [python/pycrypto](https://github.com/pycrypto/pycrypto)
 
 ### Online website
 
