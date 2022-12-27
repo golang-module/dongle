@@ -14,7 +14,7 @@ import (
 
 // Version current version
 // 当前版本号
-const Version = "0.2.2"
+const Version = "0.2.3"
 
 // dongle defines a dongle struct.
 // 定义 dongle 结构体
