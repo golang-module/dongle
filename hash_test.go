@@ -57,6 +57,16 @@ var hashTests = []struct {
 
 	{"ripemd160", "", "", ""},
 	{"ripemd160", "hello world", "98c615784ccb5fe5936fbc0cbe9dfdb408d92f0f", "mMYVeEzLX+WTb7wMvp39tAjZLw8="},
+
+	{"shake128-256", "", "", ""},
+	{"shake128-256", "hello world", "3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b8", "OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLg="},
+	{"shake128-512", "", "", ""},
+	{"shake128-512", "hello world", "3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b899072665674f26cc494a4bcf027c58267e8ee2da60e942759de86d2670bba1aa", "OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLiZByZlZ08mzElKS88CfFgmfo7i2mDpQnWd6G0mcLuhqg=="},
+
+	{"shake256-256", "", "", ""},
+	{"shake256-256", "hello world", "369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527", "Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSc="},
+	{"shake256-512", "", "", ""},
+	{"shake256-512", "hello world", "369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116", "Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg=="},
 }
 
 func TestHash_Encrypt_String(t *testing.T) {
@@ -94,6 +104,14 @@ func TestHash_Encrypt_String(t *testing.T) {
 			e = e.BySha512(256)
 		case "ripemd160":
 			e = e.ByRipemd160()
+		case "shake128-256":
+			e = e.ByShake128(256)
+		case "shake128-512":
+			e = e.ByShake128(512)
+		case "shake256-256":
+			e = e.ByShake256(256)
+		case "shake256-512":
+			e = e.ByShake256(512)
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
@@ -140,6 +158,14 @@ func TestHash_Encrypt_Bytes(t *testing.T) {
 			e = e.BySha512(256)
 		case "ripemd160":
 			e = e.ByRipemd160()
+		case "shake128-256":
+			e = e.ByShake128(256)
+		case "shake128-512":
+			e = e.ByShake128(512)
+		case "shake256-256":
+			e = e.ByShake256(256)
+		case "shake256-512":
+			e = e.ByShake256(512)
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {

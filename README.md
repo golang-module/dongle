@@ -404,6 +404,34 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToHexBytes() // []
 dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToBase64Bytes() // []byte("mMYVeEzLX+WTb7wMvp39tAjZLw8=")
 ```
 
+##### Encrypt by shake128
+
+```go
+// Encrypt by shake128 from string and output string with hex encoding
+dongle.Encrypt.FromString("hello world").ByShake128(256).ToHexString() // 3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b8
+// Encrypt by shake128 from string and output string with base64 encoding
+dongle.Encrypt.FromString("hello world").ByShake128(256).ToBase64String() // OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLg=
+
+// Encrypt by shake128 from byte slice and output byte slice with hex encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake128(256).ToHexBytes() // []byte("3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b8")
+// Encrypt by shake128 from byte slice and output byte slice with base64 encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake128(256).ToBase64Bytes() // []byte("OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLg=")
+```
+
+##### Encrypt by shake256
+
+```go
+// Encrypt by shake256 from string and output string with hex encoding
+dongle.Encrypt.FromString("hello world").ByShake256(512).ToHexString() // 369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116
+// Encrypt by shake256 from string and output string with base64 encoding
+dongle.Encrypt.FromString("hello world").ByShake256(512).ToBase64String() // Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg==
+
+// Encrypt by shake256 from byte slice and output byte slice with hex encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(512).ToHexBytes() // []byte("369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116")
+// Encrypt by shake256 from byte slice and output byte slice with base64 encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(512).ToBase64Bytes() // []byte("Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg==")
+```
+
 ##### Encrypt by hmac-md2
 
 ```go
@@ -1086,6 +1114,8 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Encryption by Sha512-224
 - [x] Encryption by Sha512-256
 - [x] Encryption by Ripemd160
+- [x] Encryption by Shake128
+- [x] Encryption by Shake256
 - [x] Encryption by Hmac-md2
 - [x] Encryption by Hmac-md4
 - [x] Encryption by Hmac-md5

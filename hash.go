@@ -178,3 +178,27 @@ func (e Encrypter) ByRipemd160() Encrypter {
 	e.dst = h.Sum(nil)
 	return e
 }
+
+// ByShake128 encrypts by shake128.
+// 通过 shake128 加密
+func (e Encrypter) ByShake128(size int) Encrypter {
+	if len(e.src) == 0 {
+		return e
+	}
+	h := make([]byte, size/8)
+	sha3.ShakeSum128(h, e.src)
+	e.dst = h
+	return e
+}
+
+// ByShake256 encrypts by shake256.
+// 通过 shake256 加密
+func (e Encrypter) ByShake256(size int) Encrypter {
+	if len(e.src) == 0 {
+		return e
+	}
+	h := make([]byte, size/8)
+	sha3.ShakeSum256(h, e.src)
+	e.dst = h
+	return e
+}
