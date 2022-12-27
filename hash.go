@@ -167,18 +167,6 @@ func (e Encrypter) BySha512(size ...int) Encrypter {
 	return e
 }
 
-// ByRipemd160 encrypts by ripemd160.
-// 通过 ripemd160 加密
-func (e Encrypter) ByRipemd160() Encrypter {
-	if len(e.src) == 0 {
-		return e
-	}
-	h := ripemd160.New()
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
-	return e
-}
-
 // ByShake128 encrypts by shake128.
 // 通过 shake128 加密
 func (e Encrypter) ByShake128(size int) Encrypter {
@@ -200,5 +188,17 @@ func (e Encrypter) ByShake256(size int) Encrypter {
 	h := make([]byte, size/8)
 	sha3.ShakeSum256(h, e.src)
 	e.dst = h
+	return e
+}
+
+// ByRipemd160 encrypts by ripemd160.
+// 通过 ripemd160 加密
+func (e Encrypter) ByRipemd160() Encrypter {
+	if len(e.src) == 0 {
+		return e
+	}
+	h := ripemd160.New()
+	h.Write(e.src)
+	e.dst = h.Sum(nil)
 	return e
 }

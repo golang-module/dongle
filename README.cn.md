@@ -387,20 +387,6 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha512(256).ToHexBytes() // []
 dongle.Encrypt.FromBytes([]byte("hello world")).BySha512(256).ToBase64Bytes() // []byte("CsVh+sg4EE4/LkrRB7S+4+k4vxXysV8AnMzNYakT8Bc=")
 ```
 
-##### Ripemd160 加密
-
-```go
-// 对字符串进行 ripemd160 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByRipemd160().ToHexString() // 98c615784ccb5fe5936fbc0cbe9dfdb408d92f0f
-// 对字符串进行 ripemd160 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByRipemd160().ToBase64String() // mMYVeEzLX+WTb7wMvp39tAjZLw8=
-
-// 对字节切片进行 ripemd160 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToHexBytes() // []byte("98c615784ccb5fe5936fbc0cbe9dfdb408d92f0f")
-// 对字节切片进行 ripemd160 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToBase64Bytes() // []byte("mMYVeEzLX+WTb7wMvp39tAjZLw8=")
-```
-
 ##### Shake128 加密
 
 ```go
@@ -427,6 +413,20 @@ dongle.Encrypt.FromString("hello world").ByShake256(512).ToBase64String() // Npd
 dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(512).ToHexBytes() // []byte("369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116")
 // 对字节切片进行 ripemd160 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(512).ToBase64Bytes() // []byte("Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg==")
+```
+
+##### Ripemd160 加密
+
+```go
+// 对字符串进行 ripemd160 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByRipemd160().ToHexString() // 98c615784ccb5fe5936fbc0cbe9dfdb408d92f0f
+// 对字符串进行 ripemd160 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByRipemd160().ToBase64String() // mMYVeEzLX+WTb7wMvp39tAjZLw8=
+
+// 对字节切片进行 ripemd160 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToHexBytes() // []byte("98c615784ccb5fe5936fbc0cbe9dfdb408d92f0f")
+// 对字节切片进行 ripemd160 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToBase64Bytes() // []byte("mMYVeEzLX+WTb7wMvp39tAjZLw8=")
 ```
 
 ##### Hmac-md2 加密
@@ -1116,9 +1116,9 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Sha512 加密
 - [x] Sha512-224 加密
 - [x] Sha512-256 加密
-- [x] Ripemd160 加密
 - [x] Shake128 加密
 - [x] Shake256 加密
+- [x] Ripemd160 加密
 - [x] Hmac-md2 加密
 - [x] Hmac-md4 加密
 - [x] Hmac-md5 加密
