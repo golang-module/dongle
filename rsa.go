@@ -1,6 +1,7 @@
 package dongle
 
 import (
+	"bytes"
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
@@ -19,7 +20,12 @@ func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
 		e.Error = invalidRsaPublicKeyError()
 		return e
 	}
-	e.dst, e.Error = rsa.EncryptPKCS1v15(rand.Reader, pub, e.src)
+	buffer := bytes.NewBufferString("")
+	for _, chunk := range split(e.src, pub.Size()-11) {
+		e.dst, e.Error = rsa.EncryptPKCS1v15(rand.Reader, pub, chunk)
+		buffer.Write(e.dst)
+	}
+	e.dst = buffer.Bytes()
 	return e
 }
 
@@ -34,11 +40,16 @@ func (d Decrypter) ByRsa(privateKey interface{}) Decrypter {
 		d.Error = invalidRsaPrivateKeyError()
 		return d
 	}
-	d.dst, d.Error = rsa.DecryptPKCS1v15(rand.Reader, pri, d.src)
-	if d.Error != nil {
-		d.Error = invalidRsaPrivateKeyError()
-		return d
+	buffer := bytes.NewBufferString("")
+	for _, chunk := range split(d.src, pri.Size()) {
+		d.dst, d.Error = rsa.DecryptPKCS1v15(rand.Reader, pri, chunk)
+		if d.Error != nil {
+			d.Error = invalidRsaPrivateKeyError()
+			return d
+		}
+		buffer.Write(d.dst)
 	}
+	d.dst = buffer.Bytes()
 	return d
 }
 
@@ -134,4 +145,19 @@ func (hash hashAlgo) isRsaSupported() bool {
 		}
 	}
 	return false
+}
+
+// split the string by the specified size
+// 按照指定长度分割字符串
+func split(buf []byte, size int) [][]byte {
+	var chunk []byte
+	chunks := make([][]byte, 0, len(buf)/size+1)
+	for len(buf) >= size {
+		chunk, buf = buf[:size], buf[size:]
+		chunks = append(chunks, chunk)
+	}
+	if len(buf) > 0 {
+		chunks = append(chunks, buf[:])
+	}
+	return chunks
 }
