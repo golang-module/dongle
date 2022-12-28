@@ -84,6 +84,20 @@ dongle.Encode.FromBytes([]byte("hello world")).ByBase32().ToBytes() // []byte("N
 dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToBytes() // []byte("hello world")
 ```
 
+##### Encode and decode by base45
+
+```go
+// Encode by base45 from string and output string
+dongle.Encode.FromString("hello world").ByBase45().ToString() // +8D VD82EK4F.KEA2
+// Decode by base45 from string and output string
+dongle.Decode.FromString("+8D VD82EK4F.KEA2").ByBase45().ToString() // hello world
+
+// Encode by base45 from byte slice and output byte slice
+dongle.Encode.FromBytes([]byte("hello world")).ByBase45().ToBytes() // []byte("+8D VD82EK4F.KEA2")
+// Decode by base45 from byte slice and output byte slice
+dongle.Decode.FromBytes([]byte("+8D VD82EK4F.KEA2")).ByBase45().ToBytes() // []byte("hello world")
+```
+
 ##### Encode and decode by base58
 
 ```go
@@ -1090,6 +1104,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Encoding and decoding by Hex
 - [x] Encoding and decoding by Base16
 - [x] Encoding and decoding by Base32
+- [x] Encoding and decoding by Base45
 - [x] Encoding and decoding by Base58
 - [x] Encoding and decoding by Base62
 - [x] Encoding and decoding by Base64

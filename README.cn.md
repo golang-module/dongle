@@ -81,6 +81,20 @@ dongle.Encode.FromBytes([]byte("hello world")).ByBase32().ToBytes() // []byte("N
 dongle.Decode.FromBytes([]byte("NBSWY3DPEB3W64TMMQ======")).ByBase32().ToBytes() // []byte("hello world")
 ```
 
+##### Base45 编码、解码
+
+```go
+// 对字符进行 base45 编码，输出字符串
+dongle.Encode.FromString("hello world").ByBase45().ToString() // +8D VD82EK4F.KEA2
+// 对字符串进行 base45 解码，输出字符串
+dongle.Decode.FromString("+8D VD82EK4F.KEA2").ByBase45().ToString() // hello world
+
+// 对字节切片进行 base45 编码，输出字节切片
+dongle.Encode.FromBytes([]byte("hello world")).ByBase45().ToBytes() // []byte("+8D VD82EK4F.KEA2")
+// 对字节切片进行 base45 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("+8D VD82EK4F.KEA2")).ByBase45().ToBytes() // []byte("hello world")
+```
+
 ##### Base58 编码、解码
 
 ```go
@@ -1093,6 +1107,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Hex 编码、解码
 - [x] Base16 编码、解码
 - [x] Base32 编码、解码
+- [x] Base45 编码、解码
 - [x] Base58 编码、解码
 - [x] Base62 编码、解码
 - [x] Base64 编码、解码

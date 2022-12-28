@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 
 	"github.com/golang-module/dongle/base100"
+	"github.com/golang-module/dongle/base45"
 	"github.com/golang-module/dongle/base58"
 	"github.com/golang-module/dongle/base62"
 	"github.com/golang-module/dongle/base91"
@@ -77,6 +78,28 @@ func (d Decoder) ByBase32() Decoder {
 		return d
 	}
 	d.dst, d.Error = buf[:n], err
+	return d
+}
+
+// ByBase45 encodes by base45.
+// 通过 base45 编码
+func (e Encoder) ByBase45() Encoder {
+	if len(e.src) == 0 {
+		return e
+	}
+	dst := base45.Encode(bytes2string(e.src))
+	e.dst = string2bytes(dst)
+	return e
+}
+
+// ByBase45 decodes by base45.
+// 通过 base45 解码
+func (d Decoder) ByBase45() Decoder {
+	if len(d.src) == 0 {
+		return d
+	}
+	dst, err := base45.Decode(bytes2string(d.src))
+	d.dst, d.Error = string2bytes(dst), err
 	return d
 }
 

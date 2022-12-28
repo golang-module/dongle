@@ -22,6 +22,9 @@ var baseXTests = []struct {
 	{"base32", "", ""},
 	{"base32", "hello world", "NBSWY3DPEB3W64TMMQ======"},
 
+	{"base45", "", ""},
+	{"base45", "hello world", "+8D VD82EK4F.KEA2"},
+
 	{"base58", "", ""},
 	{"base58", "hello world", "StV1DL6CwTryKyV"},
 
@@ -67,6 +70,8 @@ func TestBaseX_Encode_String(t *testing.T) {
 			e = e.ByBase16()
 		case "base32":
 			e = e.ByBase32()
+		case "base45":
+			e = e.ByBase45()
 		case "base58":
 			e = e.ByBase58()
 		case "base62":
@@ -102,6 +107,8 @@ func TestBaseX_Decode_String(t *testing.T) {
 			d = d.ByBase16()
 		case "base32":
 			d = d.ByBase32()
+		case "base45":
+			d = d.ByBase45()
 		case "base58":
 			d = d.ByBase58()
 		case "base62":
@@ -137,6 +144,8 @@ func TestBaseX_Encode_Bytes(t *testing.T) {
 			e = e.ByBase16()
 		case "base32":
 			e = e.ByBase32()
+		case "base45":
+			e = e.ByBase45()
 		case "base58":
 			e = e.ByBase58()
 		case "base62":
@@ -171,6 +180,8 @@ func TestBaseX_Decode_Bytes(t *testing.T) {
 			d = d.ByBase16()
 		case "base32":
 			d = d.ByBase32()
+		case "base45":
+			d = d.ByBase45()
 		case "base58":
 			d = d.ByBase58()
 		case "base62":
