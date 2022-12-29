@@ -1,34 +1,17 @@
 package dongle
 
 import (
-	"crypto"
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
-	"hash"
+	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/blake2s"
 
 	"github.com/golang-module/dongle/md2"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
-)
-
-// defines hash algorithm enum type.
-// 定义哈希算法枚举类型
-type hashAlgo crypto.Hash
-
-// hash algorithm constants
-// 哈希算法枚举值
-const (
-	MD4 hashAlgo = 1 + iota
-	MD5
-	SHA1
-	SHA224
-	SHA256
-	SHA384
-	SHA512
-	RIPEMD160 = 19
 )
 
 // ByMd2 encrypts by md2.
@@ -61,9 +44,8 @@ func (e Encrypter) ByMd5() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	h := md5.New()
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
+	dst := md5.Sum(e.src)
+	e.dst = dst[:]
 	return e
 }
 
@@ -73,34 +55,33 @@ func (e Encrypter) BySha1() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	h := sha1.New()
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
+	dst := sha1.Sum(e.src)
+	e.dst = dst[:]
 	return e
 }
 
 // BySha3 encrypts by sha3.
 // 通过 BySha3 加密
 func (e Encrypter) BySha3(size int) Encrypter {
-	var h hash.Hash
 	if len(e.src) == 0 {
 		return e
 	}
 	switch size {
 	case 224:
-		h = sha3.New224()
+		dst := sha3.Sum224(e.src)
+		e.dst = dst[:]
 	case 256:
-		h = sha3.New256()
+		dst := sha3.Sum256(e.src)
+		e.dst = dst[:]
 	case 384:
-		h = sha3.New384()
+		dst := sha3.Sum384(e.src)
+		e.dst = dst[:]
 	case 512:
-		h = sha3.New512()
+		dst := sha3.Sum512(e.src)
+		e.dst = dst[:]
 	default:
 		e.Error = invalidHashSizeError()
-		return e
 	}
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
 	return e
 }
 
@@ -110,9 +91,8 @@ func (e Encrypter) BySha224() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	h := sha256.New224()
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
+	dst := sha256.Sum224(e.src)
+	e.dst = dst[:]
 	return e
 }
 
@@ -122,9 +102,8 @@ func (e Encrypter) BySha256() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	h := sha256.New()
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
+	dst := sha256.Sum256(e.src)
+	e.dst = dst[:]
 	return e
 }
 
@@ -134,36 +113,32 @@ func (e Encrypter) BySha384() Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	h := sha512.New384()
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
+	dst := sha512.Sum384(e.src)
+	e.dst = dst[:]
 	return e
 }
 
 // BySha512 encrypts by sha512.
 // 通过 sha512 加密
 func (e Encrypter) BySha512(size ...int) Encrypter {
-	var h hash.Hash
 	if len(e.src) == 0 {
 		return e
 	}
 	if len(size) == 0 {
-		h = sha512.New()
-		h.Write(e.src)
-		e.dst = h.Sum(nil)
+		dst := sha512.Sum512(e.src)
+		e.dst = dst[:]
 		return e
 	}
 	switch size[0] {
 	case 224:
-		h = sha512.New512_224()
+		dst := sha512.Sum512_224(e.src)
+		e.dst = dst[:]
 	case 256:
-		h = sha512.New512_256()
+		dst := sha512.Sum512_256(e.src)
+		e.dst = dst[:]
 	default:
 		e.Error = invalidHashSizeError()
-		return e
 	}
-	h.Write(e.src)
-	e.dst = h.Sum(nil)
 	return e
 }
 
@@ -200,5 +175,43 @@ func (e Encrypter) ByRipemd160() Encrypter {
 	h := ripemd160.New()
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
+	return e
+}
+
+// ByBlake2b encrypts by blake2b.
+// 通过 blake2b 加密
+func (e Encrypter) ByBlake2b(size int) Encrypter {
+	if len(e.src) == 0 {
+		return e
+	}
+	switch size {
+	case 256:
+		dst := blake2b.Sum256(e.src)
+		e.dst = dst[:]
+	case 384:
+		dst := blake2b.Sum384(e.src)
+		e.dst = dst[:]
+	case 512:
+		dst := blake2b.Sum512(e.src)
+		e.dst = dst[:]
+	default:
+		e.Error = invalidHashSizeError()
+	}
+	return e
+}
+
+// ByBlake2s encrypts by blake2s.
+// 通过 blake2s 加密
+func (e Encrypter) ByBlake2s(size int) Encrypter {
+	if len(e.src) == 0 {
+		return e
+	}
+	switch size {
+	case 256:
+		dst := blake2s.Sum256(e.src)
+		e.dst = dst[:]
+	default:
+		e.Error = invalidHashSizeError()
+	}
 	return e
 }

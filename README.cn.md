@@ -443,6 +443,53 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToHexBytes() // []
 dongle.Encrypt.FromBytes([]byte("hello world")).ByRipemd160().ToBase64Bytes() // []byte("mMYVeEzLX+WTb7wMvp39tAjZLw8=")
 ```
 
+##### Blake2b 加密
+> 包含 blake2b-256, blake2b-384, blake2b-512
+
+```go
+// 对字符串进行 blake2b-256 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2b(256).ToHexBytes() // 256c83b297114d201b30179f3f0ef0cace9783622da5974326b436178aeef610
+// 对字符串进行 blake2b-256 加密，输出经过 base6 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2b(256).ToBase64String() // JWyDspcRTSAbMBefPw7wys6Xg2ItpZdDJrQ2F4ru9hA=
+// 对字节切片进行 blake2b-256 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2b(256).ToHexBytes() // []byte("256c83b297114d201b30179f3f0ef0cace9783622da5974326b436178aeef610")
+// 对字节切片进行 blake2b-256 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2b(256).ToBase64Bytes() // []byte("JWyDspcRTSAbMBefPw7wys6Xg2ItpZdDJrQ2F4ru9hA=")
+
+// 对字符串进行 blake2b-384 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2b(384).ToHexBytes() // 8c653f8c9c9aa2177fb6f8cf5bb914828faa032d7b486c8150663d3f6524b086784f8e62693171ac51fc80b7d2cbb12b
+// 对字符串进行 blake2b-384 加密，输出经过 base6 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2b(384).ToBase64String() // jGU/jJyaohd/tvjPW7kUgo+qAy17SGyBUGY9P2UksIZ4T45iaTFxrFH8gLfSy7Er
+// 对字节切片进行 blake2b-384 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2b(384).ToHexBytes() // []byte("8c653f8c9c9aa2177fb6f8cf5bb914828faa032d7b486c8150663d3f6524b086784f8e62693171ac51fc80b7d2cbb12b")
+// 对字节切片进行 blake2b-384 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2b(384).ToBase64Bytes() // []byte("jGU/jJyaohd/tvjPW7kUgo+qAy17SGyBUGY9P2UksIZ4T45iaTFxrFH8gLfSy7Er")
+
+// 对字符串进行 blake2b-512 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2b(512).ToHexBytes() // 021ced8799296ceca557832ab941a50b4a11f83478cf141f51f933f653ab9fbcc05a037cddbed06e309bf334942c4e58cdf1a46e237911ccd7fcf9787cbc7fd0
+// 对字符串进行 blake2b-512 加密，输出经过 base6 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2b(512).ToBase64String() // Ahzth5kpbOylV4MquUGlC0oR+DR4zxQfUfkz9lOrn7zAWgN83b7QbjCb8zSULE5YzfGkbiN5EczX/Pl4fLx/0A==
+// 对字节切片进行 blake2b-512 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2b(512).ToHexBytes() // []byte("021ced8799296ceca557832ab941a50b4a11f83478cf141f51f933f653ab9fbcc05a037cddbed06e309bf334942c4e58cdf1a46e237911ccd7fcf9787cbc7fd0")
+// 对字节切片进行 blake2b-512 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2b(512).ToBase64Bytes() // []byte("Ahzth5kpbOylV4MquUGlC0oR+DR4zxQfUfkz9lOrn7zAWgN83b7QbjCb8zSULE5YzfGkbiN5EczX/Pl4fLx/0A==")
+```
+
+##### Blake2s 加密
+> 目前仅支持 blake2s-256
+
+```go
+// 对字符串进行 blake2s-256 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2s(256).ToHexString() // 9aec6806794561107e594b1f6a8a6b0c92a0cba9acf5e5e93cca06f781813b0b
+// 对字符串进行 blake2s-256 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlake2s(256).ToBase64String() // muxoBnlFYRB+WUsfaoprDJKgy6ms9eXpPMoG94GBOws=
+
+// 对字节切片进行 blake2s-256 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2s(256).ToHexBytes() // []byte("9aec6806794561107e594b1f6a8a6b0c92a0cba9acf5e5e93cca06f781813b0b")
+// 对字节切片进行 blake2s-256 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2s(256).ToBase64Bytes() // []byte("muxoBnlFYRB+WUsfaoprDJKgy6ms9eXpPMoG94GBOws=")
+```
+
 ##### Hmac-md2 加密
 
 ```go
@@ -1134,6 +1181,10 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Shake128 加密
 - [x] Shake256 加密
 - [x] Ripemd160 加密
+- [x] Blake2b-256 加密
+- [x] Blake2b-384 加密
+- [x] Blake2b-512 加密
+- [x] Blake2s-256 加密
 - [x] Hmac-md2 加密
 - [x] Hmac-md4 加密
 - [x] Hmac-md5 加密

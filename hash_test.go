@@ -60,13 +60,27 @@ var hashTests = []struct {
 
 	{"shake128-256", "", "", ""},
 	{"shake128-256", "hello world", "3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b8", "OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLg="},
+
 	{"shake128-512", "", "", ""},
 	{"shake128-512", "hello world", "3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b899072665674f26cc494a4bcf027c58267e8ee2da60e942759de86d2670bba1aa", "OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLiZByZlZ08mzElKS88CfFgmfo7i2mDpQnWd6G0mcLuhqg=="},
 
 	{"shake256-256", "", "", ""},
 	{"shake256-256", "hello world", "369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527", "Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSc="},
+
 	{"shake256-512", "", "", ""},
 	{"shake256-512", "hello world", "369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116", "Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg=="},
+
+	{"blake2b-256", "", "", ""},
+	{"blake2b-256", "hello world", "256c83b297114d201b30179f3f0ef0cace9783622da5974326b436178aeef610", "JWyDspcRTSAbMBefPw7wys6Xg2ItpZdDJrQ2F4ru9hA="},
+
+	{"blake2b-384", "", "", ""},
+	{"blake2b-384", "hello world", "8c653f8c9c9aa2177fb6f8cf5bb914828faa032d7b486c8150663d3f6524b086784f8e62693171ac51fc80b7d2cbb12b", "jGU/jJyaohd/tvjPW7kUgo+qAy17SGyBUGY9P2UksIZ4T45iaTFxrFH8gLfSy7Er"},
+
+	{"blake2b-512", "", "", ""},
+	{"blake2b-512", "hello world", "021ced8799296ceca557832ab941a50b4a11f83478cf141f51f933f653ab9fbcc05a037cddbed06e309bf334942c4e58cdf1a46e237911ccd7fcf9787cbc7fd0", "Ahzth5kpbOylV4MquUGlC0oR+DR4zxQfUfkz9lOrn7zAWgN83b7QbjCb8zSULE5YzfGkbiN5EczX/Pl4fLx/0A=="},
+
+	{"blake2s-256", "", "", ""},
+	{"blake2s-256", "hello world", "9aec6806794561107e594b1f6a8a6b0c92a0cba9acf5e5e93cca06f781813b0b", "muxoBnlFYRB+WUsfaoprDJKgy6ms9eXpPMoG94GBOws="},
 }
 
 func TestHash_Encrypt_String(t *testing.T) {
@@ -112,6 +126,14 @@ func TestHash_Encrypt_String(t *testing.T) {
 			e = e.ByShake256(256)
 		case "shake256-512":
 			e = e.ByShake256(512)
+		case "blake2b-256":
+			e = e.ByBlake2b(256)
+		case "blake2b-384":
+			e = e.ByBlake2b(384)
+		case "blake2b-512":
+			e = e.ByBlake2b(512)
+		case "blake2s-256":
+			e = e.ByBlake2s(256)
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
@@ -166,6 +188,14 @@ func TestHash_Encrypt_Bytes(t *testing.T) {
 			e = e.ByShake256(256)
 		case "shake256-512":
 			e = e.ByShake256(512)
+		case "blake2b-256":
+			e = e.ByBlake2b(256)
+		case "blake2b-384":
+			e = e.ByBlake2b(384)
+		case "blake2b-512":
+			e = e.ByBlake2b(512)
+		case "blake2s-256":
+			e = e.ByBlake2s(256)
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
@@ -186,4 +216,14 @@ func TestHash_Size_Error(t *testing.T) {
 	assert.Equal(t, invalidHashSizeError(), e3.Error)
 	e4 := Encrypt.FromBytes([]byte("hello world")).BySha512(100)
 	assert.Equal(t, invalidHashSizeError(), e4.Error)
+
+	e5 := Encrypt.FromString("hello world").ByBlake2b(100)
+	assert.Equal(t, invalidHashSizeError(), e5.Error)
+	e6 := Encrypt.FromBytes([]byte("hello world")).ByBlake2b(100)
+	assert.Equal(t, invalidHashSizeError(), e6.Error)
+
+	e7 := Encrypt.FromString("hello world").ByBlake2s(100)
+	assert.Equal(t, invalidHashSizeError(), e7.Error)
+	e8 := Encrypt.FromBytes([]byte("hello world")).ByBlake2s(100)
+	assert.Equal(t, invalidHashSizeError(), e8.Error)
 }
