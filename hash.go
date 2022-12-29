@@ -5,10 +5,10 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
-	"golang.org/x/crypto/blake2b"
-	"golang.org/x/crypto/blake2s"
 
 	"github.com/golang-module/dongle/md2"
+	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
