@@ -9,6 +9,23 @@ import (
 	"encoding/pem"
 )
 
+// defines rsa hash enum type.
+// 定义 rsa 哈希算法枚举类型
+type rsaHash crypto.Hash
+
+// rsa hash constants
+// rsa 哈希算法枚举值
+const (
+	MD4 rsaHash = 1 + iota
+	MD5
+	SHA1
+	SHA224
+	SHA256
+	SHA384
+	SHA512
+	RIPEMD160 = 19
+)
+
 // ByRsa encrypts by rsa with public key.
 // 通过 rsa 公钥加密
 func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
@@ -55,11 +72,11 @@ func (d Decrypter) ByRsa(privateKey interface{}) Decrypter {
 
 // ByRsa signs by rsa.
 // 通过 rsa 私钥签名
-func (s Signer) ByRsa(privateKey interface{}, hash hashAlgo) Signer {
+func (s Signer) ByRsa(privateKey interface{}, hash rsaHash) Signer {
 	if len(s.src) == 0 || s.Error != nil {
 		return s
 	}
-	if !hash.isRsaSupported() {
+	if !hash.isSupported() {
 		s.Error = invalidRsaHashError()
 		return s
 	}
@@ -76,11 +93,11 @@ func (s Signer) ByRsa(privateKey interface{}, hash hashAlgo) Signer {
 
 // ByRsa verify sign by rsa with public key.
 // 通过 rsa 公钥验签
-func (v Verifier) ByRsa(publicKey interface{}, hash hashAlgo) Verifier {
+func (v Verifier) ByRsa(publicKey interface{}, hash rsaHash) Verifier {
 	if len(v.src) == 0 || v.Error != nil {
 		return v
 	}
-	if !hash.isRsaSupported() {
+	if !hash.isSupported() {
 		v.Error = invalidRsaHashError()
 		return v
 	}
@@ -135,12 +152,12 @@ func parseRsaPrivateKey(privateKey interface{}) (*rsa.PrivateKey, error) {
 
 // whether is a rsa supported hash algorithm
 // 判断是否是 rsa 支持的哈希算法
-func (hash hashAlgo) isRsaSupported() bool {
-	hashes := []hashAlgo{
+func (hash rsaHash) isSupported() bool {
+	hashes := []rsaHash{
 		MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160,
 	}
-	for _, val := range hashes {
-		if val == hash {
+	for _, algo := range hashes {
+		if algo == hash {
 			return true
 		}
 	}
