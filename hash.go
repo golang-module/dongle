@@ -61,7 +61,7 @@ func (e Encrypter) BySha1() Encrypter {
 }
 
 // BySha3 encrypts by sha3.
-// 通过 BySha3 加密
+// 通过 sha3 加密
 func (e Encrypter) BySha3(size int) Encrypter {
 	if len(e.src) == 0 {
 		return e
