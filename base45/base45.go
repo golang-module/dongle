@@ -1,4 +1,4 @@
-// Package base45 implements base62 encoding, fork from https://github.com/xkmsoft/base45
+// Package base45 implements base45 encoding, fork from https://github.com/xkmsoft/base45
 package base45
 
 import (
