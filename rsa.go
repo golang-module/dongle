@@ -32,13 +32,13 @@ func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
 	}
-	pub, err := parseRsaPublicKey(publicKey)
+	pub, err := ParseRsaPublicKey(interface2bytes(publicKey))
 	if err != nil {
-		e.Error = invalidRsaPublicKeyError()
+		e.Error = err
 		return e
 	}
 	buffer := bytes.NewBufferString("")
-	for _, chunk := range split(e.src, pub.Size()-11) {
+	for _, chunk := range stringSplit(e.src, pub.Size()-11) {
 		e.dst, e.Error = rsa.EncryptPKCS1v15(rand.Reader, pub, chunk)
 		buffer.Write(e.dst)
 	}
@@ -52,13 +52,13 @@ func (d Decrypter) ByRsa(privateKey interface{}) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
-	pri, err := parseRsaPrivateKey(privateKey)
+	pri, err := ParseRsaPrivateKey(interface2bytes(privateKey))
 	if err != nil {
-		d.Error = invalidRsaPrivateKeyError()
+		d.Error = err
 		return d
 	}
 	buffer := bytes.NewBufferString("")
-	for _, chunk := range split(d.src, pri.Size()) {
+	for _, chunk := range stringSplit(d.src, pri.Size()) {
 		d.dst, d.Error = rsa.DecryptPKCS1v15(rand.Reader, pri, chunk)
 		if d.Error != nil {
 			d.Error = invalidRsaPrivateKeyError()
@@ -80,7 +80,7 @@ func (s Signer) ByRsa(privateKey interface{}, hash rsaHash) Signer {
 		s.Error = invalidRsaHashError()
 		return s
 	}
-	pri, err := parseRsaPrivateKey(privateKey)
+	pri, err := ParseRsaPrivateKey(interface2bytes(privateKey))
 	if err != nil {
 		s.Error = err
 		return s
@@ -101,7 +101,7 @@ func (v Verifier) ByRsa(publicKey interface{}, hash rsaHash) Verifier {
 		v.Error = invalidRsaHashError()
 		return v
 	}
-	pub, err := parseRsaPublicKey(publicKey)
+	pub, err := ParseRsaPublicKey(interface2bytes(publicKey))
 	if err != nil {
 		v.Error = err
 		return v
@@ -112,10 +112,10 @@ func (v Verifier) ByRsa(publicKey interface{}, hash rsaHash) Verifier {
 	return v
 }
 
-// parseRsaPublicKey parses rsa public key.
+// ParseRsaPublicKey parses rsa public key.
 // 解析 rsa 公钥
-func parseRsaPublicKey(publicKey interface{}) (*rsa.PublicKey, error) {
-	block, _ := pem.Decode(interface2bytes(publicKey))
+func ParseRsaPublicKey(publicKey []byte) (*rsa.PublicKey, error) {
+	block, _ := pem.Decode(publicKey)
 	if block == nil {
 		return nil, invalidRsaPublicKeyError()
 	}
@@ -131,10 +131,10 @@ func parseRsaPublicKey(publicKey interface{}) (*rsa.PublicKey, error) {
 	return pub.(*rsa.PublicKey), err
 }
 
-// parseRsaPrivateKey parses rsa private key.
+// ParseRsaPrivateKey parses rsa private key.
 // 解析 rsa 私钥
-func parseRsaPrivateKey(privateKey interface{}) (*rsa.PrivateKey, error) {
-	block, _ := pem.Decode(interface2bytes(privateKey))
+func ParseRsaPrivateKey(privateKey []byte) (*rsa.PrivateKey, error) {
+	block, _ := pem.Decode(privateKey)
 	if block == nil {
 		return nil, invalidRsaPrivateKeyError()
 	}
@@ -162,19 +162,4 @@ func (hash rsaHash) isSupported() bool {
 		}
 	}
 	return false
-}
-
-// split the string by the specified size
-// 按照指定长度分割字符串
-func split(buf []byte, size int) [][]byte {
-	var chunk []byte
-	chunks := make([][]byte, 0, len(buf)/size+1)
-	for len(buf) >= size {
-		chunk, buf = buf[:size], buf[size:]
-		chunks = append(chunks, chunk)
-	}
-	if len(buf) > 0 {
-		chunks = append(chunks, buf[:])
-	}
-	return chunks
 }
