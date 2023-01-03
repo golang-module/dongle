@@ -38,7 +38,7 @@ func (e Encrypter) ByRsa(publicKey interface{}) Encrypter {
 		return e
 	}
 	buffer := bytes.NewBufferString("")
-	for _, chunk := range stringSplit(e.src, pub.Size()-11) {
+	for _, chunk := range bytesSplit(e.src, pub.Size()-11) {
 		e.dst, e.Error = rsa.EncryptPKCS1v15(rand.Reader, pub, chunk)
 		buffer.Write(e.dst)
 	}
@@ -58,7 +58,7 @@ func (d Decrypter) ByRsa(privateKey interface{}) Decrypter {
 		return d
 	}
 	buffer := bytes.NewBufferString("")
-	for _, chunk := range stringSplit(d.src, pri.Size()) {
+	for _, chunk := range bytesSplit(d.src, pri.Size()) {
 		d.dst, d.Error = rsa.DecryptPKCS1v15(rand.Reader, pri, chunk)
 		if d.Error != nil {
 			d.Error = invalidRsaPrivateKeyError()

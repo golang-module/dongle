@@ -80,9 +80,9 @@ func interface2bytes(i interface{}) (b []byte) {
 	return
 }
 
-// stringSplit split the string by the specified size
-// 按照指定长度分割字符串
-func stringSplit(buf []byte, size int) [][]byte {
+// bytesSplit split the byte slice by the specified size
+// 按照指定长度分割字节切片
+func bytesSplit(buf []byte, size int) [][]byte {
 	var chunk []byte
 	chunks := make([][]byte, 0, len(buf)/size+1)
 	for len(buf) >= size {
