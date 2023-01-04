@@ -898,7 +898,7 @@ RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
 ```
 
-###### 公钥加密、私钥解密
+###### 1、公钥加密、私钥解密
 
 ```go
 // 使用 pkcs1 格式公钥对字符串进行 rsa 加密
@@ -930,7 +930,7 @@ dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PrivateKey).ToBy
 dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
 ```
 
-###### 私钥加密、公钥解密
+###### 2、私钥加密、公钥解密
 
 ```go
 // 使用 pkcs1 格式私钥对字符串进行 rsa 加密
