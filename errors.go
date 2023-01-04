@@ -87,11 +87,6 @@ var (
 	invalidRsaPrivateKeyError = func() error {
 		return fmt.Errorf("rsa: invalid private key, please make sure the private key is valid")
 	}
-	// returns an invalid rsa hash function error
-	// 返回无效的 rsa 哈希函数错误
-	invalidRsaHashError = func() error {
-		return fmt.Errorf("rsa: invalid hash function, the hash function is unsupported")
-	}
 )
 
 var (
