@@ -25,6 +25,11 @@ var (
 	invalidPrivateKeyError = func() error {
 		return fmt.Errorf("rsa: invalid private key, please make sure the private key is valid")
 	}
+	// returns an invalid hash function error
+	// 返回无效的哈希函数错误
+	invalidHashError = func() error {
+		return fmt.Errorf("rsa: invalid hash function, the hash function is unsupported")
+	}
 )
 
 // KeyPair defines a KeyPair struct.
@@ -32,6 +37,7 @@ var (
 type KeyPair struct {
 	publicKey  []byte
 	privateKey []byte
+	hash       crypto.Hash
 }
 
 // NewKeyPair returns a new KeyPair instance.
@@ -50,6 +56,12 @@ func (k *KeyPair) SetPublicKey(publicKey []byte) {
 // 设置私钥
 func (k *KeyPair) SetPrivateKey(privateKey []byte) {
 	k.privateKey = privateKey
+}
+
+// SetHash sets hash.
+// 设置哈希
+func (k *KeyPair) SetHash(hash crypto.Hash) {
+	k.hash = hash
 }
 
 // EncryptByPublicKey encrypts by public key.
@@ -118,7 +130,7 @@ func (k *KeyPair) EncryptByPrivateKey(src []byte) (dst []byte, err error) {
 		return
 	}
 	buffer := bytes.NewBufferString("")
-	for _, chunk := range bytesSplit(src, pri.Size()) {
+	for _, chunk := range bytesSplit(src, pri.Size()-11) {
 		dst, err = rsa.SignPKCS1v15(nil, pri, crypto.Hash(0), chunk)
 		buffer.Write(dst)
 	}
@@ -142,37 +154,51 @@ func (k *KeyPair) DecryptByPublicKey(src []byte) (dst []byte, err error) {
 		dst, err = emptyByte, invalidPublicKeyError()
 		return
 	}
-
+	buffer := bytes.NewBufferString("")
 	bigInt := new(big.Int)
-	bigInt.Exp(new(big.Int).SetBytes(src), big.NewInt(int64(pub.E)), pub.N)
-	dst = leftUnPad(leftPad(bigInt.Bytes(), pub.Size()))
+	for _, chunk := range bytesSplit(src, pub.Size()) {
+		bigInt.Exp(new(big.Int).SetBytes(chunk), big.NewInt(int64(pub.E)), pub.N)
+		dst = leftUnPad(leftPad(bigInt.Bytes(), pub.Size()))
+		buffer.Write(dst)
+	}
+	dst = buffer.Bytes()
 	return
 }
 
 // SignByPrivateKey signs by private key.
 // 通过私钥签名
-func (k *KeyPair) SignByPrivateKey(src []byte, hash crypto.Hash) (dst []byte, err error) {
+func (k *KeyPair) SignByPrivateKey(src []byte) (dst []byte, err error) {
 	pri, err := k.ParsePrivateKey()
 	if err != nil {
 		dst, err = emptyByte, invalidPrivateKeyError()
 		return
 	}
-	hasher := hash.New()
+	if !isSupported(k.hash) {
+		dst, err = emptyByte, invalidHashError()
+		return
+	}
+	hasher := k.hash.New()
 	hasher.Write(src)
-	dst, err = rsa.SignPKCS1v15(rand.Reader, pri, hash, hasher.Sum(nil))
+	hashed := hasher.Sum(nil)
+	dst, err = rsa.SignPKCS1v15(rand.Reader, pri, k.hash, hashed)
 	return
 }
 
 // VerifyByPublicKey verify by public key.
 // 通过公钥验签
-func (k *KeyPair) VerifyByPublicKey(src, sign []byte, hash crypto.Hash) (err error) {
+func (k *KeyPair) VerifyByPublicKey(src, sign []byte) (err error) {
 	pub, err := k.ParsePublicKey()
 	if err != nil {
 		return
 	}
-	hasher := hash.New()
+	if !isSupported(k.hash) {
+		err = invalidHashError()
+		return
+	}
+	hasher := k.hash.New()
 	hasher.Write(src)
-	return rsa.VerifyPKCS1v15(pub, hash, hasher.Sum(nil), sign)
+	hashed := hasher.Sum(nil)
+	return rsa.VerifyPKCS1v15(pub, k.hash, hashed, sign)
 }
 
 // ParsePublicKey parses public key.
@@ -241,6 +267,20 @@ func IsPrivateKey(publicKey []byte) bool {
 	}
 	if block.Type == "PRIVATE KEY" {
 		return true
+	}
+	return false
+}
+
+// whether is a supported hash algorithm
+// 判断是否是支持的哈希算法
+func isSupported(hash crypto.Hash) bool {
+	hashes := []crypto.Hash{
+		crypto.MD5, crypto.SHA1, crypto.SHA224, crypto.SHA256, crypto.SHA384, crypto.SHA512, crypto.RIPEMD160,
+	}
+	for _, algo := range hashes {
+		if algo == hash {
+			return true
+		}
 	}
 	return false
 }
