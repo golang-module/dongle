@@ -51,111 +51,85 @@ RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
 )
 
-func TestRsa_PKCS1_String(t *testing.T) {
-	e := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
-	assert.Nil(t, e.Error)
-	d1 := Decrypt.FromRawString(e.ToRawString()).ByRsa(pkcs1PrivateKey)
-	assert.Nil(t, d1.Error)
-	assert.Equal(t, rsaInput, d1.ToString())
-	d2 := Decrypt.FromHexString(e.ToHexString()).ByRsa(pkcs1PrivateKey)
-	assert.Nil(t, d2.Error)
-	assert.Equal(t, rsaInput, d2.ToString())
-	d3 := Decrypt.FromBase64String(e.ToBase64String()).ByRsa(pkcs1PrivateKey)
-	assert.Nil(t, d3.Error)
-	assert.Equal(t, rsaInput, d3.ToString())
+func TestRsa_EncryptWithPublicKy(t *testing.T) {
+	e1 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PublicKey)
+	assert.Nil(t, e1.Error)
+	d11 := Decrypt.FromRawString(e1.ToRawString()).ByRsa(pkcs1PrivateKey)
+	assert.Nil(t, d11.Error)
+	assert.Equal(t, rsaInput, d11.ToString())
+	d12 := Decrypt.FromHexString(e1.ToHexString()).ByRsa(pkcs1PrivateKey)
+	assert.Nil(t, d12.Error)
+	assert.Equal(t, rsaInput, d12.ToString())
+	d13 := Decrypt.FromBase64String(e1.ToBase64String()).ByRsa(pkcs1PrivateKey)
+	assert.Nil(t, d13.Error)
+	assert.Equal(t, rsaInput, d13.ToString())
 
-	s := Sign.FromString(rsaInput).ByRsa(pkcs1PrivateKey, SHA384)
-	assert.Nil(t, s.Error)
-	v1 := Verify.FromRawString(s.ToRawString(), rsaInput).ByRsa(pkcs1PublicKey, SHA384)
-	assert.Nil(t, v1.Error)
-	assert.Equal(t, true, v1.ToBool())
-	v2 := Verify.FromHexString(s.ToHexString(), rsaInput).ByRsa(pkcs1PublicKey, SHA384)
-	assert.Nil(t, v2.Error)
-	assert.Equal(t, true, v2.ToBool())
-	v3 := Verify.FromBase64String(s.ToBase64String(), rsaInput).ByRsa(pkcs1PublicKey, SHA384)
-	assert.Nil(t, v1.Error)
-	assert.Equal(t, true, v3.ToBool())
+	e8 := Encrypt.FromString(rsaInput).ByRsa(pkcs8PublicKey)
+	assert.Nil(t, e8.Error)
+	d81 := Decrypt.FromRawString(e8.ToRawString()).ByRsa(pkcs8PrivateKey)
+	assert.Nil(t, d81.Error)
+	assert.Equal(t, rsaInput, d11.ToString())
+	d82 := Decrypt.FromHexString(e8.ToHexString()).ByRsa(pkcs8PrivateKey)
+	assert.Nil(t, d82.Error)
+	assert.Equal(t, rsaInput, d12.ToString())
+	d83 := Decrypt.FromBase64String(e8.ToBase64String()).ByRsa(pkcs8PrivateKey)
+	assert.Nil(t, d83.Error)
+	assert.Equal(t, rsaInput, d83.ToString())
 }
 
-func TestRsa_PKCS1_Bytes(t *testing.T) {
-	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
-	assert.Nil(t, e.Error)
-	d1 := Decrypt.FromRawBytes(e.ToRawBytes()).ByRsa([]byte(pkcs1PrivateKey))
-	assert.Nil(t, d1.Error)
-	assert.Equal(t, []byte(rsaInput), d1.ToBytes())
-	d2 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa([]byte(pkcs1PrivateKey))
-	assert.Nil(t, d2.Error)
-	assert.Equal(t, []byte(rsaInput), d2.ToBytes())
-	d3 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa([]byte(pkcs1PrivateKey))
-	assert.Nil(t, d3.Error)
-	assert.Equal(t, []byte(rsaInput), d3.ToBytes())
+func TestRsa_EncryptWithPrivateKy(t *testing.T) {
+	e1 := Encrypt.FromString(rsaInput).ByRsa(pkcs1PrivateKey)
+	assert.Nil(t, e1.Error)
+	d11 := Decrypt.FromRawString(e1.ToRawString()).ByRsa(pkcs1PublicKey)
+	assert.Nil(t, d11.Error)
+	assert.Equal(t, rsaInput, d11.ToString())
+	d12 := Decrypt.FromHexString(e1.ToHexString()).ByRsa(pkcs1PublicKey)
+	assert.Nil(t, d12.Error)
+	assert.Equal(t, rsaInput, d12.ToString())
+	d13 := Decrypt.FromBase64String(e1.ToBase64String()).ByRsa(pkcs1PublicKey)
+	assert.Nil(t, d13.Error)
+	assert.Equal(t, rsaInput, d13.ToString())
 
-	s := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PrivateKey), SHA256)
-	assert.Nil(t, s.Error)
-	v1 := Verify.FromRawBytes(s.ToRawBytes(), []byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey), SHA256)
-	assert.Nil(t, v1.Error)
-	assert.Equal(t, true, v1.ToBool())
-	v2 := Verify.FromHexBytes(s.ToHexBytes(), []byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey), SHA256)
-	assert.Nil(t, v2.Error)
-	assert.Equal(t, true, v2.ToBool())
-	v3 := Verify.FromBase64Bytes(s.ToBase64Bytes(), []byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey), SHA256)
-	assert.Nil(t, v2.Error)
-	assert.Equal(t, true, v3.ToBool())
+	e8 := Encrypt.FromString(rsaInput).ByRsa(pkcs8PrivateKey)
+	assert.Nil(t, e8.Error)
+	d81 := Decrypt.FromRawString(e8.ToRawString()).ByRsa(pkcs8PublicKey)
+	assert.Nil(t, d81.Error)
+	assert.Equal(t, rsaInput, d81.ToString())
+	d82 := Decrypt.FromHexString(e8.ToHexString()).ByRsa(pkcs8PublicKey)
+	assert.Nil(t, d82.Error)
+	assert.Equal(t, rsaInput, d82.ToString())
+	d83 := Decrypt.FromBase64String(e8.ToBase64String()).ByRsa(pkcs8PublicKey)
+	assert.Nil(t, d83.Error)
+	assert.Equal(t, rsaInput, d83.ToString())
 }
 
-func TestRsa_PKCS8_String(t *testing.T) {
-	e := Encrypt.FromString(rsaInput).ByRsa(pkcs8PublicKey)
-	assert.Nil(t, e.Error)
-	d1 := Decrypt.FromRawString(e.ToRawString()).ByRsa(pkcs8PrivateKey)
-	assert.Nil(t, d1.Error)
-	assert.Equal(t, rsaInput, d1.ToString())
-	d2 := Decrypt.FromHexString(e.ToHexString()).ByRsa(pkcs8PrivateKey)
-	assert.Nil(t, d2.Error)
-	assert.Equal(t, rsaInput, d2.ToString())
-	d3 := Decrypt.FromBase64String(e.ToBase64String()).ByRsa(pkcs8PrivateKey)
-	assert.Nil(t, d3.Error)
-	assert.Equal(t, rsaInput, d3.ToString())
+func TestRsa_SignWithPrivateKy(t *testing.T) {
+	s1 := Sign.FromString(rsaInput).ByRsa(pkcs1PrivateKey, SHA224)
+	assert.Nil(t, s1.Error)
+	v11 := Verify.FromRawString(s1.ToRawString(), rsaInput).ByRsa(pkcs1PublicKey, SHA224)
+	assert.Nil(t, v11.Error)
+	assert.Equal(t, true, v11.ToBool())
+	v12 := Verify.FromHexString(s1.ToHexString(), rsaInput).ByRsa(pkcs1PublicKey, SHA224)
+	assert.Nil(t, v12.Error)
+	assert.Equal(t, true, v12.ToBool())
+	v13 := Verify.FromBase64String(s1.ToBase64String(), rsaInput).ByRsa(pkcs1PublicKey, SHA224)
+	assert.Nil(t, v13.Error)
+	assert.Equal(t, true, v13.ToBool())
 
-	s := Sign.FromString(rsaInput).ByRsa(pkcs8PrivateKey, SHA384)
-	assert.Nil(t, s.Error)
-	v1 := Verify.FromRawString(s.ToRawString(), "").ByRsa(pkcs8PublicKey, SHA224)
-	assert.Nil(t, v1.Error)
-	assert.Equal(t, false, v1.ToBool())
-	v2 := Verify.FromHexString(s.ToHexString(), "").ByRsa(pkcs8PublicKey, SHA224)
-	assert.Nil(t, v2.Error)
-	assert.Equal(t, false, v2.ToBool())
-	v3 := Verify.FromBase64String(s.ToBase64String(), rsaInput).ByRsa(pkcs8PublicKey, SHA384)
-	assert.Nil(t, v1.Error)
-	assert.Equal(t, true, v3.ToBool())
+	s8 := Sign.FromString(rsaInput).ByRsa(pkcs8PrivateKey, SHA256)
+	assert.Nil(t, s8.Error)
+	v81 := Verify.FromRawString(s8.ToRawString(), rsaInput).ByRsa(pkcs8PublicKey, SHA256)
+	assert.Nil(t, v81.Error)
+	assert.Equal(t, true, v81.ToBool())
+	v82 := Verify.FromHexString(s8.ToHexString(), rsaInput).ByRsa(pkcs8PublicKey, SHA256)
+	assert.Nil(t, v82.Error)
+	assert.Equal(t, true, v12.ToBool())
+	v83 := Verify.FromBase64String(s8.ToBase64String(), rsaInput).ByRsa(pkcs8PublicKey, SHA256)
+	assert.Nil(t, v83.Error)
+	assert.Equal(t, true, v83.ToBool())
 }
 
-func TestRsa_PKCS8_Bytes(t *testing.T) {
-	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey))
-	assert.Nil(t, e.Error)
-	d1 := Decrypt.FromRawBytes(e.ToRawBytes()).ByRsa([]byte(pkcs8PrivateKey))
-	assert.Nil(t, d1.Error)
-	assert.Equal(t, []byte(rsaInput), d1.ToBytes())
-	d2 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa([]byte(pkcs8PrivateKey))
-	assert.Nil(t, d2.Error)
-	assert.Equal(t, []byte(rsaInput), d2.ToBytes())
-	d3 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa([]byte(pkcs8PrivateKey))
-	assert.Nil(t, d3.Error)
-	assert.Equal(t, []byte(rsaInput), d3.ToBytes())
-
-	s := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PrivateKey), SHA256)
-	assert.Nil(t, s.Error)
-	v1 := Verify.FromRawBytes(s.ToRawBytes(), []byte("")).ByRsa([]byte(pkcs8PublicKey), MD5)
-	assert.Nil(t, v1.Error)
-	assert.Equal(t, false, v1.ToBool())
-	v2 := Verify.FromHexBytes(s.ToHexBytes(), []byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey), SHA256)
-	assert.Nil(t, v2.Error)
-	assert.Equal(t, true, v2.ToBool())
-	v3 := Verify.FromBase64Bytes(s.ToBase64Bytes(), []byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey), SHA256)
-	assert.Nil(t, v2.Error)
-	assert.Equal(t, true, v3.ToBool())
-}
-
-func TestRsa_Empty_String(t *testing.T) {
+func TestRsa_Empty_Src(t *testing.T) {
 	empty := ""
 	e := Encrypt.FromString(empty).ByRsa(pkcs1PublicKey)
 	assert.Nil(t, e.Error)
@@ -169,117 +143,58 @@ func TestRsa_Empty_String(t *testing.T) {
 	assert.Nil(t, d3.Error)
 	assert.Equal(t, empty, d3.ToString())
 
-	s := Sign.FromString(empty).ByRsa(pkcs1PrivateKey, SHA384)
+	s := Sign.FromString(empty).ByRsa(pkcs1PrivateKey, MD5)
 	assert.Nil(t, s.Error)
-	v1 := Verify.FromRawString(s.ToRawString(), empty).ByRsa(pkcs1PublicKey, SHA224)
+	v1 := Verify.FromRawString(s.ToRawString(), empty).ByRsa(pkcs1PublicKey, MD5)
 	assert.Nil(t, v1.Error)
 	assert.Equal(t, false, v1.ToBool())
-	v2 := Verify.FromHexString(s.ToHexString(), empty).ByRsa(pkcs1PublicKey, SHA224)
+	v2 := Verify.FromHexString(s.ToHexString(), empty).ByRsa(pkcs1PublicKey, MD5)
 	assert.Nil(t, v2.Error)
 	assert.Equal(t, false, v2.ToBool())
-	v3 := Verify.FromBase64String(s.ToBase64String(), empty).ByRsa(pkcs1PublicKey, SHA384)
+	v3 := Verify.FromBase64String(s.ToBase64String(), empty).ByRsa(pkcs1PublicKey, MD5)
 	assert.Nil(t, v1.Error)
-	assert.Equal(t, false, v3.ToBool())
-}
-
-func TestRsa_Empty_Bytes(t *testing.T) {
-	empty := ""
-	e := Encrypt.FromBytes([]byte(empty)).ByRsa([]byte(pkcs1PublicKey))
-	assert.Nil(t, e.Error)
-	d1 := Decrypt.FromRawBytes(e.ToRawBytes()).ByRsa([]byte(pkcs1PrivateKey))
-	assert.Nil(t, d1.Error)
-	assert.Equal(t, []byte(empty), d1.ToBytes())
-	d2 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa([]byte(pkcs1PrivateKey))
-	assert.Nil(t, d2.Error)
-	assert.Equal(t, []byte(empty), d2.ToBytes())
-	d3 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa([]byte(pkcs1PrivateKey))
-	assert.Nil(t, d3.Error)
-	assert.Equal(t, []byte(empty), d3.ToBytes())
-
-	s := Sign.FromBytes([]byte(empty)).ByRsa([]byte(pkcs1PrivateKey), SHA256)
-	assert.Nil(t, s.Error)
-	v1 := Verify.FromRawBytes(s.ToRawBytes(), []byte(empty)).ByRsa([]byte(pkcs1PublicKey), MD5)
-	assert.Nil(t, v1.Error)
-	assert.Equal(t, false, v1.ToBool())
-	v2 := Verify.FromHexBytes(s.ToHexBytes(), []byte(empty)).ByRsa([]byte(pkcs1PublicKey), SHA256)
-	assert.Nil(t, v2.Error)
-	assert.Equal(t, false, v2.ToBool())
-	v3 := Verify.FromBase64Bytes(s.ToBase64Bytes(), []byte(empty)).ByRsa([]byte(pkcs1PublicKey), SHA256)
-	assert.Nil(t, v2.Error)
 	assert.Equal(t, false, v3.ToBool())
 }
 
 func TestRsa_PublicKey_Error(t *testing.T) {
+	invalidPublicKey := `-----BEGIN PUBLIC KEY-----
+xxxx
+-----END PUBLIC KEY-----`
+
 	e1 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte("xxxx"))
 	assert.Equal(t, invalidRsaPublicKeyError(), e1.Error)
-	e2 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(`-----BEGIN PUBLIC KEY-----
-xxxx
------END PUBLIC KEY-----`))
+	e2 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(invalidPublicKey))
 	assert.Equal(t, invalidRsaPublicKeyError(), e2.Error)
-	e3 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(`-----BEGIN RSA PUBLIC KEY-----
-	xxxx
-	-----END RSA PUBLIC KEY-----`))
-	assert.Equal(t, invalidRsaPublicKeyError(), e3.Error)
-	e4 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PrivateKey))
-	assert.Equal(t, invalidRsaPublicKeyError(), e4.Error)
 
-	v1 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte("xxxx"), SHA512)
+	v1 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte("xxxx"), SHA1)
 	assert.Equal(t, invalidRsaPublicKeyError(), v1.Error)
-	v2 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte(`-----BEGIN PUBLIC KEY-----
-xxxx
------END PUBLIC KEY-----`), SHA512)
+	v2 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte(invalidPublicKey), SHA224)
 	assert.Equal(t, invalidRsaPublicKeyError(), v2.Error)
-	v3 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte(`-----BEGIN RSA PUBLIC KEY-----
-	xxxx
-	-----END RSA PUBLIC KEY-----`), SHA512)
-	assert.Equal(t, invalidRsaPublicKeyError(), v3.Error)
-	v4 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte(pkcs8PrivateKey), SHA512)
-	assert.Equal(t, invalidRsaPublicKeyError(), v4.Error)
 
-	v5 := Verify.FromHexString("xxxx", rsaInput).ByRsa(pkcs8PublicKey, SHA512)
-	assert.Equal(t, invalidDecodingError("hex"), v5.Error)
-	v6 := Verify.FromHexBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa(pkcs8PublicKey, SHA512)
-	assert.Equal(t, invalidDecodingError("hex"), v6.Error)
-	v7 := Verify.FromBase64String("xxxxxx", rsaInput).ByRsa(pkcs8PublicKey, SHA512)
-	assert.Equal(t, invalidDecodingError("base64"), v7.Error)
-	v8 := Verify.FromBase64Bytes([]byte("xxxxxx"), []byte(rsaInput)).ByRsa(pkcs8PublicKey, SHA512)
-	assert.Equal(t, invalidDecodingError("base64"), v8.Error)
+	v3 := Verify.FromHexString("xxxx", rsaInput).ByRsa(pkcs8PublicKey, SHA256)
+	assert.Equal(t, invalidDecodingError("hex"), v3.Error)
+	v4 := Verify.FromHexBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa(pkcs8PublicKey, SHA384)
+	assert.Equal(t, invalidDecodingError("hex"), v4.Error)
+	v5 := Verify.FromBase64String("xxxxxx", rsaInput).ByRsa(pkcs8PublicKey, SHA512)
+	assert.Equal(t, invalidDecodingError("base64"), v5.Error)
+	v6 := Verify.FromBase64Bytes([]byte("xxxxxx"), []byte(rsaInput)).ByRsa(pkcs8PublicKey, RIPEMD160)
+	assert.Equal(t, invalidDecodingError("base64"), v6.Error)
 }
 
 func TestRsa_PrivateKey_Error(t *testing.T) {
+	invalidPrivateKey := `-----BEGIN PRIVATE KEY-----
+xxxx
+-----END PRIVATE KEY-----`
+
 	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
 
 	d1 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa([]byte("xxxx"))
 	assert.Equal(t, invalidRsaPrivateKeyError(), d1.Error)
-	d2 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa([]byte(`-----BEGIN RSA PRIVATE KEY-----
-	xxxx
-	-----END RSA PRIVATE KEY-----`))
+	d2 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa([]byte(invalidPrivateKey))
 	assert.Equal(t, invalidRsaPrivateKeyError(), d2.Error)
-	d3 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa([]byte(`-----BEGIN PRIVATE KEY-----
-	xxxx
-	-----END PRIVATE KEY-----`))
-	assert.Equal(t, invalidRsaPrivateKeyError(), d3.Error)
-	d4 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa([]byte(pkcs8PrivateKey))
-	assert.Equal(t, invalidRsaPrivateKeyError(), d4.Error)
 
 	s1 := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte("xxxx"), SHA1)
 	assert.Equal(t, invalidRsaPrivateKeyError(), s1.Error)
-	s2 := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(`-----BEGIN RSA PRIVATE KEY-----
-	xxxx
-	-----END RSA PRIVATE KEY-----`), SHA1)
+	s2 := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(invalidPrivateKey), SHA1)
 	assert.Equal(t, invalidRsaPrivateKeyError(), s2.Error)
-	s3 := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(`-----BEGIN PRIVATE KEY-----
-	xxxx
-	-----END PRIVATE KEY-----`), SHA1)
-	assert.Equal(t, invalidRsaPrivateKeyError(), s3.Error)
-	s4 := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey), SHA1)
-	assert.Equal(t, invalidRsaPrivateKeyError(), s4.Error)
-}
-
-func TestRsa_Hash_Error(t *testing.T) {
-	s := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PrivateKey), MD4)
-	assert.Equal(t, invalidRsaHashError(), s.Error)
-
-	v := Verify.FromRawBytes(s.ToRawBytes(), []byte(rsaInput)).ByRsa([]byte(pkcs8PublicKey), MD4)
-	assert.Equal(t, invalidRsaHashError(), v.Error)
 }

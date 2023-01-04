@@ -1,6 +1,6 @@
 # dongle  #
 
-[![Carbon Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
+[![Dongle Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
 [![Go Build](https://github.com/golang-module/dongle/actions/workflows/test.yml/badge.svg)](https://github.com/golang-module/dongle/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-module/dongle)](https://goreportcard.com/report/github.com/golang-module/dongle)
 [![codecov](https://codecov.io/gh/golang-module/openssl/branch/main/graph/badge.svg)](https://codecov.io/gh/golang-module/dongle)
@@ -9,9 +9,7 @@
 
 简体中文 | [English](README.md)
 
-一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密和签名验签库
-
-`Dongle` 已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录, 如果您觉得不错，请给个 star 吧
+一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密和签名验签库，已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
 
@@ -898,7 +896,11 @@ fPzfA+7ywG5c8Fa79wOB0SoB1KeUjcSLo5Ssj2fwea1F9dAeU90LAkBJQFofveaD
 a3YlN4EQZOcCvJKmg7xwWuGxFVTZDVVEws7UCQbEOEEXZrNd9x0IF5kpPLR+rxua
 RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
+```
 
+###### 公钥加密、私钥解密
+
+```go
 // 使用 pkcs1 格式公钥对字符串进行 rsa 加密
 cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs1PublicKey)
 // 使用 pkcs1 格式私钥对经过 hex 编码的字符串进行 rsa 解密，输出字符串
@@ -926,6 +928,38 @@ cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs8PublicK
 dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
 // 使用 pkcs8 格式私钥对经过 base64 编码的字节切片进行 rsa 解密，输出字节切片
 dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
+```
+
+###### 私钥加密、公钥解密
+
+```go
+// 使用 pkcs1 格式私钥对字符串进行 rsa 加密
+cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs1PrivateKey)
+// 使用 pkcs1 格式公钥对经过 hex 编码的字符串进行 rsa 解密，输出字符串
+dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs1PublicKey).ToString() // hello world
+// 使用 pkcs1 格式公钥对经过 base64 编码的字符串进行 rsa 解密，输出字符串
+dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs1PublicKey).ToString() // hello world
+
+// 使用 pkcs1 格式私钥对字节切片进行 rsa 加密
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs1PrivateKey))
+// 使用 pkcs1 格式公钥对经过 hex 编码的字节切片进行 rsa 解密，输出字节切片
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
+// 使用 pkcs1 格式公钥对经过 base64 编码的字节切片进行 rsa 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
+
+// 使用 pkcs8 格式私钥对字符串进行 rsa 加密，输出经过 hex 编码的字符串
+cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs8PrivateKey)
+// 使用 pkcs8 格式公钥对经过 hex 编码的字符串进行 rsa 解密，输出字符串
+dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs8PublicKey).ToString() // hello world
+// 使用 pkcs8 格式公钥对经过 base64 编码的字符串进行 rsa 解密，输出字符串
+dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs8PublicKey).ToString() // hello world
+
+// 使用 pkcs8 格式私钥对字节切片进行 rsa 加密，输出经过 hex 编码的字节切片
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs8PrivateKey)
+// 使用 pkcs8 格式公钥对经过 hex 编码的字节切片进行 rsa 解密，输出字节切片
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PublicKey).ToByte() // []bytes("hello world)
+// 使用 pkcs8 格式公钥对经过 base64 编码的字节切片进行 rsa 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PublicKey).ToByte() // []bytes("hello world)
 ```
 
 ##### Tea 加密、解密

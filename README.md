@@ -1,6 +1,6 @@
 # dongle  #
 
-[![Carbon Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
+[![Dongle Release](https://img.shields.io/github/release/golang-module/dongle.svg)](https://github.com/golang-module/dongle/releases)
 [![Go Build](https://github.com/golang-module/dongle/actions/workflows/test.yml/badge.svg)](https://github.com/golang-module/dongle/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-module/dongle)](https://goreportcard.com/report/github.com/golang-module/dongle)
 [![codecov](https://codecov.io/gh/golang-module/dongle/branch/main/graph/badge.svg)](https://codecov.io/gh/golang-module/dongle)
@@ -11,10 +11,7 @@ English | [简体中文](README.cn.md)
 
 ### Introduction
 
-A simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification
-
-`Dongle` has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go"), if you think
-it is helpful, please give me a star
+A simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
 
@@ -903,7 +900,11 @@ fPzfA+7ywG5c8Fa79wOB0SoB1KeUjcSLo5Ssj2fwea1F9dAeU90LAkBJQFofveaD
 a3YlN4EQZOcCvJKmg7xwWuGxFVTZDVVEws7UCQbEOEEXZrNd9x0IF5kpPLR+rxua
 RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
+```
 
+###### Encrypt by public key and decrypt by private key
+
+```go
 // Use pkcs1 format public key to encrypt by rsa from string
 cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs1PublicKey)
 // Use pkcs1 format private key to decrypt by rsa from string with hex encoding
@@ -920,9 +921,9 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa([]byte(pkcs1Pri
 
 // Use pkcs8 format public key to encrypt by rsa from string
 cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs8PublicKey)
-// Use pkcs8 format  private key to decrypt by rsa from string with hex encoding
+// Use pkcs8 format private key to decrypt by rsa from string with hex encoding
 dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs8PrivateKey).ToString() // hello world
-// Use pkcs8 format  private key to decrypt by rsa from string with base64 encoding
+// Use pkcs8 format private key to decrypt by rsa from string with base64 encoding
 dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs8PrivateKey).ToString() // hello world
 
 // Use pkcs8 format public key to encrypt by rsa from byte
@@ -931,6 +932,38 @@ cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8
 dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
 // Use pkcs8 format private key to decrypt by rsa from byte with base64 encoding
 dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
+```
+
+###### Encrypt by private key and decrypt by public key
+
+```go
+// Use pkcs1 format private key to encrypt by rsa from string
+cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs1PrivateKey)
+// Use pkcs1 format public key to decrypt by rsa from string with hex encoding
+dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs1PublicKey).ToString() // hello world
+// Use pkcs1 format public key to decrypt by rsa from string with base64 encoding
+dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs1PublicKey).ToString() // hello world
+
+// Use pkcs1 format private key to encrypt by rsa from byte
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs1PrivateKey))
+// Use pkcs1 format public key to decrypt by rsa from byte with hex encoding
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
+// Use pkcs1 format public key to decrypt by rsa from byte with base64 encoding
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
+
+// Use pkcs8 format private key to encrypt by rsa from string
+cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs8PrivateKey)
+// Use pkcs8 format  public key to decrypt by rsa from string with hex encoding
+dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs8PublicKey).ToString() // hello world
+// Use pkcs8 format  public key to decrypt by rsa from string with base64 encoding
+dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs8PublicKey).ToString() // hello world
+
+// Use pkcs8 format private key to encrypt by rsa from byte
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PrivateKey))
+// Use pkcs8 format public key to decrypt by rsa from byte with hex encoding
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PublicKey).ToByte() // []bytes("hello world)
+// Use pkcs8 format public key to decrypt by rsa from byte with base64 encoding
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PublicKey).ToByte() // []bytes("hello world)
 ```
 
 ##### Encrypt and decrypt by tea
