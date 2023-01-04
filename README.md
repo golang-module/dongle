@@ -902,7 +902,7 @@ RPgUNaDGIh5o
 -----END PRIVATE KEY-----`
 ```
 
-###### 1.Encrypt by public key and decrypt by private key
+###### 1.RSA encrypt by public key and decrypt by private key
 
 ```go
 // Use pkcs1 format public key to encrypt by rsa from string
@@ -934,7 +934,7 @@ dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PrivateKey).ToBy
 dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
 ```
 
-###### 2.Encrypt by private key and decrypt by public key
+###### 2.RSA encrypt by private key and decrypt by public key
 
 ```go
 // Use pkcs1 format private key to encrypt by rsa from string
