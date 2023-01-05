@@ -205,7 +205,7 @@ dongle.Encode.FromBytes([]byte("www.gouguoyin.cn?sex=男&age=18")).BySafeURL().T
 dongle.Decode.FromBytes([]byte("www.gouguoyin.cn%3Fsex%3D%E7%94%B7%26age%3D18")).BySafeURL().ToBytes() // []byte("www.gouguoyin.cn?sex=男&age=18")
 ```
 
-##### Morse(摩斯) 编码、解码
+##### Morse 编码、解码
 
 > 默认分隔符是 `/`
 
@@ -1213,7 +1213,7 @@ rsa: invalid public key, please make sure the public key is valid
 - [x] Base85 编码、解码
 - [x] Base91 编码、解码
 - [x] Base100 编码、解码
-- [x] Morse(摩斯) 编码、解码
+- [x] Morse 编码、解码
 - [x] Md2 加密
 - [x] Md4 加密
 - [x] Md5 加密
