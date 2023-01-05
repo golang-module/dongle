@@ -15,20 +15,20 @@ import (
 var emptyByte = []byte("")
 
 var (
-	// returns an invalid public key error
+	// returns an invalid public key error.
 	// 返回无效的公钥错误
 	invalidPublicKeyError = func() error {
 		return fmt.Errorf("rsa: invalid public key, please make sure the public key is valid")
 	}
-	// returns an invalid private key error
+	// returns an invalid private key error.
 	// 返回无效的私钥错误
 	invalidPrivateKeyError = func() error {
 		return fmt.Errorf("rsa: invalid private key, please make sure the private key is valid")
 	}
-	// returns an invalid hash function error
-	// 返回无效的哈希函数错误
+	// returns an invalid hash algorithm error.
+	// 返回无效的哈希算法错误
 	invalidHashError = func() error {
-		return fmt.Errorf("rsa: invalid hash function, the hash function is unsupported")
+		return fmt.Errorf("rsa: invalid hash algorithm, the hash algorithm is unsupported")
 	}
 )
 
@@ -58,8 +58,8 @@ func (k *KeyPair) SetPrivateKey(privateKey []byte) {
 	k.privateKey = privateKey
 }
 
-// SetHash sets hash.
-// 设置哈希
+// SetHash sets hash algorithm.
+// 设置哈希算法
 func (k *KeyPair) SetHash(hash crypto.Hash) {
 	k.hash = hash
 }
@@ -271,7 +271,7 @@ func IsPrivateKey(publicKey []byte) bool {
 	return false
 }
 
-// whether is a supported hash algorithm
+// whether is a supported hash algorithm.
 // 判断是否是支持的哈希算法
 func isSupported(hash crypto.Hash) bool {
 	hashes := []crypto.Hash{
@@ -285,7 +285,7 @@ func isSupported(hash crypto.Hash) bool {
 	return false
 }
 
-// left padding
+// left padding.
 // 左填充
 func leftPad(src []byte, size int) (dst []byte) {
 	dst = make([]byte, size)
@@ -293,8 +293,8 @@ func leftPad(src []byte, size int) (dst []byte) {
 	return
 }
 
-// remove left padding
-// 移出左填充
+// remove left padding.
+// 移除左填充
 func leftUnPad(src []byte) (dst []byte) {
 	n := len(src)
 	t := 2
@@ -313,8 +313,8 @@ func leftUnPad(src []byte) (dst []byte) {
 	return
 }
 
-// split the byte slice by the specified size
-// 按照指定长度分割字符串
+// split the byte slice by the specified size.
+// 按照指定长度分割字节切片
 func bytesSplit(buf []byte, size int) [][]byte {
 	var chunk []byte
 	chunks := make([][]byte, 0, len(buf)/size+1)
