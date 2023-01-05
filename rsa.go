@@ -22,8 +22,8 @@ const (
 	RIPEMD160 = 19
 )
 
-// ByRsa encrypts by rsa with public key.
-// 通过 rsa 密钥加密
+// ByRsa encrypts by rsa with public key or private key.
+// 通过 rsa 公钥或私钥加密
 func (e Encrypter) ByRsa(rsaKey interface{}) Encrypter {
 	if len(e.src) == 0 {
 		return e
@@ -40,8 +40,8 @@ func (e Encrypter) ByRsa(rsaKey interface{}) Encrypter {
 	return e
 }
 
-// ByRsa decrypts by rsa with private key.
-// 通过 rsa 密钥解密
+// ByRsa decrypts by rsa with private key or public key.
+// 通过 rsa 私钥或公钥解密
 func (d Decrypter) ByRsa(rsaKey interface{}) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
