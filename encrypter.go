@@ -79,9 +79,9 @@ func (e Encrypter) ToBase64Bytes() []byte {
 // 根据指定的分组模式和填充模式进行加密
 func (e Encrypter) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	src, mode, padding, size := e.src, c.mode, c.padding, b.BlockSize()
-
+	dst = []byte("")
 	if len(src) == 0 {
-		return nil, nil
+		return
 	}
 
 	switch padding {
@@ -97,7 +97,8 @@ func (e Encrypter) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	case ISO97971:
 		src = c.ISO97971Padding(src, size)
 	default:
-		return nil, invalidPaddingError(padding)
+		err = invalidPaddingError(padding)
+		return
 	}
 
 	switch mode {
@@ -112,6 +113,7 @@ func (e Encrypter) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	case OFB:
 		return c.NewOFBEncrypter(src, b), nil
 	default:
-		return nil, invalidModeError(mode)
+		err = invalidModeError(mode)
+		return
 	}
 }

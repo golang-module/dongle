@@ -103,11 +103,13 @@ func (d Decrypter) ToBytes() []byte {
 // 根据指定的分组模式和填充模式进行解密
 func (d Decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	src, mode, padding := d.src, c.mode, c.padding
+	dst = []byte("")
 	if len(src) == 0 {
-		return nil, nil
+		return
 	}
-	if !padding.isSupported() {
-		return nil, invalidPaddingError(padding)
+	if !c.isSupportedPadding() {
+		err = invalidPaddingError(padding)
+		return
 	}
 
 	switch mode {
@@ -122,7 +124,8 @@ func (d Decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	case OFB:
 		src = c.NewOFBDecrypter(src, b)
 	default:
-		return nil, invalidModeError(mode)
+		err = invalidModeError(mode)
+		return
 	}
 
 	switch padding {
