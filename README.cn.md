@@ -402,28 +402,44 @@ dongle.Encrypt.FromBytes([]byte("hello world")).BySha512(256).ToBase64Bytes() //
 ##### Shake128 加密
 
 ```go
-// 对字符串进行 ripemd160 加密，输出经过 hex 编码的字符串
+// 对字符串进行 shake128-256 加密，输出经过 hex 编码的字符串
 dongle.Encrypt.FromString("hello world").ByShake128(256).ToHexString() // 3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b8
-// 对字符串进行 ripemd160 加密，输出经过 base64 编码的字符串
+// 对字符串进行 shake128-256 加密，输出经过 base64 编码的字符串
 dongle.Encrypt.FromString("hello world").ByShake128(256).ToBase64String() // OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLg=
-
-// 对字节切片进行 ripemd160 加密，输出经过 hex 编码的字节切片
+// 对字节切片进行 shake128-256 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByShake128(256).ToHexBytes() // []byte("3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b8")
-// 对字节切片进行 ripemd160 加密，输出经过 base64 编码的字节切片
+// 对字节切片进行 shake128-256 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByShake128(256).ToBase64Bytes() // []byte("OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLg=")
+
+// 对字符串进行 shake128-512 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByShake128(512).ToHexString() // 3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b899072665674f26cc494a4bcf027c58267e8ee2da60e942759de86d2670bba1aa
+// 对字符串进行 shake128-512 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByShake128(512).ToBase64String() // OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLiZByZlZ08mzElKS88CfFgmfo7i2mDpQnWd6G0mcLuhqg==
+// 对字节切片进行 shake128-512 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake128(512).ToHexBytes() // []byte("3a9159f071e4dd1c8c4f968607c30942e120d8156b8b1e72e0d376e8871cb8b899072665674f26cc494a4bcf027c58267e8ee2da60e942759de86d2670bba1aa")
+// 对字节切片进行 shake128-512 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake128(512).ToBase64Bytes() // []byte("OpFZ8HHk3RyMT5aGB8MJQuEg2BVrix5y4NN26IccuLiZByZlZ08mzElKS88CfFgmfo7i2mDpQnWd6G0mcLuhqg==")
 ```
 
 ##### Shake256 加密
 
 ```go
-// 对字符串进行 ripemd160 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByShake256(512).ToHexString() // 369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116
-// 对字符串进行 ripemd160 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByShake256(512).ToBase64String() // Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg==
+// 对字符串进行 shake256-384 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByShake256(384).ToHexString() // 369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df2
+// 对字符串进行 shake256-384 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByShake256(384).ToBase64String() // Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3y
+// 对字节切片进行 shake256-384 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(384).ToHexBytes() // []byte("369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df2")
+// 对字节切片进行 shake256-384 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(384).ToBase64Bytes() // []byte("Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3y")
 
-// 对字节切片进行 ripemd160 加密，输出经过 hex 编码的字节切片
+// 对字符串进行 shake256-512 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByShake256(512).ToHexString() // 369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116
+// 对字符串进行 shake256-512 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByShake256(512).ToBase64String() // Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg==
+// 对字节切片进行 shake256-512 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(512).ToHexBytes() // []byte("369771bb2cb9d2b04c1d54cca487e372d9f187f73f7ba3f65b95c8ee7798c527f4f3c2d55c2d46a29f2e945d469c3df27853a8735271f5cc2d9e889544357116")
-// 对字节切片进行 ripemd160 加密，输出经过 base64 编码的字节切片
+// 对字节切片进行 shake256-512 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByShake256(512).ToBase64Bytes() // []byte("Npdxuyy50rBMHVTMpIfjctnxh/c/e6P2W5XI7neYxSf088LVXC1Gop8ulF1GnD3yeFOoc1Jx9cwtnoiVRDVxFg==")
 ```
 
