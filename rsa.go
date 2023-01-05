@@ -32,7 +32,7 @@ func (e Encrypter) ByRsa(rsaKey interface{}) Encrypter {
 	keyPair.SetPublicKey(interface2bytes(rsaKey))
 	keyPair.SetPrivateKey(interface2bytes(rsaKey))
 
-	if rsa.IsPrivateKey(interface2bytes(rsaKey)) {
+	if keyPair.IsPrivateKey() {
 		e.dst, e.Error = keyPair.EncryptByPrivateKey(e.src)
 		return e
 	}
@@ -50,7 +50,7 @@ func (d Decrypter) ByRsa(rsaKey interface{}) Decrypter {
 	keyPair.SetPublicKey(interface2bytes(rsaKey))
 	keyPair.SetPrivateKey(interface2bytes(rsaKey))
 
-	if rsa.IsPublicKey(interface2bytes(rsaKey)) {
+	if keyPair.IsPublicKey() {
 		d.dst, d.Error = keyPair.DecryptByPublicKey(d.src)
 		return d
 	}
