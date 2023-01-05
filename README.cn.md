@@ -728,6 +728,46 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByAes(cipher).ToBase64Bytes() //
 dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher).ToBytes() // []byte("hello world")
 ```
 
+##### Blowfish 加密、解密
+
+```go
+cipher := dongle.NewCipher()
+cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetKey("0123456789abcdef") // key 长度必须是 1-56 字节
+cipher.SetIV("12345678")          // iv 长度必须是 8 字节，ECB 模式不需要设置 iv
+
+// 对字符串进行 blowfish 加密，输出未经编码的原始字符串
+rawString := dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToRawString()
+// 对未经编码的原始字符串进行 blowfish 解密，输出字符串
+dongle.Decrypt.FromRawString(rawString).ByBlowfish(cipher).ToString() // hello world
+
+// 对字符串进行 blowfish 加密，输出经过 hex 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToHexString() // c1e9b4529aac9793010f4677f6358efe
+// 对经过 hex 编码的字符串进行 blowfish 解密，输出字符串
+dongle.Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(cipher).ToString() // hello world
+
+// 对字符串进行 blowfish 加密，输出经过 base64 编码的字符串
+dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToBase64String() // ksNyTXILWZgtIaq5p7ufQA==
+// 对经过 base64 编码的字符串进行 blowfish 解密，输出字符串
+dongle.Decrypt.FromBase64String("ksNyTXILWZgtIaq5p7ufQA==").ByBlowfish(cipher).ToString() // hello world
+
+// 对字节切片进行 blowfish 加密，输出未经编码的原始字节切片
+rawBytes := dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToRawBytes()
+// 对未经编码的原始字节切片进行 blowfish 解密，输出字节切片
+dongle.Decrypt.FromRawBytes(rawBytes).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+
+// 对字节切片进行 blowfish 加密，输出经过 hex 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToHexBytes() // []byte("c1e9b4529aac9793010f4677f6358efe")
+// 对经过 hex 编码的字节切片进行 blowfish 解密，输出字节切片
+dongle.Decrypt.FromHexBytes([]byte("c1e9b4529aac9793010f4677f6358efe")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+
+// 对字节切片进行 blowfish 加密，输出经过 base64 编码的字节切片
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToBase64Bytes() // []byte("ksNyTXILWZgtIaq5p7ufQA==")
+// 对经过 base64 编码的字节切片进行 blowfish 解密，输出字节切片
+dongle.Decrypt.FromBase64Bytes(()byte("ksNyTXILWZgtIaq5p7ufQA==")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+```
+
 ##### Des 加密、解密
 
 ```go
@@ -806,46 +846,6 @@ dongle.Decrypt.FromHexBytes([]byte("92c3724d720b59982d21aab9a7bb9f40")).By3Des(c
 dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToBase64Bytes() // []byte("CyqS6B+0nOGkMmaqyup7gQ==")
 // 对经过 base64 编码的字节切片进行 3des 解密，输出字节切片
 dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher).ToBytes() // []byte("hello world")
-```
-
-##### Blowfish 加密、解密
-
-```go
-cipher := dongle.NewCipher()
-cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
-cipher.SetKey("0123456789abcdef") // key 长度必须是 1-56 字节
-cipher.SetIV("12345678")          // iv 长度必须是 8 字节，ECB 模式不需要设置 iv
-
-// 对字符串进行 blowfish 加密，输出未经编码的原始字符串
-rawString := dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToRawString()
-// 对未经编码的原始字符串进行 blowfish 解密，输出字符串
-dongle.Decrypt.FromRawString(rawString).ByBlowfish(cipher).ToString() // hello world
-
-// 对字符串进行 blowfish 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToHexString() // c1e9b4529aac9793010f4677f6358efe
-// 对经过 hex 编码的字符串进行 blowfish 解密，输出字符串
-dongle.Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(cipher).ToString() // hello world
-
-// 对字符串进行 blowfish 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToBase64String() // ksNyTXILWZgtIaq5p7ufQA==
-// 对经过 base64 编码的字符串进行 blowfish 解密，输出字符串
-dongle.Decrypt.FromBase64String("ksNyTXILWZgtIaq5p7ufQA==").ByBlowfish(cipher).ToString() // hello world
-
-// 对字节切片进行 blowfish 加密，输出未经编码的原始字节切片
-rawBytes := dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToRawBytes()
-// 对未经编码的原始字节切片进行 blowfish 解密，输出字节切片
-dongle.Decrypt.FromRawBytes(rawBytes).ByBlowfish(cipher).ToBytes() // []byte("hello world")
-
-// 对字节切片进行 blowfish 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToHexBytes() // []byte("c1e9b4529aac9793010f4677f6358efe")
-// 对经过 hex 编码的字节切片进行 blowfish 解密，输出字节切片
-dongle.Decrypt.FromHexBytes([]byte("c1e9b4529aac9793010f4677f6358efe")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
-
-// 对字节切片进行 blowfish 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToBase64Bytes() // []byte("ksNyTXILWZgtIaq5p7ufQA==")
-// 对经过 base64 编码的字节切片进行 blowfish 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(()byte("ksNyTXILWZgtIaq5p7ufQA==")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
 ```
 
 ##### Rsa 加密、解密

@@ -732,6 +732,46 @@ dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher)
 
 ```
 
+##### Encrypt and decrypt by blowfish
+
+```go
+cipher := dongle.NewCipher()
+cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
+cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetKey("0123456789abcdef") // key must from 1 to 56 bytes
+cipher.SetIV("12345678")          // iv must be 8 bytes
+
+// Encrypt by blowfish from string and output raw string
+rawString := dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToRawString()
+// Decrypt by blowfish from raw string and output string
+dongle.Decrypt.FromRawString(rawString).ByBlowfish(cipher).ToString() // hello world
+
+// Encrypt by blowfish from string and output string with hex encoding
+dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToHexString() // c1e9b4529aac9793010f4677f6358efe
+// Decrypt by blowfish from string with hex encoding and output string
+dongle.Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(cipher).ToString() // hello world
+
+// Encrypt by blowfish from string and output string with base64 encoding
+dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToBase64String() // ksNyTXILWZgtIaq5p7ufQA==
+// Decrypt by blowfish from string with base64 encoding and output string
+dongle.Decrypt.FromBase64String("ksNyTXILWZgtIaq5p7ufQA==").ByBlowfish(cipher).ToString() // hello world
+
+// Encrypt by blowfish from byte slice and output raw byte slice
+rawBytes := dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToRawBytes()
+// Decrypt by blowfish from raw byte slice and output byte slice
+dongle.Decrypt.FromRawBytes(rawBytes).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+
+// Encrypt by blowfish from byte slice and output byte slice with hex encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToHexBytes() // []byte("c1e9b4529aac9793010f4677f6358efe")
+// Decrypt by blowfish from byte slice with hex encoding and output byte slice
+dongle.Decrypt.FromHexBytes([]byte("c1e9b4529aac9793010f4677f6358efe")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+
+// Encrypt by blowfish from byte slice and output byte slice with base64 encoding
+dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToBase64Bytes() // []byte("ksNyTXILWZgtIaq5p7ufQA==")
+// Decrypt by blowfish from byte slice with base64 encoding and output byte slice
+dongle.Decrypt.FromBase64Bytes(()byte("ksNyTXILWZgtIaq5p7ufQA==")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
+```
+
 ##### Encrypt and decrypt by des
 
 ```go
@@ -810,46 +850,6 @@ dongle.Decrypt.FromHexBytes([]byte("0b2a92e81fb49ce1a43266aacaea7b81")).By3Des(c
 dongle.Encrypt.FromBytes([]byte("hello world")).By3Des(cipher).ToBase64Bytes() // []byte("CyqS6B+0nOGkMmaqyup7gQ==")
 // Decrypt by 3des from byte slice with base64 encoding and output byte slice
 dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher).ToBytes() // []byte("hello world")
-```
-
-##### Encrypt and decrypt by blowfish
-
-```go
-cipher := dongle.NewCipher()
-cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
-cipher.SetKey("0123456789abcdef") // key must from 1 to 56 bytes
-cipher.SetIV("12345678")          // iv must be 8 bytes
-
-// Encrypt by blowfish from string and output raw string
-rawString := dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToRawString()
-// Decrypt by blowfish from raw string and output string
-dongle.Decrypt.FromRawString(rawString).ByBlowfish(cipher).ToString() // hello world
-
-// Encrypt by blowfish from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToHexString() // c1e9b4529aac9793010f4677f6358efe
-// Decrypt by blowfish from string with hex encoding and output string
-dongle.Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(cipher).ToString() // hello world
-
-// Encrypt by blowfish from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToBase64String() // ksNyTXILWZgtIaq5p7ufQA==
-// Decrypt by blowfish from string with base64 encoding and output string
-dongle.Decrypt.FromBase64String("ksNyTXILWZgtIaq5p7ufQA==").ByBlowfish(cipher).ToString() // hello world
-
-// Encrypt by blowfish from byte slice and output raw byte slice
-rawBytes := dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToRawBytes()
-// Decrypt by blowfish from raw byte slice and output byte slice
-dongle.Decrypt.FromRawBytes(rawBytes).ByBlowfish(cipher).ToBytes() // []byte("hello world")
-
-// Encrypt by blowfish from byte slice and output byte slice with hex encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToHexBytes() // []byte("c1e9b4529aac9793010f4677f6358efe")
-// Decrypt by blowfish from byte slice with hex encoding and output byte slice
-dongle.Decrypt.FromHexBytes([]byte("c1e9b4529aac9793010f4677f6358efe")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
-
-// Encrypt by blowfish from byte slice and output byte slice with base64 encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByBlowfish(cipher).ToBase64Bytes() // []byte("ksNyTXILWZgtIaq5p7ufQA==")
-// Decrypt by blowfish from byte slice with base64 encoding and output byte slice
-dongle.Decrypt.FromBase64Bytes(()byte("ksNyTXILWZgtIaq5p7ufQA==")).ByBlowfish(cipher).ToBytes() // []byte("hello world")
 ```
 
 ##### Encrypt and decrypt by rsa
