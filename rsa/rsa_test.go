@@ -134,20 +134,37 @@ func TestRsa_Empty_Src(t *testing.T) {
 }
 
 func TestRsa_IsKey(t *testing.T) {
-	assert.Equal(t, true, IsPublicKey([]byte(pkcs1PublicKey)))
-	assert.Equal(t, true, IsPrivateKey([]byte(pkcs1PrivateKey)))
+	keyPair := NewKeyPair()
 
-	assert.Equal(t, true, IsPublicKey([]byte(pkcs8PublicKey)))
-	assert.Equal(t, true, IsPrivateKey([]byte(pkcs8PrivateKey)))
+	keyPair.SetPublicKey([]byte(pkcs1PublicKey))
+	keyPair.SetPrivateKey([]byte(pkcs1PrivateKey))
+	assert.Equal(t, true, keyPair.IsPublicKey())
+	assert.Equal(t, true, keyPair.IsPrivateKey())
 
-	assert.Equal(t, false, IsPublicKey([]byte(pkcs1PrivateKey)))
-	assert.Equal(t, false, IsPrivateKey([]byte(pkcs1PublicKey)))
+	keyPair.SetPublicKey([]byte(pkcs8PublicKey))
+	keyPair.SetPrivateKey([]byte(pkcs8PrivateKey))
+	assert.Equal(t, true, keyPair.IsPublicKey())
+	assert.Equal(t, true, keyPair.IsPrivateKey())
 
-	assert.Equal(t, false, IsPublicKey([]byte(pkcs8PrivateKey)))
-	assert.Equal(t, false, IsPrivateKey([]byte(pkcs8PublicKey)))
+	keyPair.SetPublicKey([]byte(pkcs1PrivateKey))
+	keyPair.SetPrivateKey([]byte(pkcs1PublicKey))
+	assert.Equal(t, false, keyPair.IsPublicKey())
+	assert.Equal(t, false, keyPair.IsPrivateKey())
 
-	assert.Equal(t, false, IsPublicKey([]byte("")))
-	assert.Equal(t, false, IsPrivateKey([]byte("")))
+	keyPair.SetPublicKey([]byte(pkcs8PrivateKey))
+	keyPair.SetPrivateKey([]byte(pkcs8PublicKey))
+	assert.Equal(t, false, keyPair.IsPublicKey())
+	assert.Equal(t, false, keyPair.IsPrivateKey())
+
+	keyPair.SetPublicKey([]byte(""))
+	keyPair.SetPrivateKey([]byte(""))
+	assert.Equal(t, false, keyPair.IsPublicKey())
+	assert.Equal(t, false, keyPair.IsPrivateKey())
+
+	keyPair.SetPublicKey([]byte("xxx"))
+	keyPair.SetPrivateKey([]byte("xxx"))
+	assert.Equal(t, false, keyPair.IsPublicKey())
+	assert.Equal(t, false, keyPair.IsPrivateKey())
 }
 
 func TestRsa_PublicKey_Error(t *testing.T) {

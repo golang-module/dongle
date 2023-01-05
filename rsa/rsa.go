@@ -12,8 +12,6 @@ import (
 	"math/big"
 )
 
-var emptyByte = []byte("")
-
 var (
 	// returns an invalid public key error.
 	// 返回无效的公钥错误
@@ -67,16 +65,17 @@ func (k *KeyPair) SetHash(hash crypto.Hash) {
 // EncryptByPublicKey encrypts by public key.
 // 通过公钥加密
 func (k *KeyPair) EncryptByPublicKey(src []byte) (dst []byte, err error) {
+	dst = []byte("")
 	if len(src) == 0 {
-		return emptyByte, nil
+		return
 	}
-	if !IsPublicKey(k.publicKey) {
-		dst, err = emptyByte, invalidPublicKeyError()
+	if !k.IsPublicKey() {
+		err = invalidPublicKeyError()
 		return
 	}
 	pub, err := k.ParsePublicKey()
 	if err != nil {
-		dst, err = emptyByte, invalidPublicKeyError()
+		err = invalidPublicKeyError()
 		return
 	}
 	buffer := bytes.NewBufferString("")
@@ -91,17 +90,17 @@ func (k *KeyPair) EncryptByPublicKey(src []byte) (dst []byte, err error) {
 // DecryptByPrivateKey encrypts by private key.
 // 通过私钥解密
 func (k *KeyPair) DecryptByPrivateKey(src []byte) (dst []byte, err error) {
+	dst = []byte("")
 	if len(src) == 0 {
-		dst = emptyByte
 		return
 	}
-	if !IsPrivateKey(k.privateKey) {
-		dst, err = emptyByte, invalidPrivateKeyError()
+	if !k.IsPrivateKey() {
+		err = invalidPrivateKeyError()
 		return
 	}
 	pri, err := k.ParsePrivateKey()
 	if err != nil {
-		dst, err = emptyByte, invalidPrivateKeyError()
+		err = invalidPrivateKeyError()
 		return
 	}
 	buffer := bytes.NewBufferString("")
@@ -116,17 +115,17 @@ func (k *KeyPair) DecryptByPrivateKey(src []byte) (dst []byte, err error) {
 // EncryptByPrivateKey encrypts by private key.
 // 通过私钥加密
 func (k *KeyPair) EncryptByPrivateKey(src []byte) (dst []byte, err error) {
+	dst = []byte("")
 	if len(src) == 0 {
-		dst = emptyByte
 		return
 	}
-	if !IsPrivateKey(k.privateKey) {
-		dst, err = emptyByte, invalidPrivateKeyError()
+	if !k.IsPrivateKey() {
+		err = invalidPrivateKeyError()
 		return
 	}
 	pri, err := k.ParsePrivateKey()
 	if err != nil {
-		dst, err = emptyByte, invalidPrivateKeyError()
+		err = invalidPrivateKeyError()
 		return
 	}
 	buffer := bytes.NewBufferString("")
@@ -141,17 +140,17 @@ func (k *KeyPair) EncryptByPrivateKey(src []byte) (dst []byte, err error) {
 // DecryptByPublicKey encrypts by public key.
 // 通过公钥解密
 func (k *KeyPair) DecryptByPublicKey(src []byte) (dst []byte, err error) {
+	dst = []byte("")
 	if len(src) == 0 {
-		dst = emptyByte
 		return
 	}
-	if !IsPublicKey(k.publicKey) {
-		dst, err = emptyByte, invalidPublicKeyError()
+	if !k.IsPublicKey() {
+		err = invalidPublicKeyError()
 		return
 	}
 	pub, err := k.ParsePublicKey()
 	if err != nil {
-		dst, err = emptyByte, invalidPublicKeyError()
+		err = invalidPublicKeyError()
 		return
 	}
 	buffer := bytes.NewBufferString("")
@@ -168,13 +167,14 @@ func (k *KeyPair) DecryptByPublicKey(src []byte) (dst []byte, err error) {
 // SignByPrivateKey signs by private key.
 // 通过私钥签名
 func (k *KeyPair) SignByPrivateKey(src []byte) (dst []byte, err error) {
+	dst = []byte("")
 	pri, err := k.ParsePrivateKey()
 	if err != nil {
-		dst, err = emptyByte, invalidPrivateKeyError()
+		err = invalidPrivateKeyError()
 		return
 	}
-	if !isSupported(k.hash) {
-		dst, err = emptyByte, invalidHashError()
+	if !k.IsSupportedHash() {
+		err = invalidHashError()
 		return
 	}
 	hasher := k.hash.New()
@@ -191,7 +191,7 @@ func (k *KeyPair) VerifyByPublicKey(src, sign []byte) (err error) {
 	if err != nil {
 		return
 	}
-	if !isSupported(k.hash) {
+	if !k.IsSupportedHash() {
 		err = invalidHashError()
 		return
 	}
@@ -241,8 +241,8 @@ func (k *KeyPair) ParsePrivateKey() (*rsa.PrivateKey, error) {
 
 // IsPublicKey whether is a public key.
 // 是否是公钥
-func IsPublicKey(publicKey []byte) bool {
-	block, _ := pem.Decode(publicKey)
+func (k *KeyPair) IsPublicKey() bool {
+	block, _ := pem.Decode(k.publicKey)
 	if block == nil {
 		return false
 	}
@@ -257,8 +257,8 @@ func IsPublicKey(publicKey []byte) bool {
 
 // IsPrivateKey whether is a private key.
 // 是否是私钥
-func IsPrivateKey(publicKey []byte) bool {
-	block, _ := pem.Decode(publicKey)
+func (k *KeyPair) IsPrivateKey() bool {
+	block, _ := pem.Decode(k.privateKey)
 	if block == nil {
 		return false
 	}
@@ -271,14 +271,14 @@ func IsPrivateKey(publicKey []byte) bool {
 	return false
 }
 
-// whether is a supported hash algorithm.
+// IsSupportedHash whether is a supported hash algorithm.
 // 判断是否是支持的哈希算法
-func isSupported(hash crypto.Hash) bool {
+func (k *KeyPair) IsSupportedHash() bool {
 	hashes := []crypto.Hash{
 		crypto.MD5, crypto.SHA1, crypto.SHA224, crypto.SHA256, crypto.SHA384, crypto.SHA512, crypto.RIPEMD160,
 	}
-	for _, algo := range hashes {
-		if algo == hash {
+	for _, hash := range hashes {
+		if hash == k.hash {
 			return true
 		}
 	}
@@ -286,7 +286,7 @@ func isSupported(hash crypto.Hash) bool {
 }
 
 // left padding.
-// 左填充
+// 左补码
 func leftPad(src []byte, size int) (dst []byte) {
 	dst = make([]byte, size)
 	copy(dst[len(dst)-len(src):], src)
@@ -294,7 +294,7 @@ func leftPad(src []byte, size int) (dst []byte) {
 }
 
 // remove left padding.
-// 移除左填充
+// 左减码
 func leftUnPad(src []byte) (dst []byte) {
 	n := len(src)
 	t := 2
