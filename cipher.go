@@ -239,12 +239,12 @@ func (c *Cipher) NewOFBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 
 // whether is a supported padding
 // 判断是否是支持的填充模式
-func (padding cipherPadding) isSupported() bool {
+func (c *Cipher) isSupportedPadding() bool {
 	paddings := []cipherPadding{
 		No, Zero, PKCS5, PKCS7, AnsiX923, ISO97971,
 	}
-	for _, val := range paddings {
-		if val == padding {
+	for _, padding := range paddings {
+		if padding == c.padding {
 			return true
 		}
 	}
