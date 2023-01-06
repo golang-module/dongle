@@ -21,7 +21,7 @@ func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 	}
 	src, size := e.src, tea.BlockSize
 	if len(src) > size {
-		src = NewCipher().EmptyPadding(e.src, 8)
+		src = NewCipher().EmptyPadding(e.src, size)
 	}
 	buffer := bytes.NewBufferString("")
 	for _, chunk := range bytesSplit(src, size) {
