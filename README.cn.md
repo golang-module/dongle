@@ -709,7 +709,7 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSm3([]byte("dongle")).ToBa
 ```go
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("0123456789abcdef") // key 长度必须是 16、24 或 32 字节
 cipher.SetIV("0123456789abcdef") // iv 长度必须是 16 字节，ECB 模式不需要设置 iv
 
@@ -749,7 +749,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher)
 ```go
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("0123456789abcdef") // key 长度必须是 1-56 字节
 cipher.SetIV("12345678")          // iv 长度必须是 8 字节，ECB 模式不需要设置 iv
 
@@ -789,7 +789,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("ksNyTXILWZgtIaq5p7ufQA==")).ByBlowfish(ci
 ```go
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("12345678") // key 长度必须是 8 字节
 cipher.SetIV("12345678") // iv 长度必须是 8 字节
 
@@ -829,7 +829,7 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).ByDes(cipher)
 ```go
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC, CFB, CTR, ECB, OFB
-cipher.SetPadding(dongle.PKCS7) // No、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
+cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("123456781234567812345678") // key 长度必须是 24
 cipher.SetIV("12345678") // iv 长度必须是 8
 
@@ -980,28 +980,28 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PublicKey)
 
 ##### Tea 加密、解密
 
-> 加密明文如果超过 8 字节，进行零填充分组解密；迭代轮次(rounds) 必须是偶数，默认是 64
+> 加密明文如果超过 8 字节，进行空字符串填充分组解密；迭代轮次(rounds) 必须是偶数，默认是 64
 
 ```go
 // 对字符串进行 tea 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToHexString() // bfa8d956247c0dcebfb9d6dd42d03cd7
+dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToHexString() // bfa8d956247c0dcecfe2b0ef44b08aab
 // 对经过 hex 编码的字符串进行 tea 解密，输出字符串
-dongle.Decrypt.FromHexString("bfa8d956247c0dcebfb9d6dd42d03cd7").ByTea("0123456789abcdef").ToString() // hello world
+dongle.Decrypt.FromHexString("bfa8d956247c0dcecfe2b0ef44b08aab").ByTea("0123456789abcdef").ToString() // hello world
 
 // 对字符串进行 tea 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToBase64String() // v6jZViR8Dc6/udbdQtA81w==
+dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToBase64String() // v6jZViR8Dc7P4rDvRLCKqw==
 // 对经过 base64 编码的字符串进行 tea 解密，输出字符串
-dongle.Decrypt.FromBase64String("v6jZViR8Dc6/udbdQtA81w==").ByTea("0123456789abcdef").ToString() // hello world
+dongle.Decrypt.FromBase64String("v6jZViR8Dc7P4rDvRLCKqw==").ByTea("0123456789abcdef").ToString() // hello world
 
 // 对字节切片进行 tea 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToHexBytes() // []byte("bfa8d956247c0dcebfb9d6dd42d03cd7")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToHexBytes() // []byte("bfa8d956247c0dcecfe2b0ef44b08aab")
 // 对经过 hex 编码的字节切片进行 tea 解密，输出字节切片
-dongle.Decrypt.FromHexBytes([]byte("bfa8d956247c0dcebfb9d6dd42d03cd7")).ByTea("4539658173a59fc2", 64).ToBytes() // []byte("hello world")
+dongle.Decrypt.FromHexBytes([]byte("bfa8d956247c0dcecfe2b0ef44b08aab")).ByTea("4539658173a59fc2", 64).ToBytes() // []byte("hello world")
 
 // 对字节切片进行 tea 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToBase64Bytes() // []byte("v6jZViR8Dc6/udbdQtA81w==")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToBase64Bytes() // []byte("v6jZViR8Dc7P4rDvRLCKqw==")
 // 对经过 base64 编码的字节切片进行 tea 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(()byte("v6jZViR8Dc6/udbdQtA81w==")).ByTea("0123456789abcdef", 64).ToBytes() // []byte("hello world")
+dongle.Decrypt.FromBase64Bytes(()byte("v6jZViR8Dc7P4rDvRLCKqw==")).ByTea("0123456789abcdef", 64).ToBytes() // []byte("hello world")
 ```
 
 ##### Rc4 加密、解密

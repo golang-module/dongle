@@ -17,7 +17,7 @@ var teaTests = []struct {
 	{"", "", 64, "", ""},
 	{"", "0123456789abcdef", 64, "", ""},
 	{"hello go", "0123456789abcdef", 0, "3f9a9d3f2f58277f", "P5qdPy9YJ38="},
-	{"hello world", "0123456789abcdef", 64, "bfa8d956247c0dcebfb9d6dd42d03cd7", "v6jZViR8Dc6/udbdQtA81w=="},
+	{"hello world", "0123456789abcdef", 64, "bfa8d956247c0dcecfe2b0ef44b08aab", "v6jZViR8Dc7P4rDvRLCKqw=="},
 }
 
 func TestTea_Encrypt_String(t *testing.T) {
