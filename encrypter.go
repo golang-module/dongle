@@ -86,6 +86,8 @@ func (e Encrypter) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 
 	switch padding {
 	case No:
+	case Empty:
+		src = c.EmptyPadding(src, size)
 	case Zero:
 		src = c.ZeroPadding(src, size)
 	case PKCS5:

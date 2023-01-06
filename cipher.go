@@ -27,6 +27,7 @@ type cipherPadding string
 // 填充模式常量
 const (
 	No       cipherPadding = "no"
+	Empty    cipherPadding = "empty"
 	Zero     cipherPadding = "zero"
 	PKCS5    cipherPadding = "pkcs5"
 	PKCS7    cipherPadding = "pkcs7"
@@ -76,6 +77,20 @@ func (c *Cipher) SetIV(iv interface{}) {
 	c.iv = interface2bytes(iv)
 }
 
+// EmptyPadding padding with Empty mode.
+// 进行空填充
+func (c *Cipher) EmptyPadding(src []byte, blockSize int) []byte {
+	paddingSize := blockSize - len(src)%blockSize
+	paddingText := bytes.Repeat([]byte(" "), paddingSize)
+	return append(src, paddingText...)
+}
+
+// EmptyUnPadding removes padding with Empty mode.
+// 移除空填充
+func (c *Cipher) EmptyUnPadding(src []byte) []byte {
+	return bytes.TrimRight(src, " ")
+}
+
 // ZeroPadding padding with Zero mode.
 // 进行 0 填充
 func (c *Cipher) ZeroPadding(src []byte, blockSize int) []byte {
@@ -87,9 +102,7 @@ func (c *Cipher) ZeroPadding(src []byte, blockSize int) []byte {
 // ZeroUnPadding removes padding with Zero mode.
 // 移除 0 填充
 func (c *Cipher) ZeroUnPadding(src []byte) []byte {
-	return bytes.TrimFunc(src, func(r rune) bool {
-		return r == rune(0)
-	})
+	return bytes.TrimRight(src, string([]byte{0}))
 }
 
 // ISO97971Padding padding with ISO/IEC 9797-1 mode.
@@ -241,7 +254,7 @@ func (c *Cipher) NewOFBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 // 判断是否是支持的填充模式
 func (c *Cipher) isSupportedPadding() bool {
 	paddings := []cipherPadding{
-		No, Zero, PKCS5, PKCS7, AnsiX923, ISO97971,
+		No, Empty, Zero, PKCS5, PKCS7, AnsiX923, ISO97971,
 	}
 	for _, padding := range paddings {
 		if padding == c.padding {

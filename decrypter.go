@@ -131,6 +131,8 @@ func (d Decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
 	switch padding {
 	case Zero:
 		return c.ZeroUnPadding(src), nil
+	case Empty:
+		return c.EmptyUnPadding(src), nil
 	case PKCS5:
 		return c.PKCS5UnPadding(src), nil
 	case PKCS7:
