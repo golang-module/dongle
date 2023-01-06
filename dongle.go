@@ -14,7 +14,7 @@ import (
 
 // Version current version
 // 当前版本号
-const Version = "0.2.5"
+const Version = "0.2.6"
 
 // dongle defines a dongle struct.
 // 定义 dongle 结构体
@@ -78,4 +78,16 @@ func interface2bytes(i interface{}) (b []byte) {
 		b = v
 	}
 	return
+}
+
+// split the byte slice by the specified size.
+// 按照指定长度分割字节切片
+func bytesSplit(buf []byte, size int) [][]byte {
+	var chunk []byte
+	chunks := make([][]byte, 0, len(buf)/size+1)
+	for len(buf) >= size {
+		chunk, buf = buf[:size], buf[size:]
+		chunks = append(chunks, chunk)
+	}
+	return chunks
 }
