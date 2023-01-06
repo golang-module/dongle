@@ -110,11 +110,6 @@ var (
 )
 
 var (
-	// returns an invalid tea src error
-	// 返回无效的 tea 明文错误
-	invalidTeaSrcError = func() error {
-		return fmt.Errorf("tea: invalid src, the src must be 8 bytes")
-	}
 	// returns an invalid tea round error
 	// 返回无效的 tea 迭代轮数错误
 	invalidTeaRoundsError = func() error {
