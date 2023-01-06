@@ -1,6 +1,7 @@
 package dongle
 
 import (
+	"bytes"
 	"golang.org/x/crypto/tea"
 )
 
@@ -8,10 +9,6 @@ import (
 // 通过 tea 加密
 func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 	if len(e.src) == 0 {
-		return e
-	}
-	if len(e.src) != 8 {
-		e.Error = invalidTeaSrcError()
 		return e
 	}
 	if len(rounds) == 0 {
@@ -22,14 +19,23 @@ func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 		e.Error = invalidTeaRoundsError()
 		return e
 	}
-
-	block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
-	if err != nil {
-		e.Error = invalidTeaKeyError()
-		return e
+	src, size := e.src, tea.BlockSize
+	if len(src) > size {
+		cipher := NewCipher()
+		src = cipher.ZeroPadding(e.src, 8)
 	}
-	e.dst = make([]byte, tea.BlockSize)
-	block.Encrypt(e.dst, e.src)
+	buffer := bytes.NewBufferString("")
+	for _, chunk := range bytesSplit(src, size) {
+		block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
+		if err != nil {
+			e.Error = invalidTeaKeyError()
+			return e
+		}
+		dst := make([]byte, size)
+		block.Encrypt(dst, chunk)
+		buffer.Write(dst)
+	}
+	e.dst = buffer.Bytes()
 	return e
 }
 
@@ -37,10 +43,6 @@ func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 // 通过 tea 解密
 func (d Decrypter) ByTea(key interface{}, rounds ...int) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
-		return d
-	}
-	if len(d.src) != 8 {
-		d.Error = invalidTeaSrcError()
 		return d
 	}
 	if len(rounds) == 0 {
@@ -51,12 +53,19 @@ func (d Decrypter) ByTea(key interface{}, rounds ...int) Decrypter {
 		d.Error = invalidTeaRoundsError()
 		return d
 	}
-	block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
-	if err != nil {
-		d.Error = invalidTeaKeyError()
-		return d
+	cipher := NewCipher()
+	src, size := d.src, tea.BlockSize
+	buffer := bytes.NewBufferString("")
+	for _, chunk := range bytesSplit(src, size) {
+		block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
+		if err != nil {
+			d.Error = invalidTeaKeyError()
+			return d
+		}
+		dst := make([]byte, size)
+		block.Decrypt(dst, chunk)
+		buffer.Write(dst)
 	}
-	d.dst = make([]byte, 8)
-	block.Decrypt(d.dst, d.src)
+	d.dst = cipher.ZeroUnPadding(buffer.Bytes())
 	return d
 }

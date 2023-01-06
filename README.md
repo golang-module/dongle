@@ -984,28 +984,28 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PublicKey)
 
 ##### Encrypt and decrypt by tea
 
-> Rounds must be even, the default value is 64
+> If plaintext more than 8 bytes, block encryption with zero padding. Rounds must be even, the default value is 64
 
 ```go
 // Encrypt by tea from string and output string with hex encoding
-dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToHexString() // 06f1e586e866a2b7
+dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToHexString() // bfa8d956247c0dcebfb9d6dd42d03cd7
 // Decrypt by tea from string with hex encoding and output string
-dongle.Decrypt.FromHexString("06f1e586e866a2b7").ByTea("0123456789abcdef").ToString() // hello go
+dongle.Decrypt.FromHexString("bfa8d956247c0dcebfb9d6dd42d03cd7").ByTea("0123456789abcdef").ToString() // hello world
 
 // Encrypt by tea from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello go").ByTea("0123456789abcdef").ToBase64String() // BvHlhuhmorc=
+dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToBase64String() // v6jZViR8Dc6/udbdQtA81w==
 // Decrypt by tea from string with base64 encoding and output string
-dongle.Decrypt.FromBase64String("BvHlhuhmorc=").ByTea("0123456789abcdef").ToString() // hello go
+dongle.Decrypt.FromBase64String("v6jZViR8Dc6/udbdQtA81w==").ByTea("0123456789abcdef").ToString() // hello world
 
 // Encrypt by tea from byte slice and output byte slice with hex encoding
-dongle.Encrypt.FromBytes([]byte("hello go")).ByTea("0123456789abcdef", 64).ToHexBytes() // []byte("4539658173a59fc2")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToHexBytes() // []byte("bfa8d956247c0dcebfb9d6dd42d03cd7")
 // Decrypt by tea from byte slice with hex encoding and output byte slice
-dongle.Decrypt.FromHexBytes([]byte("4539658173a59fc2")).ByTea("0123456789abcdef", 64).ToBytes() // []byte("hello go")
+dongle.Decrypt.FromHexBytes([]byte("bfa8d956247c0dcebfb9d6dd42d03cd7")).ByTea("4539658173a59fc2", 64).ToBytes() // []byte("hello world")
 
 // Encrypt by tea from byte slice and output byte slice with base64 encoding
-dongle.Encrypt.FromBytes([]byte("hello go")).ByTea("0123456789abcdef", 32).ToBase64Bytes() // []byte("RTllgXOln8I=")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToBase64Bytes() // []byte("v6jZViR8Dc6/udbdQtA81w==")
 // Decrypt by tea from byte slice with base64 encoding and output byte slice
-dongle.Decrypt.FromBase64Bytes(()byte("RTllgXOln8I=")).ByTea("0123456789abcdef", 32).ToBytes() // []byte("hello go")
+dongle.Decrypt.FromBase64Bytes(()byte("v6jZViR8Dc6/udbdQtA81w==")).ByTea("0123456789abcdef", 64).ToBytes() // []byte("hello world")
 ```
 
 ##### Encrypt and decrypt by rc4
