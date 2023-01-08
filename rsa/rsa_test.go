@@ -258,7 +258,7 @@ func TestRsa_Hash_Error(t *testing.T) {
 	keyPair.SetHash(crypto.MD4)
 
 	_, err1 := keyPair.SignByPrivateKey([]byte(rsaInput))
-	assert.Equal(t, invalidHashError(), err1)
+	assert.Equal(t, unsupportedHashError(), err1)
 	err2 := keyPair.VerifyByPublicKey([]byte(rsaInput), []byte(rsaInput))
-	assert.Equal(t, invalidHashError(), err2)
+	assert.Equal(t, unsupportedHashError(), err2)
 }
