@@ -24,13 +24,13 @@ func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 		src = NewCipher().EmptyPadding(e.src, size)
 	}
 	buffer := bytes.NewBufferString("")
+	dst := make([]byte, size)
 	for _, chunk := range bytesSplit(src, size) {
 		block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
 		if err != nil {
 			e.Error = invalidTeaKeyError()
 			return e
 		}
-		dst := make([]byte, size)
 		block.Encrypt(dst, chunk)
 		buffer.Write(dst)
 	}
@@ -54,13 +54,13 @@ func (d Decrypter) ByTea(key interface{}, rounds ...int) Decrypter {
 	}
 	src, size := d.src, tea.BlockSize
 	buffer := bytes.NewBufferString("")
+	dst := make([]byte, size)
 	for _, chunk := range bytesSplit(src, size) {
 		block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
 		if err != nil {
 			d.Error = invalidTeaKeyError()
 			return d
 		}
-		dst := make([]byte, size)
 		block.Decrypt(dst, chunk)
 		buffer.Write(dst)
 	}
