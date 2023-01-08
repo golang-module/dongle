@@ -20,6 +20,7 @@ var desTests = []struct {
 }{
 	{CBC, PKCS7, "", "", ""},
 	{CBC, No, "hello world, go!", "0b2a92e81fb49ce1b161ab1a2e35d7ce", "CyqS6B+0nOGxYasaLjXXzg=="},
+	{CBC, Empty, "hello world", "0b2a92e81fb49ce1dcb45f808e7b4075", "CyqS6B+0nOHctF+AjntAdQ=="},
 	{CBC, Zero, "hello world", "0b2a92e81fb49ce1e02ecfa986df2ec8", "CyqS6B+0nOHgLs+pht8uyA=="},
 	{CBC, PKCS5, "hello world", "0b2a92e81fb49ce1a43266aacaea7b81", "CyqS6B+0nOGkMmaqyup7gQ=="},
 	{CBC, PKCS7, "hello world", "0b2a92e81fb49ce1a43266aacaea7b81", "CyqS6B+0nOGkMmaqyup7gQ=="},
@@ -28,6 +29,7 @@ var desTests = []struct {
 
 	{CFB, PKCS7, "", "", ""},
 	{CFB, No, "hello world, go!", "feb56ee417f5fbe61a4e5700b93c340b", "/rVu5Bf1++YaTlcAuTw0Cw=="},
+	{CFB, Empty, "hello world", "feb56ee417f5fbe61a4e570cb97b7b0a", "/rVu5Bf1++YaTlcMuXt7Cg=="},
 	{CFB, Zero, "hello world", "feb56ee417f5fbe61a4e572c995b5b2a", "/rVu5Bf1++YaTlcsmVtbKg=="},
 	{CFB, PKCS5, "hello world", "feb56ee417f5fbe61a4e57299c5e5e2f", "/rVu5Bf1++YaTlcpnF5eLw=="},
 	{CFB, PKCS7, "hello world", "feb56ee417f5fbe61a4e57299c5e5e2f", "/rVu5Bf1++YaTlcpnF5eLw=="},
@@ -36,6 +38,7 @@ var desTests = []struct {
 
 	{OFB, PKCS7, "", "", ""},
 	{OFB, No, "hello world, go!", "feb56ee417f5fbe69b19fcf309087d8b", "/rVu5Bf1++abGfzzCQh9iw=="},
+	{OFB, Empty, "hello world", "feb56ee417f5fbe69b19fcff094f328a", "/rVu5Bf1++abGfz/CU8yig=="},
 	{OFB, Zero, "hello world", "feb56ee417f5fbe69b19fcdf296f12aa", "/rVu5Bf1++abGfzfKW8Sqg=="},
 	{OFB, PKCS5, "hello world", "feb56ee417f5fbe69b19fcda2c6a17af", "/rVu5Bf1++abGfzaLGoXrw=="},
 	{OFB, PKCS7, "hello world", "feb56ee417f5fbe69b19fcda2c6a17af", "/rVu5Bf1++abGfzaLGoXrw=="},
@@ -44,6 +47,7 @@ var desTests = []struct {
 
 	{CTR, PKCS7, "", "", ""},
 	{CTR, No, "hello world, go!", "feb56ee417f5fbe6337e8b3af91e9929", "/rVu5Bf1++Yzfos6+R6ZKQ=="},
+	{CTR, Empty, "hello world", "feb56ee417f5fbe6337e8b36f959d628", "/rVu5Bf1++Yzfos2+VnWKA=="},
 	{CTR, Zero, "hello world", "feb56ee417f5fbe6337e8b16d979f608", "/rVu5Bf1++YzfosW2Xn2CA=="},
 	{CTR, PKCS5, "hello world", "feb56ee417f5fbe6337e8b13dc7cf30d", "/rVu5Bf1++YzfosT3HzzDQ=="},
 	{CTR, PKCS7, "hello world", "feb56ee417f5fbe6337e8b13dc7cf30d", "/rVu5Bf1++YzfosT3HzzDQ=="},
@@ -52,6 +56,7 @@ var desTests = []struct {
 
 	{ECB, PKCS7, "", "", ""},
 	{ECB, No, "hello world, go!", "28dba02eb5f6dd47e5a66298af31d4ca", "KNugLrX23UflpmKYrzHUyg=="},
+	{ECB, Empty, "hello world", "28dba02eb5f6dd47a66e845b5ef12e13", "KNugLrX23UemboRbXvEuEw=="},
 	{ECB, Zero, "hello world", "28dba02eb5f6dd476042daebfa59687a", "KNugLrX23UdgQtrr+lloeg=="},
 	{ECB, PKCS5, "hello world", "28dba02eb5f6dd475d82e3681c83bb77", "KNugLrX23UddguNoHIO7dw=="},
 	{ECB, PKCS7, "hello world", "28dba02eb5f6dd475d82e3681c83bb77", "KNugLrX23UddguNoHIO7dw=="},

@@ -20,6 +20,7 @@ var aesTests = []struct {
 }{
 	{CBC, PKCS7, "", "", ""},
 	{CBC, No, "hello world, go!", "77aa39926f9b2f3f22254bfd422fa75d", "d6o5km+bLz8iJUv9Qi+nXQ=="},
+	{CBC, Empty, "hello world", "956f2b73603b1a97024a7e5aa73ad7e2", "lW8rc2A7GpcCSn5apzrX4g=="},
 	{CBC, Zero, "hello world", "889935b7a0c64b0333d713cafaee08fe", "iJk1t6DGSwMz1xPK+u4I/g=="},
 	{CBC, PKCS5, "hello world", "c1e9b4529aac9793010f4677f6358efe", "wem0Upqsl5MBD0Z39jWO/g=="},
 	{CBC, PKCS7, "hello world", "c1e9b4529aac9793010f4677f6358efe", "wem0Upqsl5MBD0Z39jWO/g=="},
@@ -28,6 +29,7 @@ var aesTests = []struct {
 
 	{CFB, PKCS7, "", "", ""},
 	{CFB, No, "hello world, go!", "1a1712e471fc8a6e72cb7c44596eda44", "GhcS5HH8im5yy3xEWW7aRA=="},
+	{CFB, Empty, "hello world", "1a1712e471fc8a6e72cb7c4859299545", "GhcS5HH8im5yy3xIWSmVRQ=="},
 	{CFB, Zero, "hello world", "1a1712e471fc8a6e72cb7c687909b565", "GhcS5HH8im5yy3xoeQm1ZQ=="},
 	{CFB, PKCS5, "hello world", "1a1712e471fc8a6e72cb7c6d7c0cb060", "GhcS5HH8im5yy3xtfAywYA=="},
 	{CFB, PKCS7, "hello world", "1a1712e471fc8a6e72cb7c6d7c0cb060", "GhcS5HH8im5yy3xtfAywYA=="},
@@ -36,6 +38,7 @@ var aesTests = []struct {
 
 	{OFB, PKCS7, "", "", ""},
 	{OFB, No, "hello world, go!", "1a1712e471fc8a6e72cb7c44596eda44", "GhcS5HH8im5yy3xEWW7aRA=="},
+	{OFB, Empty, "hello world", "1a1712e471fc8a6e72cb7c4859299545", "GhcS5HH8im5yy3xIWSmVRQ=="},
 	{OFB, Zero, "hello world", "1a1712e471fc8a6e72cb7c687909b565", "GhcS5HH8im5yy3xoeQm1ZQ=="},
 	{OFB, PKCS5, "hello world", "1a1712e471fc8a6e72cb7c6d7c0cb060", "GhcS5HH8im5yy3xtfAywYA=="},
 	{OFB, PKCS7, "hello world", "1a1712e471fc8a6e72cb7c6d7c0cb060", "GhcS5HH8im5yy3xtfAywYA=="},
@@ -44,6 +47,7 @@ var aesTests = []struct {
 
 	{CTR, PKCS7, "", "", ""},
 	{CTR, No, "hello world, go!", "1a1712e471fc8a6e72cb7c44596eda44", "GhcS5HH8im5yy3xEWW7aRA=="},
+	{CTR, Empty, "hello world", "1a1712e471fc8a6e72cb7c4859299545", "GhcS5HH8im5yy3xIWSmVRQ=="},
 	{CTR, Zero, "hello world", "1a1712e471fc8a6e72cb7c687909b565", "GhcS5HH8im5yy3xoeQm1ZQ=="},
 	{CTR, PKCS5, "hello world", "1a1712e471fc8a6e72cb7c6d7c0cb060", "GhcS5HH8im5yy3xtfAywYA=="},
 	{CTR, PKCS7, "hello world", "1a1712e471fc8a6e72cb7c6d7c0cb060", "GhcS5HH8im5yy3xtfAywYA=="},
@@ -52,6 +56,7 @@ var aesTests = []struct {
 
 	{ECB, PKCS7, "", "", ""},
 	{ECB, No, "hello world, go!", "f82a4c0db7a82f70c7fa84c39fa7627b", "+CpMDbeoL3DH+oTDn6diew=="},
+	{ECB, Empty, "hello world", "5868584176d2aca3c257592a9d8a020d", "WGhYQXbSrKPCV1kqnYoCDQ=="},
 	{ECB, Zero, "hello world", "769c326290511c93bd59bba9c24d8904", "dpwyYpBRHJO9Wbupwk2JBA=="},
 	{ECB, PKCS5, "hello world", "8169bed4ef49a8874559c5b200daade7", "gWm+1O9JqIdFWcWyANqt5w=="},
 	{ECB, PKCS7, "hello world", "8169bed4ef49a8874559c5b200daade7", "gWm+1O9JqIdFWcWyANqt5w=="},

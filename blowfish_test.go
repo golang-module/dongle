@@ -20,6 +20,7 @@ var blowfishTests = []struct {
 }{
 	{CBC, PKCS7, "", "", ""},
 	{CBC, No, "hello world, go!", "92c3724d720b5998615b123dd9774323", "ksNyTXILWZhhWxI92XdDIw=="},
+	{CBC, Empty, "hello world", "92c3724d720b59989fcf8696627e6c0e", "ksNyTXILWZifz4aWYn5sDg=="},
 	{CBC, Zero, "hello world", "92c3724d720b599812a2da1e70f954ff", "ksNyTXILWZgSotoecPlU/w=="},
 	{CBC, PKCS5, "hello world", "92c3724d720b59982d21aab9a7bb9f40", "ksNyTXILWZgtIaq5p7ufQA=="},
 	{CBC, PKCS7, "hello world", "92c3724d720b59982d21aab9a7bb9f40", "ksNyTXILWZgtIaq5p7ufQA=="},
@@ -28,6 +29,7 @@ var blowfishTests = []struct {
 
 	{CFB, PKCS7, "", "", ""},
 	{CFB, No, "hello world, go!", "f0ea2f993584f026d070683357c9205c", "8OovmTWE8CbQcGgzV8kgXA=="},
+	{CFB, Empty, "hello world", "f0ea2f993584f026d070683f578e6f5d", "8OovmTWE8CbQcGg/V45vXQ=="},
 	{CFB, Zero, "hello world", "f0ea2f993584f026d070681f77ae4f7d", "8OovmTWE8CbQcGgfd65PfQ=="},
 	{CFB, PKCS5, "hello world", "f0ea2f993584f026d070681a72ab4a78", "8OovmTWE8CbQcGgacqtKeA=="},
 	{CFB, PKCS7, "hello world", "f0ea2f993584f026d070681a72ab4a78", "8OovmTWE8CbQcGgacqtKeA=="},
@@ -36,6 +38,7 @@ var blowfishTests = []struct {
 
 	{OFB, PKCS7, "", "", ""},
 	{OFB, No, "hello world, go!", "f0ea2f993584f0267e628f1ec7f5d21d", "8OovmTWE8CZ+Yo8ex/XSHQ=="},
+	{OFB, Empty, "hello world", "f0ea2f993584f0267e628f12c7b29d1c", "8OovmTWE8CZ+Yo8Sx7KdHA=="},
 	{OFB, Zero, "hello world", "f0ea2f993584f0267e628f32e792bd3c", "8OovmTWE8CZ+Yo8y55K9PA=="},
 	{OFB, PKCS5, "hello world", "f0ea2f993584f0267e628f37e297b839", "8OovmTWE8CZ+Yo834pe4OQ=="},
 	{OFB, PKCS7, "hello world", "f0ea2f993584f0267e628f37e297b839", "8OovmTWE8CZ+Yo834pe4OQ=="},
@@ -44,6 +47,7 @@ var blowfishTests = []struct {
 
 	{CTR, PKCS7, "", "", ""},
 	{CTR, No, "hello world, go!", "f0ea2f993584f026d6f92ffda9d639be", "8OovmTWE8CbW+S/9qdY5vg=="},
+	{CTR, Empty, "hello world", "f0ea2f993584f026d6f92ff1a99176bf", "8OovmTWE8CbW+S/xqZF2vw=="},
 	{CTR, Zero, "hello world", "f0ea2f993584f026d6f92fd189b1569f", "8OovmTWE8CbW+S/RibFWnw=="},
 	{CTR, PKCS5, "hello world", "f0ea2f993584f026d6f92fd48cb4539a", "8OovmTWE8CbW+S/UjLRTmg=="},
 	{CTR, PKCS7, "hello world", "f0ea2f993584f026d6f92fd48cb4539a", "8OovmTWE8CbW+S/UjLRTmg=="},
@@ -52,6 +56,7 @@ var blowfishTests = []struct {
 
 	{ECB, PKCS7, "", "", ""},
 	{ECB, No, "hello world, go!", "954ddb4b65c05c90112006edaeda25f5", "lU3bS2XAXJARIAbtrtol9Q=="},
+	{ECB, Empty, "hello world", "954ddb4b65c05c9002d465bae4ae9dc1", "lU3bS2XAXJAC1GW65K6dwQ=="},
 	{ECB, Zero, "hello world", "954ddb4b65c05c90c8cb0c6bbb3ec912", "lU3bS2XAXJDIywxruz7JEg=="},
 	{ECB, PKCS5, "hello world", "954ddb4b65c05c9022457a6f07c5859c", "lU3bS2XAXJAiRXpvB8WFnA=="},
 	{ECB, PKCS7, "hello world", "954ddb4b65c05c9022457a6f07c5859c", "lU3bS2XAXJAiRXpvB8WFnA=="},

@@ -20,7 +20,7 @@ func (e Encrypter) ByBlowfish(c *Cipher) Encrypter {
 		e.Error = invalidBlowfishSrcError()
 		return e
 	}
-	e.dst, e.Error = e.encrypt(c, block)
+	e.dst, e.Error = c.encrypt(e.src, block)
 	return e
 }
 
@@ -43,6 +43,6 @@ func (d Decrypter) ByBlowfish(c *Cipher) Decrypter {
 		d.Error = invalidBlowfishSrcError()
 		return d
 	}
-	d.dst, d.Error = d.decrypt(c, block)
+	d.dst, d.Error = c.decrypt(d.src, block)
 	return d
 }
