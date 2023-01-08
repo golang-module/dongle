@@ -20,7 +20,7 @@ func (e Encrypter) ByDes(c *Cipher) Encrypter {
 		e.Error = invalidDesSrcError()
 		return e
 	}
-	e.dst, e.Error = c.encrypt(e.src, block)
+	e.dst, e.Error = c.Encrypt(e.src, block)
 	return e
 }
 
@@ -43,6 +43,6 @@ func (d Decrypter) ByDes(c *Cipher) Decrypter {
 		d.Error = invalidDesSrcError()
 		return d
 	}
-	d.dst, d.Error = c.decrypt(d.src, block)
+	d.dst, d.Error = c.Decrypt(d.src, block)
 	return d
 }

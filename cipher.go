@@ -264,9 +264,9 @@ func (c *Cipher) isSupportedPadding() bool {
 	return false
 }
 
-// encrypts with given mode and padding
+// Encrypt encrypts with given mode and padding
 // 根据指定的分组模式和填充模式进行加密
-func (c *Cipher) encrypt(src []byte, block cipher.Block) (dst []byte, err error) {
+func (c *Cipher) Encrypt(src []byte, block cipher.Block) (dst []byte, err error) {
 	mode, padding, size := c.mode, c.padding, block.BlockSize()
 	dst = []byte("")
 	if len(src) == 0 {
@@ -309,9 +309,9 @@ func (c *Cipher) encrypt(src []byte, block cipher.Block) (dst []byte, err error)
 	}
 }
 
-// decrypts with given mode and padding.
+// Decrypt decrypts with given mode and padding.
 // 根据指定的分组模式和填充模式进行解密
-func (c *Cipher) decrypt(src []byte, block cipher.Block) (dst []byte, err error) {
+func (c *Cipher) Decrypt(src []byte, block cipher.Block) (dst []byte, err error) {
 	mode, padding := c.mode, c.padding
 	dst = []byte("")
 	if len(src) == 0 {
