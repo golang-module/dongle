@@ -1,9 +1,5 @@
 package dongle
 
-import (
-	"crypto/cipher"
-)
-
 // Encrypter defines Encrypter struct.
 // 定义 Encrypter 结构体
 type Encrypter struct {
@@ -73,49 +69,4 @@ func (e Encrypter) ToHexBytes() []byte {
 // 输出经过 base64 编码的字节切片
 func (e Encrypter) ToBase64Bytes() []byte {
 	return Encode.FromBytes(e.dst).ByBase64().ToBytes()
-}
-
-// encrypts with given mode and padding
-// 根据指定的分组模式和填充模式进行加密
-func (e Encrypter) encrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
-	src, mode, padding, size := e.src, c.mode, c.padding, b.BlockSize()
-	dst = []byte("")
-	if len(src) == 0 {
-		return
-	}
-
-	switch padding {
-	case No:
-	case Empty:
-		src = c.EmptyPadding(src, size)
-	case Zero:
-		src = c.ZeroPadding(src, size)
-	case PKCS5:
-		src = c.PKCS5Padding(src)
-	case PKCS7:
-		src = c.PKCS7Padding(src, size)
-	case AnsiX923:
-		src = c.AnsiX923Padding(src, size)
-	case ISO97971:
-		src = c.ISO97971Padding(src, size)
-	default:
-		err = invalidPaddingError(padding)
-		return
-	}
-
-	switch mode {
-	case ECB:
-		return c.NewECBEncrypter(src, b), nil
-	case CBC:
-		return c.NewCBCEncrypter(src, b), nil
-	case CTR:
-		return c.NewCTREncrypter(src, b), nil
-	case CFB:
-		return c.NewCFBEncrypter(src, b), nil
-	case OFB:
-		return c.NewOFBEncrypter(src, b), nil
-	default:
-		err = invalidModeError(mode)
-		return
-	}
 }

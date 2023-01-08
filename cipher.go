@@ -264,6 +264,97 @@ func (c *Cipher) isSupportedPadding() bool {
 	return false
 }
 
+// encrypts with given mode and padding
+// 根据指定的分组模式和填充模式进行加密
+func (c *Cipher) encrypt(src []byte, block cipher.Block) (dst []byte, err error) {
+	mode, padding, size := c.mode, c.padding, block.BlockSize()
+	dst = []byte("")
+	if len(src) == 0 {
+		return
+	}
+
+	switch padding {
+	case No:
+	case Empty:
+		src = c.EmptyPadding(src, size)
+	case Zero:
+		src = c.ZeroPadding(src, size)
+	case PKCS5:
+		src = c.PKCS5Padding(src)
+	case PKCS7:
+		src = c.PKCS7Padding(src, size)
+	case AnsiX923:
+		src = c.AnsiX923Padding(src, size)
+	case ISO97971:
+		src = c.ISO97971Padding(src, size)
+	default:
+		err = invalidPaddingError(padding)
+		return
+	}
+
+	switch mode {
+	case ECB:
+		return c.NewECBEncrypter(src, block), nil
+	case CBC:
+		return c.NewCBCEncrypter(src, block), nil
+	case CTR:
+		return c.NewCTREncrypter(src, block), nil
+	case CFB:
+		return c.NewCFBEncrypter(src, block), nil
+	case OFB:
+		return c.NewOFBEncrypter(src, block), nil
+	default:
+		err = invalidModeError(mode)
+		return
+	}
+}
+
+// decrypts with given mode and padding.
+// 根据指定的分组模式和填充模式进行解密
+func (c *Cipher) decrypt(src []byte, block cipher.Block) (dst []byte, err error) {
+	mode, padding := c.mode, c.padding
+	dst = []byte("")
+	if len(src) == 0 {
+		return
+	}
+	if !c.isSupportedPadding() {
+		err = invalidPaddingError(padding)
+		return
+	}
+
+	switch mode {
+	case ECB:
+		src = c.NewECBDecrypter(src, block)
+	case CBC:
+		src = c.NewCBCDecrypter(src, block)
+	case CTR:
+		src = c.NewCTRDecrypter(src, block)
+	case CFB:
+		src = c.NewCFBDecrypter(src, block)
+	case OFB:
+		src = c.NewOFBDecrypter(src, block)
+	default:
+		err = invalidModeError(mode)
+		return
+	}
+
+	switch padding {
+	case Zero:
+		return c.ZeroUnPadding(src), nil
+	case Empty:
+		return c.EmptyUnPadding(src), nil
+	case PKCS5:
+		return c.PKCS5UnPadding(src), nil
+	case PKCS7:
+		return c.PKCS7UnPadding(src), nil
+	case AnsiX923:
+		return c.AnsiX923UnPadding(src), nil
+	case ISO97971:
+		return c.ISO97971UnPadding(src), nil
+	}
+	return src, nil
+}
+
 // gets Cipher instance.
 // 获取 Cipher 对象
 func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
