@@ -23,8 +23,7 @@ func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
 	if len(src) > size {
 		src = NewCipher().EmptyPadding(e.src, size)
 	}
-	buffer := bytes.NewBufferString("")
-	dst := make([]byte, size)
+	dst, buffer := make([]byte, size), bytes.NewBufferString("")
 	for _, chunk := range bytesSplit(src, size) {
 		block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
 		if err != nil {
@@ -53,8 +52,7 @@ func (d Decrypter) ByTea(key interface{}, rounds ...int) Decrypter {
 		return d
 	}
 	src, size := d.src, tea.BlockSize
-	buffer := bytes.NewBufferString("")
-	dst := make([]byte, size)
+	dst, buffer := make([]byte, size), bytes.NewBufferString("")
 	for _, chunk := range bytesSplit(src, size) {
 		block, err := tea.NewCipherWithRounds(interface2bytes(key), rounds[0])
 		if err != nil {
