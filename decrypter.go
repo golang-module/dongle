@@ -1,9 +1,5 @@
 package dongle
 
-import (
-	"crypto/cipher"
-)
-
 // Decrypter defines Decrypter struct.
 // 定义 Decrypter 结构体
 type Decrypter struct {
@@ -97,50 +93,4 @@ func (d Decrypter) ToBytes() []byte {
 		return []byte("")
 	}
 	return d.dst
-}
-
-// decrypts with given mode and padding.
-// 根据指定的分组模式和填充模式进行解密
-func (d Decrypter) decrypt(c *Cipher, b cipher.Block) (dst []byte, err error) {
-	src, mode, padding := d.src, c.mode, c.padding
-	dst = []byte("")
-	if len(src) == 0 {
-		return
-	}
-	if !c.isSupportedPadding() {
-		err = invalidPaddingError(padding)
-		return
-	}
-
-	switch mode {
-	case ECB:
-		src = c.NewECBDecrypter(src, b)
-	case CBC:
-		src = c.NewCBCDecrypter(src, b)
-	case CTR:
-		src = c.NewCTRDecrypter(src, b)
-	case CFB:
-		src = c.NewCFBDecrypter(src, b)
-	case OFB:
-		src = c.NewOFBDecrypter(src, b)
-	default:
-		err = invalidModeError(mode)
-		return
-	}
-
-	switch padding {
-	case Zero:
-		return c.ZeroUnPadding(src), nil
-	case Empty:
-		return c.EmptyUnPadding(src), nil
-	case PKCS5:
-		return c.PKCS5UnPadding(src), nil
-	case PKCS7:
-		return c.PKCS7UnPadding(src), nil
-	case AnsiX923:
-		return c.AnsiX923UnPadding(src), nil
-	case ISO97971:
-		return c.ISO97971UnPadding(src), nil
-	}
-	return src, nil
 }
