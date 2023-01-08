@@ -218,3 +218,14 @@ func TestAes_Decoding_Error(t *testing.T) {
 	d4 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(getCipher(CFB, PKCS7, []byte(aesKey), []byte(aesIV)))
 	assert.Equal(t, invalidDecodingError("base64"), d4.Error)
 }
+
+// gets Cipher instance.
+// 获取 Cipher 对象
+func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
+	cipher = NewCipher()
+	cipher.SetMode(mode)
+	cipher.SetPadding(padding)
+	cipher.SetKey(key)
+	cipher.SetIV(iv)
+	return
+}

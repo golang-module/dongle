@@ -354,14 +354,3 @@ func (c *Cipher) decrypt(src []byte, block cipher.Block) (dst []byte, err error)
 	}
 	return src, nil
 }
-
-// gets Cipher instance.
-// 获取 Cipher 对象
-func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
-	cipher = NewCipher()
-	cipher.SetMode(mode)
-	cipher.SetPadding(padding)
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
-	return
-}
