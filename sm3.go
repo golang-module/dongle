@@ -1,7 +1,7 @@
 package dongle
 
 import (
-	"github.com/tjfoc/gmsm/sm3"
+	"github.com/emmansun/gmsm/sm3"
 )
 
 // BySm3 encrypts by sm3.
