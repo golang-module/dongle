@@ -23,10 +23,10 @@ var (
 	invalidPrivateKeyError = func() error {
 		return fmt.Errorf("rsa: invalid private key, please make sure the private key is valid")
 	}
-	// returns an invalid hash algorithm error.
-	// 返回无效的哈希算法错误
-	invalidHashError = func() error {
-		return fmt.Errorf("rsa: invalid hash algorithm, the hash algorithm is unsupported")
+	// returns an unsupported hash function error.
+	// 返回不支持的哈希函数错误
+	unsupportedHashError = func() error {
+		return fmt.Errorf("rsa: invalid hash function, the hash function is unsupported")
 	}
 )
 
@@ -174,7 +174,7 @@ func (k *KeyPair) SignByPrivateKey(src []byte) (dst []byte, err error) {
 		return
 	}
 	if !k.IsSupportedHash() {
-		err = invalidHashError()
+		err = unsupportedHashError()
 		return
 	}
 	hasher := k.hash.New()
@@ -192,7 +192,7 @@ func (k *KeyPair) VerifyByPublicKey(src, sign []byte) (err error) {
 		return
 	}
 	if !k.IsSupportedHash() {
-		err = invalidHashError()
+		err = unsupportedHashError()
 		return
 	}
 	hasher := k.hash.New()
