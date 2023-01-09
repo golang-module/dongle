@@ -7,7 +7,7 @@ import (
 // ByBcrypt signs by bcrypt.
 // 通过 bcrypt 签名
 func (s Signer) ByBcrypt(rounds ...int) Signer {
-	if len(s.src) == 0 {
+	if len(s.src) == 0 || s.Error != nil {
 		return s
 	}
 	if len(rounds) == 0 {

@@ -1,13 +1,13 @@
 package dongle
 
 import (
-	"github.com/golang-module/dongle/morse"
+	"gitee.com/golang-package/dongle/morse"
 )
 
 // ByMorse encodes by morse.
 // 通过 morse 编码
 func (e Encoder) ByMorse(separator ...string) Encoder {
-	if len(e.src) == 0 {
+	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
 	if len(separator) == 0 {

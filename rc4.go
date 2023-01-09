@@ -7,7 +7,7 @@ import (
 // ByRc4 encrypts by rc4.
 // 通过 rc4 加密
 func (e Encrypter) ByRc4(key interface{}) Encrypter {
-	if len(e.src) == 0 {
+	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
 	cipher, err := rc4.NewCipher(interface2bytes(key))

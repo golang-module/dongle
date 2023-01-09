@@ -8,7 +8,7 @@ import (
 // ByTea encrypts by tea.
 // 通过 tea 加密
 func (e Encrypter) ByTea(key interface{}, rounds ...int) Encrypter {
-	if len(e.src) == 0 {
+	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
 	if len(rounds) == 0 {

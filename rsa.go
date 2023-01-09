@@ -3,7 +3,7 @@ package dongle
 import (
 	"crypto"
 
-	"github.com/golang-module/dongle/rsa"
+	"gitee.com/golang-package/dongle/rsa"
 )
 
 // defines rsa hash enum type.
@@ -25,7 +25,7 @@ const (
 // ByRsa encrypts by rsa with public key or private key.
 // 通过 rsa 公钥或私钥加密
 func (e Encrypter) ByRsa(rsaKey interface{}) Encrypter {
-	if len(e.src) == 0 {
+	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
 	keyPair := rsa.NewKeyPair()
