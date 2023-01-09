@@ -7,6 +7,9 @@ import (
 // ByDes encrypts by des.
 // 通过 des 加密
 func (e Encrypter) ByDes(c *Cipher) Encrypter {
+	if len(e.src) == 0 || e.Error != nil {
+		return e
+	}
 	block, err := des.NewCipher(c.key)
 	if err != nil {
 		e.Error = invalidDesKeyError()
@@ -27,7 +30,7 @@ func (e Encrypter) ByDes(c *Cipher) Encrypter {
 // ByDes decrypts by des.
 // 通过 des 解密
 func (d Decrypter) ByDes(c *Cipher) Decrypter {
-	if d.Error != nil {
+	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
 	block, err := des.NewCipher(c.key)

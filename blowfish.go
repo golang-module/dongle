@@ -7,6 +7,9 @@ import (
 // ByBlowfish encrypts by blowfish.
 // 通过 blowfish 加密
 func (e Encrypter) ByBlowfish(c *Cipher) Encrypter {
+	if len(e.src) == 0 || e.Error != nil {
+		return e
+	}
 	block, err := blowfish.NewCipher(c.key)
 	if err != nil {
 		e.Error = invalidBlowfishKeyError()
@@ -27,7 +30,7 @@ func (e Encrypter) ByBlowfish(c *Cipher) Encrypter {
 // ByBlowfish decrypts by blowfish.
 // 通过 blowfish 解密
 func (d Decrypter) ByBlowfish(c *Cipher) Decrypter {
-	if d.Error != nil {
+	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
 	block, err := blowfish.NewCipher(c.key)

@@ -129,6 +129,9 @@ func (c *Cipher) AnsiX923Padding(src []byte, blockSize int) []byte {
 // AnsiX923UnPadding removes padding with ANSI X.923 mode.
 // 移除 ANSI X.923 填充
 func (c *Cipher) AnsiX923UnPadding(src []byte) []byte {
+	if len(src) == 0 {
+		return []byte("")
+	}
 	n := len(src) - int(src[len(src)-1])
 	return src[0:n]
 }
@@ -156,6 +159,9 @@ func (c *Cipher) PKCS7Padding(src []byte, blockSize int) []byte {
 // PKCS7UnPadding removes padding with PKCS7 mode.
 // 移除 PKCS7 填充
 func (c *Cipher) PKCS7UnPadding(src []byte) []byte {
+	if len(src) == 0 {
+		return []byte("")
+	}
 	n := len(src) - int(src[len(src)-1])
 	return src[0:n]
 }
