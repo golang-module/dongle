@@ -6,11 +6,11 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 
-	"gitee.com/golang-package/dongle/base100"
-	"gitee.com/golang-package/dongle/base45"
-	"gitee.com/golang-package/dongle/base58"
-	"gitee.com/golang-package/dongle/base62"
-	"gitee.com/golang-package/dongle/base91"
+	"github.com/golang-module/dongle/base100"
+	"github.com/golang-module/dongle/base45"
+	"github.com/golang-module/dongle/base58"
+	"github.com/golang-module/dongle/base62"
+	"github.com/golang-module/dongle/base91"
 )
 
 // ByHex encodes by hex.
