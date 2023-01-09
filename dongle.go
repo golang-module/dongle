@@ -49,7 +49,7 @@ var (
 // 将字符串转换为字节切片
 func string2bytes(s string) []byte {
 	if len(s) == 0 {
-		return nil
+		return []byte("")
 	}
 	return *(*[]byte)(unsafe.Pointer(
 		&struct {
