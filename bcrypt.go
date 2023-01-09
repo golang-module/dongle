@@ -26,6 +26,9 @@ func (s Signer) ByBcrypt(rounds ...int) Signer {
 // ByBcrypt verify by bcrypt.
 // 通过 bcrypt 验签
 func (v Verifier) ByBcrypt() Verifier {
+	if len(v.src) == 0 || v.Error != nil {
+		return v
+	}
 	v.Error = bcrypt.CompareHashAndPassword(interface2bytes(v.sign), v.src)
 	return v
 }
