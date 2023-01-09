@@ -183,22 +183,6 @@ func TestBlowfish_IV_Error(t *testing.T) {
 	assert.Equal(t, invalidBlowfishIVError(), d.Error)
 }
 
-func TestBlowfish_Mode_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").ByBlowfish(getCipher("xxxx", PKCS7, blowfishKey, blowfishIV))
-	assert.Equal(t, invalidModeError("xxxx"), e.Error)
-
-	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(getCipher("xxxx", PKCS7, blowfishKey, blowfishIV))
-	assert.Equal(t, invalidModeError("xxxx"), d.Error)
-}
-
-func TestBlowfish_Padding_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").ByBlowfish(getCipher(CFB, "xxxx", blowfishKey, blowfishIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), e.Error)
-
-	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(getCipher(CBC, "xxxx", blowfishKey, blowfishIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), d.Error)
-}
-
 func TestBlowfish_Src_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByBlowfish(getCipher(CFB, No, blowfishKey, blowfishIV))
 	assert.Equal(t, invalidBlowfishSrcError(), e.Error)

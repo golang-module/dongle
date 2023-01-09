@@ -183,22 +183,6 @@ func Test3Des_IV_Error(t *testing.T) {
 	assert.Equal(t, invalid3DesIVError(), d.Error)
 }
 
-func Test3Des_Mode_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").By3Des(getCipher("xxxx", PKCS7, tripleDesKey, tripleDesIV))
-	assert.Equal(t, invalidModeError("xxxx"), e.Error)
-
-	d := Decrypt.FromHexString("7e9194cc827a325db9c765859716cc97").By3Des(getCipher("xxxx", PKCS7, tripleDesKey, tripleDesIV))
-	assert.Equal(t, invalidModeError("xxxx"), d.Error)
-}
-
-func Test3Des_Padding_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").By3Des(getCipher(CFB, "xxxx", tripleDesKey, tripleDesIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), e.Error)
-
-	d := Decrypt.FromHexString("7e9194cc827a325db9c765859716cc97").By3Des(getCipher(CBC, "xxxx", tripleDesKey, tripleDesIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), d.Error)
-}
-
 func Test3Des_Src_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").By3Des(getCipher(CFB, No, tripleDesKey, tripleDesIV))
 	assert.Equal(t, invalid3DesSrcError(), e.Error)

@@ -157,22 +157,9 @@ var (
 	invalidHashSizeError = func() error {
 		return fmt.Errorf("hash: invalid size, the size is unsupported")
 	}
-)
-
-var (
-	// returns an invalid cipher mode error
-	// 返回无效的分组模式错误
-	invalidModeError = func(mode cipherMode) error {
-		return fmt.Errorf("invalid cipher mode %q, currently only support CBC, ECB, CFB, OFB, CTR mode", mode)
-	}
-	// returns an invalid cipher padding error
-	// 返回无效的填充方式错误
-	invalidPaddingError = func(padding cipherPadding) error {
-		return fmt.Errorf("invalid cipher padding %q, currently only support No, Zero, PKCS5, PKCS7 padding", padding)
-	}
 	// returns an invalid decoding error
 	// 返回无效的解码方式错误
 	invalidDecodingError = func(mode string) error {
-		return fmt.Errorf("invalid decoding, the src can't be decoded by %s", mode)
+		return fmt.Errorf("decode: invalid decoding, the src can't be decoded by %s", mode)
 	}
 )

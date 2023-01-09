@@ -256,20 +256,6 @@ func (c *Cipher) NewOFBDecrypter(src []byte, block cipher.Block) (dst []byte) {
 	return
 }
 
-// whether is a supported padding
-// 判断是否是支持的填充模式
-func (c *Cipher) isSupportedPadding() bool {
-	paddings := []cipherPadding{
-		No, Empty, Zero, PKCS5, PKCS7, AnsiX923, ISO97971,
-	}
-	for _, padding := range paddings {
-		if padding == c.padding {
-			return true
-		}
-	}
-	return false
-}
-
 // Encrypt encrypts with given mode and padding
 // 根据指定的分组模式和填充模式进行加密
 func (c *Cipher) Encrypt(src []byte, block cipher.Block) (dst []byte, err error) {
@@ -293,26 +279,21 @@ func (c *Cipher) Encrypt(src []byte, block cipher.Block) (dst []byte, err error)
 		src = c.AnsiX923Padding(src, size)
 	case ISO97971:
 		src = c.ISO97971Padding(src, size)
-	default:
-		err = invalidPaddingError(padding)
-		return
 	}
 
 	switch mode {
 	case ECB:
-		return c.NewECBEncrypter(src, block), nil
+		dst = c.NewECBEncrypter(src, block)
 	case CBC:
-		return c.NewCBCEncrypter(src, block), nil
+		dst = c.NewCBCEncrypter(src, block)
 	case CTR:
-		return c.NewCTREncrypter(src, block), nil
+		dst = c.NewCTREncrypter(src, block)
 	case CFB:
-		return c.NewCFBEncrypter(src, block), nil
+		dst = c.NewCFBEncrypter(src, block)
 	case OFB:
-		return c.NewOFBEncrypter(src, block), nil
-	default:
-		err = invalidModeError(mode)
-		return
+		dst = c.NewOFBEncrypter(src, block)
 	}
+	return
 }
 
 // Decrypt decrypts with given mode and padding.
@@ -321,10 +302,6 @@ func (c *Cipher) Decrypt(src []byte, block cipher.Block) (dst []byte, err error)
 	mode, padding := c.mode, c.padding
 	dst = []byte("")
 	if len(src) == 0 {
-		return
-	}
-	if !c.isSupportedPadding() {
-		err = invalidPaddingError(padding)
 		return
 	}
 
@@ -339,9 +316,6 @@ func (c *Cipher) Decrypt(src []byte, block cipher.Block) (dst []byte, err error)
 		src = c.NewCFBDecrypter(src, block)
 	case OFB:
 		src = c.NewOFBDecrypter(src, block)
-	default:
-		err = invalidModeError(mode)
-		return
 	}
 
 	switch padding {

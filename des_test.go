@@ -183,22 +183,6 @@ func TestDes_IV_Error(t *testing.T) {
 	assert.Equal(t, invalidDesIVError(), d.Error)
 }
 
-func TestDes_Mode_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").ByDes(getCipher("xxxx", PKCS7, desKey, desIV))
-	assert.Equal(t, invalidModeError("xxxx"), e.Error)
-
-	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher("xxxx", PKCS7, desKey, desIV))
-	assert.Equal(t, invalidModeError("xxxx"), d.Error)
-}
-
-func TestDes_Padding_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").ByDes(getCipher(CFB, "xxxx", desKey, desIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), e.Error)
-
-	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher(CBC, "xxxx", desKey, desIV))
-	assert.Equal(t, invalidPaddingError("xxxx"), d.Error)
-}
-
 func TestDes_Src_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").ByDes(getCipher(CFB, No, desKey, desIV))
 	assert.Equal(t, invalidDesSrcError(), e.Error)
