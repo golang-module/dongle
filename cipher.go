@@ -218,11 +218,11 @@ func (c *Cipher) NewCTRDecrypter(src []byte, block cipher.Block) (dst []byte) {
 // ECB 模式加密
 func (c *Cipher) NewECBEncrypter(src []byte, block cipher.Block) (dst []byte) {
 	dst = make([]byte, len(src))
-	encrypted, size := dst, block.BlockSize()
+	encrypted, blockSize := dst, block.BlockSize()
 	for len(src) > 0 {
-		block.Encrypt(encrypted, src[:size])
-		src = src[size:]
-		encrypted = encrypted[size:]
+		block.Encrypt(encrypted, src[:blockSize])
+		src = src[blockSize:]
+		encrypted = encrypted[blockSize:]
 	}
 	return
 }
