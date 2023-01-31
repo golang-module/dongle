@@ -1184,6 +1184,38 @@ dongle.Verify.FromHexBytes(sign.ToHexBytes(), []byte("hello world")).ByRsa([]byt
 dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
 ```
 
+#### OpenSSL
+
+##### RSA
+
+```go
+// 生成 PKCS#1 格式 RSA 密钥对
+publicKey, privateKey := dongle.openssl.RSA.GenPKCS1KeyPair(1024)
+// 生成 PKCS#8 格式密钥对
+publicKey, privateKey := dongle.openssl.RSA.GenPKCS8KeyPair(2048)
+
+// 验证 RSA 密钥对是否匹配
+dongle.openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
+dongle.openssl.RSA.VerifyKeyPair(publicKey, []byte("xxx")) // false
+
+// 验证是否是 RSA 公钥
+dongle.openssl.RSA.IsPublicKey(publicKey) // true
+dongle.openssl.RSA.IsPublicKey(privateKey) // false
+
+// 验证是否是 RSA 私钥
+dongle.openssl.RSA.IsPrivateKey(privateKey) // true
+dongle.openssl.RSA.IsPrivateKey(publicKey) // false
+
+// 解析 RSA 公钥
+pub, err := dongle.openssl.RSA.ParsePublicKey(publicKey)
+// 解析 RSA 私钥
+pri, err := dongle.openssl.RSA.ParsePrivateKey(privateKey)
+
+// 从 RSA 私钥里导出公钥
+pub, err := dongle.openssl.RSA.ExportPublicKey(privateKey) 
+
+```
+
 ### 错误处理
 
 > 如果有多个错误发生，只返回第一个错误，前一个错误排除后才返回下一个错误
