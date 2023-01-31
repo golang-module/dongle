@@ -6,10 +6,10 @@ import (
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/x509"
-	"encoding/pem"
 	"fmt"
 	"math/big"
+
+	"github.com/golang-module/dongle/openssl"
 )
 
 var (
@@ -69,11 +69,11 @@ func (k *KeyPair) EncryptByPublicKey(src []byte) (dst []byte, err error) {
 	if len(src) == 0 {
 		return
 	}
-	if !k.IsPublicKey() {
+	if !openssl.RSA.IsPublicKey(k.publicKey) {
 		err = invalidPublicKeyError()
 		return
 	}
-	pub, err := k.ParsePublicKey()
+	pub, err := openssl.RSA.ParsePublicKey(k.publicKey)
 	if err != nil {
 		err = invalidPublicKeyError()
 		return
@@ -94,11 +94,11 @@ func (k *KeyPair) DecryptByPrivateKey(src []byte) (dst []byte, err error) {
 	if len(src) == 0 {
 		return
 	}
-	if !k.IsPrivateKey() {
+	if !openssl.RSA.IsPrivateKey(k.privateKey) {
 		err = invalidPrivateKeyError()
 		return
 	}
-	pri, err := k.ParsePrivateKey()
+	pri, err := openssl.RSA.ParsePrivateKey(k.privateKey)
 	if err != nil {
 		err = invalidPrivateKeyError()
 		return
@@ -119,11 +119,12 @@ func (k *KeyPair) EncryptByPrivateKey(src []byte) (dst []byte, err error) {
 	if len(src) == 0 {
 		return
 	}
-	if !k.IsPrivateKey() {
+
+	if !openssl.RSA.IsPrivateKey(k.privateKey) {
 		err = invalidPrivateKeyError()
 		return
 	}
-	pri, err := k.ParsePrivateKey()
+	pri, err := openssl.RSA.ParsePrivateKey(k.privateKey)
 	if err != nil {
 		err = invalidPrivateKeyError()
 		return
@@ -144,11 +145,12 @@ func (k *KeyPair) DecryptByPublicKey(src []byte) (dst []byte, err error) {
 	if len(src) == 0 {
 		return
 	}
-	if !k.IsPublicKey() {
+
+	if !openssl.RSA.IsPublicKey(k.publicKey) {
 		err = invalidPublicKeyError()
 		return
 	}
-	pub, err := k.ParsePublicKey()
+	pub, err := openssl.RSA.ParsePublicKey(k.publicKey)
 	if err != nil {
 		err = invalidPublicKeyError()
 		return
@@ -168,7 +170,7 @@ func (k *KeyPair) DecryptByPublicKey(src []byte) (dst []byte, err error) {
 // 通过私钥签名
 func (k *KeyPair) SignByPrivateKey(src []byte) (dst []byte, err error) {
 	dst = []byte("")
-	pri, err := k.ParsePrivateKey()
+	pri, err := openssl.RSA.ParsePrivateKey(k.privateKey)
 	if err != nil {
 		err = invalidPrivateKeyError()
 		return
@@ -187,8 +189,9 @@ func (k *KeyPair) SignByPrivateKey(src []byte) (dst []byte, err error) {
 // VerifyByPublicKey verify by public key.
 // 通过公钥验签
 func (k *KeyPair) VerifyByPublicKey(src, sign []byte) (err error) {
-	pub, err := k.ParsePublicKey()
+	pub, err := openssl.RSA.ParsePublicKey(k.publicKey)
 	if err != nil {
+		err = invalidPublicKeyError()
 		return
 	}
 	if !k.IsSupportedHash() {
@@ -201,74 +204,16 @@ func (k *KeyPair) VerifyByPublicKey(src, sign []byte) (err error) {
 	return rsa.VerifyPKCS1v15(pub, k.hash, hashed, sign)
 }
 
-// ParsePublicKey parses public key.
-// 解析公钥
-func (k *KeyPair) ParsePublicKey() (*rsa.PublicKey, error) {
-	block, _ := pem.Decode(k.publicKey)
-	if block == nil {
-		return nil, invalidPublicKeyError()
-	}
-	// pkcs1 pem
-	if block.Type == "RSA PUBLIC KEY" {
-		return x509.ParsePKCS1PublicKey(block.Bytes)
-	}
-	// pkcs8 pem
-	pub, err := x509.ParsePKIXPublicKey(block.Bytes)
-	if err != nil {
-		return nil, invalidPublicKeyError()
-	}
-	return pub.(*rsa.PublicKey), err
-}
-
-// ParsePrivateKey parses private key.
-// 解析私钥
-func (k *KeyPair) ParsePrivateKey() (*rsa.PrivateKey, error) {
-	block, _ := pem.Decode(k.privateKey)
-	if block == nil {
-		return nil, invalidPrivateKeyError()
-	}
-	// pkcs1 pem
-	if block.Type == "RSA PRIVATE KEY" {
-		return x509.ParsePKCS1PrivateKey(block.Bytes)
-	}
-	// pkcs8 pem
-	pri, err := x509.ParsePKCS8PrivateKey(block.Bytes)
-	if err != nil {
-		return nil, invalidPrivateKeyError()
-	}
-	return pri.(*rsa.PrivateKey), nil
-}
-
 // IsPublicKey whether is a public key.
 // 是否是公钥
 func (k *KeyPair) IsPublicKey() bool {
-	block, _ := pem.Decode(k.publicKey)
-	if block == nil {
-		return false
-	}
-	if block.Type == "RSA PUBLIC KEY" {
-		return true
-	}
-	if block.Type == "PUBLIC KEY" {
-		return true
-	}
-	return false
+	return openssl.RSA.IsPublicKey(k.publicKey)
 }
 
 // IsPrivateKey whether is a private key.
 // 是否是私钥
 func (k *KeyPair) IsPrivateKey() bool {
-	block, _ := pem.Decode(k.privateKey)
-	if block == nil {
-		return false
-	}
-	if block.Type == "RSA PRIVATE KEY" {
-		return true
-	}
-	if block.Type == "PRIVATE KEY" {
-		return true
-	}
-	return false
+	return openssl.RSA.IsPrivateKey(k.privateKey)
 }
 
 // IsSupportedHash whether is a supported hash algorithm.

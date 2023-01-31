@@ -114,25 +114,6 @@ func TestRsa_PKCS8_Sign(t *testing.T) {
 	assert.Equal(t, nil, err2)
 }
 
-func TestRsa_Empty_Src(t *testing.T) {
-	keyPair := NewKeyPair()
-	keyPair.SetPublicKey([]byte(pkcs1PublicKey))
-	keyPair.SetPrivateKey([]byte(pkcs1PrivateKey))
-
-	empty := ""
-	dst1, err1 := keyPair.EncryptByPublicKey([]byte(empty))
-	assert.Nil(t, err1)
-	dst2, err2 := keyPair.DecryptByPrivateKey(dst1)
-	assert.Nil(t, err2)
-	assert.Equal(t, []byte(empty), dst2)
-
-	dst3, err3 := keyPair.EncryptByPrivateKey([]byte(empty))
-	assert.Nil(t, err3)
-	dst4, err4 := keyPair.DecryptByPublicKey(dst3)
-	assert.Nil(t, err4)
-	assert.Equal(t, []byte(empty), dst4)
-}
-
 func TestRsa_IsKey(t *testing.T) {
 	keyPair := NewKeyPair()
 
@@ -165,6 +146,25 @@ func TestRsa_IsKey(t *testing.T) {
 	keyPair.SetPrivateKey([]byte("xxx"))
 	assert.Equal(t, false, keyPair.IsPublicKey())
 	assert.Equal(t, false, keyPair.IsPrivateKey())
+}
+
+func TestRsa_Empty_Src(t *testing.T) {
+	keyPair := NewKeyPair()
+	keyPair.SetPublicKey([]byte(pkcs1PublicKey))
+	keyPair.SetPrivateKey([]byte(pkcs1PrivateKey))
+
+	empty := ""
+	dst1, err1 := keyPair.EncryptByPublicKey([]byte(empty))
+	assert.Nil(t, err1)
+	dst2, err2 := keyPair.DecryptByPrivateKey(dst1)
+	assert.Nil(t, err2)
+	assert.Equal(t, []byte(empty), dst2)
+
+	dst3, err3 := keyPair.EncryptByPrivateKey([]byte(empty))
+	assert.Nil(t, err3)
+	dst4, err4 := keyPair.DecryptByPublicKey(dst3)
+	assert.Nil(t, err4)
+	assert.Equal(t, []byte(empty), dst4)
 }
 
 func TestRsa_PublicKey_Error(t *testing.T) {
@@ -234,21 +234,6 @@ xxxx
 	assert.Equal(t, invalidPrivateKeyError(), err8)
 	_, err9 := keyPair.SignByPrivateKey([]byte(rsaInput))
 	assert.Equal(t, invalidPrivateKeyError(), err9)
-}
-
-func TestRsa_Parse_Error(t *testing.T) {
-	invalidPublicKey := "xxxx"
-	invalidPrivateKey := "xxxx"
-
-	keyPair := NewKeyPair()
-
-	keyPair.SetPublicKey([]byte(invalidPublicKey))
-	keyPair.SetPrivateKey([]byte(invalidPrivateKey))
-
-	_, err1 := keyPair.ParsePublicKey()
-	assert.Equal(t, invalidPublicKeyError(), err1)
-	_, err2 := keyPair.ParsePrivateKey()
-	assert.Equal(t, invalidPrivateKeyError(), err2)
 }
 
 func TestRsa_Hash_Error(t *testing.T) {
