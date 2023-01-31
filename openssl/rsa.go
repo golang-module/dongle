@@ -76,7 +76,6 @@ func (r rsaKeyPair) VerifyKeyPair(publicKey, privateKey []byte) bool {
 	if err != nil {
 		return false
 	}
-
 	if string(publicKey) == string(pub) {
 		return true
 	}
