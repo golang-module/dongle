@@ -1191,15 +1191,15 @@ publicKey, privateKey := dongle.openssl.RSA.GenPKCS1KeyPair(1024)
 // Generate PKCS#8 format RSA key pair.
 publicKey, privateKey := dongle.openssl.RSA.GenPKCS8KeyPair(2048)
 
-// verify RSA key pair matches
+// Verify RSA key pair matches
 dongle.openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
 dongle.openssl.RSA.VerifyKeyPair(publicKey, []byte("xxx")) // false
 
-// whether is a RSA public key
+// Whether is a RSA public key
 dongle.openssl.RSA.IsPublicKey(publicKey) // true
 dongle.openssl.RSA.IsPublicKey(privateKey) // false
 
-// Verify whether is a RSA private key
+// Whether is a RSA private key
 dongle.openssl.RSA.IsPrivateKey(privateKey) // true
 dongle.openssl.RSA.IsPrivateKey(publicKey) // false
 
