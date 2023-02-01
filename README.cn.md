@@ -1191,7 +1191,7 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ```go
 // 生成 PKCS#1 格式 RSA 密钥对
 publicKey, privateKey := dongle.openssl.RSA.GenPKCS1KeyPair(1024)
-// 生成 PKCS#8 格式密钥对
+// 生成 PKCS#8 格式 RSA 密钥对
 publicKey, privateKey := dongle.openssl.RSA.GenPKCS8KeyPair(2048)
 
 // 验证 RSA 密钥对是否匹配

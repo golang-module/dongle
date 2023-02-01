@@ -1186,9 +1186,9 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 ##### RSA
 
 ```go
-// Generate PKCS#1 format RSA key pair.
+// Generate PKCS#1 format RSA key pair
 publicKey, privateKey := dongle.openssl.RSA.GenPKCS1KeyPair(1024)
-// Generate PKCS#8 format RSA key pair.
+// Generate PKCS#8 format RSA key pair
 publicKey, privateKey := dongle.openssl.RSA.GenPKCS8KeyPair(2048)
 
 // Verify RSA key pair matches
