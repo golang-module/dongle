@@ -1190,29 +1190,29 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 
 ```go
 // 生成 PKCS#1 格式 RSA 密钥对
-publicKey, privateKey := dongle.openssl.RSA.GenPKCS1KeyPair(1024)
+publicKey, privateKey := openssl.RSA.GenPKCS1KeyPair(1024)
 // 生成 PKCS#8 格式 RSA 密钥对
-publicKey, privateKey := dongle.openssl.RSA.GenPKCS8KeyPair(2048)
+publicKey, privateKey := openssl.RSA.GenPKCS8KeyPair(2048)
 
 // 验证 RSA 密钥对是否匹配
-dongle.openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
-dongle.openssl.RSA.VerifyKeyPair(publicKey, []byte("xxx")) // false
+openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
+openssl.RSA.VerifyKeyPair(publicKey, []byte("xxx")) // false
 
 // 验证是否是 RSA 公钥
-dongle.openssl.RSA.IsPublicKey(publicKey) // true
-dongle.openssl.RSA.IsPublicKey(privateKey) // false
+openssl.RSA.IsPublicKey(publicKey) // true
+openssl.RSA.IsPublicKey(privateKey) // false
 
 // 验证是否是 RSA 私钥
-dongle.openssl.RSA.IsPrivateKey(privateKey) // true
-dongle.openssl.RSA.IsPrivateKey(publicKey) // false
+openssl.RSA.IsPrivateKey(privateKey) // true
+openssl.RSA.IsPrivateKey(publicKey) // false
 
 // 解析 RSA 公钥
-pub, err := dongle.openssl.RSA.ParsePublicKey(publicKey)
+pub, err := openssl.RSA.ParsePublicKey(publicKey)
 // 解析 RSA 私钥
-pri, err := dongle.openssl.RSA.ParsePrivateKey(privateKey)
+pri, err := openssl.RSA.ParsePrivateKey(privateKey)
 
 // 从 RSA 私钥里导出公钥
-pub, err := dongle.openssl.RSA.ExportPublicKey(privateKey) 
+pub, err := openssl.RSA.ExportPublicKey(privateKey) 
 
 ```
 

@@ -1187,29 +1187,29 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 
 ```go
 // Generate PKCS#1 format RSA key pair
-publicKey, privateKey := dongle.openssl.RSA.GenPKCS1KeyPair(1024)
+publicKey, privateKey := openssl.RSA.GenPKCS1KeyPair(1024)
 // Generate PKCS#8 format RSA key pair
-publicKey, privateKey := dongle.openssl.RSA.GenPKCS8KeyPair(2048)
+publicKey, privateKey := openssl.RSA.GenPKCS8KeyPair(2048)
 
 // Verify RSA key pair matches
-dongle.openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
-dongle.openssl.RSA.VerifyKeyPair(publicKey, []byte("xxx")) // false
+openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
+openssl.RSA.VerifyKeyPair(publicKey, []byte("xxx")) // false
 
 // Whether is a RSA public key
-dongle.openssl.RSA.IsPublicKey(publicKey) // true
-dongle.openssl.RSA.IsPublicKey(privateKey) // false
+openssl.RSA.IsPublicKey(publicKey) // true
+openssl.RSA.IsPublicKey(privateKey) // false
 
 // Whether is a RSA private key
-dongle.openssl.RSA.IsPrivateKey(privateKey) // true
-dongle.openssl.RSA.IsPrivateKey(publicKey) // false
+openssl.RSA.IsPrivateKey(privateKey) // true
+openssl.RSA.IsPrivateKey(publicKey) // false
 
 // Parse RSA public key
-pub, err := dongle.openssl.RSA.ParsePublicKey(publicKey)
+pub, err := openssl.RSA.ParsePublicKey(publicKey)
 // Parse RSA private key
-pri, err := dongle.openssl.RSA.ParsePrivateKey(privateKey)
+pri, err := openssl.RSA.ParsePrivateKey(privateKey)
 
 // Export public key from RSA private key
-pub, err := dongle.openssl.RSA.ExportPublicKey(privateKey) 
+pub, err := openssl.RSA.ExportPublicKey(privateKey) 
 
 ```
 
