@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"strings"
 )
 
 var (
@@ -18,6 +19,11 @@ var (
 	// 返回无效的 RSA 私钥错误
 	invalidRSAPrivateKeyError = func() error {
 		return fmt.Errorf("openssl/rsa: invalid rsa private key, please make sure the private key is valid")
+	}
+	// returns an invalid RSA key error.
+	// 返回无效的 RSA 密钥错误
+	invalidRSAKeyError = func() error {
+		return fmt.Errorf("openssl/rsa: invalid rsa key, please make sure the key is valid")
 	}
 )
 
@@ -34,38 +40,37 @@ func newRsaKeyPair() *rsaKeyPair {
 	return &rsaKeyPair{}
 }
 
-// GenPKCS1KeyPair generates PKCS#1 key pair.
-// 生成 PKCS#1 格式密钥对
-func (r rsaKeyPair) GenPKCS1KeyPair(bits int) (publicKey, privateKey []byte) {
-	pri, _ := rsa.GenerateKey(rand.Reader, bits)
-	privateBytes := x509.MarshalPKCS1PrivateKey(pri)
-	privateKey = pem.EncodeToMemory(&pem.Block{
-		Type:  "RSA PRIVATE KEY",
-		Bytes: privateBytes,
-	})
-	publicBytes := x509.MarshalPKCS1PublicKey(&pri.PublicKey)
-	publicKey = pem.EncodeToMemory(&pem.Block{
-		Type:  "RSA PUBLIC KEY",
-		Bytes: publicBytes,
-	})
-	return
-}
-
-// GenPKCS8KeyPair generates PKCS#8 key pair.
-// 生成 PKCS#8 格式密钥对
-func (r rsaKeyPair) GenPKCS8KeyPair(bits int) (publicKey, privateKey []byte) {
+// GenKeyPair generates key pair.
+// 生成密钥对
+func (r rsaKeyPair) GenKeyPair(pkcs keyFormat, bits int) (publicKey, privateKey []byte) {
 	pri, _ := rsa.GenerateKey(rand.Reader, bits)
 
-	privateBytes, _ := x509.MarshalPKCS8PrivateKey(pri)
-	privateKey = pem.EncodeToMemory(&pem.Block{
-		Type:  "PRIVATE KEY",
-		Bytes: privateBytes,
-	})
-	publicBytes, _ := x509.MarshalPKIXPublicKey(&pri.PublicKey)
-	publicKey = pem.EncodeToMemory(&pem.Block{
-		Type:  "PUBLIC KEY",
-		Bytes: publicBytes,
-	})
+	if pkcs == PKCS1 {
+		privateBytes := x509.MarshalPKCS1PrivateKey(pri)
+		privateKey = pem.EncodeToMemory(&pem.Block{
+			Type:  "RSA PRIVATE KEY",
+			Bytes: privateBytes,
+		})
+		publicBytes := x509.MarshalPKCS1PublicKey(&pri.PublicKey)
+		publicKey = pem.EncodeToMemory(&pem.Block{
+			Type:  "RSA PUBLIC KEY",
+			Bytes: publicBytes,
+		})
+	}
+
+	if pkcs == PKCS8 {
+		privateBytes, _ := x509.MarshalPKCS8PrivateKey(pri)
+		privateKey = pem.EncodeToMemory(&pem.Block{
+			Type:  "PRIVATE KEY",
+			Bytes: privateBytes,
+		})
+		publicBytes, _ := x509.MarshalPKIXPublicKey(&pri.PublicKey)
+		publicKey = pem.EncodeToMemory(&pem.Block{
+			Type:  "PUBLIC KEY",
+			Bytes: publicBytes,
+		})
+	}
+
 	return
 }
 
@@ -76,13 +81,13 @@ func (r rsaKeyPair) VerifyKeyPair(publicKey, privateKey []byte) bool {
 	if err != nil {
 		return false
 	}
-	if string(publicKey) == string(pub) {
+	if bytes2string(publicKey) == bytes2string(pub) {
 		return true
 	}
 	return false
 }
 
-// IsPublicKey whether is a public key.
+// IsPublicKey whether is public key.
 // 是否是公钥
 func (r rsaKeyPair) IsPublicKey(publicKey []byte) bool {
 	block, _ := pem.Decode(publicKey)
@@ -98,7 +103,7 @@ func (r rsaKeyPair) IsPublicKey(publicKey []byte) bool {
 	return false
 }
 
-// IsPrivateKey whether is a private key.
+// IsPrivateKey whether is private key.
 // 是否是私钥
 func (r rsaKeyPair) IsPrivateKey(privateKey []byte) bool {
 	block, _ := pem.Decode(privateKey)
@@ -112,6 +117,38 @@ func (r rsaKeyPair) IsPrivateKey(privateKey []byte) bool {
 		return true
 	}
 	return false
+}
+
+// FormatPublicKey formats public key, adds header, tail and newline character.
+// 格式化公钥，添加头尾和换行符
+func (r rsaKeyPair) FormatPublicKey(pkcs keyFormat, publicKey []byte) []byte {
+	keyHeader, keyTail := "", ""
+	if pkcs == PKCS1 {
+		keyHeader = "-----BEGIN RSA PUBLIC KEY-----\n"
+		keyTail = "-----END RSA PUBLIC KEY-----\n"
+	}
+	if pkcs == PKCS8 {
+		keyHeader = "-----BEGIN PUBLIC KEY-----\n"
+		keyTail = "-----END PUBLIC KEY-----\n"
+	}
+	keyBody := stringSplit(strings.Replace(bytes2string(publicKey), "\n", "", -1), 64)
+	return string2bytes(keyHeader + keyBody + keyTail)
+}
+
+// FormatPrivateKey formats private key, adds header, tail and newline character
+// 格式化私，添加头尾和换行符
+func (r rsaKeyPair) FormatPrivateKey(pkcs keyFormat, privateKey []byte) []byte {
+	keyHeader, keyTail := "", ""
+	if pkcs == PKCS1 {
+		keyHeader = "-----BEGIN RSA PRIVATE KEY-----\n"
+		keyTail = "-----END RSA PRIVATE KEY-----\n"
+	}
+	if pkcs == PKCS8 {
+		keyHeader = "-----BEGIN PRIVATE KEY-----\n"
+		keyTail = "-----END PRIVATE KEY-----\n"
+	}
+	keyBody := stringSplit(strings.Replace(bytes2string(privateKey), "\n", "", -1), 64)
+	return string2bytes(keyHeader + keyBody + keyTail)
 }
 
 // ParsePublicKey parses public key.
@@ -190,4 +227,18 @@ func (r rsaKeyPair) ExportPublicKey(privateKey []byte) (publicKey []byte, err er
 		Bytes: blockBytes,
 	})
 	return
+}
+
+// CompressKey compresses key, removes head, tail and newline character.
+// 压缩密钥，去掉头尾和换行符
+func (r rsaKeyPair) CompressKey(key []byte) ([]byte, error) {
+	if !r.IsPublicKey(key) && !r.IsPrivateKey(key) {
+		return nil, invalidRSAKeyError()
+	}
+	str := strings.Replace(bytes2string(key), "\n", "", -1)
+	str = strings.Replace(str, "-----BEGIN RSA PUBLIC KEY-----", "", -1)
+	str = strings.Replace(str, "-----BEGIN PUBLIC KEY-----", "", -1)
+	str = strings.Replace(str, "-----END RSA PUBLIC KEY-----", "", -1)
+	str = strings.Replace(str, "-----END PUBLIC KEY-----", "", -1)
+	return string2bytes(str), nil
 }
