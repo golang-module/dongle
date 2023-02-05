@@ -1180,26 +1180,25 @@ dongle.Verify.FromHexBytes(sign.ToHexBytes(), []byte("hello world")).ByRsa([]byt
 dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
 ```
 
-
 #### OpenSSL
 
-##### RSA
+##### RSA key
 
 ```go
 // Generate PKCS#1 format RSA key pair
-publicKey, privateKey := openssl.RSA.GenPKCS1KeyPair(1024)
+publicKey, privateKey := openssl.RSA.GenKeyPair(opensssl.PKCS1, 1024)
 // Generate PKCS#8 format RSA key pair
-publicKey, privateKey := openssl.RSA.GenPKCS8KeyPair(2048)
+publicKey, privateKey := openssl.RSA.GenKeyPair(opensssl.PKCS8, 2048)
 
 // Verify RSA key pair matches
 openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
 openssl.RSA.VerifyKeyPair(publicKey, []byte("xxx")) // false
 
-// Whether is a RSA public key
+// Whether is RSA public key
 openssl.RSA.IsPublicKey(publicKey) // true
 openssl.RSA.IsPublicKey(privateKey) // false
 
-// Whether is a RSA private key
+// Whether is RSA private key
 openssl.RSA.IsPrivateKey(privateKey) // true
 openssl.RSA.IsPrivateKey(publicKey) // false
 
@@ -1208,8 +1207,20 @@ pub, err := openssl.RSA.ParsePublicKey(publicKey)
 // Parse RSA private key
 pri, err := openssl.RSA.ParsePrivateKey(privateKey)
 
-// Export public key from RSA private key
-pub, err := openssl.RSA.ExportPublicKey(privateKey) 
+// Format PKCS#1 RSA public key, add header, tail and newline character
+openssl.RSA.FormatPublicKey(openssl.PKCS1, publicKey1)
+// Format PKCS#8 RSA public key, add header, tail and newline character
+openssl.RSA.FormatPublicKey(openssl.PKCS8, publicKey8)
+// Format PKCS#1 RSA private key, add header, tail and newline character
+openssl.RSA.FormatPrivateKey(openssl.PKCS1, privateKey1)
+// Format PKCS#8 RSA private key, add header, tail and newline character
+openssl.RSA.FormatPrivateKey(openssl.PKCS8, privateKey8)
+
+// Compress RSA key, remove head, tail and newline character
+keyBytes, err := openssl.RSA.CompressKey(key)
+
+// Export RSA public key from RSA private key
+publicKey, err := openssl.RSA.ExportPublicKey(privateKey)
 
 ```
 

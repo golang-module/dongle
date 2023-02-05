@@ -1186,13 +1186,13 @@ dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa
 
 #### OpenSSL
 
-##### RSA
+##### RSA 密钥
 
 ```go
 // 生成 PKCS#1 格式 RSA 密钥对
-publicKey, privateKey := openssl.RSA.GenPKCS1KeyPair(1024)
+publicKey, privateKey := openssl.RSA.GenKeyPair(opensssl.PKCS1, 1024)
 // 生成 PKCS#8 格式 RSA 密钥对
-publicKey, privateKey := openssl.RSA.GenPKCS8KeyPair(2048)
+publicKey, privateKey := openssl.RSA.GenKeyPair(opensssl.PKCS8, 2048)
 
 // 验证 RSA 密钥对是否匹配
 openssl.RSA.VerifyKeyPair(publicKey, privateKey) // true
@@ -1211,8 +1211,20 @@ pub, err := openssl.RSA.ParsePublicKey(publicKey)
 // 解析 RSA 私钥
 pri, err := openssl.RSA.ParsePrivateKey(privateKey)
 
+// 格式化 PKCS#1 格式 RSA 公钥，添加头尾和换行符
+openssl.RSA.FormatPublicKey(openssl.PKCS1, publicKey1)
+// 格式化 PKCS#8 格式RSA 公钥，添加头尾和换行符
+openssl.RSA.FormatPublicKey(openssl.PKCS8, publicKey8)
+// 格式化 PKCS#1 格式 RSA 私钥，添加头尾和换行符
+openssl.RSA.FormatPrivateKey(openssl.PKCS1, privateKey1)
+// 格式化 PKCS#8 格式 RSA 私钥，添加头尾和换行符
+openssl.RSA.FormatPrivateKey(openssl.PKCS8, privateKey8)
+
+// 压缩 RSA 密钥，去掉头尾和换行符
+keyBytes, err := openssl.RSA.CompressKey(key)
+
 // 从 RSA 私钥里导出公钥
-pub, err := openssl.RSA.ExportPublicKey(privateKey) 
+publicKey, err := openssl.RSA.ExportPublicKey(privateKey)
 
 ```
 
