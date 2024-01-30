@@ -139,7 +139,7 @@ func (c *Cipher) AnsiX923UnPadding(src []byte) []byte {
 // PKCS5Padding padding with PKCS5 mode.
 // 进行 PKCS5 填充
 func (c *Cipher) PKCS5Padding(src []byte) []byte {
-	return c.PKCS7Padding(src, 8)
+	return c.PKCS7Padding(src, 16)
 }
 
 // PKCS5UnPadding removes padding with PKCS5 mode.
