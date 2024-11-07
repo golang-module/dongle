@@ -11,7 +11,9 @@ English | [简体中文](README.cn.md)
 
 ### Introduction
 
-A simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
+A simple, semantic and developer-friendly `golang` package for encoding&decoding, encryption&decryption and signature&verification, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
+
+### Repository
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
 

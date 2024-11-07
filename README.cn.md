@@ -9,7 +9,11 @@
 
 简体中文 | [English](README.md)
 
-一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密和签名验签库，已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录
+### 项目简介
+
+一个轻量级、语义化、对开发者友好的 `golang` 编码解码、加密解密和签名验签库，已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录
+
+### 仓库地址
 
 [github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
 
