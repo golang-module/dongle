@@ -11,30 +11,44 @@ English | [简体中文](README.cn.md)
 
 ### Introduction
 
-A simple, semantic and developer-friendly `golang` package for encoding&decoding, encryption&decryption and signature&verification, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
+A simple, semantic and developer-friendly `golang` package for encryption algorithms, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
 
 ### Repository
 
-[github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
+[github.com/dromara/dongle](https://github.com/dromara/dongle "github.com/dromara/dongle")
 
-[gitee.com/golang-module/dongle](https://gitee.com/golang-module/dongle "gitee.com/golang-module/dongle")
+[gitee.com/dromara/dongle](https://gitee.com/dromara/dongle "gitee.com/dromara/dongle")
+
+[gitcode.com/dromara/dongle](https://gitcode.com/dromara/dongle "gitcode.com/dromara/dongle")
 
 ### Installation
 
 ```go
 // By github
-go get -u github.com/golang-module/dongle
+go get -u github.com/dromara/dongle
 
 import (
-    "github.com/golang-module/dongle"
+    "github.com/dromara/dongle"
 )
 
 // By gitee
-go get -u gitee.com/golang-module/dongle
+go get -u gitee.com/dromara/dongle
 
 import (
-    "gitee.com/golang-module/dongle"
+    "gitee.com/dromara/dongle"
 )
+
+// By gitcode
+go get -u gitcode.com/dromara/dongle
+
+import (
+    "gitcode.com/dromara/dongle"
+)
+```
+Because `dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed. If the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
+
+```go
+go mod edit -replace github.com/golang-module/dongle=github.com/dromara/dongle
 ```
 
 ### Usage and example

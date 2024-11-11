@@ -10,31 +10,44 @@
 简体中文 | [English](README.md)
 
 ### 项目简介
-
-一个轻量级、语义化、对开发者友好的 `golang` 编码解码、加密解密和签名验签库，已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录
+一个轻量级、语义化、对开发者友好的 golang 编码解码、加密解密和签名验签库，已被 [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go") 收录
 
 ### 仓库地址
 
-[github.com/golang-module/dongle](https://github.com/golang-module/dongle "github.com/golang-module/dongle")
+[github.com/dromara/dongle](https://github.com/dromara/dongle "github.com/dromara/dongle")
 
-[gitee.com/golang-module/dongle](https://gitee.com/golang-module/dongle "gitee.com/golang-module/dongle")
+[gitee.com/dromara/dongle](https://gitee.com/dromara/dongle "gitee.com/dromara/dongle")
+
+[gitcode.com/dromara/dongle](https://gitcode.com/dromara/dongle "gitcode.com/dromara/dongle")
 
 ### 安装使用
 
 ```go
 // 使用 github 库
-go get -u github.com/golang-module/dongle
+go get -u github.com/dromara/dongle
 
 import (
-    "github.com/golang-module/dongle"
+    "github.com/dromara/dongle"
 )
 
 // 使用 gitee 库
-go get -u gitee.com/golang-module/dongle
+go get -u gitee.com/dromara/dongle
 
 import (
-    "gitee.com/golang-module/dongle"
+    "gitee.com/dromara/dongle"
 )
+
+// 使用 gitcode 库
+go get -u gitcode.com/dromara/dongle
+
+import (
+    "gitcode.com/dromara/dongle"
+)
+```
+由于 `dongle` 已经捐赠给了 [dromara](https://dromara.org/ "dromara") 组织，仓库地址发生了改变，如果之前用的仓库地址是 `golang-module/dongle`，请在 `go.mod` 里将原地址更换为新地址，如
+
+```go
+go mod edit -replace github.com/golang-module/dongle=github.com/dromara/dongle
 ```
 
 ### 用法示例
