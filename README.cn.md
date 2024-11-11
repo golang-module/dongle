@@ -1,6 +1,6 @@
 # dongle  #
 
-[![![Dongle Release](https://img.shields.io/github/release/dromara/dongle.svg)](https://github.com/dromara/dongle/releases)
+[![Dongle Release](https://img.shields.io/github/release/dromara/dongle.svg)](https://github.com/dromara/dongle/releases)
 [![Go Build](https://github.com/dromara/dongle/actions/workflows/test.yml/badge.svg)](https://github.com/dromara/dongle/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dromara/dongle)](https://goreportcard.com/report/github.com/dromara/dongle)
 [![codecov](https://codecov.io/gh/dromara/dongle/branch/main/graph/badge.svg)](https://codecov.io/gh/dromara/dongle)
