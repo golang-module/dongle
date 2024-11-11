@@ -1243,7 +1243,6 @@ keyBytes, err := openssl.RSA.CompressKey(key)
 
 // 从 RSA 私钥里导出公钥
 publicKey, err := openssl.RSA.ExportPublicKey(privateKey)
-
 ```
 
 ### 错误处理
