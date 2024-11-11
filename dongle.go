@@ -1,9 +1,9 @@
 // @Package dongle
 // @Description a simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification
-// @Page github.com/golang-module/dongle
+// @Page github.com/dromara/dongle
 // @Developer gouguoyin
 // @Blog www.gouguoyin.com
-// @Email contact@gouguoyin.com
+// @Email 245629560@qq.com
 
 // Package dongle is a simple, semantic and developer-friendly golang package for encoding&decoding, encryption&decryption and signature&verification.
 package dongle
@@ -14,7 +14,7 @@ import (
 
 // Version current version
 // 当前版本号
-const Version = "0.2.8"
+const Version = "1.0.0"
 
 // dongle defines a dongle struct.
 // 定义 dongle 结构体
