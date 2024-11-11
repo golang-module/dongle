@@ -1,35 +1,29 @@
 name: test
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+  push
 jobs:
-
   test:
     strategy:
       matrix:
-        vm-os: [ubuntu-latest, windows-latest]
-        go-version: [ 1.16, 1.19 ]
+        vm-os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.vm-os }}
     env:
       GO111MODULE: on
       GOPROXY: https://goproxy.cn
     steps:
-      - name: Install go ${{ matrix.go-version }}
-        uses: actions/setup-go@v3
+      - name: Set up go
+        uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: '>=1.16.0'
 
-      - name: Install dependencies
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Test and create coverage file
+      - name: Create coverage file
         run: go test -coverprofile='coverage.txt' -covermode=atomic
 
-      - name: Upload coverage file to codecov
-        uses: codecov/codecov-action@v3
+      - name: Upload coverage file
+        uses: codecov/codecov-action@v4
         with:
           token: ${{secrets.CODECOV_TOKEN}}
