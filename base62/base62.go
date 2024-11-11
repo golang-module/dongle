@@ -8,16 +8,24 @@ import (
 
 // An Encoding is a radix 62 encoding/decoding scheme, defined by a 62-character alphabet.
 type Encoding struct {
+	table     string
 	encode    [62]byte
 	decodeMap [256]byte
 }
+type Config struct {
+	Table string
+}
 
-const encodeStd = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+var StdTable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 // newEncoding returns a new padded Encoding defined by the given alphabet,
 // which must be a 62-byte string that does not contain the padding character
 // or CR / LF ('\r', '\n').
-func newEncoding(encoder string) *Encoding {
+func newEncoding(table string) *Encoding {
+	encoder := StdTable
+	if len(table) > 0 {
+		encoder = table
+	}
 	e := new(Encoding)
 	copy(e.encode[:], encoder)
 
@@ -31,7 +39,7 @@ func newEncoding(encoder string) *Encoding {
 }
 
 // StdEncoding is the standard base62 encoding.
-var StdEncoding = newEncoding(encodeStd)
+var StdEncoding = newEncoding(StdTable)
 
 // Encode encodes src using the encoding enc.
 func (enc *Encoding) Encode(src []byte) []byte {
