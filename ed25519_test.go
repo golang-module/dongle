@@ -2,8 +2,9 @@ package dongle
 
 import (
 	"crypto/ed25519"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (

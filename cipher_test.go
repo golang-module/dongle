@@ -2,8 +2,9 @@ package dongle
 
 import (
 	"crypto/aes"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCipher_Encrypt(t *testing.T) {

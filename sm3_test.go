@@ -2,8 +2,9 @@ package dongle
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var sm3Tests = []struct {
