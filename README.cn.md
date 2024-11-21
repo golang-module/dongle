@@ -127,6 +127,8 @@ dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToBytes() // []byt
 
 ##### Base62 编码、解码
 
+> 可自定义编码表，编码表必须是62位，默认编码表是 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+
 ```go
 // 对字符进行 base62 编码，输出字符串
 dongle.Encode.FromString("hello world").ByBase62().ToString() // AAwf93rvy4aWQVw
@@ -137,6 +139,11 @@ dongle.Decode.FromString("AAwf93rvy4aWQVw").ByBase62().ToString() // hello world
 dongle.Encode.FromBytes([]byte("hello world")).ByBase62().ToBytes() // []byte("AAwf93rvy4aWQVw")
 // 对字节切片进行 base62 解码，输出字节切片
 dongle.Decode.FromBytes([]byte("AAwf93rvy4aWQVw")).ByBase62().ToBytes() // []byte("hello world")
+
+// 自定义编码表对字节切片进行 base62 编码，输出字节切片
+dongle.Encode.FromBytes([]byte("hello world")).ByBase62("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789").ToBytes() // []byte("KK6pJD158Ekgaf6")
+// 自定义编码表对字节切片进行 base62 解码，输出字节切片
+dongle.Decode.FromBytes([]byte("KK6pJD158Ekgaf6")).ByBase62().ToBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") // []byte("hello world")
 ```
 
 ##### Base64 编码、解码
@@ -526,9 +533,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2s(256).ToBase64Bytes() /
 
 ```go
 // 对字符串进行 hmac-md2 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToHexString() // 88ed6ef9ab699d03a702f2a6fb1c0673
+dongle.Encrypt.FromString("hello world").ByHmacMd2([]byte("dongle")).ToHexString() // 88ed6ef9ab699d03a702f2a6fb1c0673
 // 对字符串进行 hmac-md2 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToBase64String() // iO1u+atpnQOnAvKm+xwGcw==
+dongle.Encrypt.FromString("hello world").ByHmacMd2([]byte("dongle")).ToBase64String() // iO1u+atpnQOnAvKm+xwGcw==
 
 // 对字节切片进行 hmac-md2 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToHexBytes() // []byte("88ed6ef9ab699d03a702f2a6fb1c0673")
@@ -540,9 +547,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToBa
 
 ```go
 // 对字符串进行 hmac-md4 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacMd4("dongle").ToHexString() // 7a9df5247cbf76a8bc17c9c4f5a75b6b
+dongle.Encrypt.FromString("hello world").ByHmacMd4([]byte("dongle")).ToHexString() // 7a9df5247cbf76a8bc17c9c4f5a75b6b
 // 对字符串进行 hmac-md4 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacMd4("dongle").ToBase64String() // ep31JHy/dqi8F8nE9adbaw==
+dongle.Encrypt.FromString("hello world").ByHmacMd4([]byte("dongle")).ToBase64String() // ep31JHy/dqi8F8nE9adbaw==
 
 // 对字节切片进行 hmac-md4 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd4([]byte("dongle")).ToHexBytes() // []byte("7a9df5247cbf76a8bc17c9c4f5a75b6b")
@@ -554,9 +561,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd4([]byte("dongle")).ToBa
 
 ```go
 // 对字符串进行 hmac-md5 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacMd5("dongle").ToHexString() // 4790626a275f776956386e5a3ea7b726
+dongle.Encrypt.FromString("hello world").ByHmacMd5([]byte("dongle")).ToHexString() // 4790626a275f776956386e5a3ea7b726
 // 对字符串进行 hmac-md5 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacMd5("dongle").ToBase64String() // R5Biaidfd2lWOG5aPqe3Jg==
+dongle.Encrypt.FromString("hello world").ByHmacMd5([]byte("dongle")).ToBase64String() // R5Biaidfd2lWOG5aPqe3Jg==
 
 // 对字节切片进行 hmac-md5 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd5([]byte("dongle")).ToHexBytes() // []byte("4790626a275f776956386e5a3ea7b726")
@@ -568,9 +575,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd5([]byte("dongle")).ToBa
 
 ```go
 // 对字符串进行 hmac-sha1 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha1("dongle").ToHexString() // 91c103ef93ba7420902b0d1bf0903251c94b4a62
+dongle.Encrypt.FromString("hello world").ByHmacSha1([]byte("dongle")).ToHexString() // 91c103ef93ba7420902b0d1bf0903251c94b4a62
 // 对字符串进行 hmac-sha1 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha1("dongle").ToBase64String() // kcED75O6dCCQKw0b8JAyUclLSmI=
+dongle.Encrypt.FromString("hello world").ByHmacSha1([]byte("dongle")).ToBase64String() // kcED75O6dCCQKw0b8JAyUclLSmI=
 
 // 对字节切片进行 hmac-sha1 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha1([]byte("dongle")).ToHexBytes() // []byte("91c103ef93ba7420902b0d1bf0903251c94b4a62")
@@ -584,36 +591,36 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha1([]byte("dongle")).ToB
 
 ```go
 // 对字符串进行 hmac-sha3-224 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 224).ToHexString() // fb8f061d9d1dddd2f5d3b9064a5e98e3e4b6df27ea93ce67627583ce
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 224).ToHexString() // fb8f061d9d1dddd2f5d3b9064a5e98e3e4b6df27ea93ce67627583ce
 // 对字符串进行 hmac-sha3-224 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 224).ToBase64String() // +48GHZ0d3dL107kGSl6Y4+S23yfqk85nYnWDzg==
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 224).ToBase64String() // +48GHZ0d3dL107kGSl6Y4+S23yfqk85nYnWDzg==
 // 对字节切片进行 hmac-sha3-224 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 224).ToHexBytes() // []byte("fb8f061d9d1dddd2f5d3b9064a5e98e3e4b6df27ea93ce67627583ce")
 // 对字节切片进行 hmac-sha3-224 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 224).ToBase64Bytes() // []byte("+48GHZ0d3dL107kGSl6Y4+S23yfqk85nYnWDzg==")
 
 // 对字符串进行 hmac-sha3-256 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 256).ToHexString() // 8193367fde28cf5c460adb449a04b3dd9c184f488bdccbabf0526c54f90c4460
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 256).ToHexString() // 8193367fde28cf5c460adb449a04b3dd9c184f488bdccbabf0526c54f90c4460
 // 对字符串进行 hmac-sha3-256 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 256).ToBase64String() // gZM2f94oz1xGCttEmgSz3ZwYT0iL3Mur8FJsVPkMRGA=
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 256).ToBase64String() // gZM2f94oz1xGCttEmgSz3ZwYT0iL3Mur8FJsVPkMRGA=
 // 对字节切片进行 hmac-sha3-256 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 256).ToHexBytes() // []byte("8193367fde28cf5c460adb449a04b3dd9c184f488bdccbabf0526c54f90c4460")
 // 对字节切片进行 hmac-sha3-256 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 256).ToBase64Bytes() // []byte("gZM2f94oz1xGCttEmgSz3ZwYT0iL3Mur8FJsVPkMRGA=")
 
 // 对字符串进行 hmac-sha3-384 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 384).ToHexString() // 3f76f5cda69cada3ee6b33f8458cd498b063075db263dd8b33f2a3992a8804f9569a7c86ffa2b8f0748babeb7a6fc0e7
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 384).ToHexString() // 3f76f5cda69cada3ee6b33f8458cd498b063075db263dd8b33f2a3992a8804f9569a7c86ffa2b8f0748babeb7a6fc0e7
 // 对字符串进行 hmac-sha3-384 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 384).ToBase64String() // P3b1zaacraPuazP4RYzUmLBjB12yY92LM/KjmSqIBPlWmnyG/6K48HSLq+t6b8Dn
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 384).ToBase64String() // P3b1zaacraPuazP4RYzUmLBjB12yY92LM/KjmSqIBPlWmnyG/6K48HSLq+t6b8Dn
 // 对字节切片进行 hmac-sha3-384 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 384).ToHexBytes() // []byte("3f76f5cda69cada3ee6b33f8458cd498b063075db263dd8b33f2a3992a8804f9569a7c86ffa2b8f0748babeb7a6fc0e7")
 // 对字节切片进行 hmac-sha3-384 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 384).ToBase64Bytes() // []byte("P3b1zaacraPuazP4RYzUmLBjB12yY92LM/KjmSqIBPlWmnyG/6K48HSLq+t6b8Dn")
 
 // 对字符串进行 hmac-sha3-512 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 512).ToHexString() // a99653d0407d659eccdeed43bb7cccd2e2b05a2c34fd3467c4198cf2ad26a466738513e88839fb55e64eb49df65bc52ed0fec2775bd9e086edd4fb4024add4a2
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 512).ToHexString() // a99653d0407d659eccdeed43bb7cccd2e2b05a2c34fd3467c4198cf2ad26a466738513e88839fb55e64eb49df65bc52ed0fec2775bd9e086edd4fb4024add4a2
 // 对字符串进行 hmac-sha3-512 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 512).ToBase64String() // qZZT0EB9ZZ7M3u1Du3zM0uKwWiw0/TRnxBmM8q0mpGZzhRPoiDn7VeZOtJ32W8Uu0P7Cd1vZ4Ibt1PtAJK3Uog==
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 512).ToBase64String() // qZZT0EB9ZZ7M3u1Du3zM0uKwWiw0/TRnxBmM8q0mpGZzhRPoiDn7VeZOtJ32W8Uu0P7Cd1vZ4Ibt1PtAJK3Uog==
 // 对字节切片进行 hmac-sha3-512 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 512).ToHexBytes() // []byte("a99653d0407d659eccdeed43bb7cccd2e2b05a2c34fd3467c4198cf2ad26a466738513e88839fb55e64eb49df65bc52ed0fec2775bd9e086edd4fb4024add4a2")
 // 对字节切片进行 hmac-sha3-512 加密，输出经过 base64 编码的字节切片
@@ -624,9 +631,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 512
 
 ```go
 // 对字符串进行 hmac-sha224 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha224("dongle").ToHexString() // e15b9e5a7eccb1f17dc81dc07c909a891936dc3429dc0d940accbcec
+dongle.Encrypt.FromString("hello world").ByHmacSha224([]byte("dongle")).ToHexString() // e15b9e5a7eccb1f17dc81dc07c909a891936dc3429dc0d940accbcec
 // 对字符串进行 hmac-sha224 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha224("dongle").ToBase64String() // 4VueWn7MsfF9yB3AfJCaiRk23DQp3A2UCsy87A====
+dongle.Encrypt.FromString("hello world").ByHmacSha224([]byte("dongle")).ToBase64String() // 4VueWn7MsfF9yB3AfJCaiRk23DQp3A2UCsy87A====
 
 // 对字节切片进行 hmac-sha224 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha224([]byte("dongle")).ToHexBytes() // []byte("e15b9e5a7eccb1f17dc81dc07c909a891936dc3429dc0d940accbcec")
@@ -638,9 +645,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha224([]byte("dongle")).T
 
 ```go
 // 对字符串进行 hmac-sha256 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha256("dongle").ToHexString() // b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9
+dongle.Encrypt.FromString("hello world").ByHmacSha256([]byte("dongle")).ToHexString() // b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9
 // 对字符串进行 hmac-sha256 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha256("dongle").ToBase64String() // uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=
+dongle.Encrypt.FromString("hello world").ByHmacSha256([]byte("dongle")).ToBase64String() // uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=
 
 // 对字节切片进行 hmac-sha256 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha256([]byte("dongle")).ToHexBytes() // []byte("b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9")
@@ -652,9 +659,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha256([]byte("dongle")).T
 
 ```go
 // 对字符串进行 hmac-sha384 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha384("dongle").ToHexString() // 421fcaa740216a31bbcd1f86f2212e0c68aa4b156a8ebc2ae55b3e75c4ee0509ea0325a0570ae739006b61d91d817fe8
+dongle.Encrypt.FromString("hello world").ByHmacSha384([]byte("dongle")).ToHexString() // 421fcaa740216a31bbcd1f86f2212e0c68aa4b156a8ebc2ae55b3e75c4ee0509ea0325a0570ae739006b61d91d817fe8
 // 对字符串进行 hmac-sha384 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha384("dongle").ToBase64String() // Qh/Kp0AhajG7zR+G8iEuDGiqSxVqjrwq5Vs+dcTuBQnqAyWgVwrnOQBrYdkdgX/o
+dongle.Encrypt.FromString("hello world").ByHmacSha384([]byte("dongle")).ToBase64String() // Qh/Kp0AhajG7zR+G8iEuDGiqSxVqjrwq5Vs+dcTuBQnqAyWgVwrnOQBrYdkdgX/o
 // 对字节切片进行 hmac-sha384 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha384([]byte("dongle")).ToHexBytes() // []byte("421fcaa740216a31bbcd1f86f2212e0c68aa4b156a8ebc2ae55b3e75c4ee0509ea0325a0570ae739006b61d91d817fe8")
 // 对字节切片进行 hmac-sha384 加密，输出经过 base64 编码的字节切片
@@ -667,27 +674,27 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha384([]byte("dongle")).T
 
 ```go
 // 对字符串进行 hmac-sha512 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle").ToHexString() // d971b790bbc2a4ac81062bbffac693c9c234bae176c8faf5e304dbdb153032a826f12353964b4a4fb87abecd2dc237638a630cbad54a6b94b1f6ef5d5e2835d1
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle")).ToHexString() // d971b790bbc2a4ac81062bbffac693c9c234bae176c8faf5e304dbdb153032a826f12353964b4a4fb87abecd2dc237638a630cbad54a6b94b1f6ef5d5e2835d1
 // 对字符串进行 hmac-sha512 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle").ToBase64String() // 2XG3kLvCpKyBBiu/+saTycI0uuF2yPr14wTb2xUwMqgm8SNTlktKT7h6vs0twjdjimMMutVKa5Sx9u9dXig10Q==
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle")).ToBase64String() // 2XG3kLvCpKyBBiu/+saTycI0uuF2yPr14wTb2xUwMqgm8SNTlktKT7h6vs0twjdjimMMutVKa5Sx9u9dXig10Q==
 // 对字节切片进行 hmac-sha512 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle")).ToHexBytes() // []byte("d971b790bbc2a4ac81062bbffac693c9c234bae176c8faf5e304dbdb153032a826f12353964b4a4fb87abecd2dc237638a630cbad54a6b94b1f6ef5d5e2835d1")
 // 对字节切片进行 hmac-sha512 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle")).ToBase64Bytes() // []byte("2XG3kLvCpKyBBiu/+saTycI0uuF2yPr14wTb2xUwMqgm8SNTlktKT7h6vs0twjdjimMMutVKa5Sx9u9dXig10Q==")
 
 // 对字符串进行 hmac-sha512-224 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 224).ToHexString() // c4145bcc385c29f0e5683cd5450be9deb522d556de3b046a7ffa1eb3
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 224).ToHexString() // c4145bcc385c29f0e5683cd5450be9deb522d556de3b046a7ffa1eb3
 // 对字符串进行 hmac-sha512-224 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 224).ToBase64String() // xBRbzDhcKfDlaDzVRQvp3rUi1VbeOwRqf/oesw==
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 224).ToBase64String() // xBRbzDhcKfDlaDzVRQvp3rUi1VbeOwRqf/oesw==
 // 对字节切片进行 hmac-sha512-224 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 224).ToHexBytes() // []byte("c4145bcc385c29f0e5683cd5450be9deb522d556de3b046a7ffa1eb3")
 // 对字节切片进行 hmac-sha512-224 加密，输出经过 base64 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 224).ToBase64Bytes() // []byte("xBRbzDhcKfDlaDzVRQvp3rUi1VbeOwRqf/oesw==")
 
 // 对字符串进行 hmac-sha512-256 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 256).ToHexString() // e99fae71bcb43651ae10e952989eadf897faccb43966ee5122bb1b1d82f7a7c2
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 256).ToHexString() // e99fae71bcb43651ae10e952989eadf897faccb43966ee5122bb1b1d82f7a7c2
 // 对字符串进行 hmac-sha512-256 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 256).ToBase64String() // 6Z+ucby0NlGuEOlSmJ6t+Jf6zLQ5Zu5RIrsbHYL3p8I=
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 256).ToBase64String() // 6Z+ucby0NlGuEOlSmJ6t+Jf6zLQ5Zu5RIrsbHYL3p8I=
 // 对字节切片进行 hmac-sha512-256 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 256).ToHexBytes() // []byte("e99fae71bcb43651ae10e952989eadf897faccb43966ee5122bb1b1d82f7a7c2")
 // 对字节切片进行 hmac-sha512-256 加密，输出经过 base64 编码的字节切片
@@ -698,9 +705,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 2
 
 ```go
 // 对字符串进行 hmac-ripemd160 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacRipemd160("dongle").ToHexString() // 3691ad040e80c43dc6e8ffe9bc6ef3d5bd8786b8
+dongle.Encrypt.FromString("hello world").ByHmacRipemd160([]byte("dongle")).ToHexString() // 3691ad040e80c43dc6e8ffe9bc6ef3d5bd8786b8
 // 对字符串进行 hmac-ripemd160 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacRipemd160("dongle").ToBase64String() // NpGtBA6AxD3G6P/pvG7z1b2Hhrg=
+dongle.Encrypt.FromString("hello world").ByHmacRipemd160([]byte("dongle")).ToBase64String() // NpGtBA6AxD3G6P/pvG7z1b2Hhrg=
 
 // 对字节切片进行 hmac-ripemd160 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacRipemd160([]byte("dongle")).ToHexBytes() // []byte("3691ad040e80c43dc6e8ffe9bc6ef3d5bd8786b8")
@@ -712,9 +719,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacRipemd160([]byte("dongle")
 
 ```go
 // 对字符串进行 hmac-sm3 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSm3("dongle").ToHexString() // 8c733aae1d553c466a08c3e9e5daac3e99ae220181c7c1bc8c2564961de751b3
+dongle.Encrypt.FromString("hello world").ByHmacSm3([]byte("dongle")).ToHexString() // 8c733aae1d553c466a08c3e9e5daac3e99ae220181c7c1bc8c2564961de751b3
 // 对字符串进行 hmac-sm3 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByHmacSm3("dongle").ToBase64String() // jHM6rh1VPEZqCMPp5dqsPpmuIgGBx8G8jCVklh3nUbM=
+dongle.Encrypt.FromString("hello world").ByHmacSm3([]byte("dongle")).ToBase64String() // jHM6rh1VPEZqCMPp5dqsPpmuIgGBx8G8jCVklh3nUbM=
 
 // 对字节切片进行 hmac-sm3 加密，输出经过 hex 编码的字节切片
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSm3([]byte("dongle")).ToHexBytes() // []byte("8c733aae1d553c466a08c3e9e5daac3e99ae220181c7c1bc8c2564961de751b3")
@@ -729,7 +736,9 @@ cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("0123456789abcdef") // key 长度必须是 16、24 或 32 字节
+// cipher.WithKey([]byte("0123456789abcdef")) 
 cipher.SetIV("0123456789abcdef") // iv 长度必须是 16 字节，ECB 模式不需要设置 iv
+// cipher.WithIV([]byte("0123456789abcdef")) 
 
 // 对字符串进行 aes 加密，输出未经编码的原始字符串
 rawString := dongle.Encrypt.FromString("hello world").ByAes(cipher).ToRawString()
@@ -769,7 +778,9 @@ cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("0123456789abcdef") // key 长度必须是 1-56 字节
-cipher.SetIV("12345678")          // iv 长度必须是 8 字节，ECB 模式不需要设置 iv
+// cipher.WithKey([]byte("0123456789abcdef")) 
+cipher.SetIV("12345678"))         // iv 长度必须是 8 字节，ECB 模式不需要设置 iv
+// cipher.WithIV([]byte("12345678"))          
 
 // 对字符串进行 blowfish 加密，输出未经编码的原始字符串
 rawString := dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToRawString()
@@ -809,7 +820,9 @@ cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("12345678") // key 长度必须是 8 字节
+// cipher.WithKey([]byte("12345678")) 
 cipher.SetIV("12345678") // iv 长度必须是 8 字节
+// cipher.WithIV([]byte("12345678")) 
 
 // 对字符串进行 des 加密，输出未经编码的原始字符串
 rawString := dongle.Encrypt.FromString("hello world").ByDes(cipher).ToRawString()
@@ -849,7 +862,9 @@ cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC, CFB, CTR, ECB, OFB
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("123456781234567812345678") // key 长度必须是 24
+// cipher.WithKey([]byte("123456781234567812345678"))
 cipher.SetIV("12345678") // iv 长度必须是 8
+// cipher.WithIV([]byte("12345678")) 
 
 // 对字符串进行 3des 加密，输出未经编码的原始字符串
 rawString := dongle.Encrypt.FromString("hello world").By3Des(cipher).ToRawString()
@@ -885,13 +900,13 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher
 ##### Rsa 加密、解密
 
 ```go
-pkcs1PublicKey := `-----BEGIN RSA PUBLIC KEY-----
+pkcs1PublicKey :=  []byte(`-----BEGIN RSA PUBLIC KEY-----
 MIGJAoGBAK12MTd84qkCZzp4iLUj8YSUglaFMsFlv9KlIL4+Xts40PK3+wbsXPEw
 cujGeUmdgMeZiK7SLLSz8QeE0v7Vs+cGK4Bs4qLtMGCiO6wEuyt10KsafTyBktFn
 dk/+gBLr7B/b+9+HaMIIoJUdsFksdAg3cxTSpwVApe98loFNRfqDAgMBAAE=
------END RSA PUBLIC KEY-----`
+-----END RSA PUBLIC KEY-----`)
 
-pkcs1PrivateKey := `-----BEGIN RSA PRIVATE KEY-----
+pkcs1PrivateKey :=  []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQCtdjE3fOKpAmc6eIi1I/GElIJWhTLBZb/SpSC+Pl7bONDyt/sG
 7FzxMHLoxnlJnYDHmYiu0iy0s/EHhNL+1bPnBiuAbOKi7TBgojusBLsrddCrGn08
 gZLRZ3ZP/oAS6+wf2/vfh2jCCKCVHbBZLHQIN3MU0qcFQKXvfJaBTUX6gwIDAQAB
@@ -905,16 +920,16 @@ Y7kdDwZoF/+SW+vzWMbvQf3CgzV/Ak2+TgrRrbyDVZkJw45HjM4fyiRgoQJBALH/
 /qlxgPyQQs3O/s2KQBsm1auAE5IF5MLuVUZ69sF/mBko2hEXSqHnGV645TuKU0pC
 Zz12ga9WO3z6gaK0SaECQQDah1pKt9ViBBy4USXK3OWXEloHuTwmyr9AbLqqI5tQ
 2eNuH0NkuJYQmnXmHLbKOELoYocldEBXmkzPXSN+X9kV
------END RSA PRIVATE KEY-----`
+-----END RSA PRIVATE KEY-----`)
 
-pkcs8PublicKey := `-----BEGIN PUBLIC KEY-----
+pkcs8PublicKey :=  []byte(`-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqzZNa9VrcewyU6wDoV7Y9kAHq
 X1VK0B3Rb6GNmQe4zLEfce7cVTaLrc4VGTKl35tADG1cRHqtaG4S/WttpiGZBhxJ
 y4MpOXb6eIPiVLsn2lL+rJo5XdbSr3gyjxEOQQ97ihtw4lDd5wMo4bIOuw1LtMez
 HC1outlM6x+/BB0BSQIDAQAB
------END PUBLIC KEY-----`
+-----END PUBLIC KEY-----`)
 
-pkcs8PrivateKey := `-----BEGIN PRIVATE KEY-----
+pkcs8PrivateKey :=  []byte(`-----BEGIN PRIVATE KEY-----
 MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKrNk1r1Wtx7DJTr
 AOhXtj2QAepfVUrQHdFvoY2ZB7jMsR9x7txVNoutzhUZMqXfm0AMbVxEeq1obhL9
 a22mIZkGHEnLgyk5dvp4g+JUuyfaUv6smjld1tKveDKPEQ5BD3uKG3DiUN3nAyjh
@@ -929,7 +944,7 @@ dHnxnpNkOxVPHEnnpEcVFbgrf5gjAkB7KmRI4VTiEfRgINhTJAG0VU7SH/N7+4cu
 fPzfA+7ywG5c8Fa79wOB0SoB1KeUjcSLo5Ssj2fwea1F9dAeU90LAkBJQFofveaD
 a3YlN4EQZOcCvJKmg7xwWuGxFVTZDVVEws7UCQbEOEEXZrNd9x0IF5kpPLR+rxua
 RPgUNaDGIh5o
------END PRIVATE KEY-----`
+-----END PRIVATE KEY-----`)
 ```
 
 ###### 1、RSA 公钥加密、私钥解密
@@ -943,11 +958,11 @@ dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs1PrivateKey).To
 dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs1PrivateKey).ToString() // hello world
 
 // 使用 pkcs1 格式公钥对字节切片进行 rsa 加密
-cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs1PublicKey))
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs1PublicKey)
 // 使用 pkcs1 格式私钥对经过 hex 编码的字节切片进行 rsa 解密，输出字节切片
-dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa([]byte(pkcs1PrivateKey)).ToByte() // []bytes("hello world)
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs1PrivateKey).ToByte() // []bytes("hello world)
 // 使用 pkcs1 格式私钥对经过 base64 编码的字节切片进行 rsa 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa([]byte(pkcs1PrivateKey)).ToByte() // []bytes("hello world)
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs1PrivateKey).ToByte() // []bytes("hello world)
 
 // 使用 pkcs8 格式公钥对字符串进行 rsa 加密，输出经过 hex 编码的字符串
 cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs8PublicKey)
@@ -975,11 +990,11 @@ dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs1PublicKey).ToS
 dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs1PublicKey).ToString() // hello world
 
 // 使用 pkcs1 格式私钥对字节切片进行 rsa 加密
-cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs1PrivateKey))
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs1PrivateKey)
 // 使用 pkcs1 格式公钥对经过 hex 编码的字节切片进行 rsa 解密，输出字节切片
-dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs1PublicKey).ToByte() // []bytes("hello world)
 // 使用 pkcs1 格式公钥对经过 base64 编码的字节切片进行 rsa 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs1PublicKey).ToByte() // []bytes("hello world)
 
 // 使用 pkcs8 格式私钥对字符串进行 rsa 加密，输出经过 hex 编码的字符串
 cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs8PrivateKey)
@@ -1002,48 +1017,48 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PublicKey)
 
 ```go
 // 对字符串进行 tea 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToHexString() // bfa8d956247c0dcecfe2b0ef44b08aab
+dongle.Encrypt.FromString("hello world").ByTea([]byte("0123456789abcdef")).ToHexString() // bfa8d956247c0dcecfe2b0ef44b08aab
 // 对经过 hex 编码的字符串进行 tea 解密，输出字符串
-dongle.Decrypt.FromHexString("bfa8d956247c0dcecfe2b0ef44b08aab").ByTea("0123456789abcdef").ToString() // hello world
+dongle.Decrypt.FromHexString("bfa8d956247c0dcecfe2b0ef44b08aab").ByTea([]byte("0123456789abcdef")).ToString() // hello world
 
 // 对字符串进行 tea 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToBase64String() // v6jZViR8Dc7P4rDvRLCKqw==
+dongle.Encrypt.FromString("hello world").ByTea([]byte("0123456789abcdef")).ToBase64String() // v6jZViR8Dc7P4rDvRLCKqw==
 // 对经过 base64 编码的字符串进行 tea 解密，输出字符串
-dongle.Decrypt.FromBase64String("v6jZViR8Dc7P4rDvRLCKqw==").ByTea("0123456789abcdef").ToString() // hello world
+dongle.Decrypt.FromBase64String("v6jZViR8Dc7P4rDvRLCKqw==").ByTea([]byte("0123456789abcdef")).ToString() // hello world
 
 // 对字节切片进行 tea 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToHexBytes() // []byte("bfa8d956247c0dcecfe2b0ef44b08aab")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea([]byte("0123456789abcdef"), 32).ToHexBytes() // []byte("bfa8d956247c0dcecfe2b0ef44b08aab")
 // 对经过 hex 编码的字节切片进行 tea 解密，输出字节切片
-dongle.Decrypt.FromHexBytes([]byte("bfa8d956247c0dcecfe2b0ef44b08aab")).ByTea("4539658173a59fc2", 64).ToBytes() // []byte("hello world")
+dongle.Decrypt.FromHexBytes([]byte("bfa8d956247c0dcecfe2b0ef44b08aab")).ByTea([]byte("0123456789abcdef"), 64).ToBytes() // []byte("hello world")
 
 // 对字节切片进行 tea 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToBase64Bytes() // []byte("v6jZViR8Dc7P4rDvRLCKqw==")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea([]byte("0123456789abcdef"), 32).ToBase64Bytes() // []byte("v6jZViR8Dc7P4rDvRLCKqw==")
 // 对经过 base64 编码的字节切片进行 tea 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes(()byte("v6jZViR8Dc7P4rDvRLCKqw==")).ByTea("0123456789abcdef", 64).ToBytes() // []byte("hello world")
+dongle.Decrypt.FromBase64Bytes(()byte("v6jZViR8Dc7P4rDvRLCKqw==")).ByTea([]byte("0123456789abcdef"), 64).ToBytes() // []byte("hello world")
 ```
 
 ##### Rc4 加密、解密
 
 ```go
 // 对字符串进行 rc4 加密，输出经过 hex 编码的字符串
-dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToHexString() // eba154b4cb5a9038dbbf9d
+dongle.Encrypt.FromString("hello world").ByRc4([]byte("dongle")).ToHexString() // eba154b4cb5a9038dbbf9d
 // 对经过 hex 编码的字符串进行 rc4 解密，输出字符串
-dongle.Encrypt.FromHexString("eba154b4cb5a9038dbbf9d").ByRc4("dongle").ToString() // hello world
+dongle.Encrypt.FromHexString("eba154b4cb5a9038dbbf9d").ByRc4([]byte("dongle")).ToString() // hello world
 
 // 对字符串进行 rc4 加密，输出经过 base64 编码的字符串
-dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToBase64String() // 66FUtMtakDjbv50=
+dongle.Encrypt.FromString("hello world").ByRc4([]byte("dongle")).ToBase64String() // 66FUtMtakDjbv50=
 // 对经过 base64 编码的字符串进行 rc4 解密，输出字符串
-dongle.Decrypt.FromBase64String("66FUtMtakDjbv50=").ByRc4("dongle").ToString() // hello world
+dongle.Decrypt.FromBase64String("66FUtMtakDjbv50=").ByRc4([]byte("dongle")).ToString() // hello world
 
 // 对字节切片进行 rc4 加密，输出经过 hex 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
 // 对经过 hex 编码的字节切片进行 rc4 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes([]byte("hello world")).ByRc4("dongle").ToBytes() // []byte("eba154b4cb5a9038dbbf9d")
+dongle.Decrypt.FromBase64Bytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBytes() // []byte("eba154b4cb5a9038dbbf9d")
 
 // 对字节切片进行 rc4 加密，输出经过 base64 编码的字节切片
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
 // 对经过 base64 编码的字节切片进行 rc4 解密，输出字节切片
-dongle.Decrypt.FromBase64Bytes([]byte("66FUtMtakDjbv50=")).ByRc4("dongle").ToBytes() // []byte("hello world")
+dongle.Decrypt.FromBase64Bytes([]byte("66FUtMtakDjbv50=")).ByRc4([]byte("dongle")).ToBytes() // []byte("hello world")
 ```
 
 ##### Sm3 加密
@@ -1137,13 +1152,13 @@ dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(b
 > hash 算法仅支持 MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160
 
 ```go
-pkcs1PublicKey := `-----BEGIN RSA PUBLIC KEY-----
+pkcs1PublicKey := []byte(`-----BEGIN RSA PUBLIC KEY-----
 MIGJAoGBAK12MTd84qkCZzp4iLUj8YSUglaFMsFlv9KlIL4+Xts40PK3+wbsXPEw
 cujGeUmdgMeZiK7SLLSz8QeE0v7Vs+cGK4Bs4qLtMGCiO6wEuyt10KsafTyBktFn
 dk/+gBLr7B/b+9+HaMIIoJUdsFksdAg3cxTSpwVApe98loFNRfqDAgMBAAE=
------END RSA PUBLIC KEY-----`
+-----END RSA PUBLIC KEY-----`)
 
-pkcs1PrivateKey := `-----BEGIN RSA PRIVATE KEY-----
+pkcs1PrivateKey :=  []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQCtdjE3fOKpAmc6eIi1I/GElIJWhTLBZb/SpSC+Pl7bONDyt/sG
 7FzxMHLoxnlJnYDHmYiu0iy0s/EHhNL+1bPnBiuAbOKi7TBgojusBLsrddCrGn08
 gZLRZ3ZP/oAS6+wf2/vfh2jCCKCVHbBZLHQIN3MU0qcFQKXvfJaBTUX6gwIDAQAB
@@ -1157,16 +1172,16 @@ Y7kdDwZoF/+SW+vzWMbvQf3CgzV/Ak2+TgrRrbyDVZkJw45HjM4fyiRgoQJBALH/
 /qlxgPyQQs3O/s2KQBsm1auAE5IF5MLuVUZ69sF/mBko2hEXSqHnGV645TuKU0pC
 Zz12ga9WO3z6gaK0SaECQQDah1pKt9ViBBy4USXK3OWXEloHuTwmyr9AbLqqI5tQ
 2eNuH0NkuJYQmnXmHLbKOELoYocldEBXmkzPXSN+X9kV
------END RSA PRIVATE KEY-----`
+-----END RSA PRIVATE KEY-----`)
 
-pkcs8PublicKey := `-----BEGIN PUBLIC KEY-----
+pkcs8PublicKey :=  []byte(`-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqzZNa9VrcewyU6wDoV7Y9kAHq
 X1VK0B3Rb6GNmQe4zLEfce7cVTaLrc4VGTKl35tADG1cRHqtaG4S/WttpiGZBhxJ
 y4MpOXb6eIPiVLsn2lL+rJo5XdbSr3gyjxEOQQ97ihtw4lDd5wMo4bIOuw1LtMez
 HC1outlM6x+/BB0BSQIDAQAB
------END PUBLIC KEY-----`
+-----END PUBLIC KEY-----`)
 
-pkcs8PrivateKey := `-----BEGIN PRIVATE KEY-----
+pkcs8PrivateKey :=  []byte(`-----BEGIN PRIVATE KEY-----
 MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKrNk1r1Wtx7DJTr
 AOhXtj2QAepfVUrQHdFvoY2ZB7jMsR9x7txVNoutzhUZMqXfm0AMbVxEeq1obhL9
 a22mIZkGHEnLgyk5dvp4g+JUuyfaUv6smjld1tKveDKPEQ5BD3uKG3DiUN3nAyjh
@@ -1181,7 +1196,7 @@ dHnxnpNkOxVPHEnnpEcVFbgrf5gjAkB7KmRI4VTiEfRgINhTJAG0VU7SH/N7+4cu
 fPzfA+7ywG5c8Fa79wOB0SoB1KeUjcSLo5Ssj2fwea1F9dAeU90LAkBJQFofveaD
 a3YlN4EQZOcCvJKmg7xwWuGxFVTZDVVEws7UCQbEOEEXZrNd9x0IF5kpPLR+rxua
 RPgUNaDGIh5o
------END PRIVATE KEY-----`
+-----END PRIVATE KEY-----`)
 
 // 对字符串进行 rsa 签名
 sign := dongle.Sign.FromString("hello world").ByRsa(pkcs1PrivateKey, dongle.MD5)
@@ -1193,13 +1208,13 @@ dongle.Verify.FromHexString(sign.ToHexString(), "hello world").ByRsa(pkcs1Public
 dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByRsa(pkcs1PublicKey, dongle.MD5).ToBool() // true
 
 // 对字节切片进行 rsa 签名
-sign := dongle.Sign.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PrivateKey), dongle.SHA512)
+sign := dongle.Sign.FromBytes([]byte("hello world")).ByRsa(pkcs8PrivateKey, dongle.SHA512)
 // 对未经编码的原始签名字节切片进行 rsa 验签
-dongle.Verify.FromRawBytes(sign.ToRawBytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
+dongle.Verify.FromRawBytes(sign.ToRawBytes(), []byte("hello world")).ByRsa(pkcs1PublicKey, dongle.SHA512).ToBool() // true
 // 对经过 hex 编码的签名字节切片进行 rsa 验签
-dongle.Verify.FromHexBytes(sign.ToHexBytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
+dongle.Verify.FromHexBytes(sign.ToHexBytes(), []byte("hello world")).ByRsa(pkcs1PublicKey, dongle.SHA512).ToBool() // true
 // 对经过 base64 编码的签名字节切片进行 rsa 验签
-dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
+dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa(pkcs1PublicKey, dongle.SHA512).ToBool() // true
 ```
 
 #### OpenSSL
@@ -1243,6 +1258,7 @@ keyBytes, err := openssl.RSA.CompressKey(key)
 
 // 从 RSA 私钥里导出公钥
 publicKey, err := openssl.RSA.ExportPublicKey(privateKey)
+
 ```
 
 ### 错误处理
@@ -1250,7 +1266,7 @@ publicKey, err := openssl.RSA.ExportPublicKey(privateKey)
 > 如果有多个错误发生，只返回第一个错误，前一个错误排除后才返回下一个错误
 
 ```go
-e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
+e := dongle.Encrypt.FromString("hello world").ByRsa([]byte("xxxx"))
 if e.Error != nil {
     // 错误处理...
     log.Fatal(e.Error)
@@ -1260,95 +1276,12 @@ fmt.Println(e.ToString())
 rsa: invalid public key, please make sure the public key is valid
 ```
 
-### 功能清单
-
-- [x] Hex 编码、解码
-- [x] Base16 编码、解码
-- [x] Base32 编码、解码
-- [x] Base45 编码、解码
-- [x] Base58 编码、解码
-- [x] Base62 编码、解码
-- [x] Base64 编码、解码
-- [x] Base64URL 编码、解码
-- [x] SafeURL 编码、解码
-- [x] Base85 编码、解码
-- [x] Base91 编码、解码
-- [x] Base100 编码、解码
-- [x] Morse 编码、解码
-- [x] Md2 加密
-- [x] Md4 加密
-- [x] Md5 加密
-- [x] Sha1 加密
-- [x] Sha3-224 加密
-- [x] Sha3-256 加密
-- [x] Sha3-384 加密
-- [x] Sha3-512 加密
-- [x] Sha224 加密
-- [x] Sha256 加密
-- [x] Sha384 加密
-- [x] Sha512 加密
-- [x] Sha512-224 加密
-- [x] Sha512-256 加密
-- [x] Shake128 加密
-- [x] Shake256 加密
-- [x] Ripemd160 加密
-- [x] Blake2b-256 加密
-- [x] Blake2b-384 加密
-- [x] Blake2b-512 加密
-- [x] Blake2s-256 加密
-- [x] Hmac-md2 加密
-- [x] Hmac-md4 加密
-- [x] Hmac-md5 加密
-- [x] Hmac-sha1 加密
-- [x] Hmac-sha3-224 加密
-- [x] Hmac-sha3-256 加密
-- [x] Hmac-sha3-384 加密
-- [x] Hmac-sha3-512 加密
-- [x] Hmac-sha224 加密
-- [x] Hmac-sha256 加密
-- [x] Hmac-sha384 加密
-- [x] Hmac-sha512 加密
-- [x] Hmac-sha512-224 加密
-- [x] Hmac-sha512-256 加密
-- [x] Hmac-ripemd160 加密
-- [x] Hmac-sm3 加密
-- [ ] Rc2 加密、解密
-- [x] Rc4 加密、解密
-- [ ] Rc5 加密、解密
-- [ ] Rc6 加密、解密
-- [x] Tea 加密、解密
-- [ ] Xtea 加密、解密
-- [x] Aes 加密、解密
-- [x] Blowfish 加密、解密
-- [x] Des 加密、解密
-- [x] 3Des 加密、解密
-- [x] Rsa 加密、解密
-- [ ] Ecc 加密、解密
-- [ ] Sm2 加密、解密
-- [x] Sm3 加密
-- [ ] Sm4 加密、解密
-- [ ] Sm7 加密、解密
-- [ ] Sm9 加密、解密
-- [x] Bcrypt 签名、验签
-- [x] Ed25519 签名、验签
-- [x] Rsa 签名、验签
-- [ ] Dsa 签名、验签
-
 ### 参考项目
 
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycrypto](https://github.com/pycrypto/pycrypto)
-
-### 在线网站
-
-* [tool.gouguoyin.com](https://tool.gouguoyin.com)
-* [www.ssleye.com](https://www.ssleye.com/ssltool)
-* [base62.js.org](https://base62.js.org)
-* [www.sojson.com](https://www.sojson.com/encrypt.html)
-* [tool.chacuo.net](http://tool.chacuo.net/cryptaes)
-* [www.oktools.net](https://oktools.net/aes)
 
 ### 赞助
 

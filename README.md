@@ -128,6 +128,8 @@ dongle.Decode.FromBytes([]byte("StV1DL6CwTryKyV")).ByBase58().ToBytes() // []byt
 
 ##### Encode and decode by base62
 
+>Customizable alphabet, the alphabet must be 62 bytes, the default alphabet is 0123456789ABCDEFGHIJKNMNOPQLRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+
 ```go
 // Encode by base62 from string and output string
 dongle.Encode.FromString("hello world").ByBase62().ToString() // AAwf93rvy4aWQVw
@@ -138,6 +140,11 @@ dongle.Decode.FromString("AAwf93rvy4aWQVw").ByBase62().ToString() // hello world
 dongle.Encode.FromBytes([]byte("hello world")).ByBase62().ToBytes() // []byte("AAwf93rvy4aWQVw")
 // Decode by base62 from byte slice and output byte slice
 dongle.Decode.FromBytes([]byte("AAwf93rvy4aWQVw")).ByBase62().ToBytes() // []byte("hello world")
+
+// Encode by base62 with custom alphabet from byte slice and output byte slice
+dongle.Encode.FromBytes([]byte("hello world")).ByBase62("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789").ToBytes() // []byte("KK6pJD158Ekgaf6")
+// Decode by base62 with custom alphabet from byte slice and output byte slice
+dongle.Decode.FromBytes([]byte("KK6pJD158Ekgaf6")).ByBase62().ToBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") // []byte("hello world")
 ```
 
 ##### Encode and decode by base64
@@ -527,9 +534,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByBlake2s(256).ToBase64Bytes() /
 
 ```go
 // Encrypt by hmac-md2 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToHexString() // 88ed6ef9ab699d03a702f2a6fb1c0673
+dongle.Encrypt.FromString("hello world").ByHmacMd2([]byte("dongle")).ToHexString() // 88ed6ef9ab699d03a702f2a6fb1c0673
 // Encrypt by hmac-md2 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacMd2("dongle").ToBase64String() // iO1u+atpnQOnAvKm+xwGcw==
+dongle.Encrypt.FromString("hello world").ByHmacMd2([]byte("dongle")).ToBase64String() // iO1u+atpnQOnAvKm+xwGcw==
 
 // Encrypt by hmac-md2 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToHexBytes() // []byte("88ed6ef9ab699d03a702f2a6fb1c0673")
@@ -541,9 +548,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd2([]byte("dongle")).ToBa
 
 ```go
 // Encrypt by hmac-md4 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacMd4("dongle").ToHexString() // 7a9df5247cbf76a8bc17c9c4f5a75b6b
+dongle.Encrypt.FromString("hello world").ByHmacMd4([]byte("dongle")).ToHexString() // 7a9df5247cbf76a8bc17c9c4f5a75b6b
 // Encrypt by hmac-md4 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacMd4("dongle").ToBase64String() // ep31JHy/dqi8F8nE9adbaw==
+dongle.Encrypt.FromString("hello world").ByHmacMd4([]byte("dongle")).ToBase64String() // ep31JHy/dqi8F8nE9adbaw==
 
 // Encrypt by hmac-md4 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd4([]byte("dongle")).ToHexBytes() // []byte("7a9df5247cbf76a8bc17c9c4f5a75b6b")
@@ -555,9 +562,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd4([]byte("dongle")).ToBa
 
 ```go
 // Encrypt by hmac-md5 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacMd5("dongle").ToHexString() // 4790626a275f776956386e5a3ea7b726
+dongle.Encrypt.FromString("hello world").ByHmacMd5([]byte("dongle")).ToHexString() // 4790626a275f776956386e5a3ea7b726
 // Encrypt by hmac-md5 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacMd5("dongle").ToBase64String() // R5Biaidfd2lWOG5aPqe3Jg==
+dongle.Encrypt.FromString("hello world").ByHmacMd5([]byte("dongle")).ToBase64String() // R5Biaidfd2lWOG5aPqe3Jg==
 
 // Encrypt by hmac-md5 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd5([]byte("dongle")).ToHexBytes() // []byte("4790626a275f776956386e5a3ea7b726")
@@ -569,9 +576,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacMd5([]byte("dongle")).ToBa
 
 ```go
 // Encrypt by hmac-sha1 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha1("dongle").ToHexString() // 91c103ef93ba7420902b0d1bf0903251c94b4a62
+dongle.Encrypt.FromString("hello world").ByHmacSha1([]byte("dongle")).ToHexString() // 91c103ef93ba7420902b0d1bf0903251c94b4a62
 // Encrypt by hmac-sha1 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha1("dongle").ToBase64String() // kcED75O6dCCQKw0b8JAyUclLSmI=
+dongle.Encrypt.FromString("hello world").ByHmacSha1([]byte("dongle")).ToBase64String() // kcED75O6dCCQKw0b8JAyUclLSmI=
 
 // Encrypt by hmac-sha1 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha1([]byte("dongle")).ToHexBytes() // []byte("91c103ef93ba7420902b0d1bf0903251c94b4a62")
@@ -585,36 +592,36 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha1([]byte("dongle")).ToB
 
 ```go
 // Encrypt by hmac-sha3-224 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 224).ToHexString() // fb8f061d9d1dddd2f5d3b9064a5e98e3e4b6df27ea93ce67627583ce
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 224).ToHexString() // fb8f061d9d1dddd2f5d3b9064a5e98e3e4b6df27ea93ce67627583ce
 // Encrypt by hmac-sha3-224 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 224).ToBase64String() // +48GHZ0d3dL107kGSl6Y4+S23yfqk85nYnWDzg==
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 224).ToBase64String() // +48GHZ0d3dL107kGSl6Y4+S23yfqk85nYnWDzg==
 // Encrypt by hmac-sha3-224 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 224).ToHexBytes() // []byte("fb8f061d9d1dddd2f5d3b9064a5e98e3e4b6df27ea93ce67627583ce")
 // Encrypt by hmac-sha3-224 from byte slice and output byte slice with base64 encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 224).ToBase64Bytes() // []byte("+48GHZ0d3dL107kGSl6Y4+S23yfqk85nYnWDzg==")
 
 // Encrypt by hmac-sha3-256 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 256).ToHexString() // 8193367fde28cf5c460adb449a04b3dd9c184f488bdccbabf0526c54f90c4460
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 256).ToHexString() // 8193367fde28cf5c460adb449a04b3dd9c184f488bdccbabf0526c54f90c4460
 // Encrypt by hmac-sha3-256 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 256).ToBase64String() // gZM2f94oz1xGCttEmgSz3ZwYT0iL3Mur8FJsVPkMRGA=
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 256).ToBase64String() // gZM2f94oz1xGCttEmgSz3ZwYT0iL3Mur8FJsVPkMRGA=
 // Encrypt by hmac-sha3-256 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 256).ToHexBytes() // []byte("8193367fde28cf5c460adb449a04b3dd9c184f488bdccbabf0526c54f90c4460")
 // Encrypt by hmac-sha3-256 from byte slice and output byte slice with base64 encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 256).ToBase64Bytes() // []byte("gZM2f94oz1xGCttEmgSz3ZwYT0iL3Mur8FJsVPkMRGA=")
 
 // Encrypt by hmac-sha3-384 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 384).ToHexString() // 3f76f5cda69cada3ee6b33f8458cd498b063075db263dd8b33f2a3992a8804f9569a7c86ffa2b8f0748babeb7a6fc0e7
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 384).ToHexString() // 3f76f5cda69cada3ee6b33f8458cd498b063075db263dd8b33f2a3992a8804f9569a7c86ffa2b8f0748babeb7a6fc0e7
 // Encrypt by hmac-sha3-384 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 384).ToBase64String() // P3b1zaacraPuazP4RYzUmLBjB12yY92LM/KjmSqIBPlWmnyG/6K48HSLq+t6b8Dn
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 384).ToBase64String() // P3b1zaacraPuazP4RYzUmLBjB12yY92LM/KjmSqIBPlWmnyG/6K48HSLq+t6b8Dn
 // Encrypt by hmac-sha3-384 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 384).ToHexBytes() // []byte("3f76f5cda69cada3ee6b33f8458cd498b063075db263dd8b33f2a3992a8804f9569a7c86ffa2b8f0748babeb7a6fc0e7")
 // Encrypt by hmac-sha3-384 from byte slice and output byte slice with base64 encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 384).ToBase64Bytes() // []byte("P3b1zaacraPuazP4RYzUmLBjB12yY92LM/KjmSqIBPlWmnyG/6K48HSLq+t6b8Dn")
 
 // Encrypt by hmac-sha3-512 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 512).ToHexString() // a99653d0407d659eccdeed43bb7cccd2e2b05a2c34fd3467c4198cf2ad26a466738513e88839fb55e64eb49df65bc52ed0fec2775bd9e086edd4fb4024add4a2
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 512).ToHexString() // a99653d0407d659eccdeed43bb7cccd2e2b05a2c34fd3467c4198cf2ad26a466738513e88839fb55e64eb49df65bc52ed0fec2775bd9e086edd4fb4024add4a2
 // Encrypt by hmac-sha3-512 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha3("dongle", 512).ToBase64String() // qZZT0EB9ZZ7M3u1Du3zM0uKwWiw0/TRnxBmM8q0mpGZzhRPoiDn7VeZOtJ32W8Uu0P7Cd1vZ4Ibt1PtAJK3Uog==
+dongle.Encrypt.FromString("hello world").ByHmacSha3([]byte("dongle"), 512).ToBase64String() // qZZT0EB9ZZ7M3u1Du3zM0uKwWiw0/TRnxBmM8q0mpGZzhRPoiDn7VeZOtJ32W8Uu0P7Cd1vZ4Ibt1PtAJK3Uog==
 // Encrypt by hmac-sha3-512 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 512).ToHexBytes() // []byte("a99653d0407d659eccdeed43bb7cccd2e2b05a2c34fd3467c4198cf2ad26a466738513e88839fb55e64eb49df65bc52ed0fec2775bd9e086edd4fb4024add4a2")
 // Encrypt by hmac-sha3-512 from byte slice and output byte slice with base64 encoding
@@ -625,9 +632,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 512
 
 ```go
 // Encrypt by hmac-sha224 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha224("dongle").ToHexString() // e15b9e5a7eccb1f17dc81dc07c909a891936dc3429dc0d940accbcec
+dongle.Encrypt.FromString("hello world").ByHmacSha224([]byte("dongle")).ToHexString() // e15b9e5a7eccb1f17dc81dc07c909a891936dc3429dc0d940accbcec
 // Encrypt by hmac-sha224 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha224("dongle").ToBase64String() // 4VueWn7MsfF9yB3AfJCaiRk23DQp3A2UCsy87A====
+dongle.Encrypt.FromString("hello world").ByHmacSha224([]byte("dongle")).ToBase64String() // 4VueWn7MsfF9yB3AfJCaiRk23DQp3A2UCsy87A====
 
 // Encrypt by hmac-sha224 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha224([]byte("dongle")).ToHexBytes() // []byte("e15b9e5a7eccb1f17dc81dc07c909a891936dc3429dc0d940accbcec")
@@ -639,9 +646,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha224([]byte("dongle")).T
 
 ```go
 // Encrypt by hmac-sha256 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha256("dongle").ToHexString() // b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9
+dongle.Encrypt.FromString("hello world").ByHmacSha256([]byte("dongle")).ToHexString() // b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9
 // Encrypt by hmac-sha256 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha256("dongle").ToBase64String() // uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=
+dongle.Encrypt.FromString("hello world").ByHmacSha256([]byte("dongle")).ToBase64String() // uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=
 
 // Encrypt by hmac-sha256 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha256([]byte("dongle")).ToHexBytes() // []byte("b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9")
@@ -653,9 +660,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha256([]byte("dongle")).T
 
 ```go
 // Encrypt by hmac-sha384 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha384("dongle").ToHexString() // 421fcaa740216a31bbcd1f86f2212e0c68aa4b156a8ebc2ae55b3e75c4ee0509ea0325a0570ae739006b61d91d817fe8
+dongle.Encrypt.FromString("hello world").ByHmacSha384([]byte("dongle")).ToHexString() // 421fcaa740216a31bbcd1f86f2212e0c68aa4b156a8ebc2ae55b3e75c4ee0509ea0325a0570ae739006b61d91d817fe8
 // Encrypt by hmac-sha384 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha384("dongle").ToBase64String() // Qh/Kp0AhajG7zR+G8iEuDGiqSxVqjrwq5Vs+dcTuBQnqAyWgVwrnOQBrYdkdgX/o
+dongle.Encrypt.FromString("hello world").ByHmacSha384([]byte("dongle")).ToBase64String() // Qh/Kp0AhajG7zR+G8iEuDGiqSxVqjrwq5Vs+dcTuBQnqAyWgVwrnOQBrYdkdgX/o
 
 // Encrypt by hmac-sha384 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha384([]byte("dongle")).ToHexBytes() // []byte("421fcaa740216a31bbcd1f86f2212e0c68aa4b156a8ebc2ae55b3e75c4ee0509ea0325a0570ae739006b61d91d817fe8")
@@ -669,27 +676,27 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha384([]byte("dongle")).T
 
 ```go
 // Encrypt by hmac-sha512 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle").ToHexString() // d971b790bbc2a4ac81062bbffac693c9c234bae176c8faf5e304dbdb153032a826f12353964b4a4fb87abecd2dc237638a630cbad54a6b94b1f6ef5d5e2835d1
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle")).ToHexString() // d971b790bbc2a4ac81062bbffac693c9c234bae176c8faf5e304dbdb153032a826f12353964b4a4fb87abecd2dc237638a630cbad54a6b94b1f6ef5d5e2835d1
 // Encrypt by hmac-sha512 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle").ToBase64String() // 2XG3kLvCpKyBBiu/+saTycI0uuF2yPr14wTb2xUwMqgm8SNTlktKT7h6vs0twjdjimMMutVKa5Sx9u9dXig10Q==
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle")).ToBase64String() // 2XG3kLvCpKyBBiu/+saTycI0uuF2yPr14wTb2xUwMqgm8SNTlktKT7h6vs0twjdjimMMutVKa5Sx9u9dXig10Q==
 // Encrypt by hmac-sha512 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle")).ToHexBytes() // []byte("d971b790bbc2a4ac81062bbffac693c9c234bae176c8faf5e304dbdb153032a826f12353964b4a4fb87abecd2dc237638a630cbad54a6b94b1f6ef5d5e2835d1")
 // Encrypt by hmac-sha512 from byte slice and output byte slice with base64 encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle")).ToBase64Bytes() // []byte("2XG3kLvCpKyBBiu/+saTycI0uuF2yPr14wTb2xUwMqgm8SNTlktKT7h6vs0twjdjimMMutVKa5Sx9u9dXig10Q==")
 
 // Encrypt by hmac-sha512-224 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 224).ToHexString() // c4145bcc385c29f0e5683cd5450be9deb522d556de3b046a7ffa1eb3
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 224).ToHexString() // c4145bcc385c29f0e5683cd5450be9deb522d556de3b046a7ffa1eb3
 // Encrypt by hmac-sha512-224 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 224).ToBase64String() // xBRbzDhcKfDlaDzVRQvp3rUi1VbeOwRqf/oesw==
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 224).ToBase64String() // xBRbzDhcKfDlaDzVRQvp3rUi1VbeOwRqf/oesw==
 // Encrypt by hmac-sha512-224 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 224).ToHexBytes() // []byte("c4145bcc385c29f0e5683cd5450be9deb522d556de3b046a7ffa1eb3")
 // Encrypt by hmac-sha512-224 from byte slice and output byte slice with base64 encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 224).ToBase64Bytes() // []byte("xBRbzDhcKfDlaDzVRQvp3rUi1VbeOwRqf/oesw==")
 
 // Encrypt by hmac-sha512-256 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 256).ToHexString() // e99fae71bcb43651ae10e952989eadf897faccb43966ee5122bb1b1d82f7a7c2
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 256).ToHexString() // e99fae71bcb43651ae10e952989eadf897faccb43966ee5122bb1b1d82f7a7c2
 // Encrypt by hmac-sha512-256 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacSha512("dongle", 256).ToBase64String() // 6Z+ucby0NlGuEOlSmJ6t+Jf6zLQ5Zu5RIrsbHYL3p8I=
+dongle.Encrypt.FromString("hello world").ByHmacSha512([]byte("dongle"), 256).ToBase64String() // 6Z+ucby0NlGuEOlSmJ6t+Jf6zLQ5Zu5RIrsbHYL3p8I=
 // Encrypt by hmac-sha512-256 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 256).ToHexBytes() // []byte("e99fae71bcb43651ae10e952989eadf897faccb43966ee5122bb1b1d82f7a7c2")
 // Encrypt by hmac-sha512-256 from byte slice and output byte slice with base64 encoding
@@ -700,9 +707,9 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 2
 
 ```go
 // Encrypt by hmac-ripemd160 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByHmacRipemd160("dongle").ToHexString() // 3691ad040e80c43dc6e8ffe9bc6ef3d5bd8786b8
+dongle.Encrypt.FromString("hello world").ByHmacRipemd160([]byte("dongle")).ToHexString() // 3691ad040e80c43dc6e8ffe9bc6ef3d5bd8786b8
 // Encrypt by hmac-ripemd160 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByHmacRipemd160("dongle").ToBase64String() // NpGtBA6AxD3G6P/pvG7z1b2Hhrg=
+dongle.Encrypt.FromString("hello world").ByHmacRipemd160([]byte("dongle")).ToBase64String() // NpGtBA6AxD3G6P/pvG7z1b2Hhrg=
 
 // Encrypt by hmac-ripemd160 from byte slice and output byte slice with hex encoding
 dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacRipemd160([]byte("dongle")).ToHexBytes() // []byte("3691ad040e80c43dc6e8ffe9bc6ef3d5bd8786b8")
@@ -730,8 +737,8 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSm3().ToBase64Bytes() // [
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
-cipher.SetKey("0123456789abcdef") // key must be 16, 24 or 32 bytes
-cipher.SetIV("0123456789abcdef") // iv must be 16 bytes (ECB mode doesn't require setting iv)
+cipher.SetKey([]byte("0123456789abcdef")) // key must be 16, 24 or 32 bytes
+cipher.SetIV([]byte("0123456789abcdef")) // iv must be 16 bytes (ECB mode doesn't require setting iv)
 
 // Encrypt by aes from string and output raw string
 rawString := dongle.Encrypt.FromString("hello world").ByAes(cipher).ToRawString()
@@ -771,8 +778,10 @@ dongle.Decrypt.FromBase64Bytes(()byte("wem0Upqsl5MBD0Z39jWO/g==")).ByAes(cipher)
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
-cipher.SetKey("0123456789abcdef") // key must from 1 to 56 bytes
-cipher.SetIV("12345678")          // iv must be 8 bytes
+cipher.SetKey("0123456789abcdef")  // key must from 1 to 56 bytes
+// cipher.WithKey([]byte("0123456789abcdef"))
+cipher.SetIV("12345678"))           // iv must be 8 bytes
+// cipher.WithIV([]byte("12345678"))          
 
 // Encrypt by blowfish from string and output raw string
 rawString := dongle.Encrypt.FromString("hello world").ByBlowfish(cipher).ToRawString()
@@ -812,7 +821,9 @@ cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("12345678") // key must be 8 bytes
+// cipher.WithKey([]byte("12345678")) 
 cipher.SetIV("12345678") // iv must be 8 bytes
+// cipher.WithIV([]byte("12345678")) 
 
 // Encrypt by des from string and output raw string
 rawString := dongle.Encrypt.FromString("hello world").ByDes(cipher).ToRawString()
@@ -852,7 +863,9 @@ cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、ECB、CFB、OFB、CTR
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
 cipher.SetKey("123456781234567812345678") // key must be 24 bytes
-cipher.SetIV("12345678") // iv must be 8 bytes
+// cipher.WithKey([]byte("123456781234567812345678"))
+cipher.SetIV("12345678") // v must be 8 bytes
+// cipher.WithIV([]byte("12345678")) 
 
 // Encrypt by 3des from string and output raw string
 rawString := dongle.Encrypt.FromString("hello world").By3Des(cipher).ToRawString()
@@ -888,13 +901,13 @@ dongle.Decrypt.FromBase64Bytes(()byte("CyqS6B+0nOGkMmaqyup7gQ==")).By3Des(cipher
 ##### Encrypt and decrypt by rsa
 
 ```go
-pkcs1PublicKey := `-----BEGIN RSA PUBLIC KEY-----
+pkcs1PublicKey := []byte(`-----BEGIN RSA PUBLIC KEY-----
 MIGJAoGBAK12MTd84qkCZzp4iLUj8YSUglaFMsFlv9KlIL4+Xts40PK3+wbsXPEw
 cujGeUmdgMeZiK7SLLSz8QeE0v7Vs+cGK4Bs4qLtMGCiO6wEuyt10KsafTyBktFn
 dk/+gBLr7B/b+9+HaMIIoJUdsFksdAg3cxTSpwVApe98loFNRfqDAgMBAAE=
------END RSA PUBLIC KEY-----`
+-----END RSA PUBLIC KEY-----`)
 
-pkcs1PrivateKey := `-----BEGIN RSA PRIVATE KEY-----
+pkcs1PrivateKey := []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQCtdjE3fOKpAmc6eIi1I/GElIJWhTLBZb/SpSC+Pl7bONDyt/sG
 7FzxMHLoxnlJnYDHmYiu0iy0s/EHhNL+1bPnBiuAbOKi7TBgojusBLsrddCrGn08
 gZLRZ3ZP/oAS6+wf2/vfh2jCCKCVHbBZLHQIN3MU0qcFQKXvfJaBTUX6gwIDAQAB
@@ -908,16 +921,16 @@ Y7kdDwZoF/+SW+vzWMbvQf3CgzV/Ak2+TgrRrbyDVZkJw45HjM4fyiRgoQJBALH/
 /qlxgPyQQs3O/s2KQBsm1auAE5IF5MLuVUZ69sF/mBko2hEXSqHnGV645TuKU0pC
 Zz12ga9WO3z6gaK0SaECQQDah1pKt9ViBBy4USXK3OWXEloHuTwmyr9AbLqqI5tQ
 2eNuH0NkuJYQmnXmHLbKOELoYocldEBXmkzPXSN+X9kV
------END RSA PRIVATE KEY-----`
+-----END RSA PRIVATE KEY-----`)
 
-pkcs8PublicKey := `-----BEGIN PUBLIC KEY-----
+pkcs8PublicKey := []byte(`-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqzZNa9VrcewyU6wDoV7Y9kAHq
 X1VK0B3Rb6GNmQe4zLEfce7cVTaLrc4VGTKl35tADG1cRHqtaG4S/WttpiGZBhxJ
 y4MpOXb6eIPiVLsn2lL+rJo5XdbSr3gyjxEOQQ97ihtw4lDd5wMo4bIOuw1LtMez
 HC1outlM6x+/BB0BSQIDAQAB
------END PUBLIC KEY-----`
+-----END PUBLIC KEY-----`)
 
-pkcs8PrivateKey := `-----BEGIN PRIVATE KEY-----
+pkcs8PrivateKey := []byte(`-----BEGIN PRIVATE KEY-----
 MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKrNk1r1Wtx7DJTr
 AOhXtj2QAepfVUrQHdFvoY2ZB7jMsR9x7txVNoutzhUZMqXfm0AMbVxEeq1obhL9
 a22mIZkGHEnLgyk5dvp4g+JUuyfaUv6smjld1tKveDKPEQ5BD3uKG3DiUN3nAyjh
@@ -932,7 +945,7 @@ dHnxnpNkOxVPHEnnpEcVFbgrf5gjAkB7KmRI4VTiEfRgINhTJAG0VU7SH/N7+4cu
 fPzfA+7ywG5c8Fa79wOB0SoB1KeUjcSLo5Ssj2fwea1F9dAeU90LAkBJQFofveaD
 a3YlN4EQZOcCvJKmg7xwWuGxFVTZDVVEws7UCQbEOEEXZrNd9x0IF5kpPLR+rxua
 RPgUNaDGIh5o
------END PRIVATE KEY-----`
+-----END PRIVATE KEY-----`)
 ```
 
 ###### 1.RSA encrypt by public key and decrypt by private key
@@ -946,11 +959,11 @@ dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs1PrivateKey).To
 dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs1PrivateKey).ToString() // hello world
 
 // Use pkcs1 format public key to encrypt by rsa from byte
-cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs1PublicKey))
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs1PublicKey)
 // Use pkcs1 format private key to decrypt by rsa from byte with hex encoding
-dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa([]byte(pkcs1PrivateKey)).ToByte() // []bytes("hello world)
+dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs1PrivateKey).ToByte() // []bytes("hello world)
 // Use pkcs1 format private key to decrypt by rsa from byte with base64 encoding
-dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa([]byte(pkcs1PrivateKey)).ToByte() // []bytes("hello world)
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs1PrivateKey).ToByte() // []bytes("hello world)
 
 // Use pkcs8 format public key to encrypt by rsa from string
 cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs8PublicKey)
@@ -960,7 +973,7 @@ dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs8PrivateKey).To
 dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs8PrivateKey).ToString() // hello world
 
 // Use pkcs8 format public key to encrypt by rsa from byte
-cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PublicKey))
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs8PublicKey)
 // Use pkcs8 format private key to decrypt by rsa from byte with hex encoding
 dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PrivateKey).ToByte() // []bytes("hello world)
 // Use pkcs8 format private key to decrypt by rsa from byte with base64 encoding
@@ -978,11 +991,11 @@ dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs1PublicKey).ToS
 dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs1PublicKey).ToString() // hello world
 
 // Use pkcs1 format private key to encrypt by rsa from byte
-cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs1PrivateKey))
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs1PrivateKey)
 // Use pkcs1 format public key to decrypt by rsa from byte with hex encoding
 dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
 // Use pkcs1 format public key to decrypt by rsa from byte with base64 encoding
-dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa([]byte(pkcs1PublicKey)).ToByte() // []bytes("hello world)
+dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs1PublicKey).ToByte() // []bytes("hello world)
 
 // Use pkcs8 format private key to encrypt by rsa from string
 cipherText := dongle.Encrypt.FromString("hello world").ByRsa(pkcs8PrivateKey)
@@ -992,7 +1005,7 @@ dongle.Decrypt.FromHexString(cipherText.ToHexString()).ByRsa(pkcs8PublicKey).ToS
 dongle.Decrypt.FromBase64String(cipherText.ToBase64String()).ByRsa(pkcs8PublicKey).ToString() // hello world
 
 // Use pkcs8 format private key to encrypt by rsa from byte
-cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PrivateKey))
+cipherText := dongle.Encrypt.FromBytes([]byte("hello world")).ByRsa(pkcs8PrivateKey)
 // Use pkcs8 format public key to decrypt by rsa from byte with hex encoding
 dongle.Decrypt.FromHexBytes(cipherText.ToHexBytes()).ByRsa(pkcs8PublicKey).ToByte() // []bytes("hello world)
 // Use pkcs8 format public key to decrypt by rsa from byte with base64 encoding
@@ -1005,48 +1018,48 @@ dongle.Decrypt.FromBase64Bytes(cipherText.ToBase64Bytes()).ByRsa(pkcs8PublicKey)
 
 ```go
 // Encrypt by tea from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToHexString() // bfa8d956247c0dcecfe2b0ef44b08aab
+dongle.Encrypt.FromString("hello world").ByTea([]byte("0123456789abcdef")).ToHexString() // bfa8d956247c0dcecfe2b0ef44b08aab
 // Decrypt by tea from string with hex encoding and output string
-dongle.Decrypt.FromHexString("bfa8d956247c0dcecfe2b0ef44b08aab").ByTea("0123456789abcdef").ToString() // hello world
+dongle.Decrypt.FromHexString("bfa8d956247c0dcecfe2b0ef44b08aab").ByTea([]byte("0123456789abcdef")).ToString() // hello world
 
 // Encrypt by tea from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByTea("0123456789abcdef").ToBase64String() // v6jZViR8Dc7P4rDvRLCKqw==
+dongle.Encrypt.FromString("hello world").ByTea([]byte("0123456789abcdef")).ToBase64String() // v6jZViR8Dc7P4rDvRLCKqw==
 // Decrypt by tea from string with base64 encoding and output string
-dongle.Decrypt.FromBase64String("v6jZViR8Dc7P4rDvRLCKqw==").ByTea("0123456789abcdef").ToString() // hello world
+dongle.Decrypt.FromBase64String("v6jZViR8Dc7P4rDvRLCKqw==").ByTea([]byte("0123456789abcdef")).ToString() // hello world
 
 // Encrypt by tea from byte slice and output byte slice with hex encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToHexBytes() // []byte("bfa8d956247c0dcecfe2b0ef44b08aab")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea([]byte("0123456789abcdef"), 32).ToHexBytes() // []byte("bfa8d956247c0dcecfe2b0ef44b08aab")
 // Decrypt by tea from byte slice with hex encoding and output byte slice
 dongle.Decrypt.FromHexBytes([]byte("bfa8d956247c0dcecfe2b0ef44b08aab")).ByTea("4539658173a59fc2", 64).ToBytes() // []byte("hello world")
 
 // Encrypt by tea from byte slice and output byte slice with base64 encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByTea("0123456789abcdef", 32).ToBase64Bytes() // []byte("v6jZViR8Dc7P4rDvRLCKqw==")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByTea([]byte("0123456789abcdef"), 32).ToBase64Bytes() // []byte("v6jZViR8Dc7P4rDvRLCKqw==")
 // Decrypt by tea from byte slice with base64 encoding and output byte slice
-dongle.Decrypt.FromBase64Bytes(()byte("v6jZViR8Dc7P4rDvRLCKqw==")).ByTea("0123456789abcdef", 64).ToBytes() // []byte("hello world")
+dongle.Decrypt.FromBase64Bytes(()byte("v6jZViR8Dc7P4rDvRLCKqw==")).ByTea([]byte("0123456789abcdef"), 64).ToBytes() // []byte("hello world")
 ```
 
 ##### Encrypt and decrypt by rc4
 
 ```go
 // Encrypt by rc4 from string and output string with hex encoding
-dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToHexString() // eba154b4cb5a9038dbbf9d
+dongle.Encrypt.FromString("hello world").ByRc4([]byte("dongle")).ToHexString() // eba154b4cb5a9038dbbf9d
 // Decrypt by rc4 from string with hex encoding and output string
-dongle.Encrypt.FromHexString("eba154b4cb5a9038dbbf9d").ByRc4("dongle").ToString() // hello world
+dongle.Encrypt.FromHexString("eba154b4cb5a9038dbbf9d").ByRc4([]byte("dongle")).ToString() // hello world
 
 // Encrypt by rc4 from string and output string with base64 encoding
-dongle.Encrypt.FromString("hello world").ByRc4("dongle").ToBase64String() // 66FUtMtakDjbv50=
+dongle.Encrypt.FromString("hello world").ByRc4([]byte("dongle")).ToBase64String() // 66FUtMtakDjbv50=
 // Decrypt by rc4 from string with base64 encoding and output string
-dongle.Decrypt.FromBase64String("66FUtMtakDjbv50=").ByRc4("dongle").ToString() // hello world
+dongle.Decrypt.FromBase64String("66FUtMtakDjbv50=").ByRc4([]byte("dongle")).ToString() // hello world
 
 // Encrypt by rc4 from byte slice and output byte slice with hex encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToHexBytes() // []byte("eba154b4cb5a9038dbbf9d")
 // Decrypt by rc4 from byte slice with hex encoding and output byte slice
-dongle.Decrypt.FromBase64Bytes([]byte("hello world")).ByRc4("dongle").ToBytes() // []byte("eba154b4cb5a9038dbbf9d")
+dongle.Decrypt.FromBase64Bytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBytes() // []byte("eba154b4cb5a9038dbbf9d")
 
 // Encrypt by rc4 from byte slice and output byte slice with base64 encoding
-dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4("dongle").ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
+dongle.Encrypt.FromBytes([]byte("hello world")).ByRc4([]byte("dongle")).ToBase64Bytes() // []byte("66FUtMtakDjbv50=")
 // Decrypt by rc4 from byte slice with base64 encoding and output byte slice
-dongle.Decrypt.FromBase64Bytes([]byte("66FUtMtakDjbv50=")).ByRc4("dongle").ToBytes() // []byte("hello world")
+dongle.Decrypt.FromBase64Bytes([]byte("66FUtMtakDjbv50=")).ByRc4([]byte("dongle")).ToBytes() // []byte("hello world")
 ```
 
 ##### Encrypt by sm3
@@ -1132,13 +1145,13 @@ dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByEd25519(b
 > Hash algorithm only supports MD5, SHA1, SHA224, SHA256, SHA384, SHA512, RIPEMD160
 
 ```go
-pkcs1PublicKey := `-----BEGIN RSA PUBLIC KEY-----
+pkcs1PublicKey := []byte(`-----BEGIN RSA PUBLIC KEY-----
 MIGJAoGBAK12MTd84qkCZzp4iLUj8YSUglaFMsFlv9KlIL4+Xts40PK3+wbsXPEw
 cujGeUmdgMeZiK7SLLSz8QeE0v7Vs+cGK4Bs4qLtMGCiO6wEuyt10KsafTyBktFn
 dk/+gBLr7B/b+9+HaMIIoJUdsFksdAg3cxTSpwVApe98loFNRfqDAgMBAAE=
------END RSA PUBLIC KEY-----`
+-----END RSA PUBLIC KEY-----`)
 
-pkcs1PrivateKey := `-----BEGIN RSA PRIVATE KEY-----
+pkcs1PrivateKey := []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQCtdjE3fOKpAmc6eIi1I/GElIJWhTLBZb/SpSC+Pl7bONDyt/sG
 7FzxMHLoxnlJnYDHmYiu0iy0s/EHhNL+1bPnBiuAbOKi7TBgojusBLsrddCrGn08
 gZLRZ3ZP/oAS6+wf2/vfh2jCCKCVHbBZLHQIN3MU0qcFQKXvfJaBTUX6gwIDAQAB
@@ -1152,16 +1165,16 @@ Y7kdDwZoF/+SW+vzWMbvQf3CgzV/Ak2+TgrRrbyDVZkJw45HjM4fyiRgoQJBALH/
 /qlxgPyQQs3O/s2KQBsm1auAE5IF5MLuVUZ69sF/mBko2hEXSqHnGV645TuKU0pC
 Zz12ga9WO3z6gaK0SaECQQDah1pKt9ViBBy4USXK3OWXEloHuTwmyr9AbLqqI5tQ
 2eNuH0NkuJYQmnXmHLbKOELoYocldEBXmkzPXSN+X9kV
------END RSA PRIVATE KEY-----`
+-----END RSA PRIVATE KEY-----`)
 
-pkcs8PublicKey := `-----BEGIN PUBLIC KEY-----
+pkcs8PublicKey := []byte(`-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqzZNa9VrcewyU6wDoV7Y9kAHq
 X1VK0B3Rb6GNmQe4zLEfce7cVTaLrc4VGTKl35tADG1cRHqtaG4S/WttpiGZBhxJ
 y4MpOXb6eIPiVLsn2lL+rJo5XdbSr3gyjxEOQQ97ihtw4lDd5wMo4bIOuw1LtMez
 HC1outlM6x+/BB0BSQIDAQAB
------END PUBLIC KEY-----`
+-----END PUBLIC KEY-----`)
 
-pkcs8PrivateKey := `-----BEGIN PRIVATE KEY-----
+pkcs8PrivateKey := []byte(`-----BEGIN PRIVATE KEY-----
 MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKrNk1r1Wtx7DJTr
 AOhXtj2QAepfVUrQHdFvoY2ZB7jMsR9x7txVNoutzhUZMqXfm0AMbVxEeq1obhL9
 a22mIZkGHEnLgyk5dvp4g+JUuyfaUv6smjld1tKveDKPEQ5BD3uKG3DiUN3nAyjh
@@ -1176,7 +1189,7 @@ dHnxnpNkOxVPHEnnpEcVFbgrf5gjAkB7KmRI4VTiEfRgINhTJAG0VU7SH/N7+4cu
 fPzfA+7ywG5c8Fa79wOB0SoB1KeUjcSLo5Ssj2fwea1F9dAeU90LAkBJQFofveaD
 a3YlN4EQZOcCvJKmg7xwWuGxFVTZDVVEws7UCQbEOEEXZrNd9x0IF5kpPLR+rxua
 RPgUNaDGIh5o
------END PRIVATE KEY-----`
+-----END PRIVATE KEY-----`)
 
 // Sign by rsa from string
 sign := dongle.Sign.FromString("hello world").ByRsa(pkcs1PrivateKey, dongle.MD5)
@@ -1190,11 +1203,11 @@ dongle.Verify.FromBase64String(sign.ToBase64String(), "hello world").ByRsa(pkcs1
 // Sign by rsa from byte slice
 sign := dongle.Sign.FromBytes([]byte("hello world")).ByRsa([]byte(pkcs8PrivateKey), dongle.SHA512).ToRawBytes()
 // Verify by rsa from raw signature byte slice without encoding and message byte slice, output bool
-dongle.Verify.FromRawBytes(sign.ToRawBytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
+dongle.Verify.FromRawBytes(sign.ToRawBytes(), []byte("hello world")).ByRsa(pkcs1PublicKey, dongle.SHA512).ToBool() // true
 // Verify by rsa from raw signature byte slice with hex encoding and message byte slice, output bool
-dongle.Verify.FromHexBytes(sign.ToHexBytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
+dongle.Verify.FromHexBytes(sign.ToHexBytes(), []byte("hello world")).ByRsa(pkcs1PublicKey, dongle.SHA512).ToBool() // true
 // Verify by rsa from raw signature byte slice with base64 encoding and message byte slice, output bool
-dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa([]byte(pkcs1PublicKey), dongle.SHA512).ToBool() // true
+dongle.Verify.FromBase64Bytes(sign.ToBase64Bytes(), []byte("hello world")).ByRsa(pkcs1PublicKey, dongle.SHA512).ToBool() // true
 ```
 
 #### OpenSSL
@@ -1246,7 +1259,7 @@ publicKey, err := openssl.RSA.ExportPublicKey(privateKey)
 > If more than one error occurs, only the first error is returned
 
 ```go
-e := dongle.Encrypt.FromString("hello world").ByRsa("xxxx")
+e := dongle.Encrypt.FromString("hello world").ByRsa([]byte("xxxx"))
 if e.Error != nil {
     // Error handle...
     log.Fatal(e.Error)
@@ -1256,80 +1269,6 @@ fmt.Println(e.ToString())
 rsa: invalid public key, please make sure the public key is valid
 ```
 
-### Feature list
-
-- [x] Encoding and decoding by Hex
-- [x] Encoding and decoding by Base16
-- [x] Encoding and decoding by Base32
-- [x] Encoding and decoding by Base45
-- [x] Encoding and decoding by Base58
-- [x] Encoding and decoding by Base62
-- [x] Encoding and decoding by Base64
-- [x] Encoding and decoding by Base64URL
-- [x] Encoding and decoding by SafeURL
-- [x] Encoding and decoding by Base85
-- [x] Encoding and decoding by Base91
-- [x] Encoding and decoding by Base100
-- [x] Encoding and decoding by Morse
-- [x] Encryption by Md2
-- [x] Encryption by Md4
-- [x] Encryption by Md5
-- [x] Encryption by Sha1
-- [x] Encryption by Sha3-224
-- [x] Encryption by Sha3-256
-- [x] Encryption by Sha3-384
-- [x] Encryption by Sha3-512
-- [x] Encryption by Sha224
-- [x] Encryption by Sha256
-- [x] Encryption by Sha384
-- [x] Encryption by Sha512
-- [x] Encryption by Sha512-224
-- [x] Encryption by Sha512-256
-- [x] Encryption by Shake128
-- [x] Encryption by Shake256
-- [x] Encryption by Ripemd160
-- [x] Encryption by Blake2b-256
-- [x] Encryption by Blake2b-384
-- [x] Encryption by Blake2b-512
-- [x] Encryption by Blake2s-256
-- [x] Encryption by Hmac-md2
-- [x] Encryption by Hmac-md4
-- [x] Encryption by Hmac-md5
-- [x] Encryption by Hmac-sha1
-- [x] Encryption by Hmac-sha3-224
-- [x] Encryption by Hmac-sha3-256
-- [x] Encryption by Hmac-sha3-384
-- [x] Encryption by Hmac-sha3-512
-- [x] Encryption by Hmac-sha224
-- [x] Encryption by Hmac-sha256
-- [x] Encryption by Hmac-sha384
-- [x] Encryption by Hmac-sha512
-- [x] Encryption by Hmac-sha512-224
-- [x] Encryption by Hmac-sha512-256
-- [x] Encryption by Hmac-ripemd160
-- [x] Encryption by Hmac-sm3
-- [ ] Encryption and decryption by Rc2
-- [x] Encryption and decryption by Rc4
-- [ ] Encryption and decryption by Rc5
-- [ ] Encryption and decryption by Rc6
-- [x] Encryption and decryption by Tea
-- [ ] Encryption and decryption by Xtea
-- [x] Encryption and decryption by Aes
-- [x] Encryption and decryption by Blowfish
-- [x] Encryption and decryption by Des
-- [x] Encryption and decryption by 3Des
-- [x] Encryption and decryption by Rsa
-- [ ] Encryption and decryption by Ecc
-- [ ] Encryption and decryption by Sm2
-- [x] Encryption by Sm3
-- [ ] Encryption and decryption by Sm4
-- [ ] Encryption and decryption by Sm7
-- [ ] Encryption and decryption by Sm9
-- [x] Sign and verify by Bcrypt
-- [x] Sign and verify by Ed25519
-- [x] Sign and verify by Rsa
-- [ ] Sign and verify by Dsa
-
 ### References
 
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
@@ -1337,14 +1276,6 @@ rsa: invalid public key, please make sure the public key is valid
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycrypto](https://github.com/pycrypto/pycrypto)
 
-### Online website
-
-* [tool.gouguoyin.com](https://tool.gouguoyin.com)
-* [www.ssleye.com](https://www.ssleye.com/ssltool)
-* [base62.js.org](https://base62.js.org)
-* [www.sojson.com](https://www.sojson.com/encrypt.html)
-* [tool.chacuo.net](http://tool.chacuo.net/cryptaes)
-* [www.oktools.net](https://oktools.net/aes)
 
 ### Sponsors
 
