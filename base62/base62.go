@@ -2,44 +2,46 @@
 package base62
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 )
 
 // An Encoding is a radix 62 encoding/decoding scheme, defined by a 62-character alphabet.
 type Encoding struct {
-	table     string
 	encode    [62]byte
 	decodeMap [256]byte
-}
-type Config struct {
-	Table string
+	Error     error
 }
 
-var StdTable = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+var InvalidAlphabetError = func() error {
+	return fmt.Errorf("base62: invalid alphabet, the alphabet length must be 62")
+}
 
-// newEncoding returns a new padded Encoding defined by the given alphabet,
+var StdAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+// NewEncoding returns a new padded Encoding defined by the given alphabet,
 // which must be a 62-byte string that does not contain the padding character
 // or CR / LF ('\r', '\n').
-func newEncoding(table string) *Encoding {
-	encoder := StdTable
-	if len(table) > 0 {
-		encoder = table
-	}
+func NewEncoding(alphabet string) *Encoding {
 	e := new(Encoding)
-	copy(e.encode[:], encoder)
+	if len(alphabet) != 62 {
+		e.Error = InvalidAlphabetError()
+		return e
+	}
+	copy(e.encode[:], alphabet)
 
 	for i := 0; i < len(e.decodeMap); i++ {
 		e.decodeMap[i] = 0xFF
 	}
-	for i := 0; i < len(encoder); i++ {
-		e.decodeMap[encoder[i]] = byte(i)
+	for i := 0; i < len(alphabet); i++ {
+		e.decodeMap[alphabet[i]] = byte(i)
 	}
 	return e
 }
 
 // StdEncoding is the standard base62 encoding.
-var StdEncoding = newEncoding(StdTable)
+var StdEncoding = NewEncoding(StdAlphabet)
 
 // Encode encodes src using the encoding enc.
 func (enc *Encoding) Encode(src []byte) []byte {

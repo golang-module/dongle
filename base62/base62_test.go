@@ -2,6 +2,8 @@ package base62
 
 import (
 	"bytes"
+	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -63,7 +65,7 @@ func TestDecodeError(t *testing.T) {
 
 func TestEncodeWithCustomAlphabet(t *testing.T) {
 	for _, s := range SamplesWithAlphabet {
-		encoded := newEncoding(s.alphabet).Encode([]byte(s.source))
+		encoded := NewEncoding(s.alphabet).Encode([]byte(s.source))
 		if bytes.Equal(encoded, s.targetBytes) {
 			t.Logf("source: %-15s\ttarget: %s", s.source, s.target)
 		} else {
@@ -75,7 +77,7 @@ func TestEncodeWithCustomAlphabet(t *testing.T) {
 
 func TestDecodeWithCustomAlphabet(t *testing.T) {
 	for _, s := range SamplesWithAlphabet {
-		decoded, err := newEncoding(s.alphabet).Decode(s.targetBytes)
+		decoded, err := NewEncoding(s.alphabet).Decode(s.targetBytes)
 		if err != nil {
 			t.Error(err)
 			continue
@@ -179,4 +181,11 @@ var SamplesErr = []*Sample{
 	NewSample("", "Hello, World!"),
 	NewSample("", "哈哈"),
 	NewSample("", "はは"),
+}
+
+func TestEncodeAlphabetErr(t *testing.T) {
+	alphabet := "xxxx"
+	enc := NewEncoding(alphabet)
+	fmt.Println(enc.Error)
+	assert.Equal(t, InvalidAlphabetError(), enc.Error)
 }
