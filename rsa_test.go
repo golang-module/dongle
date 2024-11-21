@@ -8,12 +8,12 @@ import (
 
 var (
 	rsaInput       = "hello world"
-	pkcs1PublicKey = `-----BEGIN RSA PUBLIC KEY-----
+	pkcs1PublicKey = []byte(`-----BEGIN RSA PUBLIC KEY-----
 MIGJAoGBAK12MTd84qkCZzp4iLUj8YSUglaFMsFlv9KlIL4+Xts40PK3+wbsXPEw
 cujGeUmdgMeZiK7SLLSz8QeE0v7Vs+cGK4Bs4qLtMGCiO6wEuyt10KsafTyBktFn
 dk/+gBLr7B/b+9+HaMIIoJUdsFksdAg3cxTSpwVApe98loFNRfqDAgMBAAE=
------END RSA PUBLIC KEY-----`
-	pkcs1PrivateKey = `-----BEGIN RSA PRIVATE KEY-----
+-----END RSA PUBLIC KEY-----`)
+	pkcs1PrivateKey = []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQCtdjE3fOKpAmc6eIi1I/GElIJWhTLBZb/SpSC+Pl7bONDyt/sG
 7FzxMHLoxnlJnYDHmYiu0iy0s/EHhNL+1bPnBiuAbOKi7TBgojusBLsrddCrGn08
 gZLRZ3ZP/oAS6+wf2/vfh2jCCKCVHbBZLHQIN3MU0qcFQKXvfJaBTUX6gwIDAQAB
@@ -27,14 +27,14 @@ Y7kdDwZoF/+SW+vzWMbvQf3CgzV/Ak2+TgrRrbyDVZkJw45HjM4fyiRgoQJBALH/
 /qlxgPyQQs3O/s2KQBsm1auAE5IF5MLuVUZ69sF/mBko2hEXSqHnGV645TuKU0pC
 Zz12ga9WO3z6gaK0SaECQQDah1pKt9ViBBy4USXK3OWXEloHuTwmyr9AbLqqI5tQ
 2eNuH0NkuJYQmnXmHLbKOELoYocldEBXmkzPXSN+X9kV
------END RSA PRIVATE KEY-----`
-	pkcs8PublicKey = `-----BEGIN PUBLIC KEY-----
+-----END RSA PRIVATE KEY-----`)
+	pkcs8PublicKey = []byte(`-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqzZNa9VrcewyU6wDoV7Y9kAHq
 X1VK0B3Rb6GNmQe4zLEfce7cVTaLrc4VGTKl35tADG1cRHqtaG4S/WttpiGZBhxJ
 y4MpOXb6eIPiVLsn2lL+rJo5XdbSr3gyjxEOQQ97ihtw4lDd5wMo4bIOuw1LtMez
 HC1outlM6x+/BB0BSQIDAQAB
------END PUBLIC KEY-----`
-	pkcs8PrivateKey = `-----BEGIN PRIVATE KEY-----
+-----END PUBLIC KEY-----`)
+	pkcs8PrivateKey = []byte(`-----BEGIN PRIVATE KEY-----
 MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKrNk1r1Wtx7DJTr
 AOhXtj2QAepfVUrQHdFvoY2ZB7jMsR9x7txVNoutzhUZMqXfm0AMbVxEeq1obhL9
 a22mIZkGHEnLgyk5dvp4g+JUuyfaUv6smjld1tKveDKPEQ5BD3uKG3DiUN3nAyjh
@@ -49,7 +49,7 @@ dHnxnpNkOxVPHEnnpEcVFbgrf5gjAkB7KmRI4VTiEfRgINhTJAG0VU7SH/N7+4cu
 fPzfA+7ywG5c8Fa79wOB0SoB1KeUjcSLo5Ssj2fwea1F9dAeU90LAkBJQFofveaD
 a3YlN4EQZOcCvJKmg7xwWuGxFVTZDVVEws7UCQbEOEEXZrNd9x0IF5kpPLR+rxua
 RPgUNaDGIh5o
------END PRIVATE KEY-----`
+-----END PRIVATE KEY-----`)
 )
 
 func TestRsa_EncryptWithPublicKy(t *testing.T) {
@@ -158,44 +158,50 @@ func TestRsa_Empty_Src(t *testing.T) {
 }
 
 func TestRsa_PublicKey_Error(t *testing.T) {
+	invalidRsaKey := []byte("xxxx")
 	invalidPublicKey := `-----BEGIN PUBLIC KEY-----
 xxxx
 -----END PUBLIC KEY-----`
 
-	e1 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte("xxxx"))
-	assert.Equal(t, invalidRsaPublicKeyError(), e1.Error)
-	e2 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(invalidPublicKey))
-	assert.Equal(t, invalidRsaPublicKeyError(), e2.Error)
+	rsaError, decodeError := NewRsaError(), NewDecodeError()
 
-	v1 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte("xxxx"), SHA1)
-	assert.Equal(t, invalidRsaPublicKeyError(), v1.Error)
+	e1 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa(invalidRsaKey)
+	assert.Equal(t, rsaError.PublicKeyError(), e1.Error)
+	e2 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(invalidPublicKey))
+	assert.Equal(t, rsaError.PublicKeyError(), e2.Error)
+
+	v1 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa(invalidRsaKey, SHA1)
+	assert.Equal(t, rsaError.PublicKeyError(), v1.Error)
 	v2 := Verify.FromRawBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa([]byte(invalidPublicKey), SHA224)
-	assert.Equal(t, invalidRsaPublicKeyError(), v2.Error)
+	assert.Equal(t, rsaError.PublicKeyError(), v2.Error)
 
 	v3 := Verify.FromHexString("xxxx", rsaInput).ByRsa(pkcs8PublicKey, SHA256)
-	assert.Equal(t, invalidDecodingError("hex"), v3.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), v3.Error)
 	v4 := Verify.FromHexBytes([]byte("xxxx"), []byte(rsaInput)).ByRsa(pkcs8PublicKey, SHA384)
-	assert.Equal(t, invalidDecodingError("hex"), v4.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), v4.Error)
 	v5 := Verify.FromBase64String("xxxxxx", rsaInput).ByRsa(pkcs8PublicKey, SHA512)
-	assert.Equal(t, invalidDecodingError("base64"), v5.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), v5.Error)
 	v6 := Verify.FromBase64Bytes([]byte("xxxxxx"), []byte(rsaInput)).ByRsa(pkcs8PublicKey, RIPEMD160)
-	assert.Equal(t, invalidDecodingError("base64"), v6.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), v6.Error)
 }
 
 func TestRsa_PrivateKey_Error(t *testing.T) {
-	invalidPrivateKey := `-----BEGIN PRIVATE KEY-----
+	invalidRsaKey := []byte("xxxx")
+	invalidPrivateKey := []byte(`-----BEGIN PRIVATE KEY-----
 xxxx
------END PRIVATE KEY-----`
+-----END PRIVATE KEY-----`)
 
-	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(pkcs1PublicKey))
+	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa(pkcs1PublicKey)
 
-	d1 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa([]byte("xxxx"))
-	assert.Equal(t, invalidRsaPrivateKeyError(), d1.Error)
-	d2 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa([]byte(invalidPrivateKey))
-	assert.Equal(t, invalidRsaPrivateKeyError(), d2.Error)
+	rsaError := NewRsaError()
 
-	s1 := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte("xxxx"), SHA1)
-	assert.Equal(t, invalidRsaPrivateKeyError(), s1.Error)
-	s2 := Sign.FromBytes([]byte(rsaInput)).ByRsa([]byte(invalidPrivateKey), SHA1)
-	assert.Equal(t, invalidRsaPrivateKeyError(), s2.Error)
+	d1 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa(invalidRsaKey)
+	assert.Equal(t, rsaError.PrivateKeyError(), d1.Error)
+	d2 := Decrypt.FromBase64Bytes(e.ToBase64Bytes()).ByRsa(invalidPrivateKey)
+	assert.Equal(t, rsaError.PrivateKeyError(), d2.Error)
+
+	s1 := Sign.FromBytes([]byte(rsaInput)).ByRsa(invalidRsaKey, SHA1)
+	assert.Equal(t, rsaError.PrivateKeyError(), s1.Error)
+	s2 := Sign.FromBytes([]byte(rsaInput)).ByRsa(invalidPrivateKey, SHA1)
+	assert.Equal(t, rsaError.PrivateKeyError(), s2.Error)
 }
