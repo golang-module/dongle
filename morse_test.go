@@ -23,7 +23,6 @@ var morseTests = []struct {
 func TestMorse_Encode_String(t *testing.T) {
 	for index, test := range morseTests {
 		e := Encode.FromString(test.input).ByMorse(test.separator)
-
 		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, test.output, e.ToString())
@@ -34,7 +33,6 @@ func TestMorse_Encode_String(t *testing.T) {
 func TestMorse_Decode_String(t *testing.T) {
 	for index, test := range morseTests {
 		d := Decode.FromString(test.output).ByMorse(test.separator)
-
 		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
 			assert.Nil(t, d.Error)
 			assert.Equal(t, strings.ToLower(test.input), d.ToString())
@@ -45,7 +43,6 @@ func TestMorse_Decode_String(t *testing.T) {
 func TestMorse_Encode_Bytes(t *testing.T) {
 	for index, test := range morseTests {
 		e := Encode.FromBytes([]byte(test.input)).ByMorse(test.separator)
-
 		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
 			assert.Equal(t, []byte(test.output), e.ToBytes())
@@ -56,7 +53,6 @@ func TestMorse_Encode_Bytes(t *testing.T) {
 func TestMorse_Decode_Bytes(t *testing.T) {
 	for index, test := range morseTests {
 		d := Decode.FromBytes([]byte(test.output)).ByMorse(test.separator)
-
 		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
 			assert.Nil(t, d.Error)
 			assert.Equal(t, []byte(strings.ToLower(test.input)), d.ToBytes())
@@ -66,10 +62,10 @@ func TestMorse_Decode_Bytes(t *testing.T) {
 
 func TestMorse_Src_Error(t *testing.T) {
 	e := Encode.FromString("hello world").ByMorse()
-	assert.Equal(t, invalidMorseSrcError(), e.Error)
+	assert.Equal(t, NewMorseError().SrcError(), e.Error)
 }
 
 func TestMorse_Decoding_Error(t *testing.T) {
 	e := Decode.FromString("hello world").ByMorse()
-	assert.Equal(t, morseDecodingError(), e.Error)
+	assert.Equal(t, NewMorseError().DecodeError(), e.Error)
 }

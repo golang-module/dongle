@@ -2,6 +2,7 @@ package dongle
 
 import (
 	"fmt"
+	"github.com/dromara/dongle/base62"
 	"strconv"
 	"testing"
 
@@ -206,22 +207,23 @@ func TestBaseX_Decode_Bytes(t *testing.T) {
 }
 
 func TestBaseX_Decoding_Error(t *testing.T) {
+	err := NewDecodeError()
 	tests := []struct {
 		algo  string // 算法
 		input string // 输入值
 		error error  // 期望值
 	}{
-		{"hex", "xxxxxx", invalidDecodingError("hex")},
-		{"base16", "xxxxxx", invalidDecodingError("base16")},
-		{"base32", "xxxxxx", invalidDecodingError("base32")},
-		{"base62", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidDecodingError("base62")},
-		{"base64", "xxxxxx", invalidDecodingError("base64")},
-		{"base64URL", "xxxxxx", invalidDecodingError("base64URL")},
-		{"base85", "xxxxxx", invalidDecodingError("base85")},
-		{"base91", "'", invalidDecodingError("base91")},
-		{"base91", "-", invalidDecodingError("base91")},
-		{"base100", "\\", invalidDecodingError("base100")},
-		{"base100", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", invalidDecodingError("base100")},
+		{"hex", "xxxxxx", err.ModeError("hex")},
+		{"base16", "xxxxxx", err.ModeError("base16")},
+		{"base32", "xxxxxx", err.ModeError("base32")},
+		{"base62", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", err.ModeError("base62")},
+		{"base64", "xxxxxx", err.ModeError("base64")},
+		{"base64URL", "xxxxxx", err.ModeError("base64URL")},
+		{"base85", "xxxxxx", err.ModeError("base85")},
+		{"base91", "'", err.ModeError("base91")},
+		{"base91", "-", err.ModeError("base91")},
+		{"base100", "\\", err.ModeError("base100")},
+		{"base100", "~_1H=x_t{ |$AjJX(nMFdjL~:?1b3HgM", err.ModeError("base100")},
 	}
 
 	for index, test := range tests {
@@ -262,11 +264,32 @@ func TestBaseX_Decoding_Error(t *testing.T) {
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_d1_test_%d", index), func(t *testing.T) {
-			assert.Equal(t, invalidDecodingError(test.algo), d1.Error)
+			assert.Equal(t, err.ModeError(test.algo), d1.Error)
 		})
 
 		t.Run(fmt.Sprintf(test.algo+"_d2_test_%d", index), func(t *testing.T) {
-			assert.Equal(t, invalidDecodingError(test.algo), d2.Error)
+			assert.Equal(t, err.ModeError(test.algo), d2.Error)
 		})
 	}
+}
+
+func TestBase62_Encode_Alphabet(t *testing.T) {
+	alphabet := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	enc := Encode.FromString("Hello, World!").ByBase62(alphabet)
+	assert.Equal(t, "B6Tp195nl3heYvetep", enc.ToString())
+}
+
+func TestBase62_Decode_Alphabet(t *testing.T) {
+	alphabet := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	enc := Decode.FromString("B6Tp195nl3heYvetep").ByBase62(alphabet)
+	assert.Equal(t, "Hello, World!", enc.ToString())
+}
+
+func TestBase62_Alphabet_Error(t *testing.T) {
+	alphabet := "xxxx"
+	enc := Encode.FromString("Hello, World!").ByBase62(alphabet)
+	assert.Equal(t, base62.InvalidAlphabetError(), enc.Error)
+
+	dec := Decode.FromString("B6Tp195nl3heYvetep").ByBase62(alphabet)
+	assert.Equal(t, base62.InvalidAlphabetError(), dec.Error)
 }

@@ -2,14 +2,30 @@ package dongle
 
 import (
 	"crypto/ed25519"
+	"fmt"
 )
 
-// defines encoding mode enum type.
-// 定义编码模式枚举类型
 type encodingMode string
 
-// encoding mode constants
-// 编码模式枚举值
+type Ed25519Error struct {
+}
+
+func NewEd25519Error() Ed25519Error {
+	return Ed25519Error{}
+}
+
+func (e Ed25519Error) PrivateKeyError() error {
+	return fmt.Errorf("ed25519: invalid private key, please make sure the private key is valid")
+}
+
+func (e Ed25519Error) PublicKeyError() error {
+	return fmt.Errorf("ed25519: invalid public key, please make sure the public key is valid")
+}
+
+func (e Ed25519Error) SignatureError() error {
+	return fmt.Errorf("ed25519: invalid signature, please make sure the signature is valid")
+}
+
 const (
 	Raw    encodingMode = "raw"
 	Hex    encodingMode = "hex"
@@ -17,18 +33,18 @@ const (
 )
 
 // ByEd25519 signs by ed25519.
-// 通过 ed25519 私钥签名
-func (s Signer) ByEd25519(privateKey interface{}, mode encodingMode) Signer {
+func (s Signer) ByEd25519(privateKey []byte, mode encodingMode) Signer {
 	if len(s.src) == 0 || s.Error != nil {
 		return s
 	}
-	pri, err := mode.getDecodedKey(interface2bytes(privateKey))
+	pri, err := mode.getDecodedKey(privateKey)
 	if err != nil {
 		s.Error = err
 		return s
 	}
+	ed25519Error := NewEd25519Error()
 	if len(pri) != ed25519.PrivateKeySize {
-		s.Error = invalidEd25519PrivateKeyError()
+		s.Error = ed25519Error.PrivateKeyError()
 		return s
 	}
 	s.dst = ed25519.Sign(pri, s.src)
@@ -36,29 +52,28 @@ func (s Signer) ByEd25519(privateKey interface{}, mode encodingMode) Signer {
 }
 
 // ByEd25519 verify by ed25519.
-// 通过 ed25519 公钥验签
-func (v Verifier) ByEd25519(publicKey interface{}, mode encodingMode) Verifier {
+func (v Verifier) ByEd25519(publicKey []byte, mode encodingMode) Verifier {
 	if len(v.src) == 0 || v.Error != nil {
 		return v
 	}
-	pub, err := mode.getDecodedKey(interface2bytes(publicKey))
+	pub, err := mode.getDecodedKey(publicKey)
 	if err != nil {
 		v.Error = err
 		return v
 	}
+	ed25519Error := NewEd25519Error()
 	if len(pub) != ed25519.PublicKeySize {
-		v.Error = invalidEd25519PublicKeyError()
+		v.Error = ed25519Error.PublicKeyError()
 		return v
 	}
 	if ed25519.Verify(pub, v.src, v.sign) == false {
-		v.Error = invalidEd25519SignatureError()
+		v.Error = ed25519Error.SignatureError()
 		return v
 	}
 	return v
 }
 
 // gets the decoded key
-// 获取经过解码的 密钥
 func (mode encodingMode) getDecodedKey(key []byte) (dst []byte, err error) {
 	var decode Decoder
 	switch mode {

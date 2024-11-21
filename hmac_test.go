@@ -65,41 +65,42 @@ var hmacTests = []struct {
 
 func TestHmac_Encrypt_String(t *testing.T) {
 	for index, test := range hmacTests {
+		key := []byte(test.key)
 		e := Encrypt.FromString(test.input)
 
 		switch test.algo {
 		case "md2":
-			e = e.ByHmacMd2(test.key)
+			e = e.ByHmacMd2(key)
 		case "md4":
-			e = e.ByHmacMd4(test.key)
+			e = e.ByHmacMd4(key)
 		case "md5":
-			e = e.ByHmacMd5(test.key)
+			e = e.ByHmacMd5(key)
 		case "sha1":
-			e = e.ByHmacSha1(test.key)
+			e = e.ByHmacSha1(key)
 		case "sha3-224":
-			e = e.ByHmacSha3(test.key, 224)
+			e = e.ByHmacSha3(key, 224)
 		case "sha3-256":
-			e = e.ByHmacSha3(test.key, 256)
+			e = e.ByHmacSha3(key, 256)
 		case "sha3-384":
-			e = e.ByHmacSha3(test.key, 384)
+			e = e.ByHmacSha3(key, 384)
 		case "sha3-512":
-			e = e.ByHmacSha3(test.key, 512)
+			e = e.ByHmacSha3(key, 512)
 		case "sha224":
-			e = e.ByHmacSha224(test.key)
+			e = e.ByHmacSha224(key)
 		case "sha256":
-			e = e.ByHmacSha256(test.key)
+			e = e.ByHmacSha256(key)
 		case "sha384":
-			e = e.ByHmacSha384(test.key)
+			e = e.ByHmacSha384(key)
 		case "sha512":
-			e = e.ByHmacSha512(test.key)
+			e = e.ByHmacSha512(key)
 		case "sha512-224":
-			e = e.ByHmacSha512(test.key, 224)
+			e = e.ByHmacSha512(key, 224)
 		case "sha512-256":
-			e = e.ByHmacSha512(test.key, 256)
+			e = e.ByHmacSha512(key, 256)
 		case "ripemd160":
-			e = e.ByHmacRipemd160(test.key)
+			e = e.ByHmacRipemd160(key)
 		case "sm3":
-			e = e.ByHmacSm3(test.key)
+			e = e.ByHmacSm3(key)
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
@@ -113,41 +114,43 @@ func TestHmac_Encrypt_String(t *testing.T) {
 
 func TestHmac_Encrypt_Bytes(t *testing.T) {
 	for index, test := range hmacTests {
-		e := Encrypt.FromBytes([]byte(test.input)).ByHmacMd4([]byte(test.key))
+		key := []byte(test.key)
+
+		e := Encrypt.FromBytes([]byte(test.input)).ByHmacMd4(key)
 
 		switch test.algo {
 		case "md2":
-			e = e.ByHmacMd2([]byte(test.key))
+			e = e.ByHmacMd2(key)
 		case "md4":
-			e = e.ByHmacMd4([]byte(test.key))
+			e = e.ByHmacMd4(key)
 		case "md5":
-			e = e.ByHmacMd5([]byte(test.key))
+			e = e.ByHmacMd5(key)
 		case "sha1":
-			e = e.ByHmacSha1([]byte(test.key))
+			e = e.ByHmacSha1(key)
 		case "sha3-224":
-			e = e.ByHmacSha3([]byte(test.key), 224)
+			e = e.ByHmacSha3(key, 224)
 		case "sha3-256":
-			e = e.ByHmacSha3([]byte(test.key), 256)
+			e = e.ByHmacSha3(key, 256)
 		case "sha3-384":
-			e = e.ByHmacSha3([]byte(test.key), 384)
+			e = e.ByHmacSha3(key, 384)
 		case "sha3-512":
-			e = e.ByHmacSha3([]byte(test.key), 512)
+			e = e.ByHmacSha3(key, 512)
 		case "sha224":
-			e = e.ByHmacSha224([]byte(test.key))
+			e = e.ByHmacSha224(key)
 		case "sha256":
-			e = e.ByHmacSha256([]byte(test.key))
+			e = e.ByHmacSha256(key)
 		case "sha384":
-			e = e.ByHmacSha384([]byte(test.key))
+			e = e.ByHmacSha384(key)
 		case "sha512":
-			e = e.ByHmacSha512([]byte(test.key))
+			e = e.ByHmacSha512(key)
 		case "sha512-224":
-			e = e.ByHmacSha512([]byte(test.key), 224)
+			e = e.ByHmacSha512(key, 224)
 		case "sha512-256":
-			e = e.ByHmacSha512([]byte(test.key), 256)
+			e = e.ByHmacSha512(key, 256)
 		case "ripemd160":
-			e = e.ByHmacRipemd160([]byte(test.key))
+			e = e.ByHmacRipemd160(key)
 		case "sm3":
-			e = e.ByHmacSm3([]byte(test.key))
+			e = e.ByHmacSm3(key)
 		}
 
 		t.Run(fmt.Sprintf(test.algo+"_test_%d", index), func(t *testing.T) {
@@ -159,13 +162,16 @@ func TestHmac_Encrypt_Bytes(t *testing.T) {
 }
 
 func TestHmac_Size_Error(t *testing.T) {
-	e1 := Encrypt.FromString("hello world").ByHmacSha3("dongle", 100)
-	assert.Equal(t, invalidHashSizeError(), e1.Error)
-	e2 := Encrypt.FromBytes([]byte("hello world")).ByHmacSha3([]byte("dongle"), 100)
-	assert.Equal(t, invalidHashSizeError(), e2.Error)
+	err := NewHmacError()
+	key := []byte("dongle")
 
-	e3 := Encrypt.FromString("hello world").ByHmacSha512("dongle", 100)
-	assert.Equal(t, invalidHashSizeError(), e3.Error)
-	e4 := Encrypt.FromBytes([]byte("hello world")).ByHmacSha512([]byte("dongle"), 100)
-	assert.Equal(t, invalidHashSizeError(), e4.Error)
+	e1 := Encrypt.FromString("hello world").ByHmacSha3(key, 100)
+	assert.Equal(t, err.SizeError(), e1.Error)
+	e2 := Encrypt.FromBytes([]byte("hello world")).ByHmacSha3(key, 100)
+	assert.Equal(t, err.SizeError(), e2.Error)
+
+	e3 := Encrypt.FromString("hello world").ByHmacSha512(key, 100)
+	assert.Equal(t, err.SizeError(), e3.Error)
+	e4 := Encrypt.FromBytes([]byte("hello world")).ByHmacSha512(key, 100)
+	assert.Equal(t, err.SizeError(), e4.Error)
 }

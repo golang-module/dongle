@@ -1,11 +1,27 @@
 package dongle
 
 import (
-	"github.com/golang-module/dongle/morse"
+	"fmt"
+
+	"github.com/dromara/dongle/morse"
 )
 
+type MorseError struct {
+}
+
+func NewMorseError() MorseError {
+	return MorseError{}
+}
+
+func (e MorseError) SrcError() error {
+	return fmt.Errorf("morse: invalid src, the src can't contain spaces")
+}
+
+func (e MorseError) DecodeError() error {
+	return fmt.Errorf("morse: failed to decode src")
+}
+
 // ByMorse encodes by morse.
-// 通过 morse 编码
 func (e Encoder) ByMorse(separator ...string) Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -15,7 +31,8 @@ func (e Encoder) ByMorse(separator ...string) Encoder {
 	}
 	dst, err := morse.Encode(e.src, separator[0])
 	if err != nil {
-		e.Error = invalidMorseSrcError()
+		morseError := MorseError{}
+		e.Error = morseError.SrcError()
 		return e
 	}
 	e.dst = string2bytes(dst)
@@ -23,7 +40,6 @@ func (e Encoder) ByMorse(separator ...string) Encoder {
 }
 
 // ByMorse decodes by morse.
-// 通过 morse 解码
 func (d Decoder) ByMorse(separator ...string) Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -33,7 +49,8 @@ func (d Decoder) ByMorse(separator ...string) Decoder {
 	}
 	dst, err := morse.Decode(d.src, separator[0])
 	if err != nil {
-		d.Error = morseDecodingError()
+		morseError := MorseError{}
+		d.Error = morseError.DecodeError()
 		return d
 	}
 	d.dst = string2bytes(dst)

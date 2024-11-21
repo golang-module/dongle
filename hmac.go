@@ -6,66 +6,73 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
+	"fmt"
 	"hash"
 
+	"github.com/dromara/dongle/md2"
 	"github.com/emmansun/gmsm/sm3"
-	"github.com/golang-module/dongle/md2"
 	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
 )
 
+type HmacError struct {
+}
+
+func NewHmacError() HmacError {
+	return HmacError{}
+}
+
+func (e HmacError) SizeError() error {
+	return fmt.Errorf("hmac: invalid size, the size is unsupported")
+}
+
 // ByHmacMd2 encrypts by hmac with md2.
-// 通过 hmac-md2 加密
-func (e Encrypter) ByHmacMd2(key interface{}) Encrypter {
+func (e Encrypter) ByHmacMd2(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(md2.New, interface2bytes(key))
+	h := hmac.New(md2.New, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacMd4 encrypts by hmac with md4.
-// 通过 hmac-md4 加密
-func (e Encrypter) ByHmacMd4(key interface{}) Encrypter {
+func (e Encrypter) ByHmacMd4(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(md4.New, interface2bytes(key))
+	h := hmac.New(md4.New, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacMd5 encrypts by hmac with md5.
-// 通过 hmac-md5 加密
-func (e Encrypter) ByHmacMd5(key interface{}) Encrypter {
+func (e Encrypter) ByHmacMd5(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(md5.New, interface2bytes(key))
+	h := hmac.New(md5.New, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacSha1 encrypts by hmac with sha1.
-// 通过 hmac-sha1 加密
-func (e Encrypter) ByHmacSha1(key interface{}) Encrypter {
+func (e Encrypter) ByHmacSha1(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(sha1.New, interface2bytes(key))
+	h := hmac.New(sha1.New, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacSha3 encrypts by hmac with sha3.
-// 通过 hmac-sha3 加密
-func (e Encrypter) ByHmacSha3(key interface{}, size int) Encrypter {
+func (e Encrypter) ByHmacSha3(key []byte, size int) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
@@ -80,54 +87,51 @@ func (e Encrypter) ByHmacSha3(key interface{}, size int) Encrypter {
 	case 512:
 		f = sha3.New512
 	default:
-		e.Error = invalidHashSizeError()
+		hmacError := HmacError{}
+		e.Error = hmacError.SizeError()
 		return e
 	}
-	h := hmac.New(f, interface2bytes(key))
+	h := hmac.New(f, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacSha224 encrypts by hmac with sha224.
-// 通过 hmac-sha224 加密
-func (e Encrypter) ByHmacSha224(key interface{}) Encrypter {
+func (e Encrypter) ByHmacSha224(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(sha256.New224, interface2bytes(key))
+	h := hmac.New(sha256.New224, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacSha256 encrypts by hmac with sha256.
-// 通过 hmac-sha256 加密
-func (e Encrypter) ByHmacSha256(key interface{}) Encrypter {
+func (e Encrypter) ByHmacSha256(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(sha256.New, interface2bytes(key))
+	h := hmac.New(sha256.New, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacSha384 encrypts by hmac with sha384.
-// 通过 hmac-sha384 加密
-func (e Encrypter) ByHmacSha384(key interface{}) Encrypter {
+func (e Encrypter) ByHmacSha384(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(sha512.New384, interface2bytes(key))
+	h := hmac.New(sha512.New384, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacSha512 encrypts by hmac with sha512.
-// 通过 hmac-sha512 加密
-func (e Encrypter) ByHmacSha512(key interface{}, size ...int) Encrypter {
+func (e Encrypter) ByHmacSha512(key []byte, size ...int) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
@@ -143,34 +147,33 @@ func (e Encrypter) ByHmacSha512(key interface{}, size ...int) Encrypter {
 	case 256:
 		f = sha512.New512_256
 	default:
-		e.Error = invalidHashSizeError()
+		hmacError := HmacError{}
+		e.Error = hmacError.SizeError()
 		return e
 	}
-	h := hmac.New(f, interface2bytes(key))
+	h := hmac.New(f, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacRipemd160 encrypts by hmac with ripemd160.
-// 通过 hmac-ripemd160 加密
-func (e Encrypter) ByHmacRipemd160(key interface{}) Encrypter {
+func (e Encrypter) ByHmacRipemd160(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(ripemd160.New, interface2bytes(key))
+	h := hmac.New(ripemd160.New, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
 }
 
 // ByHmacSm3 encrypts by hmac with sm3.
-// 通过 hmac-sm3 加密
-func (e Encrypter) ByHmacSm3(key interface{}) Encrypter {
+func (e Encrypter) ByHmacSm3(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	h := hmac.New(sm3.New, interface2bytes(key))
+	h := hmac.New(sm3.New, key)
 	h.Write(e.src)
 	e.dst = h.Sum(nil)
 	return e
