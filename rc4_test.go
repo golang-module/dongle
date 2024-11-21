@@ -2,8 +2,9 @@ package dongle
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var rc4Tests = []struct {
@@ -18,7 +19,7 @@ var rc4Tests = []struct {
 
 func TestRc4_Encrypt_String(t *testing.T) {
 	for index, test := range rc4Tests {
-		e := Encrypt.FromString(test.input).ByRc4(test.key)
+		e := Encrypt.FromString(test.input).ByRc4([]byte(test.key))
 
 		t.Run(fmt.Sprintf("test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -30,7 +31,7 @@ func TestRc4_Encrypt_String(t *testing.T) {
 
 func TestRc4_Decrypt_String(t *testing.T) {
 	for index, test := range rc4Tests {
-		d1 := Decrypt.FromHexString(test.toHex).ByRc4(test.key)
+		d1 := Decrypt.FromHexString(test.toHex).ByRc4([]byte(test.key))
 
 		t.Run(fmt.Sprintf("test_hex_%d", index), func(t *testing.T) {
 			assert.Nil(t, d1.Error)
@@ -38,7 +39,7 @@ func TestRc4_Decrypt_String(t *testing.T) {
 		})
 
 		t.Run(fmt.Sprintf("test_base64_%d", index), func(t *testing.T) {
-			d := Decrypt.FromBase64String(test.toBase64).ByRc4(test.key)
+			d := Decrypt.FromBase64String(test.toBase64).ByRc4([]byte(test.key))
 			assert.Nil(t, d.Error)
 			assert.Equal(t, test.input, d.ToString())
 		})
@@ -74,9 +75,12 @@ func TestRc4_Decrypt_Bytes(t *testing.T) {
 }
 
 func TestRc4_Key_Error(t *testing.T) {
-	e := Encrypt.FromString("hello go").ByRc4("")
-	assert.Equal(t, invalidRc4KeyError(), e.Error)
+	key := []byte("")
+	err := NewRc4Error()
 
-	d := Decrypt.FromRawString("hello go").ByRc4("")
-	assert.Equal(t, invalidRc4KeyError(), d.Error)
+	e := Encrypt.FromString("hello go").ByRc4(key)
+	assert.Equal(t, err.KeyError(), e.Error)
+
+	d := Decrypt.FromRawString("hello go").ByRc4(key)
+	assert.Equal(t, err.KeyError(), d.Error)
 }

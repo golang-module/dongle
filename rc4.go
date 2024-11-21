@@ -2,17 +2,29 @@ package dongle
 
 import (
 	"crypto/rc4"
+	"fmt"
 )
 
+type Rc4Error struct {
+}
+
+func NewRc4Error() Rc4Error {
+	return Rc4Error{}
+}
+
+func (e Rc4Error) KeyError() error {
+	return fmt.Errorf("rc4: invalid key, the key at least 1 byte and at most 256 bytes")
+}
+
 // ByRc4 encrypts by rc4.
-// 通过 rc4 加密
-func (e Encrypter) ByRc4(key interface{}) Encrypter {
+func (e Encrypter) ByRc4(key []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	cipher, err := rc4.NewCipher(interface2bytes(key))
+	rc4Error := Rc4Error{}
+	cipher, err := rc4.NewCipher(key)
 	if err != nil {
-		e.Error = invalidRc4KeyError()
+		e.Error = rc4Error.KeyError()
 		return e
 	}
 	dst := make([]byte, len(e.src))
@@ -22,14 +34,14 @@ func (e Encrypter) ByRc4(key interface{}) Encrypter {
 }
 
 // ByRc4 decrypts by rc4.
-// 通过 rc4 解密
-func (d Decrypter) ByRc4(key interface{}) Decrypter {
+func (d Decrypter) ByRc4(key []byte) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
-	cipher, err := rc4.NewCipher(interface2bytes(key))
+	rc4Error := Rc4Error{}
+	cipher, err := rc4.NewCipher(key)
 	if err != nil {
-		d.Error = invalidRc4KeyError()
+		d.Error = rc4Error.KeyError()
 		return d
 	}
 	dst := make([]byte, len(d.src))
