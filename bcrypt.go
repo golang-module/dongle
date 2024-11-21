@@ -1,11 +1,23 @@
 package dongle
 
 import (
+	"fmt"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
+type BcryptError struct {
+}
+
+func NewBcryptError() BcryptError {
+	return BcryptError{}
+}
+
+func (e BcryptError) RoundsError() error {
+	return fmt.Errorf("bcrypt: invalid rounds, the rounds at least 4 and at most 31")
+}
+
 // ByBcrypt signs by bcrypt.
-// 通过 bcrypt 签名
 func (s Signer) ByBcrypt(rounds ...int) Signer {
 	if len(s.src) == 0 || s.Error != nil {
 		return s
@@ -16,7 +28,7 @@ func (s Signer) ByBcrypt(rounds ...int) Signer {
 	}
 	dst, err := bcrypt.GenerateFromPassword(s.src, rounds[0])
 	if rounds[0] < 4 || rounds[0] > 31 || err != nil {
-		s.Error = invalidBcryptRoundsError()
+		s.Error = NewBcryptError().RoundsError()
 		return s
 	}
 	s.dst = dst
@@ -24,11 +36,10 @@ func (s Signer) ByBcrypt(rounds ...int) Signer {
 }
 
 // ByBcrypt verify by bcrypt.
-// 通过 bcrypt 验签
 func (v Verifier) ByBcrypt() Verifier {
 	if len(v.src) == 0 || v.Error != nil {
 		return v
 	}
-	v.Error = bcrypt.CompareHashAndPassword(interface2bytes(v.sign), v.src)
+	v.Error = bcrypt.CompareHashAndPassword(v.sign, v.src)
 	return v
 }

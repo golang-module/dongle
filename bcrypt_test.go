@@ -37,5 +37,5 @@ func TestBcrypt_Bytes(t *testing.T) {
 
 func TestBcrypt_Rounds_Error(t *testing.T) {
 	s := Sign.FromString("hello world").ByBcrypt(1)
-	assert.Equal(t, invalidBcryptRoundsError(), s.Error)
+	assert.Equal(t, NewBcryptError().RoundsError(), s.Error)
 }
