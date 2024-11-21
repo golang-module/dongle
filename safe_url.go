@@ -5,7 +5,6 @@ import (
 )
 
 // BySafeURL encodes as safe url.
-// 对 URL 进行转义编码
 func (e Encoder) BySafeURL() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -15,7 +14,6 @@ func (e Encoder) BySafeURL() Encoder {
 }
 
 // BySafeURL decodes as safe url.
-// 对 URL 进行转义解码
 func (d Decoder) BySafeURL() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
