@@ -11,7 +11,7 @@ English | [简体中文](README.cn.md)
 
 ### Introduction
 
-A simple, semantic and developer-friendly `golang` package for encryption algorithms, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
+A simple, semantic and developer-friendly `golang` crypto package, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
 
 ### Repository
 
