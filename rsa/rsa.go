@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/golang-module/dongle/openssl"
+	"github.com/dromara/dongle/openssl"
 )
 
 var (
