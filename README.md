@@ -11,7 +11,7 @@ English | [简体中文](README.cn.md)
 
 ### Introduction
 
-A simple, semantic and developer-friendly `golang` crypto package, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
+A simple, semantic and developer-friendly `golang` package for encryption algorithms, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
 
 ### Repository
 
@@ -737,8 +737,10 @@ dongle.Encrypt.FromBytes([]byte("hello world")).ByHmacSm3().ToBase64Bytes() // [
 cipher := dongle.NewCipher()
 cipher.SetMode(dongle.CBC) // CBC、CFB、OFB、CTR、ECB
 cipher.SetPadding(dongle.PKCS7) // No、Empty、Zero、PKCS5、PKCS7、AnsiX923、ISO97971
-cipher.SetKey([]byte("0123456789abcdef")) // key must be 16, 24 or 32 bytes
-cipher.SetIV([]byte("0123456789abcdef")) // iv must be 16 bytes (ECB mode doesn't require setting iv)
+cipher.SetKey("0123456789abcdef") // key must be 16, 24 or 32 bytes
+// cipher.WithKey([]byte("0123456789abcdef")) 
+cipher.SetIV("0123456789abcdef") // iv must be 16 bytes (ECB mode doesn't require setting iv)
+// cipher.WithIV([]byte("0123456789abcdef"))
 
 // Encrypt by aes from string and output raw string
 rawString := dongle.Encrypt.FromString("hello world").ByAes(cipher).ToRawString()
