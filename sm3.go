@@ -5,7 +5,6 @@ import (
 )
 
 // BySm3 encrypts by sm3.
-// 通过 sm3 加密
 func (e Encrypter) BySm3() Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
