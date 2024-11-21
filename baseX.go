@@ -14,7 +14,6 @@ import (
 )
 
 // ByHex encodes by hex.
-// 通过 hex 编码
 func (e Encoder) ByHex() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -26,7 +25,6 @@ func (e Encoder) ByHex() Encoder {
 }
 
 // ByHex decodes by hex.
-// 通过 hex 解码
 func (d Decoder) ByHex() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -37,30 +35,27 @@ func (d Decoder) ByHex() Decoder {
 		d.dst = buf
 	}
 	if err != nil {
-		d.Error = invalidDecodingError("hex")
+		d.Error = NewDecodeError().ModeError("hex")
 		return d
 	}
 	return d
 }
 
 // ByBase16 encodes by base16.
-// 通过 base16 编码
 func (e Encoder) ByBase16() Encoder {
 	return e.ByHex()
 }
 
 // ByBase16 decodes by base16.
-// 通过 base16 解码
 func (d Decoder) ByBase16() Decoder {
 	if d.ByHex().Error != nil {
-		d.Error = invalidDecodingError("base16")
+		d.Error = NewDecodeError().ModeError("base16")
 		return d
 	}
 	return d.ByHex()
 }
 
 // ByBase32 encodes by base32.
-// 通过 base32 编码
 func (e Encoder) ByBase32() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -72,7 +67,6 @@ func (e Encoder) ByBase32() Encoder {
 }
 
 // ByBase32 decodes by base32.
-// 通过 base32 解码
 func (d Decoder) ByBase32() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -80,7 +74,7 @@ func (d Decoder) ByBase32() Decoder {
 	buf := make([]byte, base32.StdEncoding.DecodedLen(len(d.src)))
 	n, err := base32.StdEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidDecodingError("base32")
+		d.Error = NewDecodeError().ModeError("base32")
 		return d
 	}
 	d.dst, d.Error = buf[:n], err
@@ -88,7 +82,6 @@ func (d Decoder) ByBase32() Decoder {
 }
 
 // ByBase45 encodes by base45.
-// 通过 base45 编码
 func (e Encoder) ByBase45() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -99,7 +92,6 @@ func (e Encoder) ByBase45() Encoder {
 }
 
 // ByBase45 decodes by base45.
-// 通过 base45 解码
 func (d Decoder) ByBase45() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -110,7 +102,6 @@ func (d Decoder) ByBase45() Decoder {
 }
 
 // ByBase58 encodes by base58.
-// 通过 base58 编码
 func (e Encoder) ByBase58() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -120,7 +111,6 @@ func (e Encoder) ByBase58() Encoder {
 }
 
 // ByBase58 decodes by base58.
-// 通过 base58 解码
 func (d Decoder) ByBase58() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -129,32 +119,47 @@ func (d Decoder) ByBase58() Decoder {
 	return d
 }
 
-// ByBase62 encodes by base91.
-// 通过 base62 编码
-func (e Encoder) ByBase62() Encoder {
+// ByBase62 encodes by base62.
+func (e Encoder) ByBase62(alphabet ...string) Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	e.dst = base62.StdEncoding.Encode(e.src)
+	table := base62.StdAlphabet
+	if len(alphabet) > 0 {
+		table = alphabet[0]
+	}
+	enc := base62.NewEncoding(table)
+	if enc.Error != nil {
+		e.Error = enc.Error
+		return e
+	}
+	e.dst = base62.NewEncoding(table).Encode(e.src)
 	return e
 }
 
-// ByBase62 decodes by base91.
-// 通过 base62 解码
-func (d Decoder) ByBase62() Decoder {
+// ByBase62 decodes by base62.
+func (d Decoder) ByBase62(alphabet ...string) Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
-	d.dst, d.Error = base62.StdEncoding.Decode(d.src)
+	table := base62.StdAlphabet
+	if len(alphabet) > 0 {
+		table = alphabet[0]
+	}
+	enc := base62.NewEncoding(table)
+	if enc.Error != nil {
+		d.Error = enc.Error
+		return d
+	}
+	d.dst, d.Error = base62.NewEncoding(table).Decode(d.src)
 	if d.Error != nil {
-		d.Error = invalidDecodingError("base62")
+		d.Error = NewDecodeError().ModeError("base62")
 		return d
 	}
 	return d
 }
 
 // ByBase64 encodes by base64.
-// 通过 base64 编码
 func (e Encoder) ByBase64() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -166,7 +171,6 @@ func (e Encoder) ByBase64() Encoder {
 }
 
 // ByBase64 decodes by base64.
-// 通过 base64 解码
 func (d Decoder) ByBase64() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -174,7 +178,7 @@ func (d Decoder) ByBase64() Decoder {
 	buf := make([]byte, base64.StdEncoding.DecodedLen(len(d.src)))
 	n, err := base64.StdEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidDecodingError("base64")
+		d.Error = NewDecodeError().ModeError("base64")
 		return d
 	}
 	d.dst = buf[:n]
@@ -182,7 +186,6 @@ func (d Decoder) ByBase64() Decoder {
 }
 
 // ByBase64URL encodes by base64 for url.
-// 通过 base64 对 url 编码
 func (e Encoder) ByBase64URL() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -194,7 +197,6 @@ func (e Encoder) ByBase64URL() Encoder {
 }
 
 // ByBase64URL decodes by base64 for url.
-// 通过 base64 对 url 解码
 func (d Decoder) ByBase64URL() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -202,7 +204,7 @@ func (d Decoder) ByBase64URL() Decoder {
 	buf := make([]byte, base64.URLEncoding.DecodedLen(len(d.src)))
 	n, err := base64.URLEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidDecodingError("base64URL")
+		d.Error = NewDecodeError().ModeError("base64URL")
 		return d
 	}
 	d.dst, d.Error = buf[:n], err
@@ -210,7 +212,6 @@ func (d Decoder) ByBase64URL() Decoder {
 }
 
 // ByBase85 encodes by base85.
-// 通过 base85 编码
 func (e Encoder) ByBase85() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -222,7 +223,6 @@ func (e Encoder) ByBase85() Encoder {
 }
 
 // ByBase85 decodes by base85.
-// 通过 base85 解码
 func (d Decoder) ByBase85() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -230,7 +230,7 @@ func (d Decoder) ByBase85() Decoder {
 	buf := make([]byte, len(d.src))
 	n, _, err := ascii85.Decode(buf, d.src, true)
 	if err != nil {
-		d.Error = invalidDecodingError("base85")
+		d.Error = NewDecodeError().ModeError("base85")
 		return d
 	}
 	d.dst = buf[:n]
@@ -238,7 +238,6 @@ func (d Decoder) ByBase85() Decoder {
 }
 
 // ByBase91 encodes by base91.
-// 通过 base91 编码
 func (e Encoder) ByBase91() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -250,7 +249,6 @@ func (e Encoder) ByBase91() Encoder {
 }
 
 // ByBase91 decodes by base91.
-// 通过 base91 解码
 func (d Decoder) ByBase91() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
@@ -258,7 +256,7 @@ func (d Decoder) ByBase91() Decoder {
 	buf := make([]byte, base91.StdEncoding.DecodedLen(len(d.src)))
 	n, err := base91.StdEncoding.Decode(buf, d.src)
 	if err != nil {
-		d.Error = invalidDecodingError("base91")
+		d.Error = NewDecodeError().ModeError("base91")
 		return d
 	}
 	d.dst = buf[:n]
@@ -266,7 +264,6 @@ func (d Decoder) ByBase91() Decoder {
 }
 
 // ByBase100 encodes by base100.
-// 通过 base100 编码
 func (e Encoder) ByBase100() Encoder {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
@@ -276,14 +273,13 @@ func (e Encoder) ByBase100() Encoder {
 }
 
 // ByBase100 decodes by base100.
-// 通过 base100 解码
 func (d Decoder) ByBase100() Decoder {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
 	d.dst, d.Error = base100.Decode(d.src)
 	if d.Error != nil {
-		d.Error = invalidDecodingError("base100")
+		d.Error = NewDecodeError().ModeError("base100")
 	}
 	return d
 }
