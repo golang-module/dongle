@@ -207,23 +207,25 @@ func TestHash_Encrypt_Bytes(t *testing.T) {
 }
 
 func TestHash_Size_Error(t *testing.T) {
+	err := NewHashError()
+
 	e1 := Encrypt.FromString("hello world").BySha3(100)
-	assert.Equal(t, invalidHashSizeError(), e1.Error)
+	assert.Equal(t, err.SizeError(), e1.Error)
 	e2 := Encrypt.FromBytes([]byte("hello world")).BySha3(100)
-	assert.Equal(t, invalidHashSizeError(), e2.Error)
+	assert.Equal(t, err.SizeError(), e2.Error)
 
 	e3 := Encrypt.FromString("hello world").BySha512(100)
-	assert.Equal(t, invalidHashSizeError(), e3.Error)
+	assert.Equal(t, err.SizeError(), e3.Error)
 	e4 := Encrypt.FromBytes([]byte("hello world")).BySha512(100)
-	assert.Equal(t, invalidHashSizeError(), e4.Error)
+	assert.Equal(t, err.SizeError(), e4.Error)
 
 	e5 := Encrypt.FromString("hello world").ByBlake2b(100)
-	assert.Equal(t, invalidHashSizeError(), e5.Error)
+	assert.Equal(t, err.SizeError(), e5.Error)
 	e6 := Encrypt.FromBytes([]byte("hello world")).ByBlake2b(100)
-	assert.Equal(t, invalidHashSizeError(), e6.Error)
+	assert.Equal(t, err.SizeError(), e6.Error)
 
 	e7 := Encrypt.FromString("hello world").ByBlake2s(100)
-	assert.Equal(t, invalidHashSizeError(), e7.Error)
+	assert.Equal(t, err.SizeError(), e7.Error)
 	e8 := Encrypt.FromBytes([]byte("hello world")).ByBlake2s(100)
-	assert.Equal(t, invalidHashSizeError(), e8.Error)
+	assert.Equal(t, err.SizeError(), e8.Error)
 }
