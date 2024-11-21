@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	tripleDesKey = "0123456789abcdefghijklmn"
-	tripleDesIV  = "12345678"
+	tripleDesKey = []byte("0123456789abcdefghijklmn")
+	tripleDesIV  = []byte("12345678")
 )
 
 var tripleDesTests = []struct {
@@ -121,7 +121,7 @@ func Test3Des_Decrypt_String(t *testing.T) {
 func Test3Des_Encrypt_Bytes(t *testing.T) {
 	for index, test := range tripleDesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Encrypt.FromBytes([]byte(test.input)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
+		e := Encrypt.FromBytes([]byte(test.input)).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -141,7 +141,7 @@ func Test3Des_Encrypt_Bytes(t *testing.T) {
 func Test3Des_Decrypt_Bytes(t *testing.T) {
 	for index, test := range tripleDesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Decrypt.FromRawBytes(raw).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
+		e := Decrypt.FromRawBytes(raw).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -159,7 +159,7 @@ func Test3Des_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range tripleDesTests {
-		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
+		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -169,33 +169,40 @@ func Test3Des_Decrypt_Bytes(t *testing.T) {
 }
 
 func Test3Des_Key_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").By3Des(getCipher(CBC, PKCS7, "xxxx", tripleDesIV))
-	assert.Equal(t, invalid3DesKeyError(), e.Error)
+	key, iv := []byte("xxxx"), tripleDesIV
+	e := Encrypt.FromString("hello world").By3Des(getCipher(CBC, PKCS7, key, iv))
+	err := NewTripleDesError()
+	assert.Equal(t, err.KeyError(), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").By3Des(getCipher(CBC, PKCS7, "xxxx", tripleDesIV))
-	assert.Equal(t, invalid3DesKeyError(), d.Error)
+	d := Decrypt.FromHexString("68656c6c6f20776f726c64").By3Des(getCipher(CBC, PKCS7, key, iv))
+	assert.Equal(t, err.KeyError(), d.Error)
 }
 
 func Test3Des_IV_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").By3Des(getCipher(OFB, PKCS7, tripleDesKey, "xxxx"))
-	assert.Equal(t, invalid3DesIVError(), e.Error)
+	key, iv := tripleDesKey, []byte("xxxx")
+	e := Encrypt.FromString("hello world").By3Des(getCipher(OFB, PKCS7, key, iv))
+	err := NewTripleDesError()
+	assert.Equal(t, err.IvError(), e.Error)
 
-	d := Decrypt.FromHexString("68656c6c6f20776f726c64").By3Des(getCipher(CBC, PKCS7, tripleDesKey, "xxxx"))
-	assert.Equal(t, invalid3DesIVError(), d.Error)
+	d := Decrypt.FromHexString("68656c6c6f20776f726c64").By3Des(getCipher(CBC, PKCS7, key, iv))
+	assert.Equal(t, err.IvError(), d.Error)
 }
 
 func Test3Des_Src_Error(t *testing.T) {
 	e := Encrypt.FromString("hello world").By3Des(getCipher(CFB, No, tripleDesKey, tripleDesIV))
-	assert.Equal(t, invalid3DesSrcError(), e.Error)
+	err := NewTripleDesError()
+	assert.Equal(t, err.SrcError(), e.Error)
 
 	d := Decrypt.FromHexString("68656c6c6f20776f726c64").By3Des(getCipher(CBC, PKCS7, tripleDesKey, tripleDesIV))
-	assert.Equal(t, invalid3DesSrcError(), d.Error)
+	assert.Equal(t, err.SrcError(), d.Error)
 }
 
 func Test3Des_Decoding_Error(t *testing.T) {
-	d1 := Decrypt.FromHexBytes([]byte("xxxx")).By3Des(getCipher(CTR, Zero, []byte(tripleDesKey), []byte(tripleDesIV)))
-	assert.Equal(t, invalidDecodingError("hex"), d1.Error)
+	err := NewDecodeError()
 
-	d2 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).By3Des(getCipher(CFB, PKCS7, []byte(tripleDesKey), []byte(tripleDesIV)))
-	assert.Equal(t, invalidDecodingError("base64"), d2.Error)
+	d1 := Decrypt.FromHexBytes([]byte("xxxx")).By3Des(getCipher(CTR, Zero, tripleDesKey, tripleDesIV))
+	assert.Equal(t, err.ModeError("hex"), d1.Error)
+
+	d2 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).By3Des(getCipher(CFB, PKCS7, tripleDesKey, tripleDesIV))
+	assert.Equal(t, err.ModeError("base64"), d2.Error)
 }

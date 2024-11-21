@@ -2,13 +2,14 @@ package dongle
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (
-	aesKey = "0123456789abcdef"
-	aesIV  = "0123456789abcdef"
+	aesKey = []byte("0123456789abcdef")
+	aesIV  = []byte("0123456789abcdef")
 )
 
 var aesTests = []struct {
@@ -120,7 +121,7 @@ func TestAes_Decrypt_String(t *testing.T) {
 func TestAes_Encrypt_Bytes(t *testing.T) {
 	for index, test := range aesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Encrypt.FromBytes([]byte(test.input)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
+		e := Encrypt.FromBytes([]byte(test.input)).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -140,7 +141,7 @@ func TestAes_Encrypt_Bytes(t *testing.T) {
 func TestAes_Decrypt_Bytes(t *testing.T) {
 	for index, test := range aesTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Decrypt.FromRawBytes(raw).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
+		e := Decrypt.FromRawBytes(raw).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -149,7 +150,7 @@ func TestAes_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range aesTests {
-		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
+		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -158,7 +159,7 @@ func TestAes_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range aesTests {
-		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByAes(getCipher(test.mode, test.padding, []byte(aesKey), []byte(aesIV)))
+		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByAes(getCipher(test.mode, test.padding, aesKey, aesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -168,48 +169,60 @@ func TestAes_Decrypt_Bytes(t *testing.T) {
 }
 
 func TestAes_Key_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").ByAes(getCipher(CBC, PKCS7, "xxxx", aesIV))
-	assert.Equal(t, invalidAesKeyError(), e.Error)
+	key, iv := []byte("xxxx"), aesIV
+	err := NewAesError()
 
-	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, "xxxx", aesIV))
-	assert.Equal(t, invalidAesKeyError(), d.Error)
+	e := Encrypt.FromString("hello world").ByAes(getCipher(CBC, PKCS7, key, iv))
+	assert.Equal(t, err.KeyError(), e.Error)
+
+	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, key, iv))
+	assert.Equal(t, err.KeyError(), d.Error)
 }
 
 func TestAes_IV_Error(t *testing.T) {
-	e := Encrypt.FromString("hello world").ByAes(getCipher(OFB, PKCS7, aesKey, "xxxx"))
-	assert.Equal(t, invalidAesIVError(), e.Error)
+	err := NewAesError()
+	key, iv := aesKey, []byte("xxxx")
 
-	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efec1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, aesKey, "xxxx"))
-	assert.Equal(t, invalidAesIVError(), d.Error)
+	e := Encrypt.FromString("hello world").ByAes(getCipher(OFB, PKCS7, key, iv))
+	assert.Equal(t, err.IvError(), e.Error)
+
+	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efec1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, aesKey, iv))
+	assert.Equal(t, err.IvError(), d.Error)
 }
 
 func TestAes_Src_Error(t *testing.T) {
+	err := NewAesError()
+
 	e := Encrypt.FromString("hello world").ByAes(getCipher(CFB, No, aesKey, aesIV))
-	assert.Equal(t, invalidAesSrcError(), e.Error)
+	assert.Equal(t, err.SrcError(), e.Error)
 
 	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(getCipher(CBC, No, aesKey, aesIV))
-	assert.Equal(t, invalidAesSrcError(), d.Error)
+	assert.Equal(t, err.SrcError(), d.Error)
 }
 
 func TestAes_Decoding_Error(t *testing.T) {
+	err := NewDecodeError()
+
 	d1 := Decrypt.FromHexString("xxxx").ByAes(getCipher(CTR, Zero, aesKey, aesIV))
-	assert.Equal(t, invalidDecodingError("hex"), d1.Error)
-	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByAes(getCipher(CTR, Zero, []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidDecodingError("hex"), d2.Error)
+	assert.Equal(t, err.ModeError("hex"), d1.Error)
+	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByAes(getCipher(CTR, Zero, aesKey, aesIV))
+	assert.Equal(t, err.ModeError("hex"), d2.Error)
 
 	d3 := Decrypt.FromBase64String("xxxxxx").ByAes(getCipher(CFB, PKCS7, aesKey, aesIV))
-	assert.Equal(t, invalidDecodingError("base64"), d3.Error)
-	d4 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(getCipher(CFB, PKCS7, []byte(aesKey), []byte(aesIV)))
-	assert.Equal(t, invalidDecodingError("base64"), d4.Error)
+	assert.Equal(t, err.ModeError("base64"), d3.Error)
+	d4 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(getCipher(CFB, PKCS7, aesKey, aesIV))
+	assert.Equal(t, err.ModeError("base64"), d4.Error)
 }
 
 // gets Cipher instance.
 // 获取 Cipher 对象
-func getCipher(mode cipherMode, padding cipherPadding, key, iv interface{}) (cipher *Cipher) {
+func getCipher(mode cipherMode, padding cipherPadding, key, iv []byte) (cipher *Cipher) {
 	cipher = NewCipher()
 	cipher.SetMode(mode)
 	cipher.SetPadding(padding)
-	cipher.SetKey(key)
-	cipher.SetIV(iv)
+	cipher.SetKey(bytes2string(key))
+	cipher.SetIV(bytes2string(iv))
+	cipher.WithKey(key)
+	cipher.WithIV(iv)
 	return
 }
