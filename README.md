@@ -37,7 +37,7 @@ go get -u gitcode.com/dromara/dongle
 import "gitcode.com/dromara/dongle"
 ```
 
-`dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed. If the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
+`Dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed. If the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
 
 ```go
 go mod edit -replace github.com/golang-module/dongle=github.com/dromara/dongle

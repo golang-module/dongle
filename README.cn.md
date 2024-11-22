@@ -36,7 +36,7 @@ go get -u gitcode.com/dromara/dongle
 import "gitcode.com/dromara/dongle"
 ```
 
-由于 `dongle` 已经捐赠给了 [dromara](https://dromara.org/ "dromara") 组织，仓库地址发生了改变，如果之前用的仓库地址是 `golang-module/dongle`，请在 `go.mod` 里将原地址更换为新地址，如
+`Dongle` 已经捐赠给了 [dromara](https://dromara.org/ "dromara") 组织，仓库地址发生了改变，如果之前用的仓库地址是 `golang-module/dongle`，请在 `go.mod` 里将原地址更换为新地址，如
 
 ```go
 go mod edit -replace github.com/golang-module/dongle=github.com/dromara/dongle
