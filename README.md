@@ -37,7 +37,7 @@ go get -u gitcode.com/dromara/dongle
 import "gitcode.com/dromara/dongle"
 ```
 
-Because `dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed. If the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
+`dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed. If the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
 
 ```go
 go mod edit -replace github.com/golang-module/dongle=github.com/dromara/dongle
@@ -135,7 +135,7 @@ dongle.Decode.FromBytes([]byte("AAwf93rvy4aWQVw")).ByBase62().ToBytes() // []byt
 // Encode by base62 with custom alphabet from byte slice and output byte slice
 dongle.Encode.FromBytes([]byte("hello world")).ByBase62("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789").ToBytes() // []byte("KK6pJD158Ekgaf6")
 // Decode by base62 with custom alphabet from byte slice and output byte slice
-dongle.Decode.FromBytes([]byte("KK6pJD158Ekgaf6")).ByBase62().ToBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") // []byte("hello world")
+dongle.Decode.FromBytes([]byte("KK6pJD158Ekgaf6")).ByBase62("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789").ToBytes() // []byte("hello world")
 ```
 
 ##### Encode and decode by base64

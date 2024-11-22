@@ -134,7 +134,7 @@ dongle.Decode.FromBytes([]byte("AAwf93rvy4aWQVw")).ByBase62().ToBytes() // []byt
 // 自定义编码表对字节切片进行 base62 编码，输出字节切片
 dongle.Encode.FromBytes([]byte("hello world")).ByBase62("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789").ToBytes() // []byte("KK6pJD158Ekgaf6")
 // 自定义编码表对字节切片进行 base62 解码，输出字节切片
-dongle.Decode.FromBytes([]byte("KK6pJD158Ekgaf6")).ByBase62().ToBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") // []byte("hello world")
+dongle.Decode.FromBytes([]byte("KK6pJD158Ekgaf6")).ByBase62("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789").ToBytes() // []byte("hello world")
 ```
 
 ##### Base64 编码、解码
