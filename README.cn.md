@@ -25,24 +25,15 @@
 ```go
 // 使用 github 库
 go get -u github.com/dromara/dongle
-
-import (
-    "github.com/dromara/dongle"
-)
+import "github.com/dromara/dongle"
 
 // 使用 gitee 库
 go get -u gitee.com/dromara/dongle
-
-import (
-    "gitee.com/dromara/dongle"
-)
+import "gitee.com/dromara/dongle"
 
 // 使用 gitcode 库
 go get -u gitcode.com/dromara/dongle
-
-import (
-    "gitcode.com/dromara/dongle"
-)
+import "gitcode.com/dromara/dongle"
 ```
 
 由于 `dongle` 已经捐赠给了 [dromara](https://dromara.org/ "dromara") 组织，仓库地址发生了改变，如果之前用的仓库地址是 `golang-module/dongle`，请在 `go.mod` 里将原地址更换为新地址，如

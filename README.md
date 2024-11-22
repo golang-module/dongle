@@ -26,24 +26,15 @@ A simple, semantic and developer-friendly `golang` package for encryption algori
 ```go
 // By github
 go get -u github.com/dromara/dongle
-
-import (
-    "github.com/dromara/dongle"
-)
+import "github.com/dromara/dongle"
 
 // By gitee
 go get -u gitee.com/dromara/dongle
-
-import (
-    "gitee.com/dromara/dongle"
-)
+import "gitee.com/dromara/dongle"
 
 // By gitcode
 go get -u gitcode.com/dromara/dongle
-
-import (
-    "gitcode.com/dromara/dongle"
-)
+import "gitcode.com/dromara/dongle"
 ```
 
 Because `dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed. If the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
