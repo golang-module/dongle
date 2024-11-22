@@ -61,9 +61,9 @@ func TestTea_Decrypt_String(t *testing.T) {
 
 func TestTea_Encrypt_Bytes(t *testing.T) {
 	for index, test := range teaTests {
-		e := Encrypt.FromBytes([]byte(test.input)).ByTea([]byte(test.key), test.rounds)
+		e := Encrypt.FromBytes([]byte(test.input)).ByTea(test.key, test.rounds)
 		if test.rounds == 0 {
-			e = Encrypt.FromBytes([]byte(test.input)).ByTea([]byte(test.key))
+			e = Encrypt.FromBytes([]byte(test.input)).ByTea(test.key)
 		}
 		assert.Nil(t, e.Error)
 		assert.Equal(t, []byte(test.toHex), e.ToHexBytes(), "Hex test test index is "+strconv.Itoa(index))
@@ -80,9 +80,9 @@ func TestTea_Decrypt_Bytes(t *testing.T) {
 		assert.Nil(t, e1.Error)
 		assert.Equal(t, []byte(test.input), e1.ToBytes(), "Hex test index is "+strconv.Itoa(index))
 
-		e2 := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByTea([]byte(test.key), test.rounds)
+		e2 := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByTea(test.key, test.rounds)
 		if test.rounds == 0 {
-			e2 = Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByTea([]byte(test.key))
+			e2 = Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByTea(test.key)
 		}
 		assert.Nil(t, e2.Error)
 		assert.Equal(t, []byte(test.input), e2.ToBytes(), "base64 test index is "+strconv.Itoa(index))

@@ -121,7 +121,7 @@ func TestDes_Decrypt_String(t *testing.T) {
 func TestDes_Encrypt_Bytes(t *testing.T) {
 	for index, test := range desTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Encrypt.FromBytes([]byte(test.input)).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
+		e := Encrypt.FromBytes([]byte(test.input)).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -141,7 +141,7 @@ func TestDes_Encrypt_Bytes(t *testing.T) {
 func TestDes_Decrypt_Bytes(t *testing.T) {
 	for index, test := range desTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Decrypt.FromRawBytes(raw).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
+		e := Decrypt.FromRawBytes(raw).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -150,7 +150,7 @@ func TestDes_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range desTests {
-		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
+		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -159,7 +159,7 @@ func TestDes_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range desTests {
-		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByDes(getCipher(test.mode, test.padding, []byte(desKey), []byte(desIV)))
+		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByDes(getCipher(test.mode, test.padding, desKey, desIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -203,9 +203,9 @@ func TestDes_Src_Error(t *testing.T) {
 func TestDes_Decoding_Error(t *testing.T) {
 	err := NewDecodeError()
 
-	d1 := Decrypt.FromHexBytes([]byte("xxxx")).ByDes(getCipher(CTR, Zero, []byte(desKey), []byte(desIV)))
+	d1 := Decrypt.FromHexBytes([]byte("xxxx")).ByDes(getCipher(CTR, Zero, desKey, desIV))
 	assert.Equal(t, err.ModeError("hex"), d1.Error)
 
-	d2 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByDes(getCipher(CFB, PKCS7, []byte(desKey), []byte(desIV)))
+	d2 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByDes(getCipher(CFB, PKCS7, desKey, desIV))
 	assert.Equal(t, err.ModeError("base64"), d2.Error)
 }

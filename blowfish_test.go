@@ -121,7 +121,7 @@ func TestBlowfish_Decrypt_String(t *testing.T) {
 func TestBlowfish_Encrypt_Bytes(t *testing.T) {
 	for index, test := range blowfishTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Encrypt.FromBytes([]byte(test.input)).ByBlowfish(getCipher(test.mode, test.padding, []byte(blowfishKey), []byte(blowfishIV)))
+		e := Encrypt.FromBytes([]byte(test.input)).ByBlowfish(getCipher(test.mode, test.padding, blowfishKey, blowfishIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -141,7 +141,7 @@ func TestBlowfish_Encrypt_Bytes(t *testing.T) {
 func TestBlowfish_Decrypt_Bytes(t *testing.T) {
 	for index, test := range blowfishTests {
 		raw := Decode.FromBytes([]byte(test.toHex)).ByHex().ToBytes()
-		e := Decrypt.FromRawBytes(raw).ByBlowfish(getCipher(test.mode, test.padding, []byte(blowfishKey), []byte(blowfishIV)))
+		e := Decrypt.FromRawBytes(raw).ByBlowfish(getCipher(test.mode, test.padding, blowfishKey, blowfishIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_raw_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -150,7 +150,7 @@ func TestBlowfish_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range blowfishTests {
-		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByBlowfish(getCipher(test.mode, test.padding, []byte(blowfishKey), []byte(blowfishIV)))
+		e := Decrypt.FromHexBytes([]byte(test.toHex)).ByBlowfish(getCipher(test.mode, test.padding, blowfishKey, blowfishIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -159,7 +159,7 @@ func TestBlowfish_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range blowfishTests {
-		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByBlowfish(getCipher(test.mode, test.padding, []byte(blowfishKey), []byte(blowfishIV)))
+		e := Decrypt.FromBase64Bytes([]byte(test.toBase64)).ByBlowfish(getCipher(test.mode, test.padding, blowfishKey, blowfishIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_base64_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
@@ -203,11 +203,11 @@ func TestBlowfish_Decoding_Error(t *testing.T) {
 
 	d1 := Decrypt.FromHexString("xxxx").ByBlowfish(getCipher(CTR, Zero, blowfishKey, blowfishIV))
 	assert.Equal(t, err.ModeError("hex"), d1.Error)
-	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByBlowfish(getCipher(CTR, Zero, []byte(blowfishKey), []byte(blowfishIV)))
+	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByBlowfish(getCipher(CTR, Zero, blowfishKey, blowfishIV))
 	assert.Equal(t, err.ModeError("hex"), d2.Error)
 
 	d3 := Decrypt.FromBase64String("xxxxxx").ByBlowfish(getCipher(CFB, PKCS7, blowfishKey, blowfishIV))
 	assert.Equal(t, err.ModeError("base64"), d3.Error)
-	d4 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByBlowfish(getCipher(CFB, PKCS7, []byte(blowfishKey), []byte(blowfishIV)))
+	d4 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByBlowfish(getCipher(CFB, PKCS7, blowfishKey, blowfishIV))
 	assert.Equal(t, err.ModeError("base64"), d4.Error)
 }

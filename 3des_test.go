@@ -150,7 +150,7 @@ func Test3Des_Decrypt_Bytes(t *testing.T) {
 	}
 
 	for index, test := range tripleDesTests {
-		e := Decrypt.FromHexBytes([]byte(test.toHex)).By3Des(getCipher(test.mode, test.padding, []byte(tripleDesKey), []byte(tripleDesIV)))
+		e := Decrypt.FromHexBytes([]byte(test.toHex)).By3Des(getCipher(test.mode, test.padding, tripleDesKey, tripleDesIV))
 
 		t.Run(fmt.Sprintf(string(test.mode)+"_"+string(test.padding)+"_hex_test_%d", index), func(t *testing.T) {
 			assert.Nil(t, e.Error)
