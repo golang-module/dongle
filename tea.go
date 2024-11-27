@@ -22,6 +22,8 @@ func (e TeaError) RoundsError() error {
 	return fmt.Errorf("tea: invalid rounds, the rounds must be even")
 }
 
+var teaError = NewTeaError()
+
 // ByTea encrypts by tea.
 func (e Encrypter) ByTea(key []byte, rounds ...int) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
@@ -31,7 +33,6 @@ func (e Encrypter) ByTea(key []byte, rounds ...int) Encrypter {
 		// 64 is the standard number of rounds in tea.
 		rounds = []int{64}
 	}
-	teaError := NewTeaError()
 	if rounds[0]&1 != 0 {
 		e.Error = teaError.RoundsError()
 		return e
@@ -63,7 +64,6 @@ func (d Decrypter) ByTea(key []byte, rounds ...int) Decrypter {
 		// 64 is the standard number of rounds in tea.
 		rounds = []int{64}
 	}
-	teaError := TeaError{}
 	if rounds[0]&1 != 0 {
 		d.Error = teaError.RoundsError()
 		return d

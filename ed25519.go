@@ -32,6 +32,8 @@ const (
 	Base64 encodingMode = "base64"
 )
 
+var ed25519Error = NewEd25519Error()
+
 // ByEd25519 signs by ed25519.
 func (s Signer) ByEd25519(privateKey []byte, mode encodingMode) Signer {
 	if len(s.src) == 0 || s.Error != nil {
@@ -42,7 +44,6 @@ func (s Signer) ByEd25519(privateKey []byte, mode encodingMode) Signer {
 		s.Error = err
 		return s
 	}
-	ed25519Error := NewEd25519Error()
 	if len(pri) != ed25519.PrivateKeySize {
 		s.Error = ed25519Error.PrivateKeyError()
 		return s
@@ -61,7 +62,6 @@ func (v Verifier) ByEd25519(publicKey []byte, mode encodingMode) Verifier {
 		v.Error = err
 		return v
 	}
-	ed25519Error := NewEd25519Error()
 	if len(pub) != ed25519.PublicKeySize {
 		v.Error = ed25519Error.PublicKeyError()
 		return v

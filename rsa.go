@@ -34,6 +34,8 @@ func (e RsaError) PrivateKeyError() error {
 	return fmt.Errorf("rsa: invalid private key, please make sure the private key is valid")
 }
 
+var rsaError = NewRsaError()
+
 // ByRsa encrypts by rsa with public key or private key.
 func (e Encrypter) ByRsa(rsaKey []byte) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
@@ -59,7 +61,6 @@ func (d Decrypter) ByRsa(rsaKey []byte) Decrypter {
 	keyPair := rsa.NewKeyPair()
 	keyPair.SetPublicKey(rsaKey)
 	keyPair.SetPrivateKey(rsaKey)
-
 	if keyPair.IsPublicKey() {
 		d.dst, d.Error = keyPair.DecryptByPublicKey(d.src)
 		return d

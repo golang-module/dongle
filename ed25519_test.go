@@ -95,13 +95,13 @@ func TestEd25519_Empty(t *testing.T) {
 func TestEd25519_PrivateKey_Error(t *testing.T) {
 	key := []byte("xxxx")
 	s := Sign.FromString(ed25519Input).ByEd25519(key, Raw)
-	assert.Equal(t, NewEd25519Error().PrivateKeyError(), s.Error)
+	assert.Equal(t, ed25519Error.PrivateKeyError(), s.Error)
 }
 
 func TestEd25519_PublicKey_Error(t *testing.T) {
 	key := []byte("xxxx")
 	s := Verify.FromBase64String("", ed25519Input).ByEd25519(key, Raw)
-	assert.Equal(t, NewEd25519Error().PublicKeyError(), s.Error)
+	assert.Equal(t, ed25519Error.PublicKeyError(), s.Error)
 }
 
 func TestEd25519_Signature_Error(t *testing.T) {
@@ -109,20 +109,19 @@ func TestEd25519_Signature_Error(t *testing.T) {
 	publicKey, _, _ = ed25519.GenerateKey(nil)
 
 	s := Verify.FromRawString("xxxx", ed25519Input).ByEd25519(publicKey, Raw)
-	assert.Equal(t, NewEd25519Error().SignatureError(), s.Error)
+	assert.Equal(t, ed25519Error.SignatureError(), s.Error)
 }
 
 func TestEd25519_Decoding_Error(t *testing.T) {
 	Key := []byte("xxxxxx")
-	err := NewDecodeError()
 
 	s1 := Sign.FromString(ed25519Input).ByEd25519(Key, Hex)
-	assert.Equal(t, err.ModeError("hex"), s1.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), s1.Error)
 	v1 := Verify.FromHexString("68656c6c6f20776f726c64", ed25519Input).ByEd25519(Key, Hex)
-	assert.Equal(t, err.ModeError("hex"), v1.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), v1.Error)
 
 	s2 := Sign.FromString(ed25519Input).ByEd25519(Key, Base64)
-	assert.Equal(t, err.ModeError("base64"), s2.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), s2.Error)
 	v2 := Verify.FromBase64String("aGVsbG8gd29ybGQ=", ed25519Input).ByEd25519(Key, Base64)
-	assert.Equal(t, err.ModeError("base64"), v2.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), v2.Error)
 }

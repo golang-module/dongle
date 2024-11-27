@@ -163,8 +163,6 @@ func TestRsa_PublicKey_Error(t *testing.T) {
 xxxx
 -----END PUBLIC KEY-----`
 
-	rsaError, decodeError := NewRsaError(), NewDecodeError()
-
 	e1 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa(invalidRsaKey)
 	assert.Equal(t, rsaError.PublicKeyError(), e1.Error)
 	e2 := Encrypt.FromBytes([]byte(rsaInput)).ByRsa([]byte(invalidPublicKey))
@@ -192,8 +190,6 @@ xxxx
 -----END PRIVATE KEY-----`)
 
 	e := Encrypt.FromBytes([]byte(rsaInput)).ByRsa(pkcs1PublicKey)
-
-	rsaError := NewRsaError()
 
 	d1 := Decrypt.FromHexBytes(e.ToHexBytes()).ByRsa(invalidRsaKey)
 	assert.Equal(t, rsaError.PrivateKeyError(), d1.Error)

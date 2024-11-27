@@ -170,48 +170,42 @@ func TestAes_Decrypt_Bytes(t *testing.T) {
 
 func TestAes_Key_Error(t *testing.T) {
 	key, iv := []byte("xxxx"), aesIV
-	err := NewAesError()
 
 	e := Encrypt.FromString("hello world").ByAes(getCipher(CBC, PKCS7, key, iv))
-	assert.Equal(t, err.KeyError(), e.Error)
+	assert.Equal(t, aesError.KeyError(), e.Error)
 
 	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, key, iv))
-	assert.Equal(t, err.KeyError(), d.Error)
+	assert.Equal(t, aesError.KeyError(), d.Error)
 }
 
 func TestAes_IV_Error(t *testing.T) {
-	err := NewAesError()
 	key, iv := aesKey, []byte("xxxx")
 
 	e := Encrypt.FromString("hello world").ByAes(getCipher(OFB, PKCS7, key, iv))
-	assert.Equal(t, err.IvError(), e.Error)
+	assert.Equal(t, aesError.IvError(), e.Error)
 
 	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efec1e9b4529aac9793010f4677f6358efe").ByAes(getCipher(CBC, PKCS7, aesKey, iv))
-	assert.Equal(t, err.IvError(), d.Error)
+	assert.Equal(t, aesError.IvError(), d.Error)
 }
 
 func TestAes_Src_Error(t *testing.T) {
-	err := NewAesError()
-
 	e := Encrypt.FromString("hello world").ByAes(getCipher(CFB, No, aesKey, aesIV))
-	assert.Equal(t, err.SrcError(), e.Error)
+	assert.Equal(t, aesError.SrcError(), e.Error)
 
 	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByAes(getCipher(CBC, No, aesKey, aesIV))
-	assert.Equal(t, err.SrcError(), d.Error)
+	assert.Equal(t, aesError.SrcError(), d.Error)
 }
 
 func TestAes_Decoding_Error(t *testing.T) {
-	err := NewDecodeError()
-
 	d1 := Decrypt.FromHexString("xxxx").ByAes(getCipher(CTR, Zero, aesKey, aesIV))
-	assert.Equal(t, err.ModeError("hex"), d1.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), d1.Error)
 	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByAes(getCipher(CTR, Zero, aesKey, aesIV))
-	assert.Equal(t, err.ModeError("hex"), d2.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), d2.Error)
 
 	d3 := Decrypt.FromBase64String("xxxxxx").ByAes(getCipher(CFB, PKCS7, aesKey, aesIV))
-	assert.Equal(t, err.ModeError("base64"), d3.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), d3.Error)
 	d4 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByAes(getCipher(CFB, PKCS7, aesKey, aesIV))
-	assert.Equal(t, err.ModeError("base64"), d4.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), d4.Error)
 }
 
 // gets Cipher instance.

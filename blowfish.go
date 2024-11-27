@@ -25,12 +25,13 @@ func (e BlowfishError) IvError(iv []byte) error {
 	return fmt.Errorf("blowfish: invalid iv size %d, the iv size must be 8 bytes", len(iv))
 }
 
+var blowfishError = NewBlowfishError()
+
 // ByBlowfish encrypts by blowfish.
 func (e Encrypter) ByBlowfish(c *Cipher) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	blowfishError := BlowfishError{}
 	block, err := blowfish.NewCipher(c.key)
 	if err != nil {
 		e.Error = blowfishError.KeyError(c.key)
@@ -53,7 +54,6 @@ func (d Decrypter) ByBlowfish(c *Cipher) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
-	blowfishError := NewBlowfishError()
 	block, err := blowfish.NewCipher(c.key)
 	if err != nil {
 		d.Error = blowfishError.KeyError(c.key)

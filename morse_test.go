@@ -62,10 +62,10 @@ func TestMorse_Decode_Bytes(t *testing.T) {
 
 func TestMorse_Src_Error(t *testing.T) {
 	e := Encode.FromString("hello world").ByMorse()
-	assert.Equal(t, NewMorseError().SrcError(), e.Error)
+	assert.Equal(t, morseError.SrcError(), e.Error)
 }
 
 func TestMorse_Decoding_Error(t *testing.T) {
 	e := Decode.FromString("hello world").ByMorse()
-	assert.Equal(t, NewMorseError().DecodeError(), e.Error)
+	assert.Equal(t, morseError.DecodeError(), e.Error)
 }

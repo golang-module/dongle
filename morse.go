@@ -21,6 +21,8 @@ func (e MorseError) DecodeError() error {
 	return fmt.Errorf("morse: failed to decode src")
 }
 
+var morseError = NewMorseError()
+
 // ByMorse encodes by morse.
 func (e Encoder) ByMorse(separator ...string) Encoder {
 	if len(e.src) == 0 || e.Error != nil {
@@ -31,7 +33,6 @@ func (e Encoder) ByMorse(separator ...string) Encoder {
 	}
 	dst, err := morse.Encode(e.src, separator[0])
 	if err != nil {
-		morseError := MorseError{}
 		e.Error = morseError.SrcError()
 		return e
 	}
@@ -49,7 +50,6 @@ func (d Decoder) ByMorse(separator ...string) Decoder {
 	}
 	dst, err := morse.Decode(d.src, separator[0])
 	if err != nil {
-		morseError := MorseError{}
 		d.Error = morseError.DecodeError()
 		return d
 	}

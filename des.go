@@ -24,12 +24,13 @@ func (e DesError) IvError() error {
 	return fmt.Errorf("des: invalid iv, the iv size must be 8 bytes")
 }
 
+var desError = NewDesError()
+
 // ByDes encrypts by des.
 func (e Encrypter) ByDes(c *Cipher) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
-	desError := NewDesError()
 	block, err := des.NewCipher(c.key)
 	if err != nil {
 		e.Error = desError.KeyError()
@@ -52,7 +53,6 @@ func (d Decrypter) ByDes(c *Cipher) Decrypter {
 	if len(d.src) == 0 || d.Error != nil {
 		return d
 	}
-	desError := NewDesError()
 	block, err := des.NewCipher(c.key)
 	if err != nil {
 		d.Error = desError.KeyError()

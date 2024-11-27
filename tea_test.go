@@ -91,22 +91,20 @@ func TestTea_Decrypt_Bytes(t *testing.T) {
 
 func TestTea_Key_Error(t *testing.T) {
 	key := []byte("xxx")
-	err := NewTeaError()
 
 	e := Encrypt.FromString("hello go").ByTea(key, 8)
-	assert.Equal(t, err.KeyError(key), e.Error)
+	assert.Equal(t, teaError.KeyError(key), e.Error)
 
 	d := Decrypt.FromRawString("hello go").ByTea(key, 8)
-	assert.Equal(t, err.KeyError(key), d.Error)
+	assert.Equal(t, teaError.KeyError(key), d.Error)
 }
 
 func TestTea_Rounds_Error(t *testing.T) {
 	key := []byte("0123456789abcdefghijklmn")
-	err := NewTeaError()
 
 	e := Encrypt.FromString("hello go").ByTea(key, 1)
-	assert.Equal(t, err.RoundsError(), e.Error)
+	assert.Equal(t, teaError.RoundsError(), e.Error)
 
 	d := Decrypt.FromRawString("hello go").ByTea(key, 1)
-	assert.Equal(t, err.RoundsError(), d.Error)
+	assert.Equal(t, teaError.RoundsError(), d.Error)
 }

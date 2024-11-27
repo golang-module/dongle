@@ -24,13 +24,14 @@ func (e AesError) IvError() error {
 	return fmt.Errorf("aes: invalid iv, the iv size must be 16 bytes")
 }
 
+var aesError = NewAesError()
+
 // ByAes encrypts by aes.
 func (e Encrypter) ByAes(c *Cipher) Encrypter {
 	if len(e.src) == 0 || e.Error != nil {
 		return e
 	}
 	block, err := aes.NewCipher(c.key)
-	aesError := AesError{}
 	if err != nil {
 		e.Error = aesError.KeyError()
 		return e
@@ -53,7 +54,6 @@ func (d Decrypter) ByAes(c *Cipher) Decrypter {
 		return d
 	}
 	block, err := aes.NewCipher(c.key)
-	aesError := AesError{}
 	if err != nil {
 		d.Error = aesError.KeyError()
 		return d

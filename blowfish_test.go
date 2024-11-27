@@ -169,14 +169,13 @@ func TestBlowfish_Decrypt_Bytes(t *testing.T) {
 }
 
 func TestBlowfish_Key_Error(t *testing.T) {
-	err := NewBlowfishError()
 	key, iv := []byte(""), blowfishIV
 
 	e := Encrypt.FromString("hello world").ByBlowfish(getCipher(CBC, PKCS7, key, iv))
-	assert.Equal(t, err.KeyError([]byte("")), e.Error)
+	assert.Equal(t, blowfishError.KeyError([]byte("")), e.Error)
 
 	d := Decrypt.FromHexString("c1e9b4529aac9793010f4677f6358efe").ByBlowfish(getCipher(CBC, PKCS7, key, iv))
-	assert.Equal(t, err.KeyError([]byte("")), d.Error)
+	assert.Equal(t, blowfishError.KeyError([]byte("")), d.Error)
 }
 
 func TestBlowfish_IV_Error(t *testing.T) {
@@ -190,24 +189,21 @@ func TestBlowfish_IV_Error(t *testing.T) {
 }
 
 func TestBlowfish_Src_Error(t *testing.T) {
-	err := NewBlowfishError()
 	e := Encrypt.FromString("hello world").ByBlowfish(getCipher(CFB, No, blowfishKey, blowfishIV))
-	assert.Equal(t, err.SrcError(), e.Error)
+	assert.Equal(t, blowfishError.SrcError(), e.Error)
 
 	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByBlowfish(getCipher(CBC, No, blowfishKey, blowfishIV))
-	assert.Equal(t, err.SrcError(), d.Error)
+	assert.Equal(t, blowfishError.SrcError(), d.Error)
 }
 
 func TestBlowfish_Decoding_Error(t *testing.T) {
-	err := NewDecodeError()
-
 	d1 := Decrypt.FromHexString("xxxx").ByBlowfish(getCipher(CTR, Zero, blowfishKey, blowfishIV))
-	assert.Equal(t, err.ModeError("hex"), d1.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), d1.Error)
 	d2 := Decrypt.FromHexBytes([]byte("xxxx")).ByBlowfish(getCipher(CTR, Zero, blowfishKey, blowfishIV))
-	assert.Equal(t, err.ModeError("hex"), d2.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), d2.Error)
 
 	d3 := Decrypt.FromBase64String("xxxxxx").ByBlowfish(getCipher(CFB, PKCS7, blowfishKey, blowfishIV))
-	assert.Equal(t, err.ModeError("base64"), d3.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), d3.Error)
 	d4 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByBlowfish(getCipher(CFB, PKCS7, blowfishKey, blowfishIV))
-	assert.Equal(t, err.ModeError("base64"), d4.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), d4.Error)
 }

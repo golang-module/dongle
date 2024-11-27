@@ -170,42 +170,36 @@ func TestDes_Decrypt_Bytes(t *testing.T) {
 
 func TestDes_Key_Error(t *testing.T) {
 	key, iv := []byte("xxxx"), desIV
-	err := NewDesError()
 
 	e := Encrypt.FromString("hello world").ByDes(getCipher(CBC, PKCS7, key, iv))
-	assert.Equal(t, err.KeyError(), e.Error)
+	assert.Equal(t, desError.KeyError(), e.Error)
 
 	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher(CBC, PKCS7, key, iv))
-	assert.Equal(t, err.KeyError(), d.Error)
+	assert.Equal(t, desError.KeyError(), d.Error)
 }
 
 func TestDes_IV_Error(t *testing.T) {
 	key, iv := desKey, []byte("xxxx")
-	err := NewDesError()
 
 	e := Encrypt.FromString("hello world").ByDes(getCipher(OFB, PKCS7, key, iv))
-	assert.Equal(t, err.IvError(), e.Error)
+	assert.Equal(t, desError.IvError(), e.Error)
 
 	d := Decrypt.FromHexString("0b2a92e81fb49ce1a43266aacaea7b81").ByDes(getCipher(CBC, PKCS7, key, iv))
-	assert.Equal(t, err.IvError(), d.Error)
+	assert.Equal(t, desError.IvError(), d.Error)
 }
 
 func TestDes_Src_Error(t *testing.T) {
-	err := NewDesError()
-
 	e := Encrypt.FromString("hello world").ByDes(getCipher(CFB, No, desKey, desIV))
-	assert.Equal(t, err.SrcError(), e.Error)
+	assert.Equal(t, desError.SrcError(), e.Error)
 
 	d := Decrypt.FromHexString("68656c6c6f20776f726c64").ByDes(getCipher(CBC, No, desKey, desIV))
-	assert.Equal(t, err.SrcError(), d.Error)
+	assert.Equal(t, desError.SrcError(), d.Error)
 }
 
 func TestDes_Decoding_Error(t *testing.T) {
-	err := NewDecodeError()
-
 	d1 := Decrypt.FromHexBytes([]byte("xxxx")).ByDes(getCipher(CTR, Zero, desKey, desIV))
-	assert.Equal(t, err.ModeError("hex"), d1.Error)
+	assert.Equal(t, decodeError.ModeError("hex"), d1.Error)
 
 	d2 := Decrypt.FromBase64Bytes([]byte("xxxxxx")).ByDes(getCipher(CFB, PKCS7, desKey, desIV))
-	assert.Equal(t, err.ModeError("base64"), d2.Error)
+	assert.Equal(t, decodeError.ModeError("base64"), d2.Error)
 }

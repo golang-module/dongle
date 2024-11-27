@@ -13,7 +13,7 @@ import (
 )
 
 // Version current version
-const Version = "1.0.1"
+const Version = "1.0.2"
 
 // dongle defines a dongle struct.
 type dongle struct {

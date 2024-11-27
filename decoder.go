@@ -17,6 +17,8 @@ func (e DecodeError) ModeError(mode string) error {
 	return fmt.Errorf("decode: invalid decoding mode, the src can't be decoded by %s", mode)
 }
 
+var decodeError = NewDecodeError()
+
 // newDecoder returns a new Decoder instance.
 func newDecoder() Decoder {
 	return Decoder{}

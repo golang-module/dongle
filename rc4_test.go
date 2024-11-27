@@ -76,11 +76,10 @@ func TestRc4_Decrypt_Bytes(t *testing.T) {
 
 func TestRc4_Key_Error(t *testing.T) {
 	key := []byte("")
-	err := NewRc4Error()
 
 	e := Encrypt.FromString("hello go").ByRc4(key)
-	assert.Equal(t, err.KeyError(), e.Error)
+	assert.Equal(t, rc4Error.KeyError(), e.Error)
 
 	d := Decrypt.FromRawString("hello go").ByRc4(key)
-	assert.Equal(t, err.KeyError(), d.Error)
+	assert.Equal(t, rc4Error.KeyError(), d.Error)
 }
