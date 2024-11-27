@@ -11,7 +11,7 @@ English | [简体中文](README.cn.md)
 
 ### Introduction
 
-A simple, semantic and developer-friendly `golang` package for encryption algorithms, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
+A simple, semantic and developer-friendly `golang` crypto package, has been included by [awesome-go](https://github.com/avelino/awesome-go#security "awesome-go")
 
 ### Repository
 
@@ -37,7 +37,7 @@ go get -u gitcode.com/dromara/dongle
 import "gitcode.com/dromara/dongle"
 ```
 
-`Dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed. If the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
+`Dongle` was donated to the [dromara](https://dromara.org/ "dromara") organization, the repository url has changed, if the previous repository used was `golang-module/dongle`, please replace the original repository with the new repository in `go.mod`, for example
 
 ```go
 go mod edit -replace github.com/golang-module/dongle=github.com/dromara/dongle
@@ -1268,7 +1268,6 @@ rsa: invalid public key, please make sure the public key is valid
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
 * [python/pycrypto](https://github.com/pycrypto/pycrypto)
-
 
 ### Sponsors
 
