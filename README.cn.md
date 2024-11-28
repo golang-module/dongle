@@ -1269,10 +1269,10 @@ rsa: invalid public key, please make sure the public key is valid
 
 ### 参考项目
 
+* [openssl/openssl](https://github.com/openssl/openssl)
 * [javascript/crypto-js](https://github.com/brix/crypto-js)
 * [nodejs/crypto](https://nodejs.org/api/crypto.html)
 * [java/jasypt](https://github.com/jasypt/jasypt)
-* [python/pycrypto](https://github.com/pycrypto/pycrypto)
 
 ### 赞助
 
